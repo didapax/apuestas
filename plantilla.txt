@@ -1,0 +1,87 @@
+<?php 
+include "modulo.php";
+if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
+?>
+<html>
+    <head>
+        <title>Fortuna Royal</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
+        <link rel="shortcut icon" href="favicon.png">
+        <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    </head>
+    <header>
+        <style>
+            /* width */
+            ::-webkit-scrollbar {
+            width: 5px;
+            }
+
+            /* Track */
+            ::-webkit-scrollbar-track {
+            background: #263238;
+            }
+
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+            background: #263238;
+            }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+            background: #263238;
+            }            
+            .cabeza{
+                width:100%;
+                height: 55px;    
+                text-align:right;            
+            }
+            .cuerpo{
+                width:100%;
+                height: 500px;
+                background: transparent;
+                overflow-y: auto;
+                overflow-x: none;
+            }
+            .pie{
+                width:100%;
+                height: 13px;
+                text-align:center;
+            }
+            button{
+
+            }
+            a{
+                padding:3px;
+                margin-right:5px;
+                text-decoration:none;
+                cursor:pointer;
+            }
+
+            a:hover{
+                text-decoration:underline;
+            }
+        </style>        
+        <script>
+        </script>
+    </header>
+    <body>
+        <div id="cabeza" class="cabeza">
+            <a href='#'>Trabajos</a>
+            <a href='jugadas.php'>Jugadas</a>
+            <a href='#'>Promociones</a>
+            <a href='block.php?cerrarSesion'>Cerrar Sesion</a>
+        </div>
+        <div id="cuerpo" class="cuerpo">
+
+        </div>
+        <div id="pie" class="pie"><span>Copyring (c) 2022 Red Triangle Corporation</span></div>
+    </body>
+</html>
+
+<?php
+}
+else{
+    header("Location: index.php");
+}
+?>
