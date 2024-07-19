@@ -8,6 +8,13 @@ function generaTicket(){
     return $referencia;
 }
 
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+
 function ifReferidoExist($referido){
 	if(row_sqlconector("select * from REFERIDOS where REFERIDO='".$referido."'")['REFERIDO']==$referido) return TRUE;
 	return FALSE;  
@@ -92,9 +99,18 @@ function readClienteId($id){
   return row_sqlconector("SELECT * FROM USUARIOS WHERE ID={$id}");
 }
 
-function ifUsuarioExist($correo){
-	if(row_sqlconector("select * from USUARIOS where CORREO='".$correo."'")['CORREO']==$correo) return TRUE;
-	return FALSE;  
+function ifUsuarioExist($correo) {
+  $conexion = @mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
+  if (!$conexion) {
+      echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
+      exit;
+  }
+
+  $resultado = mysqli_query($conexion, "SELECT 1 FROM USUARIOS WHERE CORREO = '$correo'");
+  $existe = mysqli_num_rows($resultado) > 0;
+  mysqli_close($conexion);
+
+  return $existe;
 }
 
 function ifTxidExist($txid){

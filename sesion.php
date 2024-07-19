@@ -8,9 +8,11 @@
         <title>Fortuna Royal</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="favicon.png">
+        <link rel="shortcut icon" href="Assets/favicon.png">        
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+        <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />        
 
         <style>
             .conten{
@@ -23,13 +25,13 @@
                 font-weight:bold;
                 top: 15%;
                 width: 350px;
-                height: 350px;
+                height: 390px;
                 border: 1px solid black;
                 border-radius: 13px;
                 text-align: center;
                 padding: 13px;
                 /*background: #D4DEE2;*/
-                background-image: url('balon2.png');
+                background-image: url('Assets/balon2.png');
                 background-repeat: no-repeat;
                 background-size: cover; 
                 position: absolute;
@@ -61,61 +63,127 @@
             }
 
             .condiciones{
-
+                font-size: 11px;
             }
             body{
                 background:black;
             }
         </style>        
-        <script>
+        <script>            
             function registro(){
                 if(document.getElementById('correo').value.includes("@")){
-                    if(document.getElementById('password').value.length > 7){
+                    if(document.getElementById('password').value.length > 7){                        
                         $.post("block.php",{
                         getUsuario: "",
                         correo: document.getElementById('correo').value,
-                        password: document.getElementById('password').value
+                        password: document.getElementById('password').value,
+                        grecaptcharesponse: document.getElementById('g-recaptcha-response').value
                     },function(data){
+                        console.log("session data: ", data);
                         var datos= JSON.parse(data);
-                        if(datos.result == "true"){
-                            if(datos.bloqueado == 0){
-                                if(datos.correo == document.getElementById('correo').value && datos.password == document.getElementById('password').value){
-                                    document.getElementById("btn_registro").disabled = true;
-                                    $.post("block.php",
-                                    {
-                                        initSesion: "",
+                        if(datos.result == true && datos.capcha.success){
+                            if(datos.verificado == '0'){
+                                Swal.fire({
+                                title: 'Falta Verificacion',
+                                text: "Correo no Verificado revisa tu bandeja de entrada...! o deseas reenviar el codigo de verificacion a tu correo..?",
+                                icon: 'warning',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Si Verificar',
+                                confirmButtonColor: '#3085d6',
+                                showCancelButton: true,
+                                cancelButtonText: "No ya lo Tengo"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $.post("block.php",{
+                                        sendmail: "",
                                         correo: document.getElementById('correo').value
-                                    },function(data){
-                                        window.location.href="index";
-                                    });
-                                }
-                                else{
-                                    alert("Usuario o Password Incorrectos...!");
-                                }
+                                    },function(data){ });                                 
+                                    }else{
+                                        window.location.href="sesion";
+                                    }
+                                });
                             }
                             else{
-                                alert("Usuario Bloqueado...!");
+                                if(datos.paso){
+                                    document.getElementById("btn_registro").disabled = true;
+                                    window.location.href="index";
+                                }
+                                else{
+                                    Swal.fire({
+                                    title: 'Iniciar Sesion',
+                                    text: "Usuario o Password Incorrectos...! Intente de Nuevo",
+                                    icon: 'warning',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href="sesion";
+                                        }
+                                    });
+
+                                }
                             }
                         }
-                        else{
+                        else if (datos.result == false && datos.capcha.success){
                             document.getElementById("btn_registro").disabled = true;
-                            $.post("block.php",{
-                                regUsuario: "",
-                                correo: document.getElementById('correo').value,
-                                password: document.getElementById('password').value,
-                                referente: document.getElementById('referente').value
-                            },function(data){
-                                window.location.href="index";
+                            Swal.fire({
+                            title: 'Registrarse',
+                            text: "Usuario No Registrado...! Deseas Unirte? es rapido y sencillo ",
+                            icon: 'info',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Si Unirme',
+                            confirmButtonColor: '#3085d6',
+                            showCancelButton: true,
+                            cancelButtonText: "Cancelar"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.post("block.php",{
+                                    regUsuario: "",
+                                    correo: document.getElementById('correo').value,
+                                    password: document.getElementById('password').value,
+                                    referente: document.getElementById('referente').value
+                                },function(data){
+                                    var datos= JSON.parse(data);
+                                    window.location.href="graciasRegistro?correo="+datos.correo+"&vkey="+datos.vkey;
+                                    });                                    
+                                }else{
+                                    window.location.href="sesion";
+                                }
+                            });                        
+                        }
+                        else{
+                            Swal.fire({
+                            title: 'Capcha no Valida',
+                            text: "Vuelva a intentar resolver la Capcha",
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href="sesion";
+                                }
                             });
                         }
                     });
                     }
                     else{
-                        alert("El Password debe contener al menos 8 caracteres");
+                        Swal.fire({
+                        title: 'Error',
+                        text: "El Pasword debe contener al menos 8 caracteres",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                        });
                     }
                 }
                 else{
-                    alert("No es un correo Valido...");
+                    Swal.fire({
+                        title: 'Error',
+                        text: "Coloque un correo Valido",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                        });
                 }
             }
 
@@ -145,18 +213,23 @@
 			        }else{
                         echo "<input type='hidden' name='referente' id='referente' value='NULO'>";
                     }
-		        ?>                
+		        ?>               
+                <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="window.location.href='index'">X</a>
+                <br><br>
                 <div style="width:85px;display:inline-block;">Correo:</div><input id="correo" required type="email" ><br>
-                <div style="width:85px;display:inline-block;">Password:</div><input id="password" required type="password" ><br>
+                <div style="width:85px;display:inline-block;">Password:</div><input id="password" required type="password" >
+                <br><br>
+                <div name="g-recaptcha-response" id="g-recaptcha-response" class="g-recaptcha" data-sitekey="6Ld1nA0aAAAAAA7F7eJOY7CMwg7aaQAfg3WZy6P0"></div>
                 <p class="condiciones" id="terminos" ><u>Terminos y Condiciones</u><br>
                     Al hacer Click Usted esta Aceptando estos Terminos y Condiciones, Nuestra Pagina
-                    No se hace responsable por perdidas en las apuestas, usted debe proporcionar 
-                    al Jugar la Nota ID o tixd de la Transferencia en USDT al Operador para ser verificada,
-                    ya que no nos hacemos responsable por extravios de Dinero, usted certifica que es Mayor de 
-                    Edad y Unico Responsable. Los pagos a ganadores se realizan en un plazo de 24 a 48 Horas.
+                    No se hace responsable por el manejo de la Informacion suministrada, usted debe proporcionar 
+                    al comprar o suscribirse a un servicio la Nota ID o Tixd de la Transferencia en USDT al 
+                    Operador de la Pagina para ser verificada, ya que no nos hacemos responsable por extravios de Dinero, 
+                    usted certifica que es Mayor de Edad y Unico Responsable del uso de la informacion aqui dada. 
+                    Los Depositos y Retiros se realizan en un plazo de 24 a 48 Horas.
                 </p>
-                <button type="button" onclick="registro()" id="btn_registro">Jugar / Registrarse</button> 
-                <div style="margin-top:8px;"><a style="font-size:10px; cursor:pointer;" onclick="recuperar()">Olvide Mi Contraseña</a></div>
+                <button type="button" onclick="registro()" id="btn_registro">Inicio / Unirse</button> 
+                <div style="margin-top:8px;"><a style="font-size:12px; cursor:pointer; color:blue;" onclick="recuperar()">Olvide Mi Contraseña</a></div>
             </form>
         </div>
     </body>

@@ -4,12 +4,16 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
 ?>
 <html>
     <head>
-        <title>Fortuna Royal</title>
+    <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">                
+        <link rel="shortcut icon" href="favicon.png">        
+        <link rel="stylesheet" href="css/animate.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/Common.css">
+        <link href='css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">         
     </head>
     <header>
         <style>
@@ -138,72 +142,6 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 }
             }   
             
-/*Menu*/            
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
-
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 8px 16px;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.topnav a.active {
-  background-color: #04AA6D;
-  color: white;
-}
-
-.topnav .icon {
-  display: none;
-}
-
-.topnav a.perfil {
-  background-color: transparent;
-  color: yellow;
-  float: right;
-  cursor:default;
-}
-
-.topnav a.saldo {
-  background-color: transparent;
-  color: white;
-  float: right;
-  cursor:default;
-}
-
-@media screen and (max-width: 600px) {
-  .topnav a:not(:first-child) {display: none;}
-  .topnav a.icon {
-    float: right;
-    display: block;
-  }
-
-  .topnav.responsive {position: relative;}
-  .topnav.responsive .icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-  .topnav.responsive a {
-    float: none;
-    display: block;
-    text-align: left;
-  }  
-  .topnav.responsive a.perfil {
-    display: none;
-  }  
-}            
         </style>        
         <script>
             function leerDatos(){
@@ -257,23 +195,11 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         </script>
     </header>
     <body onload="inicio()">
-        <div id="cabeza" class="cabeza">
-        <marquee><?php verPromo(); ?></marquee>
-        <?php 
-                    echo "<div class=\"topnav\" id='myTopnav'>";
-                    echo "<a href='index' >Home</a>";
-                    echo "<a href='chat' >Chat</a>";
-                    echo "<a href='miwallet'>Mi Wallet</a>";
-                    echo "<a href='referidos'>Referidos</a>";
-                    echo "<a href='historialcliente' class='active'>Historial</a>";
-                    echo "<a href='ayuda'>Ayuda</a>";
-                    echo "<a href='block?cerrarSesion'>Cerrar Sesion</a>"; 
-                    echo "<a style='cursor:pointer;' href='miwallet' class='saldo' id='saldo'></a>";
-                    echo "<a class='perfil'>".readClienteId($_SESSION['user'])['CORREO']."</a>";
-                    echo "<a href=\"javascript:void(0);\" class='icon' onclick=\" myFunctionMenu();\"><i class='fa fa-bars'></i></a></div>";        
-        
-        ?>
-        </div>
+    <?php $page = "histcliente"; ?>
+      <!--Iniciar Barra de Navegación @media 1200px-->
+      <?php include 'barraNavegacion.php';?>
+        <!--FIN Barra de Navegación @media 1200px-->  
+
         <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
         <dialog class="dialog_agregar" id="agregar" close>            
             <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('agregar').close()">X</a><br>            
@@ -283,14 +209,16 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
             ID Payeer: <br> <input style="width:300px;" type="text" id="payeer"><br>
             <button id="guardar" class='appbtn' style="float:right;" type="button" onclick="guardar()">Guardar</button>
         </dialog>      
-        <div id="cuerpo" class="cuerpo">
+        <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;">
             <div style='padding:5px;'>
                 <?php statusPromocion(readClienteId($_SESSION['user'])['CORREO']); ?>
             </div>
             <hr>
         <div class="vista" id="vista"></div>
         </div>
-        <div id="pie" class="pie"><span>Copyring (c) 2022 Red Triangle Corporation</span></div>        
+              <!--Iniciar footer-->
+      <?php include 'footer.php';?>
+        <!--FIN footer-->     
         <script>
 
 function myFunctionMenu() {    

@@ -116,44 +116,100 @@ if(isset($_POST['jugar'])){
   }*/
 }
 
+if(isset($_POST['sendmail'])){
+  $usuario = readCliente($_POST['correo']);
+  $correo = $usuario['CORREO'];
+  $vkey = $usuario['VKEY'];
+  $para = $correo;
+  $asunto = "Verificación de correo electrónico";
+  $mensaje = "<a href='http://localhost/apuestas/verificarEmail?vkey=$vkey'>Registrar cuenta</a>";
+  $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
+  $cabeceras .= "MIME-Version: 1.0" . "\r\n";
+  $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
-if(isset($_POST['getUsuario'])){
-    if(ifUsuarioExist($_POST['correo'])){
-        $usuario = readCliente($_POST['correo']);
-        $obj = array('nombre' => $usuario['NOMBRE'],'correo' => $usuario['CORREO'], 'password' => $usuario['PASSWORD'],
-        'wallet' => $usuario['WALLET'],'payeer' => $usuario['PAYEER'], 'saldo' => $usuario['SALDO'], 'bloqueado' => $usuario['BLOQUEADO'],
-        'nivel' => $usuario['NIVEL'],'activo' => $usuario['ACTIVO'],'rate' => $usuario['RATE'],'result' => 'true',
-        'saldo' => price($usuario['SALDO']));
+  mail($para, $asunto, $mensaje, $cabeceras);  
 
-        echo json_encode($obj);        
-    }
-    else{
-        $obj = array('result' => 'false');
-        echo json_encode($obj);     
-    }
 }
 
-if(isset($_POST['regUsuario'])){     
+if(isset($_POST['getUsuario'])){
+  $correo = $_POST['correo'];
+  $respuestaClave = array('success' => false);
+  $obj = array('result' => false, 'capcha' => $respuestaClave,'paso'=>false,'verificado' => 0);
+
+  if(isset($_POST['grecaptcharesponse'])){
+    $captcha = $_POST["grecaptcharesponse"];
+    $claveSecreta = "6Ld1nA0aAAAAAJps4LCRTs7jfshN9GNjZAghnt0f";
+    $url = 'https://www.google.com/recaptcha/api/siteverify?secret='.urldecode($claveSecreta).'&response='.urldecode($captcha).'';
+    $respuesta = file_get_contents($url);
+    $respuestaClave = json_decode($respuesta, TRUE);
+    $obj['capcha'] = $respuestaClave;
+
+    if(ifUsuarioExist($correo)){
+      $usuario = readCliente($correo);
+      $obj['result'] = true;
+      if($usuario['VERIFICADO'] != 0){          
+        $obj['verificado'] = 1;
+        $contrasena = test_input($_POST['password']);        
+        if(password_verify($contrasena, $usuario['PASSWORD'])){
+          $paso = true;
+
+          $ipreal = getRealIpAddr();
+          sqlconector("UPDATE USUARIOS SET IP='{$ipreal}' WHERE CORREO='$correo'");                
+          $_SESSION['user'] =readCliente($correo)['ID'];
+          $_SESSION['nivel'] =readCliente($correo)['NIVEL'];
+          $tiempo_maximo = time() + (24 * 60 * 60);      
+          setcookie("verificado", $usuario['VERIFICADO'],$tiempo_maximo); 
+          $obj = array('nombre' => $usuario['NOMBRE'],'correo' => $usuario['CORREO'], 'password' => $usuario['PASSWORD'],
+          'wallet' => $usuario['WALLET'],'payeer' => $usuario['PAYEER'], 'bloqueado' => $usuario['BLOQUEADO'],
+          'nivel' => $usuario['NIVEL'],'activo' => $usuario['ACTIVO'],'rate' => $usuario['RATE'],'result' => true, 'paso' => $paso,
+          'saldo' => price($usuario['SALDO']), 'capcha' => $respuestaClave,'verificado' => $usuario['VERIFICADO']);          
+        }
+      }
+    }
+  }
+
+  if(isset($_POST['sesion'])){
+    $usuario = readCliente($correo);
+    $obj = array('nombre' => $usuario['NOMBRE'],'correo' => $usuario['CORREO'], 
+    'wallet' => $usuario['WALLET'],'payeer' => $usuario['PAYEER'], 'bloqueado' => $usuario['BLOQUEADO'],
+    'nivel' => $usuario['NIVEL'],'activo' => $usuario['ACTIVO'],'rate' => $usuario['RATE'],'saldo' => price($usuario['SALDO']),'verificado' => $usuario['VERIFICADO']);
+  }
+
+    echo json_encode($obj);
+}
+
+if(isset($_POST['regUsuario'])){
+    $correo = $_POST['correo'];
+    $respuestaClave = array('success' => false);
     $ipreal = getRealIpAddr();
-    $codeRefer= generaTicket();
-    sqlconector("INSERT INTO USUARIOS(IP,NOMBRE,PASSWORD,CORREO,CODIGOREFERIDO) VALUES('{$ipreal}','{$_POST['correo']}','{$_POST['password']}','{$_POST['correo']}','{$codeRefer}')");
+    $codeRefer= generaTicket();    
+    $vkey = generaTicket();
+    $contrasena = test_input($_POST['password']);
+    $hashContrasena = password_hash($contrasena, PASSWORD_BCRYPT);
+
+    sqlconector("INSERT INTO USUARIOS(IP,NOMBRE,PASSWORD,CORREO,CODIGOREFERIDO,VKEY) VALUES('$ipreal','$correo','$hashContrasena','$correo','$codeRefer','$vkey')");
     if($_POST['referente'] != "NULO"){
       insertReferido($codeRefer,$_POST['referente']);
     }  
-    $_SESSION['user'] =readCliente($_POST['correo'])['ID'];
-    $_SESSION['nivel'] =readCliente($_POST['correo'])['NIVEL'];
+
+    $obj = array('result' => false,'correo' =>$correo, 'capcha' => $respuestaClave,'paso'=>false,'verificado' => 0,'vkey' => $vkey);
+    echo json_encode($obj);         
 }
 
 if(isset($_POST['initSesion'])){
+    $usuario = readCliente($_POST['correo']);
     $ipreal = getRealIpAddr();
     sqlconector("UPDATE USUARIOS SET IP='{$ipreal}' WHERE CORREO='{$_POST['correo']}'");
     $_SESSION['user'] =readCliente($_POST['correo'])['ID'];
     $_SESSION['nivel'] =readCliente($_POST['correo'])['NIVEL'];
+    $tiempo_maximo = time() + (24 * 60 * 60);
+    setcookie("verificado", $usuario['VERIFICADO'],$tiempo_maximo);          
 }
 
 if(isset($_GET['cerrarSesion'])) {
 	session_unset();
 	session_destroy();
+  setcookie("verificado", "", time() - 3600);
 	header("Location: index.php");
 }
 
@@ -297,7 +353,7 @@ if( isset($_GET['bot']) ){
   }  
 }
 
-if(isset($_GET['readPromos'])) {
+if(isset($_GET['readPromos'])) { 
   $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
   if (!$conexion) {
     echo "Refresh page, Failed to connect to Data...";

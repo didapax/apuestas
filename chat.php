@@ -4,207 +4,20 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 0){
 ?>
 <html>
     <head>
-        <title>Fortuna Royal</title>
+    <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <link rel="shortcut icon" href="favicon.png">        
+        <link rel="stylesheet" href="css/animate.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/Common.css">
+        <link href='css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">         
     </head>
     <header>
         <style>
 
-            html, body {
-                margin: 0;
-                width: 100%;
-                background-image: url('balon.png');
-                background-repeat: no-repeat;
-                background-size: cover;       
-                color:white;
-                font-weight:bold;  
-                font-family: Arial, Helvetica, sans-serif;                               
-            }            
-            /* width */
-            ::-webkit-scrollbar {
-            width: 5px;
-            }
-
-            /* Track */
-            ::-webkit-scrollbar-track {
-            background: #263238;
-            }
-
-            /* Handle */
-            ::-webkit-scrollbar-thumb {
-            background: #263238;
-            }
-
-            /* Handle on hover */
-            ::-webkit-scrollbar-thumb:hover {
-            background: #263238;
-            }            
-            .cabeza{
-                width:100%;
-                height: 55px;    
-                text-align:right;    
-                background: #333;
-                font-weight:bold;       
-                
-            }
-
-            .cabeza a{
-                color: white; 
-            }
-            .cuerpo{
-                width:90%;
-                height: 550px;
-                background: transparent;
-                overflow-y: auto;
-                overflow-x: hidden;
-                padding:21px;
-            }
-
-            .menu{
-                width:98%;
-                height: 20px;
-                background: gray;
-                overflow-y: hidden;
-                overflow-x: hidden;
-                padding:8px;
-            }
-
-            .vista{
-                width:100%;
-                height: 440px;
-                background: transparent;
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-
-            .pie{
-                width:100%;
-                height: 13px;
-                text-align:center;
-            }
-            button{
-
-            }
-            a{
-                padding:3px;
-                margin-right:5px;
-                text-decoration:none;
-                cursor:pointer;
-            }
-
-            a:hover{
-                text-decoration:underline;
-            }
-            .dialog_agregar{
-                width:350px;
-                border: solid 1px black;
-                box-shadow: 4px 3px 8px 1px #969696;
-                /*background: #c1cae0;*/
-                background-image: url('balon.png');
-                background-repeat: no-repeat;
-                background-size: cover;                 
-                color:white;
-                font-weight:bold;
-                border-radius: 5px;
-                z-index: 1000;
-            }
-
-            input[type="text"]{
-                padding: 5px;
-                font-size: 13px;
-                width: 60%;
-                margin:5px;
-            }   
-            
-            @media (max-width: 600px) {
-                input[type="number"] {
-                    margin: 3px;
-                    border-radius: 3px;
-                    border: 0;
-                    padding: 3px;
-                    font-size: 11px;
-                }
-
-                table{
-                    width: 100%;
-                    font-size: 11px;
-                }
-
-                a{
-                    font-size:15px;
-                }
-            } 
-            
-/*Menu*/            
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
-
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 8px 16px;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.topnav a.active {
-  background-color: #04AA6D;
-  color: white;
-}
-
-.topnav .icon {
-  display: none;
-}
-
-.topnav a.perfil {
-  background-color: transparent;
-  color: yellow;
-  float: right;
-  cursor:default;
-}
-
-.topnav a.saldo {
-  background-color: transparent;
-  color: white;
-  float: right;
-  cursor:default;
-}
-
-@media screen and (max-width: 600px) {
-  .topnav a:not(:first-child) {display: none;}
-  .topnav a.icon {
-    float: right;
-    display: block;
-  }
-
-  .topnav.responsive {position: relative;}
-  .topnav.responsive .icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-  .topnav.responsive a {
-    float: none;
-    display: block;
-    text-align: left;
-  }  
-  .topnav.responsive a.perfil {
-    display: none;
-  }    
-}            
         </style>        
         <script>
             function leerDatos(){
@@ -300,23 +113,11 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 0){
   </script>
     </header>
     <body onload="inicio()">
-        <div id="cabeza" class="cabeza">
-        <marquee><?php verPromo(); ?></marquee>
-        <?php 
-                    echo "<div class=\"topnav\" id='myTopnav'>";
-                    echo "<a href='index' >Home</a>";
-                    echo "<a href='chat' class='active'>Chat</a>";
-                    echo "<a href='miwallet'>Mi Wallet</a>";
-                    echo "<a href='referidos' >Referidos</a>";
-                    echo "<a href='historialcliente'>Historial</a>";
-                    echo "<a href='ayuda'>Ayuda</a>";
-                    echo "<a href='block?cerrarSesion'>Cerrar Sesion</a>"; 
-                    echo "<a style='cursor:pointer;' href='miwallet' class='saldo' id='saldo'></a>";
-                    echo "<a class='perfil'>".readClienteId($_SESSION['user'])['CORREO']."</a>";
-                    echo "<a href=\"javascript:void(0);\" class='icon' onclick=\" myFunctionMenu();\"><i class='fa fa-bars'></i></a></div>";        
-        
-        ?>           
-        </div>
+        <?php $page = "chat"; ?>
+      <!--Iniciar Barra de Navegación @media 1200px-->
+      <?php include 'barraNavegacion.php';?>
+        <!--FIN Barra de Navegación @media 1200px-->     
+
         <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
         <dialog class="dialog_agregar" id="agregar" close>            
             <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('agregar').close()">X</a><br>            
@@ -326,7 +127,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 0){
             ID Payeer: <br> <input style="width:300px;" type="text" id="payeer"><br>
             <button id="guardar" class='appbtn' style="float:right;" type="button" onclick="guardar()">Guardar</button>
         </dialog>      
-        <div id="cuerpo" class="cuerpo">
+        <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;"> 
         <?php
   echo "
   <input type='hidden' id='ticked' value='0001'>
@@ -345,7 +146,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] >= 0){
     </div>
     <br><br>
         </div>
-        <div id="pie" class="pie"><span>Copyring (c) 2022 Red Triangle Corporation</span></div>
+
+      <!--Iniciar footer-->
+      <?php include 'footer.php';?>
+        <!--FIN footer-->            
 <script>
 
 function myFunctionMenu() {    

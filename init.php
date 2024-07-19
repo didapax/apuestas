@@ -1,11 +1,17 @@
 <?php
 
-$usuario = "";
-$servidor = "fortunaroyal.com";
-$user = "fortunar";
-$password = "Ni1Z)Ny@510cQl";
-$database = "fortunar_apuestas";
+/*$servidor = "bbetfootball.online";
+$user = "bbetxfub_admin";
+$password = ",NN7QZ.03g+b";
+$database = "bbetxfub_data";*/
+
+$servidor = "localhost";
+$user = "root";
+$password = "";
+$database = "apuestas";
+
 $data = ""; 
+$usuario = "";
 
 function sqlconector($consulta) {
    $conexion = @mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
@@ -16,17 +22,19 @@ function sqlconector($consulta) {
      $resultado = mysqli_query( $conexion, $consulta );
      mysqli_close($conexion);
    }
+   return $resultado;
 }
 
 function row_sqlconector($consulta) {
-	$row=0;
+  $row = array();
 	$conexion = @mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
   if (!$conexion) {
     echo "Refresh page, Failed to connect to Data: " . mysqli_connect_error();
     exit();
   }else{
-    if($resultado = mysqli_query( $conexion, $consulta )){
-  		$row = mysqli_fetch_array($resultado);
+    $resultado = mysqli_query($conexion, $consulta);
+    if($resultado){
+  		$row = mysqli_fetch_array($resultado, MYSQLI_ASSOC);
   	}
   	mysqli_close($conexion);
   }
@@ -39,11 +47,10 @@ function row_sqlconector($consulta) {
   ALTER TABLE JUEGOS ADD COLUMN FAVORITO INT NOT NULL DEFAULT 0
 */
 if( isset($_GET['parche']) ){
-  sqlconector("ALTER TABLE USUARIOS ADD COLUMN PAYEER VARCHAR(255)");
-  sqlconector("ALTER TABLE USUARIOS ADD COLUMN BINANCE VARCHAR(255)");
-  sqlconector("ALTER TABLE USUARIOS ADD COLUMN AIRTM VARCHAR(255)");
-  sqlconector("ALTER TABLE JUEGOS ADD COLUMN APUESTAS INT NOT NULL DEFAULT 0");
-  sqlconector("ALTER TABLE APUESTAS ADD COLUMN MEDIO_PAGO VARCHAR(35)");
+/* APLICA MODIFICACIONES DE ULTIMA HORA A LA BASE DE DATOS Y SISTEMA
+ESCRIBE AQUI LA LOGICA..
+*/  
+
   echo "Parche Aplicado Con Exito..!<br><br><a href='index'>Ir al Inicio</a>";
 }
 
@@ -61,8 +68,9 @@ if( isset($_GET['install']) ){
         ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         FECHA TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         IP VARCHAR(255),
-        APODO VARCHAR(25),
-        PASSWORD VARCHAR(13),
+        NOMBRE_USUARIO VARCHAR(25),
+        PASSWORD VARCHAR(100),
+        VKEY VARCHAR(100),
         CORREO VARCHAR(34),
         TELEFONO VARCHAR(15),
         NOMBRE VARCHAR(255),
@@ -73,13 +81,12 @@ if( isset($_GET['install']) ){
         PAYEER VARCHAR(255),
         BINANCE VARCHAR(255),
         AIRTM VARCHAR(255),
-        APIKEY VARCHAR(255),
-        HEXWALLET VARCHAR(255),
         RATE INT NOT NULL DEFAULT 0,
         SALDO DECIMAL(13,4) UNSIGNED NOT NULL DEFAULT 0.00,
         USDT DECIMAL(13,4) UNSIGNED NOT NULL DEFAULT 0.00,
         P2P DECIMAL(13,4) UNSIGNED NOT NULL DEFAULT 0.00,
         SALDOREFERIDO DECIMAL(13,4) UNSIGNED NOT NULL DEFAULT 0.00,
+        VERIFICADO INT NOT NULL DEFAULT 0,
         ACTIVO INT NOT NULL DEFAULT 0,
         BLOQUEADO INT NOT NULL DEFAULT 0,
         NIVEL INT NOT NULL DEFAULT 0,

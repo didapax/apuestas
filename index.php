@@ -5,273 +5,19 @@
 ?>
 <html style="overflow: scroll;">
     <head>
-        <title>Fortuna Royal</title>
+        <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="style.css">
+        <link rel="shortcut icon" href="favicon.png">        
+        <link rel="stylesheet" href="css/animate.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/Common.css">
+        <link href='css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">         
     </head>
-    <header>
         <style>
-            input[type="text"]{
-                margin-top: 5px;
-                padding: 8px;
-                font-size: 13px;
-                width: 60%;
-                margin:5px;
-            }
-
-            input[type="number"]{
-                padding: 5px;
-                font-size: 13px;
-                width: 100px;
-                margin:5px;
-            }
-
-            select{
-                margin-top:3px;
-                padding: 3px;
-                width: 300px;
-            }
-            /* width */
-            ::-webkit-scrollbar {
-            width: 5px;
-            }
-
-            /* Track */
-            ::-webkit-scrollbar-track {
-            background: #263238;
-            }
-
-            /* Handle */
-            ::-webkit-scrollbar-thumb {
-            background: #263238;
-            }
-
-            /* Handle on hover */
-            ::-webkit-scrollbar-thumb:hover {
-            background: #263238;
-            }            
-            .cabeza{
-                width:100%;
-                height: 55px;    
-                text-align:right;    
-                background: #333;
-                font-weight:bold;       
-                
-            }
-
-            marquee{
-                background: #333;
-                /*opacity: 0.8;*/
-                color: white; 
-                font-weight:bold;   
-                text-transform: uppercase;
-                font-family: 'Courier New', Courier, monospace;
-            }
-            .cuerpo{
-                background-image: url("cancha.jpeg");
-                background-repeat: no-repeat;
-                background-size: cover;                              
-                padding-top: 13px;
-                padding-bottom: 55px;
-                width: 100%;
-                height: 550px;
-                /*background: transparent;*/
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-            
-            .pie{
-                margin-top:55px;
-                width:100%;
-                height: 13px;
-                text-align:center;
-            }
-            button{
-                padding: 5px;
-                border: 0;
-                border-radius: 3px;
-            }
- 
-
-            .dialog_mss{
-                top: 150px;
-                width:50%;
-                height:300px;
-                padding:25px;
-                border: solid 1px black;
-                box-shadow: 4px 3px 8px 1px #969696;
-                /*background: #c1cae0;*/
-                background-image: url('catar.png');
-                background-repeat: no-repeat;
-                background-size: 100% 400px;                 
-                color:white;
-                font-weight:bold;
-                text-transform:uppercase;
-                border-radius: 5px;
-                z-index: 1100;
-            }            
-
-            .dialog_mss a{
-                color:red;
-                font: size 16px;
-            }
-            .dialog_agregar{
-                width:350px;
-                border: solid 1px black;
-                box-shadow: 4px 3px 8px 1px #969696;
-                /*background: #c1cae0;*/
-                background-image: url('balon.png');
-                background-repeat: no-repeat;
-                background-size: cover;                 
-                color:white;
-                font-weight:bold;
-                border-radius: 5px;
-                z-index: 1000;
-            }
-            footer{
-                color: white;
-                font-family: 'Oswald', sans-serif;
-                width: 100%;
-                background: #111;
-                z-index: -100;
-                position: absolute;
-                margin-top:5px;
-            }
-            .content{
-                padding:8px;
-            }
-
-            body{
-                background: black;
-                margin: 0;
-                font-family: Arial, Helvetica, sans-serif; 
-                font-weight:bold;                
-                /*background-image: url("cancha.jpeg");
-                background-repeat: no-repeat;
-                background-size: cover;                */
-            }
-
-            a{
-                padding:3px;
-                margin-right:5px;
-                text-decoration:none;
-                cursor:pointer;
-                color: white;
-            }
-
-            a:hover{
-                text-decoration:underline;
-            }
-
-            .datcajero{
-                width:300px;
-                font-weight:bold; 
-                padding:2px;
-                background:white;
-                color:black; 
-                outline:0;
-                border: 0;
-                border-radius: 3px;               
-            }
-
-            @media (max-width: 600px) {
-                input[type="number"] {
-                    margin: 3px;
-                    border-radius: 3px;
-                    border: 0;
-                    padding: 3px;
-                    font-size: 11px;
-                }
-
-                table{
-                    width: 100%;
-                    font-size: 11px;
-                }
-
-                a{
-                    font-size:15px;
-                }
-
-                .dialog_mss{
-                    top: 80px;
-                    width:80%;
-                    height:250px;
-                }                  
-            }   
-
-/*Menu*/            
-.topnav {
-    z-index: 1000;
-  overflow: hidden;
-  background-color: #333;
-}
-
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 8px 16px;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.topnav a.active {
-  background-color: #04AA6D;
-  color: white;
-}
-
-.topnav a.perfil {
-  background-color: transparent;
-  color: yellow;
-  float: right;
-  cursor:default;
-}
-
-.topnav a.saldo {
-  background-color: transparent;
-  color: white;
-  float: right;
-  cursor:default;
-}
-
-.topnav .icon {
-  display: none;
-}
-
-@media screen and (max-width: 600px) {
-  .topnav a:not(:first-child) {display: none;}
-  .topnav a.icon {
-    float: right;
-    display: block;
-  }
-
-  .topnav.responsive {position: relative;}
-  .topnav.responsive .icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-  .topnav.responsive a {
-    float: none;
-    display: block;
-    text-align: left;
-  }  
-
-  .topnav.responsive a.perfil {
-    display: none;
-  }   
-}
-
+  
         </style>        
         <script>
 
@@ -302,7 +48,8 @@
             function leerDatos(){
                 if(document.getElementById("correo").value.length > 0){
                     $.post("block",{
-                        getUsuario:"", 
+                        getUsuario: "", 
+                        sesion: true,
                         correo: document.getElementById("correo").value
                     },function(data){
                         var datos= JSON.parse(data);
@@ -475,38 +222,19 @@
                 myVar = setInterval(leerJuegos, 3000);
             }
         </script>
-    </header>
-    <body onload="inicio()">
-        <div id="cabeza" class="cabeza">
-            <marquee><?php verPromo(); ?></marquee>
-            <?php
-            if(!isset($_SESSION['user'])){
-                echo "<a style=\"color:yellow;\" href='sesion'>Jugar / Registrarse</a>";
+    <?php
+            if(isset($_SESSION['user'])){
+                echo "<body onload='inicio()'>";
             }else{
-                if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){                                   
-                    echo "<div class=\"topnav\" id='myTopnav'>";
-                    echo "<a href='index' class='active'>Home</a>";
-                    echo "<a href='chat' >Chat</a>";
-                    echo "<a href='miwallet'>Mi Wallet</a>";
-                    echo "<a href='referidos'>Referidos</a>";
-                    echo "<a href='historialcliente'>Historial</a>";
-                    echo "<a href='ayuda'>Ayuda</a>";
-                    echo "<a href='block?cerrarSesion'>Cerrar Sesion</a>"; 
-                    echo "<a style='cursor:pointer;' href='miwallet' class='saldo' id='saldo'></a>";
-                    echo "<a class='perfil'>".readClienteId($_SESSION['user'])['CORREO']."</a>";
-                    echo "<a href=\"javascript:void(0);\" class='icon' onclick=\" myFunctionMenu();\"><i class='fa fa-bars'></i></a></div>";
-                }
-                else if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
-                    echo "<a href='historialadmin'>Historial</a>";
-                    echo "<a href='trabajos'>Trabajos</a>";
-                    echo "<a href='jugadas'>Jugadas</a>";
-                    echo "<a href='promo'>Promociones</a>";
-                    echo "<a href='block?cerrarSesion'>Cerrar Sesion</a><br>";                    
-                }                    
-            }            
-            ?>            
-        </div>
-        
+                echo "<body>"; 
+            }
+
+    ?>        
+      <?php $page = "home"; ?>
+      <!--Iniciar Barra de Navegación @media 1200px-->
+      <?php include 'barraNavegacion.php';?>
+        <!--FIN Barra de Navegación @media 1200px-->        
+
         <?php
            if(!isset($_SESSION['user'])){
             echo "<div id=\"cuerpo\" class=\"cuerpo\">
@@ -563,13 +291,9 @@
         }
         ?>      
 
-    <footer>
-        <div class="content">
-            <h2>Acerca De</h2>
-            <p>Fortuna Royal es una página de juegos y competición creada con el propósito de entretener y relajarte, puedes hacer dinero mientras juegas!</p>
-        </div>
-            <center>  Red Triangle Corp@2022 All rights reserved.   </center>
-    </footer>
+      <!--Iniciar footer-->
+      <?php include 'footer.php';?>
+        <!--FIN footer-->     
 
     <script>
 

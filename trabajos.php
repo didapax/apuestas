@@ -4,142 +4,21 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 ?>
 <html>
     <head>
-        <title>Fortuna Royal</title>
+    <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <link rel="shortcut icon" href="favicon.png">        
+        <link rel="stylesheet" href="css/animate.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/Common.css">
+        <link href='css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">         
     </head>
     <header>
         <style>
-            html, body {
-                margin: 0;
-                background: #f0f0f5;
-                width: 100%;
-            }             
-            /* width */
-            ::-webkit-scrollbar {
-            width: 5px;
-            }
-
-            /* Track */
-            ::-webkit-scrollbar-track {
-            background: #263238;
-            }
-
-            /* Handle */
-            ::-webkit-scrollbar-thumb {
-            background: #263238;
-            }
-
-            /* Handle on hover */
-            ::-webkit-scrollbar-thumb:hover {
-            background: #263238;
-            }            
-            .cabeza{
-                width:100%;
-                height: 55px;    
-                text-align:right;    
-                background: #111111;
-                font-weight:bold;       
-                
-            }
-
-            .cabeza a{
-                color: white; 
-            }
-            .cuerpo{
-                width:100%;
-                height: 500px;
-                background: transparent;
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-
-            .menu{
-                width:98%;
-                height: 20px;
-                background: gray;
-                overflow-y: hidden;
-                overflow-x: hidden;
-                padding:8px;
-            }
-
-            .vista{
-                width:100%;
-                height: 440px;
-                background: transparent;
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-
-            .pie{
-                width:100%;
-                height: 13px;
-                text-align:center;
-            }
-            button{
-                padding: 5px;
-                border: 0;
-                border-radius: 3px;
-            }
-            a{
-                padding:3px;
-                margin-right:5px;
-                text-decoration:none;
-                cursor:pointer;
-            }
-
-            a:hover{
-                text-decoration:underline;
-            }
-            .dialog_agregar{
-                width:350px;
-                border: solid 1px black;
-                box-shadow: 4px 3px 8px 1px #969696;
-                background: #c1cae0;
-                border-radius: 5px;
-                z-index: 1000;
-            }
-
-            input[type="text"]{
-                padding: 5px;
-                font-size: 13px;
-                width: 60%;
-                margin:5px;
-            }    
-            @media (max-width: 600px) {
-                label{
-                    display:none;
-                }
-                .cabeza{
-                    font-size: 13px;
-                }                
-                input[type="text"]{
-                    padding: 3px;
-                    font-size: 11px;
-                    width: 60%;
-                    margin:3px;
-                }          
-
-                input[type="number"] {
-                    padding: 3px;
-                    font-size: 11px;
-                    width: 60%;
-                    margin:3px;
-                }
-
-                table{
-                    width: 100%;
-                    font-size: 11px;
-                }
-
-                a{
-                    font-size:15px;
-                }                
-
-            }                       
+       
+                  
         </style>        
         <script>
             function myFunction() {
@@ -285,15 +164,12 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         </script>
     </header>
     <body onload="inicio()">
-        <div id="cabeza" class="cabeza">
-            <a href='index'>Home</a>
-            <a href='historialadmin'>Historial</a>              
-            <a href='trabajos'>Trabajos</a>
-            <a href='jugadas'>Jugadas</a>
-            <a href='promo'>Promociones</a>
-            <a href='block?cerrarSesion'>Cerrar Sesion</a> 
-        </div>
-        <div id="cuerpo" class="cuerpo">
+    <?php $page = "trabajos"; ?>
+      <!--Iniciar Barra de Navegación @media 1200px-->
+      <?php include 'barraNavegacion.php';?>
+        <!--FIN Barra de Navegación @media 1200px-->   
+
+        <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;">
             <div class="menu" id="menu">
                 <label style="margin-left:1px; font-weight:bold;" id="estad"></label>
                 <label style="margin-left:13px; font-weight:bold;" id="reg"></label>
@@ -326,7 +202,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
             </dialog>        
             <div class="vista" id="vista"></div>
         </div>
-        <div id="pie" class="pie"><span>Copyring (c) 2022 Red Triangle Corporation</span></div>
+              <!--Iniciar footer-->
+      <?php include 'footer.php';?>
+        <!--FIN footer-->     
     </body>
 </html>
 
