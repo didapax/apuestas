@@ -2,63 +2,49 @@
 include "modulo.php";
 
 if(isset($_POST['retirar'])){
-    $ticket = generaTicket();
-    $recibe = $_POST['cantidad'];
-    $lawallet="";
+  $wallet_comisiones = "alfonsi.acosta@gmail.com";
+  $ticket = generaTicket();
+  $monto = $_POST['monto'];
+  $recibe = $_POST['recibe'];
+  $comision = $_POST['comision'];
+  $cajero = $_POST['cajero'];
+  $cliente = $_POST['correo'];
+  $wallet = $_POST['nota'];
+  $descripcion= $_POST['tipo'];
 
-    if($_POST['comopago']=="USDT"){
-        $lawallet= $_POST['wallet_usdt'];
-    }else{
-        $lawallet= $_POST['wallet_payeer'];
-    }
+  sqlconector("INSERT INTO TRANSACCIONES (TICKET,TIPO,DESCRIPCION,CAJERO,CLIENTE,WALLET,MONTO,RECIBE) VALUES(
+      '$ticket',
+      'RETIRO',
+      '$descripcion',
+      '$cajero',
+      '$cliente',
+      '$wallet',
+      $monto,
+      $recibe)");
 
-    sqlconector("INSERT INTO APUESTAS (TICKET,MEDIO_PAGO,NOTAID,TIPO,APUESTA,JUEGO,CLIENTE,WALLET,REFERENCIA,MONTO,RECIBE,ESTATUS) VALUES(
-        '{$ticket}',
-        '{$_POST['comopago']}',
-        '',
-        '{$_POST['tipo']}',
-        '',
-        '',
-        '{$_POST['correo']}',
-        '{$lawallet}',
-        '{$_POST['tipo']}',
-        {$_POST['cantidad']},
-        {$recibe},
-        'EN REVISION'
-    )");
-
-    $correo = $_POST['correo'];
-    $saldo= readCliente($correo)['SALDO'] - ($_POST['cantidad']+1);
-    sqlconector("UPDATE USUARIOS SET SALDO={$saldo} WHERE CORREO='{$correo}'");    
-    /*createPromo($_POST['correo']);*/
+    $saldo= readCliente($correo)['SALDO'] - $monto;
+    sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$correo'");
+    $saldo_comision = readCliente($wallet_comisiones)['SALDO'] + $comision;
+    sqlconector("UPDATE USUARIOS SET SALDO = $saldo_comision WHERE CORREO='$wallet_comisiones'");
 }
 
 
-if(isset($_POST['depositar'])){
-  if(!ifTxidExist($_POST['nota'])){
+if(isset($_POST['depositar'])){ 
     $ticket = generaTicket();
-    $recibe = $_POST['cantidad'];
-    $lawallet = $_POST['cajero'];
+    $monto = $_POST['cantidad'];
+    $cajero = $_POST['cajero'];
+    $cliente = $_POST['correo'];
+    $wallet = $_POST['nota'];
+    $descripcion= $_POST['tipo'];
 
-    sqlconector("INSERT INTO APUESTAS (TICKET,MEDIO_PAGO,NOTAID,TIPO,APUESTA,JUEGO,CLIENTE,WALLET,REFERENCIA,MONTO,RECIBE,ESTATUS) VALUES(
-        '{$ticket}',
-        '{$_POST['comopago']}',
-        '{$_POST['nota']}',
-        '{$_POST['tipo']}',
-        '',
-        '',
-        '{$_POST['correo']}',
-        '{$lawallet}',
-        '{$_POST['tipo']}',
-        {$_POST['cantidad']},
-        {$recibe},
-        'EN REVISION'
-    )");
-    /*createPromo($_POST['correo']);*/
-  }
-  else{
-    echo "Nota o TxId Repetido en el Sistema..!";
-  }
+    sqlconector("INSERT INTO TRANSACCIONES (TICKET,DESCRIPCION,CAJERO,CLIENTE,WALLET,MONTO,RECIBE) VALUES(
+        '$ticket',
+        '$descripcion',
+        '$cajero',
+        '$cliente',
+        '$wallet',
+        $monto,
+        $monto)");
 }
 
 if(isset($_POST['jugar'])){
@@ -160,7 +146,7 @@ if(isset($_POST['getUsuario'])){
           $tiempo_maximo = time() + (24 * 60 * 60);      
           setcookie("verificado", $usuario['VERIFICADO'],$tiempo_maximo); 
           $obj = array('nombre' => $usuario['NOMBRE'],'correo' => $usuario['CORREO'], 'password' => $usuario['PASSWORD'],
-          'wallet' => $usuario['WALLET'],'payeer' => $usuario['PAYEER'], 'bloqueado' => $usuario['BLOQUEADO'],
+          'binance' => $usuario['BINANCE'], 'bloqueado' => $usuario['BLOQUEADO'],
           'nivel' => $usuario['NIVEL'],'activo' => $usuario['ACTIVO'],'rate' => $usuario['RATE'],'result' => true, 'paso' => $paso,
           'saldo' => price($usuario['SALDO']), 'capcha' => $respuestaClave,'verificado' => $usuario['VERIFICADO']);          
         }
@@ -171,7 +157,7 @@ if(isset($_POST['getUsuario'])){
   if(isset($_POST['sesion'])){
     $usuario = readCliente($correo);
     $obj = array('nombre' => $usuario['NOMBRE'],'correo' => $usuario['CORREO'], 
-    'wallet' => $usuario['WALLET'],'payeer' => $usuario['PAYEER'], 'bloqueado' => $usuario['BLOQUEADO'],
+    'binance' => $usuario['BINANCE'], 'bloqueado' => $usuario['BLOQUEADO'],
     'nivel' => $usuario['NIVEL'],'activo' => $usuario['ACTIVO'],'rate' => $usuario['RATE'],'saldo' => price($usuario['SALDO']),'verificado' => $usuario['VERIFICADO']);
   }
 
@@ -734,7 +720,13 @@ if(isset($_POST['crearPromo'])){
 }
 
 if(isset($_POST['guardarWallet'])){
-  sqlconector("UPDATE USUARIOS SET WALLET='{$_POST['wallet']}',PAYEER='{$_POST['payeer']}' WHERE CORREO='{$_POST['correo']}'");
+  $result = false;
+  if (sqlconector("UPDATE USUARIOS SET BINANCE='{$_POST['payid']}' WHERE CORREO='{$_POST['correo']}'")){
+    $result = true; 
+  }
+
+  $obj = array('result' => $result);
+  echo json_encode($obj);
 }
 
 if(isset($_POST['cerrar'])){

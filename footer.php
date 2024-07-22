@@ -20,7 +20,7 @@
 
         <div class="legal-links"  style='font-size: .9rem;'>
             <span class="privacy-policy"><b><a href="ayuda.php">Acerca de Nosotros</a></b></span>
-            <span class="term-of-use"><b><a href=#>Terminos de uso</a></b></span>
+            <span class="term-of-use"><b><a href="terminos.php">Terminos de uso</a></b></span>
         </div>
 
            

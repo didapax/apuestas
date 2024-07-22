@@ -11,6 +11,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <link rel="stylesheet" type="text/css" href="css/Common.css">        
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">                
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+        <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />           
+        <link rel="stylesheet" href="css/bootstrap/css/bootstrap.css">      
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>          
     </head>
     <header>
         <style>
@@ -32,7 +36,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 width:350px;
                 border: solid 1px black;
                 box-shadow: 4px 3px 8px 1px #969696;
-                background: #F4B581;              
+                background: #CD6155;              
                 color:white;
                 font-weight:bold;
                 border-radius: 5px;
@@ -44,7 +48,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 padding:5px;
                 margin:2px;
                 width:360px;
-                height: 250px;
+                height: 290px;
                 border: solid 1px black;
                 box-shadow: 4px 3px 8px 1px #969696;
                 background: #1B2224;              
@@ -72,12 +76,22 @@ function myFunction() {
             function guardar(){
                 $.post("block",{
                     guardarWallet:"",
-                    correo: document.getElementById("correo").value,
-                    wallet: document.getElementById("wallet").value,
-                    payeer: document.getElementById("payeer").value
+                    correo: document.getElementById("correo").value,                    
+                    payid: document.getElementById("payid").value
                 },function(data){
-                    leerDatos();
-                    document.getElementById('agregar').close();
+                    var datos= JSON.parse(data);
+                    console.log("result:", data)
+                    if(datos.result){
+                        Swal.fire({
+                                    title: 'Wallet',
+                                    text: "Tu Wallet de PayId ha sigo Guardada con exito..!",
+                                    icon: 'info',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok'
+                                    });                                            
+                        leerDatos();
+                        document.getElementById('agregar').close();    
+                    }
                 });
             }
 
@@ -85,21 +99,18 @@ function myFunction() {
                 if(document.getElementById("correo").value.length > 0){
                     $.post("block",{
                         getUsuario:"", 
+                        sesion: true,
                         correo: document.getElementById("correo").value
                     },function(data){
+                        console.log("datos: ",data);
                         var datos= JSON.parse(data);
-                        document.getElementById("payeer").value = datos.payeer;
-                        document.getElementById("wallet").value = datos.wallet;
-                        document.getElementById("wallet_payeer").value = datos.payeer;
-                        document.getElementById("wallet_usdt").value = datos.wallet;  
-                        $("#saldo").html("Saldo "+datos.saldo+" USDT"); 
+                        document.getElementById("payid").value = datos.binance;
+                        //document.getElementById("wallet_binance").value = datos.binance;  
+                        $("#saldo").html("Saldo "+datos.saldo+" USDC"); 
 
-                        if(datos.wallet != null && datos.wallet.length > 0){
-                            document.getElementById("wallet").readOnly = true;
+                        if(datos.binance != null && datos.binance.length > 0){
+                            document.getElementById("payid").readOnly = true;
                         }
-                        if(datos.payeer != null && datos.payeer.length > 0){
-                            document.getElementById("payeer").readOnly = true;
-                        }                       
                     });
                 }
             }
@@ -109,136 +120,166 @@ function myFunction() {
             }
 
             function selpago(){
-                if($("#comopago").val() == "USDT"){
+                if(document.getElementById("payid").value.length >0){
+                    if($("#comopago").val() == "BINANCE"){                    
                     $.post("block",{
                         getUsuario:"",
-                        correo: document.getElementById("emailCajero").value
+                        sesion: true,
+                        correo: document.getElementById("cajero").value
                     },function(data){
                         var datos= JSON.parse(data);                        
-                        document.getElementById("cantidad").min = 10;
                         document.getElementById("cantidad").value = 0;
-                        document.getElementById("cajero").value = datos.wallet;
-                        $("#info").html("USDT + Comision a la Wallet USDT TRC20:");
+                        document.getElementById("paycajero").value = datos.binance;
+                        //$("#info").html(" USDC + Comision por Uso de Red");
                         $("#detalles").css("display","inline-block")
-                        document.getElementById('tipo').value = "Deposito USDT";
+                        document.getElementById('tipo').value = "Deposito Binance Pay";
                     });
                 }
-
-                if($("#comopago").val() == "PAYEER"){
-                    $.post("block",{
-                        getUsuario:"",
-                        correo: document.getElementById("emailCajero").value
-                    },function(data){
-                        var datos= JSON.parse(data);
-                        document.getElementById("cantidad").min = 5;
-                        document.getElementById("cantidad").value = 0;
-                        document.getElementById("cajero").value = datos.payeer;
-                        $("#info").html("USDT + Comision a la Cuenta de Payeer:");
-                        $("#detalles").css("display","inline-block");
-                        document.getElementById('tipo').value = "Deposito Payeer";
-                    });
-                }                
+                }   
+                else{
+                    Swal.fire({
+                                    title: 'Depositos',
+                                    text: "Debe Tener un Binance Pay ID Valido Para los Depositar..!",
+                                    icon: 'warning',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok'
+                                    });                    
+                }             
+           
             }
 
             function selretiro(){
-                if($("#como_retiro").val() == "USDT"){
-                    if(document.getElementById("wallet").value.length >0){
+                if($("#como_retiro").val() == "BINANCE"){
+                    if(document.getElementById("payid").value.length >0){
                         $.post("block",{
                         getUsuario:"",
+                        sesion: true,
                         correo: document.getElementById("correo").value
                         },function(data){
                             var datos= JSON.parse(data);                        
-                            document.getElementById("cantidad_retiro").min = 10;
-                            document.getElementById("cantidad_retiro").value = 0;
-                            $("#info_retiro").html("USDT - Comision a la Wallet USDT TRC20:");
-                            $("#detalles_retiro").css("display","inline-block")
-                            document.getElementById('tipo_retiro').value = "Retiro USDT";
-                            document.getElementById("cajero_retiro").value = document.getElementById("wallet_usdt").value;
+                            //document.getElementById("cantidad_retiro").min = 10;
+                            //document.getElementById("cantidad_retiro").value = 0;
+                            //$("#info_retiro").html("USDC - Comision de Red");
+                            $("#detalles_retiro").css("display","inline-block");
+                            document.getElementById('tipo_retiro').value = "Retiro Binance Pay";
+                            document.getElementById("cajero_retiro").value = document.getElementById("wallet_binance").value;
                         });
                     }
                     else{
-                        alert("Debe Tener una wallet USDT Para los retiros..!");
+                        Swal.fire({
+                                    title: 'Retiros',
+                                    text: "Debe Tener un Binance Pay ID Valido Para los retiros..!",
+                                    icon: 'warning',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok'
+                                    });
                     }
                 }
-
-                if($("#como_retiro").val() == "PAYEER"){
-                    if(document.getElementById("payeer").value.length >0){
-                        $.post("block",{
-                        getUsuario:"",
-                        correo: document.getElementById("correo").value
-                        },function(data){
-                            var datos= JSON.parse(data);
-                            document.getElementById("cantidad_retiro").min = 10;
-                            document.getElementById("cantidad_retiro").value = 0;
-                            $("#info_retiro").html("USDT - Comision a la Cuenta de Payeer:");
-                            $("#detalles_retiro").css("display","inline-block");
-                            document.getElementById('tipo_retiro').value = "Retiro Payeer";
-                            document.getElementById("cajero_retiro").value = document.getElementById("wallet_payeer").value;
-                        });
-                    }
-                    else{
-                        alert("Debe Tener una wallet Payeer Para los retiros..!");
-                    }
-                }                
             }
 
             function retirar_back(){
-                if($("#como_retiro").val() == "USDT" && (document.getElementById("cantidad_retiro").value*1) > 9){
-                    if((document.getElementById("tsaldo").value*1) >= (document.getElementById("cantidad_retiro").value*1)){
-                        retirar();
-                    }
-                    else{
-                        alert("saldo insuficiente");
-                    }
-                }                
-                else if($("#como_retiro").val() == "PAYEER" && document.getElementById("cantidad_retiro").value > 9){
-                    if((document.getElementById("tsaldo").value*1) >= (document.getElementById("cantidad_retiro").value*1)){
-                        retirar();
-                    }
-                    else{
-                        alert("saldo insuficiente");
-                    }
-                }
-                else{
-                    alert("Retiros Minimos USDT 10");
-                }          
+
+                Swal.fire({
+                            title: 'Retirar',
+                            text: "Estas Seguro de realizar el Retiro de tu cuenta, los retiros tardan entre 24 a 48 horas en realizarse dependiendo de la congestion de la red. ",
+                            icon: 'info',
+                            confirmButtonColor: '#EC7063',
+                            confirmButtonText: 'Si Retirar',
+                            showCancelButton: true,
+                            cancelButtonText: "Cancelar"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    if($("#como_retiro").val() == "BINANCE" && (document.getElementById("cantidad_retiro").value*1) > 0){
+                                        if((document.getElementById("tsaldo").value*1) >= (document.getElementById("cantidad_retiro").value*1)){
+                                            retirar();
+                                        }
+                                        else{
+                                            Swal.fire({
+                                                        title: 'Retiros',
+                                                        text: "Saldo USDC Insuficiente",
+                                                        icon: 'warning',
+                                                        confirmButtonColor: '#3085d6',
+                                                        confirmButtonText: 'Ok'
+                                                        });
+                                        }
+                                    }
+                                    else{
+                                        Swal.fire({
+                                                        title: 'Retiros',
+                                                        text: "Los retiros debe ser minimo 1 USDC",
+                                                        icon: 'warning',
+                                                        confirmButtonColor: '#3085d6',
+                                                        confirmButtonText: 'Ok'
+                                                        });
+                                    }                                   
+                                }
+                                else{
+                                    window.location.href="miwallet";
+                                }
+                            });    
+       
             }
 
 
             function jugar_back(){
-                if($("#comopago").val() == "USDT" && document.getElementById("cantidad").value > 9){
-                    lanzar();
-                }                
-                else if($("#comopago").val() == "PAYEER" && document.getElementById("cantidad").value > 4){
-                    lanzar();
-                }
-                else{
-                    alert("Depositos o Recargas Minimos en Payeer 5 y USDT 10");
-                }          
+                Swal.fire({
+                            title: 'Depositos',
+                            text: "Bienvenido Deposito a tu cuenta CriptoSignalGroup, los depositos tardan entre 24 a 48 horas en realizarse dependiendo de la congestion de la red. ",
+                            icon: 'info',
+                            confirmButtonColor: '#117A65',
+                            confirmButtonText: 'Depositar',
+                            cancelButtonColor: '#AEB6BF',
+                            showCancelButton: true,
+                            cancelButtonText: "Cancelar"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    if($("#comopago").val() == "BINANCE" && document.getElementById("cantidad").value > 0){
+                                        lanzar();
+                                    }                
+                                    else{
+                                        Swal.fire({
+                                                        title: 'Depositos',
+                                                        text: "Los depositos debe ser al menos 1 USDC, o otro monto",
+                                                        icon: 'warning',
+                                                        confirmButtonColor: '#3085d6',
+                                                        confirmButtonText: 'Ok'
+                                                        });                    
+                                    }                                  
+                                }else{
+                                    window.location.href="miwallet";
+                                }
+                            });            
             }
 
             function retirar(){
                 if(document.getElementById("cantidad_retiro").value.length>0 && document.getElementById("como_retiro").value.length>0){
                     document.getElementById("retirar_btn").disabled = true;
                 $.post("block",{
-                        retirar:"",
-                        cantidad: document.getElementById("cantidad_retiro").value -1,
+                        retirar:"",                        
                         tipo: document.getElementById("tipo_retiro").value,
                         comopago: document.getElementById("como_retiro").value,
-                        wallet_usdt: document.getElementById("wallet_usdt").value,
-                        wallet_payeer: document.getElementById("wallet_payeer").value,
+                        wallet: document.getElementById("wallet_binance").value,
                         correo: document.getElementById("correo").value,
+                        cajero: document.getElementById("cajero").value,
+                        monto: document.getElementById("cantidad_retiro").value,                        
+                        recibe: document.getElementById("recibe").value,
+                        comision: document.getElementById("comision_retiro").value
                     },function(data){
                         document.getElementById('retirar').close();
                         document.getElementById("retirar_btn").disabled = false;
                         if(data.length>0){
-                            alert(data);
                             document.getElementById("retirar_btn").disabled = false;
                         }
                         window.location.href="historialcliente";
                     });  
                 }else{
-                    alert("No hay Retiro a Realizar...");
+                    Swal.fire({
+                                    title: 'Retirar',
+                                    text: "No se puede realizar el retiro o faltan datos",
+                                    icon: 'warning',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok'
+                                    });
                 }         
             }
 
@@ -247,132 +288,182 @@ function myFunction() {
                     document.getElementById("jugar").disabled = true;
                 $.post("block",{
                         depositar:"",
-                        nota: document.getElementById("nota").value,
+                        nota: document.getElementById("wallet_binance").value,
                         cantidad: document.getElementById("cantidad").value,
                         tipo: document.getElementById("tipo").value,
                         comopago: document.getElementById("comopago").value,
                         cajero: document.getElementById("cajero").value,
-                        correo: document.getElementById("correo").value,
+                        correo: document.getElementById("correo").value
                     },function(data){
                         document.getElementById('jugada').close();
                         document.getElementById("jugar").disabled = false;
                         if(data.length>0){
-                            alert(data);
                             document.getElementById("jugar").disabled = false;
                         }
                         window.location.href="historialcliente";
                     });  
                 }else{
-                    alert("No hay Deposito a Realizar...");
+                    Swal.fire({
+                                    title: 'Depositos',
+                                    text: "No se puede realizar el deposito o faltan datos",
+                                    icon: 'warning',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok'
+                                    });                    
                 }         
             }
 
             function calculo_retiro(){
-                var ganancia=0;
-                ganancia = document.getElementById("cantidad_retiro").value -1;
-                if($("#desafiox1_5").val() == 1){
-                    ganancia = document.getElementById("cantidad_retiro").value -1;
-                }
-                if($("#desafiox3").val() == 1){
-                    ganancia = document.getElementById("cantidad_retiro").value -1;
-                }                
-                if($("#desafiox4").val() == 1){
-                    ganancia = document.getElementById("cantidad_retiro").value -1;
-                }                
-                $("#calculo_retiro").html("Usted Recibe: "+ ganancia + "USDT");                
-                $("#apuesta_retiro").html(document.getElementById("cantidad_retiro").value -1);
+                let cantidad = document.getElementById("cantidad_retiro").value *1;
+                let comision = 0;
+                let porcentaje = 3; 
+                let total = 0;
+
+                comision = (cantidad * porcentaje) / 100;
+                total = cantidad - comision;
+                document.getElementById("recibe").value = Math.round(total * 100) / 100;
+                document.getElementById("comision_retiro").value = Math.round(comision * 100) / 100;
+                $("#calculo_retiro").html("<li>Retiro por =  "+ cantidad + " USDC</li>"+"<li>Comision de Red "+porcentaje+"% =  "+ Math.round(comision * 100) / 100 + " USDC</li>"+"<li>Usted Recibe =  <b>"+ Math.round(total * 100) / 100 + "</b> USDC</li>");
+
             }
 
             function calculo(){
-                var ganancia=0;
-                ganancia = document.getElementById("cantidad").value *1;
-                if($("#desafiox1_5").val() == 1){
-                    ganancia = document.getElementById("cantidad").value *1;
-                }
-                if($("#desafiox3").val() == 1){
-                    ganancia = document.getElementById("cantidad").value *1;
-                }                
-                if($("#desafiox4").val() == 1){
-                    ganancia = document.getElementById("cantidad").value *1;
-                }                
-                $("#calculo").html("Usted Deposita: "+ ganancia + "USDT");                
-                $("#apuesta").html(document.getElementById("cantidad").value);
+                let cantidad = document.getElementById("cantidad").value *1;
+                let comision = 0;
+                let porcentaje = 0; 
+                let total = 0;
+
+                comision = (cantidad * porcentaje) / 100;
+                total = cantidad - comision;
+                $("#calculo").html("<li>Deposito =  "+ cantidad + " USDC</li>"+"<li>Comision de Red "+porcentaje+"% =  "+ Math.round(comision * 100) / 100 + " USDC</li>"+"<li>Usted Recibe =  <b>"+ Math.round(total * 100) / 100 + "</b> USDC</li>");
             }
              
              function inicio(){
                 leerDatos();
-                myVar = setInterval(leerHistorial, 3000);
             }
         </script>
     </header>
     <body onload="inicio()">
-
-   
     <?php $page = "wallet"; ?>
       <!--Iniciar Barra de Navegación @media 1200px-->
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->     
 
         <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
-    
+        <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['SALDO']; ?>" name="tsaldo" id="tsaldo">
+        <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['BINANCE']; ?>" name="wallet_binance" id="wallet_binance">        
+        <input type="hidden" name="cajero" id="cajero" value="alfonsi.acosta@gmail.com">
+        <input type="hidden" name="tipo" id="tipo">
+        <input type="hidden" id="recibe">
+        <input type="hidden" id="comision_retiro">
+
         <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;">
 
         <dialog class="dialog_agregar" id="jugada" close>
             <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('jugada').close()">X</a><br>
             <form method="post" action="miwallet">
-                <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['SALDO']; ?>" name="tsaldo" id="tsaldo">
-                <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
-                <input type="hidden" name="emailCajero" id="emailCajero" value="khorazi57@gmail.com">
-                <input type="hidden" name="wallet_usdt" id="wallet_usdt">
-                <input type="hidden" name="wallet_payeer" id="wallet_payeer">
-                <input hidden type="text" id="tipo" name="tipo"><br>
-                Como Vas a Pagar: <select required onchange="selpago()" name="comopago" id="comopago"><option id="comopago_back" value=""></option><option value="USDT">USDT Tron Trc20</option><option value="PAYEER">Payeer</option></select>
+                <br>
+                Como Vas a Pagar: 
+                <select required onchange="selpago()" name="comopago" id="comopago" style="color:black;">
+                    <option id="comopago_back" value=""></option>
+                    <option value="BINANCE">Binance Pay</option>                
+                </select>
                 <div id="detalles" style="display:none;">
-                    Cantidad a Depositar: <input required type="number" name="cantidad" id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" min="10" max="50" step="1"><br>
-                    <div id="calculo" style="color:green;float:right; background:white;padding:3px; border-radius:3px;"></div><br>
-                    Envia <span id="apuesta"></span><span id="info"></span>
-                    <input readonly class="datcajero" style="" id="cajero">
-                    <button title="Has Click para copiar" type="button" style="border:0;cursor:pointer;" onclick="myFunction()"><i class="far fa-copy"></i></button>
+                    Cantidad a Depositar: 
+                    <input required type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" style="color:black;"><br>                    
+                    <!--Envia <span id="apuesta"></span><span id="info"></span>-->
+                    <br><br> Binance Pay Id  CriptoSignalGroup
+                    <input readonly class="datcajero" style="" id="paycajero">
+                    <img src="Assets/qrbinance.png"><br>
+                    <div id="calculo" style="color:green;float:right; background:white;padding:3px;border:solid 1px; border-radius:5px;"></div><br>
+                 <!--   <button title="Has Click para copiar" type="button" style="border:0;cursor:pointer;" onclick="myFunction()"><i class="far fa-copy"></i></button>
                     <br>
                     Coloca la Nota Id (txid) de la transferencia realizada:<br>
-                    <input required type="text" id="nota" name="nota">
-                </div><br>
-                <button onclick="jugar_back()" class='appbtn' style="float:right;" type="button" id="jugar" name="jugar">Depositar</button>
+                    <input required type="text" id="nota" name="nota">-->
+                </div><br><br>
+                <button onclick="jugar_back()" class='appbtn' style="float:right;color:black;" type="button" id="jugar" name="jugar">Depositar</button>
             </form>
         </dialog>
 
         <dialog class="dialog_retirar" id="retirar" close>
             <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('retirar').close()">X</a><br>
             <form method="post" action="miwallet">
-                <input hidden type="text" id="tipo_retiro" name="tipo_retiro"><br>
-                Retirar con: <select required onchange="selretiro()" name="como_retiro" id="como_retiro"><option id="comopago_back" value=""></option><option value="USDT">USDT Tron Trc20</option><option value="PAYEER">Payeer</option></select>
+                <input type="hidden" id="tipo_retiro" name="tipo_retiro"><br>
+                Retirar con: 
+                <select required onchange="selretiro()" name="como_retiro" id="como_retiro" style="color:black;">
+                    <option id="comopago_back" value=""></option>
+                    <option value="BINANCE">Binance Pay</option>
+                </select>
                 <div id="detalles_retiro" style="display:none;">
-                    Cantidad a Retirar: <input required type="number" name="cantidad_retiro" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0" min="10"  step="1"><br>
-                    <div id="calculo_retiro" style="color:green;float:right; background:white;padding:3px; border-radius:3px;"></div><br><br>
-                    Recibe <span id="apuesta_retiro"></span><span id="info_retiro"></span>
+                    Cantidad a Retirar: 
+                    <input required type="number" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0" style="color:black;"  step="1"><br>
+                    <div id="calculo_retiro" style="color:green;float:right; background:white;padding:3px; border:solid 1px; border-radius:3px;"></div><br><br>
+                    <!--Recibe <span id="apuesta_retiro"></span><span id="info_retiro"></span>-->
+                    <br><br>Mi Binance Pay Id:
                     <input readonly class="datcajero" style="" id="cajero_retiro">                    
                     <br>
                 </div><br>
-                <button onclick="retirar_back()" class='appbtn' style="float:right;" type="button" id="retirar_btn" name="retirar_btn">Retirar</button>
+                <button onclick="retirar_back()" class='appbtn' style="float:right;color:black;" type="button" id="retirar_btn" name="retirar_btn">Retirar</button>
             </form>
         </dialog>
 
             <br>
-            <div id="saldo"></div>
-            <button onclick="document.getElementById('jugada').show();">Depositar</button>
-            <button onclick="document.getElementById('retirar').show();">Retirar</button>
-            <hr>
-        <div class="vista" id="vista">
-        <div class="dialog_wallet" id="agregar">                                   
-            Esta Direccion sera Utlizada para los pagos de tus premios y Retiros, asegurate que sea correcta,
-            Fortuna Royal no se hace responsable por perdidas.<br><br>
-            Wallet USDT TRC20:<br> <input style="width:300px;" type="text" id="wallet"><br>
-            ID Payeer: <br> <input style="width:300px;" type="text" id="payeer"><br>
-            <button id="guardar" class='appbtn' style="float:right;" type="button" onclick="guardar()">Guardar</button>
-        </div> 
+           <!-- <div id="saldo"></div>        -->
+
+      <!-- Inicio de la pestaña -->
+      <div class="container">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="pill" style="color:black;" href="#home">Editar mi perfil</a></li>
+                <li><a data-toggle="pill" style="color:black;" href="#depositos">Depositos</a></li>
+                <li><a data-toggle="pill" style="color:black;" href="#retiros">Retiros</a></li>
+            </ul>
+            
+            <div class="tab-content">
+
+                <div id="home" class="tab-pane fade in active">
+                    <div class="tab-title">
+                        <h3>Editar mi perfil</h3>
+                    </div>
+                    <div class="vista" id="vista">
+                    <div class="dialog_wallet" id="agregar">                                   
+                        Esta Direccion  de Binance Pay Id de sera Utlizada para los Depositos y Retiros, 
+                        asegurate que sea correcta, Cripto Signal Group no se hace responsable por la informacion 
+                        erronea que suministres.<br><br>
+                        <image src="Assets/minibina.png"><br>
+                        Mi Pay ID: <br> <input style="width:300px; color:black;" type="text" id="payid"><br>
+                        <button id="guardar" class='appbtn' style="float:right; color:black;" type="button" onclick="guardar()">Guardar</button>
+                    </div> 
+                    </div>
+                </div>
+                
+                        
+                <div id="depositos" class="tab-pane fade">
+                    <div class="tab-title">
+                        <h3>Depositar Usdc por Binance Pay</h3>
+                    </div>
+                    <div class="container mt-5 mb-5">
+                        <button onclick="document.getElementById('jugada').show();">Depositar</button>
+                    </div>
+                                        
+                </div>
+
+                <div id="retiros" class="tab-pane fade">
+                    <div class="tab-title">
+                        <h3>Retirar Tus Usdc de la Plataforma</h3>
+                    </div>
+                    <div class="container mt-5 mb-5">
+                        <button onclick="document.getElementById('retirar').show();">Retirar</button>
+                    </div>
+                                        
+                </div>
+
+
+            </div>
         </div>
+
+        <!-- Fin de la pestaña -->
+
         </div>
-        
 
 
       <!--Iniciar footer-->

@@ -22,10 +22,11 @@
             }   
 
             form{
+                color:white;
                 font-weight:bold;
                 top: 15%;
                 width: 350px;
-                height: 390px;
+                height: 430px;
                 border: 1px solid black;
                 border-radius: 13px;
                 text-align: center;
@@ -128,7 +129,7 @@
                             document.getElementById("btn_registro").disabled = true;
                             Swal.fire({
                             title: 'Registrarse',
-                            text: "Usuario No Registrado...! Deseas Unirte? es rapido y sencillo ",
+                            text: "Email No Registrado.! Recuerda debe ser Un Email de Usuario en Binance Valido... estas seguro Deseas Unirte? ",
                             icon: 'info',
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'Si Unirme',
@@ -215,6 +216,7 @@
                     }
 		        ?>               
                 <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="window.location.href='index'">X</a>
+                <h3>Cripto Signal Group</h>
                 <br><br>
                 <div style="width:85px;display:inline-block;">Correo:</div><input id="correo" required type="email" ><br>
                 <div style="width:85px;display:inline-block;">Password:</div><input id="password" required type="password" >
@@ -222,10 +224,11 @@
                 <div name="g-recaptcha-response" id="g-recaptcha-response" class="g-recaptcha" data-sitekey="6Ld1nA0aAAAAAA7F7eJOY7CMwg7aaQAfg3WZy6P0"></div>
                 <p class="condiciones" id="terminos" ><u>Terminos y Condiciones</u><br>
                     Al hacer Click Usted esta Aceptando estos Terminos y Condiciones, Nuestra Pagina
-                    No se hace responsable por el manejo de la Informacion suministrada, usted debe proporcionar 
-                    al comprar o suscribirse a un servicio la Nota ID o Tixd de la Transferencia en USDT al 
-                    Operador de la Pagina para ser verificada, ya que no nos hacemos responsable por extravios de Dinero, 
-                    usted certifica que es Mayor de Edad y Unico Responsable del uso de la informacion aqui dada. 
+                    No se hace responsable por el manejo de la Informacion suministrada, usted debe  
+                    Registrarse con un correo Valido para BINANCE, su correo de Binance sera su Identificacion   
+                    el Operador de la Pagina, no se hace responsable por extravios de Dinero, 
+                    para depositos y retiros se utiliza <u>Binance Pay</u>
+                    usted certifica que es Mayor de Edad y Unico Responsable del uso de la informacion aqui suministgrada. 
                     Los Depositos y Retiros se realizan en un plazo de 24 a 48 Horas.
                 </p>
                 <button type="button" onclick="registro()" id="btn_registro">Inicio / Unirse</button> 

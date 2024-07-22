@@ -20,9 +20,9 @@
                       echo "<a href='index' >Home</a>";
                     }
                     if($page=="chat"){
-                      echo "<a href='chat' class='active'>Chat</a>";
+                      echo "<a href='chat' class='active'>Soporte</a>";
                     }else{
-                      echo "<a href='chat' >Chat</a>";
+                      echo "<a href='chat' >Soporte</a>";
                     }
                     if($page=="wallet"){
                       echo "<a href='miwallet' class='active'>Mi Wallet</a>";
