@@ -22,8 +22,8 @@ if(isset($_POST['retirar'])){
       $monto,
       $recibe)");
 
-    $saldo= readCliente($correo)['SALDO'] - $monto;
-    sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$correo'");
+    $saldo= readCliente($cliente)['SALDO'] - $monto;
+    sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cliente'");
     $saldo_comision = readCliente($wallet_comisiones)['SALDO'] + $comision;
     sqlconector("UPDATE USUARIOS SET SALDO = $saldo_comision WHERE CORREO='$wallet_comisiones'");
 }
@@ -104,11 +104,12 @@ if(isset($_POST['jugar'])){
 
 if(isset($_POST['sendmail'])){
   $usuario = readCliente($_POST['correo']);
+
   $correo = $usuario['CORREO'];
   $vkey = $usuario['VKEY'];
   $para = $correo;
   $asunto = "Verificación de correo electrónico";
-  $mensaje = "<a href='http://localhost/apuestas/verificarEmail?vkey=$vkey'>Registrar cuenta</a>";
+  $mensaje = "<a href='http://criptosignalgroup.online/verificarEmail?vkey=$vkey'>Registrar cuenta</a>";
   $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
   $cabeceras .= "MIME-Version: 1.0" . "\r\n";
   $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
@@ -428,61 +429,39 @@ if(isset($_GET['readJuegos'])) {
     }
 }
 
-if(isset($_GET['readTrabajos'])) {
-  $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
-  if (!$conexion) {
-    echo "Refresh page, Failed to connect to Data...";
-    exit();
-  }else{
-    $colorAlert = "#F96E1F";
-    $consulta = "select * from APUESTAS WHERE ELIMINADO=0 AND PAGADO=0 ORDER BY FECHA"; 
-    echo "
-    <table style='width:100%; text-align:center;'>
-      <th></th>
-      <th>Evento</th>
-      <th>Apuesta</th>
-      <th>Monto</th>
-      <th>Estatus</th>
-      <th>Opciones</th>
-    ";
-    $resultado = mysqli_query( $conexion, $consulta );
-    while($row = mysqli_fetch_array($resultado)){
-
-      $color="transparent";
-      if(str_contains($row['TIPO'], 'Deposito')){
-        $color = "green";
-      }      
-      if(str_contains($row['TIPO'], 'Retiro')){
-        $color = "red";
-      }     
-
-      $tomado = "";
-      if($row['TOMADO']==1){
-        $tomado = "checked";
-      }      
-      $fecha = latinFecha($row['FECHA']);
-      $line= "";
-      if(strlen($row['JUEGO'])>0){
-        $juego = readJuegoId($row['JUEGO']);
-        $line = $juego['JUEGO']." / ".$juego['EQUIPO1']." Vs ".$juego['EQUIPO2'];
-      }
-     echo "<tr style='background:{$color};'>
-      <td><span>".$row['REFERENCIA']."</span></td>
-      <td><span>{$line}</span></td>
-      <td><span>".$row['APUESTA']."</span></td>
-      <td><span>".$row['MONTO']."</span></td>
-      <td><span>".$row['ESTATUS']."</span></td>
-      <td>
-        <button title='Cancelar' type='button' style='background:#F0917F;' onclick=\"borrar(".$row['ID'].")\">&#9932;</button>
-        <button title='Ver Detalles' type='button' style='background:yellow;color:black;' onclick=\"ver(".$row['ID'].")\">&#9749;</button>
-        <!--<input id='tomar{$row['ID']}' type='checkbox' {$tomado} onclick=\"tomar(".$row['ID'].")\"><label for='tomar{$row['ID']}'>Tomar</label>-->
-      </td>
-      </tr>";
+if(isset($_GET['readTrabajos'])) {  
+  function countNot($Idpedido){
+    $total = 0;
+    $resultado = sqlconector("SELECT COUNT(IDPEDIDO) AS TOTAL FROM NOTIFICACIONES WHERE IDPEDIDO='$Idpedido' AND VISTO = 0 AND IDUSUARIO = ".readCliente($_GET['correo'])['ID']);
+    if($resultado){
+      $row = mysqli_fetch_array($resultado);
+      $total = $row['TOTAL'];
     }
-
-    echo "</table>";
-    mysqli_close($conexion);
+    return $total;
   }
+
+    $obj= array();
+    $consulta = "select * from TRANSACCIONES WHERE ELIMINADO=0 AND PAGADO=0 ORDER BY FECHA"; 
+    $resultado = sqlconector($consulta);
+    if($resultado){
+      while($row = mysqli_fetch_array($resultado)){
+        $obj[]= array('id' => $row['ID'],
+      'fecha' => latinFecha($row['FECHA']),
+      'ticket' => $row['TICKET'],
+      'descripcion' => $row['DESCRIPCION'],
+      'cliente' => $row['CLIENTE'],
+      'cajero' => $row['CAJERO'],
+      'tipo' => $row['TIPO'],
+      'medio_pago' => $row['MEDIO_PAGO'],
+      'wallet' => $row['WALLET'],
+      'monto' => $row['MONTO'],
+      'recibe' => $row['RECIBE'],
+      'moneda' => $row['MONEDA'],
+      'notif' => countNot($row['TICKET']),
+      'estatus' => $row['ESTATUS']);
+      }
+    }
+    echo json_encode($obj);
 }
 
 if(isset($_GET['readHistorialAdmin'])) {
@@ -524,6 +503,48 @@ if(isset($_GET['readHistorialAdmin'])) {
     echo "</table>";
     mysqli_close($conexion);
   }
+}
+
+if(isset($_GET['readDepositos'])) {
+  $obj = array();
+  $correo = $_GET['correo'];
+  $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
+  $consulta = "select * from TRANSACCIONES WHERE TIPO='DEPOSITO' AND CLIENTE='$correo' ORDER BY FECHA DESC";
+  $resultado = mysqli_query( $conexion, $consulta );
+  while($row = mysqli_fetch_array($resultado)){
+    $obj[] = array('fecha' => latinFecha($row['FECHA']),
+    'id' => $row['ID'],
+    'ticket' => $row['TICKET'],
+    'descripcion' => $row['DESCRIPCION'],
+    'monto' => price($row['MONTO']),
+    'cliente' => $row['CLIENTE'],
+    'cajero' => $row['CAJERO'],
+    'pagado' => $row['PAGADO'],
+    'estatus' => $row['ESTATUS']);
+  }
+  mysqli_close($conexion);
+  echo json_encode($obj);
+}
+
+if(isset($_GET['readRetiros'])) {
+  $obj = array();
+  $correo = $_GET['correo'];
+  $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
+  $consulta = "select * from TRANSACCIONES WHERE TIPO='RETIRO' AND CLIENTE='$correo' ORDER BY FECHA DESC";
+  $resultado = mysqli_query( $conexion, $consulta );
+  while($row = mysqli_fetch_array($resultado)){
+    $obj[] = array('fecha' => latinFecha($row['FECHA']),
+    'id' => $row['ID'],
+    'ticket' => $row['TICKET'],
+    'descripcion' => $row['DESCRIPCION'],
+    'monto' => price($row['MONTO']),
+    'cliente' => $row['CLIENTE'],
+    'cajero' => $row['CAJERO'],
+    'pagado' => $row['PAGADO'],
+    'estatus' => $row['ESTATUS']);
+  }
+  mysqli_close($conexion);
+  echo json_encode($obj);
 }
 
 if(isset($_GET['readHistorial'])) {
@@ -606,85 +627,36 @@ if(isset($_POST['enviar'])){
 //CAMBIA LOS ESTATUS DE LAS APUESTAS
 if(isset($_POST['setEstatus'])){
  
-  sqlconector("UPDATE APUESTAS SET ESTATUS='{$_POST['setEstatus']}' WHERE ID={$_POST['idapuesta']}");
+  sqlconector("UPDATE TRANSACCIONES SET ESTATUS='{$_POST['setEstatus']}' WHERE TICKET='{$_POST['idapuesta']}'");
   
-  if($_POST['setEstatus'] == "PAGADO"){
-    sqlconector("UPDATE APUESTAS SET PAGADO=1 WHERE ID={$_POST['idapuesta']}");
+  if($_POST['setEstatus'] == "EXITOSO"){
+    sqlconector("UPDATE TRANSACCIONES SET PAGADO=1 WHERE TICKET='{$_POST['idapuesta']}'");    
+    $correo = readTransaccionTicket($_POST['idapuesta'])['CLIENTE'];
     
-    if(str_contains(readApuestaId($_POST['idapuesta'])['TIPO'], 'Deposito')){
-      $correo = readApuestaId($_POST['idapuesta'])['CLIENTE'];
-      $saldo= readCliente($correo)['SALDO'] + readApuestaId($_POST['idapuesta'])['RECIBE'];
-      sqlconector("UPDATE USUARIOS SET SALDO={$saldo} WHERE CORREO='{$correo}'");
-    }
-    else{
+    if(readTransaccionTicket($_POST['idapuesta'])['TIPO'] == "DEPOSITO"){
+      $monto = readTransaccionTicket($_POST['idapuesta'])['MONTO'];      
+      $saldo= readCliente($correo)['SALDO'] + $monto;
+      sqlconector("UPDATE USUARIOS SET SALDO={$saldo} WHERE CORREO='{$correo}'");    
+
       ini_set( 'display_errors', 1 );
       error_reporting( E_ALL );
-      $from = "soporte@fortunaroyal.com";
-      $to = readApuestaId($_POST['idapuesta'])['CLIENTE'];
-      $subject = "Tu Apuesta ha sido Pagada";
-      $message = "Fue hecho un pago de ".readApuestaId($_POST['idapuesta'])['RECIBE']."USDT En tu wallet Tron Trc20: ".readApuestaId($_POST['idapuesta'])['WALLET'].
-      " Exitos.!";
+      $from = "criptosignalgroup@criptosignalgroup.online";
+      $to = $correo;
+      $subject = "Transaccion de Deposito Cripto Signal Group";
+      $message = "Tu transaccion de deposito ha sido marcada con el estatus Exitoso, puedes consultar tu saldo ";
       $headers = "From:" . $from;
-      mail($to,$subject,$message, $headers);     
+      mail($to,$subject,$message, $headers);           
     }
-  }
-
-  if($_POST['setEstatus'] == "PERDISTE"){
-    sqlconector("UPDATE APUESTAS SET PAGADO=1 WHERE ID={$_POST['idapuesta']}");
-    $cliente = readApuestaId($_POST['idapuesta'])['CLIENTE'];
-    setPromo($cliente);
-    error_reporting( E_ALL );
-    $from = "soporte@fortunaroyal.com";
-    $to = readApuestaId($_POST['idapuesta'])['CLIENTE'];
-    $subject = "Sigue Intentandolo";
-    $message = "Has perdido en el juego  ".readJuegoId(readApuestaId($_POST['idapuesta'])['JUEGO'])['JUEGO'].", Sigue Intentandolo Gracias por Preferirnos.!";
-    $headers = "From:" . $from;
-    mail($to,$subject,$message, $headers);       
-  }  
-
-  if($_POST['setEstatus'] == "GANADOR"){
-    $cliente = readApuestaId($_POST['idapuesta'])['CLIENTE'];
-
-    if(!str_contains(readApuestaId($_POST['idapuesta'])['TIPO'], 'PREMIO')){
-      revisaGanadorPromo($cliente,$_POST['idapuesta']);
+    elseif (readTransaccionTicket($_POST['idapuesta'])['TIPO'] == "RETIRO"){
+      ini_set( 'display_errors', 1 );
+      error_reporting( E_ALL );
+      $from = "criptosignalgroup@criptosignalgroup.online";
+      $to = $correo;
+      $subject = "Transaccion de Retiro Cripto Signal Group";
+      $message = "Tu Retiro ha sido marcada con el estatus Exitoso, puedes consultar tu saldo en tu wallet de destino.! gracias por preferirnos ";
+      $headers = "From:" . $from;
+      mail($to,$subject,$message, $headers);                 
     }
-    
-    sqlconector("INSERT INTO LIBROCONTABLE (TIPO,MONTO) VALUES('GANADOR',5)");
-
-    $correo = readApuestaId($_POST['idapuesta'])['CLIENTE'];
-    $saldo= readCliente($correo)['SALDO'] + readApuestaId($_POST['idapuesta'])['RECIBE'];
-    sqlconector("UPDATE USUARIOS SET SALDO={$saldo} WHERE CORREO='{$correo}'");    
-
-    sqlconector("UPDATE APUESTAS SET PAGADO=1 WHERE ID={$_POST['idapuesta']}");
-
-    ini_set( 'display_errors', 1 );
-    error_reporting( E_ALL );
-    $from = "soporte@fortunaroyal.com";
-    $to = readApuestaId($_POST['idapuesta'])['CLIENTE'];
-    $subject = "Eres un Feliz Ganador";
-    $message = "Has ganado con el juego ".readJuegoId(readApuestaId($_POST['idapuesta'])['JUEGO'])['JUEGO']. " Tu apuesta ".readApuestaId($_POST['idapuesta'])['APUESTA'].
-    " Pronto recibiras tu Pago de ".readApuestaId($_POST['idapuesta'])['RECIBE']."USDT En tu wallet Tron Trc20: ".readApuestaId($_POST['idapuesta'])['WALLET'].
-    " Gracias por Preferirnos.";
-    $headers = "From:" . $from;
-    mail($to,$subject,$message, $headers);    
-  }
-
-  if($_POST['setEstatus'] == "APOSTADO"){
-    //cierra el juego si la cantidad de jugadores alcanza el limite.
-    if( sumApostadores(readApuestaId($_POST['idapuesta'])['JUEGO']) ==1 ){
-      sqlconector("UPDATE JUEGOS SET BLOQUEADO=1 WHERE ID='{$_POST['cerrar']}'");
-    }
-
-    ini_set( 'display_errors', 1 );
-    error_reporting( E_ALL );
-    $from = "soporte@fortunaroyal.com";
-    $to = readApuestaId($_POST['idapuesta'])['CLIENTE'];
-    $subject = "Apuesta ".readApuestaId($_POST['idapuesta'])['APUESTA'];
-    $message = "Cliente: ".readApuestaId($_POST['idapuesta'])['CLIENTE']." su apuesta esta ya en nuestra plataforma de forma segura, de resultar ganador espere con seguridad su premio en la Wallet que nos suministro, gracias por preferirnos.";
-    $headers = "From:" . $from;
-    mail($to,$subject,$message, $headers);     
-
-    sqlconector("INSERT INTO LIBROCONTABLE (TIPO,MONTO) VALUES('APUESTA',0.5)");
   }
 }
 

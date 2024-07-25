@@ -21,71 +21,33 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                   
         </style>        
         <script>
-            function myFunction() {
-                /* Get the text field */
-                var copyText = document.getElementById("wallet");
-
-                /* Select the text field */
-                copyText.select();
-                copyText.setSelectionRange(0, 99999); /* For mobile devices */
-
-                /* Copy the text inside the text field */
-                navigator.clipboard.writeText(copyText.value);
-                /* Alert the copied text
-                alert("Copied the text: " + copyText.value);*/
-            }
+            let trabajos = [];            
 
             function ver(id){
-                $.get("block?datosApuesta&idapuesta="+id,
-                function(data){
-                    var datos= JSON.parse(data);
-                    $("#evento").html(datos.nombre);
-                    $("#emailCliente").html(datos.cliente);
-                    $("#mediopago").html(datos.mediopago);
-                    $("#wallet").val(datos.wallet);
-                    $("#idapuesta").val(datos.id);
-                    $("#monto").html((datos.monto *1).toFixed(2)+" USDT");
-                    $("#notaid").html(datos.notaid);
-                    $("#tipo").html(datos.tipo);
-                    $("#equipo").html(datos.apuesta);
-                    $("#recibe").html((datos.recibe *1).toFixed(2)+" USDT");
-                    $("#estatus").html(datos.estatus);
-                    $("#resultados").css("display","none");
-                    document.getElementById("este").selected = true;
-                    document.getElementById("resultados").value = "";
-
-                    if(datos.tipo.includes("Deposito")){
-                        document.getElementById("apostado").disabled = true;
-                        document.getElementById("ganador").disabled = true;
-                        document.getElementById("perdiste").disabled = true;
-                        document.getElementById("pagado").disabled = false;  
-                    }
-                    else if(datos.tipo.includes("Retiro")){
-                        document.getElementById("apostado").disabled = true;
-                        document.getElementById("ganador").disabled = true;
-                        document.getElementById("perdiste").disabled = true;
-                        document.getElementById("pagado").disabled = false;  
-                    }
-                    else if(datos.tipo.includes("PREMIO")){
-                        document.getElementById("apostado").disabled = true;
-                        document.getElementById("perdiste").disabled = true;
-                        document.getElementById("pagado").disabled = true;
-                    }
-                    else if(datos.tipo.includes("Empate")){
-                        document.getElementById("pagado").disabled = true;
-                    }
-                    else if(datos.tipo.includes("Ganador")){
-                        document.getElementById("pagado").disabled = true;
-                    }
-                    else{
-                        document.getElementById("apostado").disabled = false;
-                        document.getElementById("ganador").disabled = false;
-                        document.getElementById("perdiste").disabled = false; 
-                        document.getElementById("pagado").disabled = false;   
+                
+                const selectedId = id.toString();
+                const datos = trabajos.find(p => p.id === selectedId);
+                if (datos) {  
+                    
+                    let monto = datos.monto;
+                    let destino = `Emitido desde la Wallet: ${datos.wallet}`
+                    if(datos.tipo == "RETIRO"){
+                        monto = datos.recibe;
+                        destino = `Wallet de Retiro: ${datos.wallet}`
                     }
                     
+                    $("#evento").html(datos.tipo);
+                    $("#emailCliente").html(datos.cliente);
+                    $("#mediopago").html(datos.medio_pago);
+                    $("#wallet").html(destino);
+                    $("#monto").html((monto *1).toFixed(2)+" "+datos.moneda);
+                    $("#estatus").html(datos.estatus);
+                    $("#idapuesta").val(datos.ticket);
+                          
+                    document.getElementById(datos.estatus).selected = true;
                     document.getElementById('ver').show();
-                });
+                }
+
             }
 
             function borrar(id){
@@ -114,18 +76,20 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
             
 
             function enviar(){
-                if(document.getElementById("resultados").value.length > 0){
+                let resultado  = confirm("Estas seguro de cambiar es estatus de la orden?");
+                if(resultado){
                     $.post("block",{
-                        enviar: document.getElementById("idapuesta").value,
-                        resultado: document.getElementById("resultados").value
+                        setEstatus: document.getElementById("selestatus").value,
+                        idapuesta: document.getElementById("idapuesta").value
                     },function(data){
                         leerTrabajos();
                         document.getElementById('ver').close();
                     });
                 }else{
                     document.getElementById('ver').close();
-                }                
-            }               
+                }
+            }
+
 
             function leerTrabajos(){
                 $.get("block?estadisticas=",
@@ -135,10 +99,73 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                     $("#reg").html("Referidos "+datos.totalRef);
                 });                
 
-                $.get("block?readTrabajos=", function(data){
-                $("#vista").html(data);
-                });
+                recuperarTrabajos();
             } 
+
+            function recuperarTrabajos() {
+                fetch("block?readTrabajos=1&correo="+document.getElementById('correo').value)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Error en la solicitud: " + response.status);
+                        }
+                        return response.json(); // Parsear la respuesta como JSON
+                    })
+                    .then(data => {
+                        trabajos = data;  
+                        
+                        mostrarTablaTrabajos();
+                        // Aquí puedes procesar los datos recibidos (data)
+                    })
+                    .catch(error => {
+                        console.error("Error en la solicitud:", error);
+                    });
+    
+            }
+
+            function mostrarTablaTrabajos() {
+                const tablaCuerpo = document.getElementById("tabla-cuerpo-depositos");
+                tablaCuerpo.innerHTML = "";
+
+                trabajos.forEach((producto, index) => {
+                    let monto = producto.monto;
+                    let color_estatus="#FAD7A0";
+
+                    if(producto.tipo == "RETIRO"){
+                        monto= producto.recibe;
+                    }
+
+                    switch (producto.estatus) {
+                        case 'REVISION':
+                            color_estatus="#4caf50";
+                            break;
+                            case 'ESPERA':
+                                color_estatus="#2196f3";
+                                break;        
+
+                            case 'EXITOSO':
+                                color_estatus="#ff9800";
+                                break;        
+                        default:
+                            color_estatus="#FAD7A0";
+                            break;
+                    }                 
+                    const fila = document.createElement("tr");
+                    fila.innerHTML = `
+                        <td>${producto.fecha}</td>
+                        <td>${producto.tipo}</td>
+                        <td>${producto.ticket}</td>
+                        <td>${producto.descripcion}</td>
+                        <td>${Math.round(monto * 100) / 100} ${producto.moneda}</td>
+                        <td style='background:${color_estatus}'>${producto.estatus}</td>
+                        <td>
+                            <!--<button type='button' onclick='borrar(${producto.id})' >Delete</button>-->                            
+                            <button type='button' onclick='ver(${producto.id})' >Trabajar</button>
+                            <a href='chatAdmin?ticket=${producto.ticket}'>&#128231;<sup style='color:red; font-weight: bold;'>${producto.notif}</sup></a>                            
+                        </td>
+                    `;
+                    tablaCuerpo.appendChild(fila);
+                });
+            }              
 
             function inicio(){
                 leerTrabajos();
@@ -149,18 +176,6 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 document.getElementById('agregar').show();
             }
             
-            function selestatus(){
-                if(document.getElementById("selestatus").value=="GANADOR"){
-                    $("#resultados").css("display","inline-block");
-                }
-
-                $.post("block",{
-                        setEstatus: document.getElementById("selestatus").value,
-                        idapuesta: document.getElementById("idapuesta").value
-                    },function(data){
-                        leerTrabajos();
-                    });
-            }
         </script>
     </header>
     <body onload="inicio()">
@@ -178,29 +193,47 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('ver').close()">X</a><br>
                 <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
                 <input type="hidden" id="idapuesta">
-                Evento: <span id="evento"></span><br>
+                Transaccion: <span id="evento"></span><br>
                 Cliente: <span id="emailCliente"></span><br>
-                Wallet <span id="mediopago"></span><br><input style="background:transparent; outline:0;border:0;width:300px;" type="text" readonly id="wallet">
-                <button title="Has Click para copiar" type="button" style="border:0;cursor:pointer;" onclick="myFunction()"><i class="far fa-copy"></i></button><br>
+                Medio de Pago: <span id="mediopago"></span><br>
+                <span id="wallet"></span>
+                <br>
                 Monto: <span id="monto"></span><br>
-                Nota ID: <span id="notaid"></span><br>
-                Apuesta a: <span id="tipo"></span><br>
-                Equipo: <span id="equipo"></span><br>
-                Recibe: <span id="recibe"></span><br>
                 Estatus:<span id="estatus"></span> 
-                <select id="selestatus" onchange="selestatus()">
-                    <option id="este"></option>
-                    <option value="EN REVISION">En Revision</option>
-                    <option value="EN PROCESO">En Proceso</option>
-                    <option id="apostado" value="APOSTADO">Apostado</option>
-                    <option id="ganador" value="GANADOR">Ganador</option>
-                    <option id="pagado" value="PAGADO">Pagado</option>
-                    <option id="perdiste" value="PERDISTE">Perdiste</option>
+                <select id="selestatus" >
+                    <option id="">selecciona...</option>
+                    <option id="REVISION" value="REVISION">En Revision</option>
+                    <option id="ESPERA" value="ESPERA">En Espera</option>
+                    <option id="EXITOSO" value="EXITOSO">Exitoso</option>                    
+                    <option id="APOSTADO" value="APOSTADO">Apostado</option>
+                    <option id="GANADOR" value="GANADOR">Ganador</option>                    
+                    <option id="FALLIDO" value="FALLIDO">Fallido</option> 
                 </select><br>
-                Resultados: <input type="text" id="resultados" >
-                <button class='appbtn' style="float:right;" type="button" id="btnenviar" onclick="enviar()">Enviar</button>
+                <button class='appbtn' style="float:right;" type="button" id="btnenviar" onclick="enviar()">Cambiar Estatus</button>
             </dialog>        
-            <div class="vista" id="vista"></div>
+
+            <div class="vista" id="vista">
+                <section class='table-section' style='padding:3.5rem;'>  
+                <div class='InventarioBox' style='height: 27rem;  width: auto; overflow-y: scroll;'> 
+                    <table style='width: 100%;'> 
+                        <thead>
+                            <tr>
+                                <th>Fecha.</th>
+                                <th>Tipo.</th>
+                                <th>Ticket N.</th>
+                                <th>Descripcion</th>
+                                <th>Monto</th>
+                                <th>Estatus</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-cuerpo-depositos">
+                        </tbody>
+                    </table>
+                </div>
+                </section>     
+
+            </div>
         </div>
               <!--Iniciar footer-->
       <?php include 'footer.php';?>

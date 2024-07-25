@@ -46,7 +46,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 <?php statusPromocion(readClienteId($_SESSION['user'])['CORREO']); ?>
             </div>
             <hr>
-        <div class="vista" id="vista"></div>
+            <div class="vista" id="vista"></div>
         </div>
               <!--Iniciar footer-->
       <?php include 'footer.php';?>

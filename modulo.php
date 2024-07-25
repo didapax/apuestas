@@ -128,6 +128,14 @@ function readApuestaId($id){
   return row_sqlconector("SELECT * FROM APUESTAS WHERE ID={$id}");
 }
 
+function readApuestaTicket($id){
+  return row_sqlconector("SELECT * FROM APUESTAS WHERE TICKET='{$id}'");
+}
+
+function readTransaccionTicket($id){
+  return row_sqlconector("SELECT * FROM TRANSACCIONES WHERE TICKET='{$id}'");
+}
+
 function ifPromoExist($correo,$codigo){
 	if(row_sqlconector("select * from USERPROMO where CORREO='{$correo}' AND CODIGO='{$codigo}'")['CORREO']==$correo) return TRUE;
 	return FALSE;   
@@ -359,116 +367,42 @@ function ifReadPromo(){
 	}
 }
 
-  /*CHAT*/
+	/*****************************************************************************************************************
+	NOTIFICACIONES*/
+  function countNotif($IDusuario){
+    return row_sqlconector("select COUNT(*) AS TOTAL from NOTIFICACIONES WHERE IDUSUARIO=".$IDusuario." AND VISTO=0")['TOTAL'];
+}
 
-	function makeChat($ticked){
-	  $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
+function notif($IDusuario){
+    $cadena="";   
+    sqlconector("DELETE FROM NOTIFICACIONES WHERE IDUSUARIO=".$IDusuario." AND VISTO=1");
+    $resultado = sqlconector("SELECT * FROM NOTIFICACIONES WHERE IDUSUARIO=".$IDusuario." AND VISTO=0");
+    if($resultado){
+        $obj=array();
+        while($row = mysqli_fetch_array($resultado)){
+            $obj[] = "<a href='{$row['ubicacion']}&notif={$row['ID']}'>".$row['noticia']."</a>";
+        }
+       }
+   return $obj;
+ }
 
-	  $consulta = "select * from CHAT where TICKED='".$ticked."' order by fecha DESC";
-	  $resultado = mysqli_query( $conexion, $consulta ) or die("No se pudo Consultar el Chat");
-	  $cadena="<table style='width: 100%; padding: 13px 0;'>";
-	  while($row = mysqli_fetch_array($resultado)){
-			$cadena=$cadena . "<tr><td style='font-size:11px;'>".$row['FECHA']." - ".$row['ENVIA']."</td></tr>
-				<tr><td style='background-color:".$row['BG']."; color=".$row['FG'].";'>".$row['MENSAJE']."</td></tr>";
-	  }
-	  $cadena = $cadena."</table>";
-	  mysqli_close($conexion);
-	  return $cadena;
-  }
+ if(isset($_POST['insertNotif'])){
+    $Q_consulta = "INSERT INTO NOTIFICACIONES(IDUSUARIO,NOTICIA,UBICACION) VALUES(".$_POST['IDusuario'].",'".$_POST['noticia']."','{$_POST['ubicacion']}')";
+    sqlconector($Q_consulta);
+ }     
 
-  function ifChatActivo($correo){
-	$p=0;
-	$row = row_sqlconector("select ACTIVO from CHAT where AMO='".$correo."'");
-	if(!empty($row['ACTIVO']))$p=$row['ACTIVO'];
-	if($p==0) return FALSE;
-	else return TRUE;
-  }
+ if(isset($_GET['marcarNotif'])){
+    $Q_consulta = "UPDATE NOTIFICACIONES SET VISTO=1 WHERE IDPEDIDO='".$_GET['idpedido']."' AND IDUSUARIO='".$_GET['user']."'";
+    sqlconector($Q_consulta);
+ }
 
-  function ifAmoExist($correo){
-	if(row_sqlconector("select * from CHAT where AMO='".$correo."'")['AMO']==$correo) return TRUE;
-	return FALSE;
-  }
+ if(isset($_GET['vernotif'])){
+    $obj = array('noticias' => notif($_GET['IDusuario']),'totalNotif' => countNotif($_GET['IDusuario']));
+    $json = json_encode($obj);
+    echo $json;
+ }
 
-  function ifChatCerrado($ticked){
-	if(row_sqlconector("select * from CHAT where TICKED='".$ticked."'")['CERRADO']==1) return TRUE;
-	return FALSE;
-  }
-
-  function chatSinLeer($ticked,$recibe){
-	if(row_sqlconector("select LEIDO, COUNT(*) AS TOTAL from CHAT where TICKED='".$ticked."' AND LEIDO=0 AND RECIBE='".$recibe."'")['TOTAL']>0) return $row['TOTAL'];
-	else return 0;
-  }
-
-  function chatColor($ticked,$recibe){
-	 if(row_sqlconector("select COUNT(*) AS TOTAL from CHAT where TICKED='".$ticked."' AND LEIDO=0 AND RECIBE='".$recibe."'")['TOTAL']>0) return "#FF0000";
-	 else return "#4D4D4D";
-  }
-
-  function cerrarChat($ticked){
-	sqlconector("UPDATE CHAT SET CERRADO=1 WHERE TICKED='".$ticked."'");
-  }
-
-  function activarChat($correo,$estatus){
-	sqlconector("UPDATE CHAT SET ACTIVO=".$estatus." WHERE AMO='".$correo."'");
-  }
-
-  function chatLeido($ticked){
-	sqlconector("UPDATE CHAT SET LEIDO=1 WHERE TICKED='".$ticked."'");
-  }
-
-  function insertChat($amo,$ticked,$envia,$recibe,$mensaje){
-
-	sqlconector("INSERT INTO CHAT(AMO,TICKED,ENVIA,RECIBE,MENSAJE) VALUES('".$amo."','".$ticked."','".$envia."','".$recibe."','".$mensaje."')");
-  }
-
-  function createAmo($correo,$tk){
-	  if(ifAmoExist($correo)==FALSE){
-	  		sqlconector("INSERT INTO CHAT(AMO,TICKED) VALUES('".$correo."','".$tk."')");
-			return 1;
-	  }
-	  else{
-		  return 0;
-	  }
-  }
-
- function updateColor($ticked,$email,$bg,$fg){
-	sqlconector("UPDATE CHAT SET BG='".$bg."',FG='".$fg."' WHERE TICKED='".$ticked."' AND ENVIA='".$email."'");
-  }
-
-  function dibujaChatApp($ticket) {
-	  $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
-
-	  $consulta = "select * from CHAT where TICKED='".$ticket."' order by FECHA DESC";
-	  $resultado = mysqli_query( $conexion, $consulta ) or die("No se pudo Consultar el Chat");
-	  $activo="";
-	  $recibe="";
-	  $amo="";
-	  while($row = mysqli_fetch_array($resultado)){
-	  		$icono="";
-			$recibe=$row['RECIBE'];
-			$amo=$row['AMO'];
-			if($row['ENVIA']==$row['AMO']){
-				$activo=$row['ENVIA'];
-			}
-			else $activo=$row['RECIBE'];
-
-			if(ifChatActivo($activo)){
-				$icono= "<span style='font-weight: lighter; font-size:11px;' title='Conectado'>&#9742;</span>";
-			}
-			else{
-				$icono= "<span style='font-weight: lighter; font-size:11px;' title='Desconectado'>&#9743;</span>";
-			}
-
-			echo "
-			<div style='width: fit-content; padding:10px; border-radius:8px;margin:13px; background-color:".$row['BG']."; color=".$row['FG'].";'>
-			<span style='margin-top:5px;font-size:12px;'><b>".latinFecha($row['FECHA'])."</b>  ".readCliente($row['ENVIA'])['CORREO']." ".$icono."</span>
-			<br><span style='font-weight: bolder;font-size:1em;'>".$row['MENSAJE']."</div>
-			";
-	  }
-
-		if($activo==$amo){$activo=$recibe;}
-
-      mysqli_close($conexion);
-  }
+   /****FIN NOTIFICACIONES**************************************************************************
+   */
 
 ?>

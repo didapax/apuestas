@@ -182,7 +182,8 @@
 
 <script>
   function inicio(){
-  	myVar = setInterval(myTimer, 2000);
+    readTicket();
+  	myVar = setInterval(myTimer, 2000);    
   }
 
   function readTicket(){
@@ -191,24 +192,22 @@
     $.get("serverChat.php?tiketPedido=&idpedido="+id,
                     function(data){                        
                         var datos= JSON.parse(data);
-                        let msj = "Monto: ";
-                        let monto = datos.monto;
-                        if(datos.tipo == "RETIRO"){
-                          monto = datos.recibe;
-                          msj = "Recibes menos Comisiones: ";
-                        }
+                        $("#numTicket").html(datos.ticket);
                         $("#usuario").html(datos.cliente);
                         document.getElementById('recibe').value=datos.cliente;
                         $("#fecha").html(datos.fecha);
                         $("#metodoPago").html(datos.medio_pago);
-                        $("#msj").html(msj);
-                        $("#totalPagar").html(monto+"<span style='font-size:10px;'>"+datos.moneda+"<span>");
+                        $("#totalPagar").html(datos.monto+"<span style='font-size:10px;'>"+datos.moneda+"<span>");
                         $("#estado").html(datos.estatus);                        
                         $("#wallet").html(datos.wallet);
-                        $("#detalle").html(`${datos.tipo} #${datos.ticket}`);
+                        $("#tipo").html(datos.tipo);
+                        document.getElementById(datos.estatus).selected = true;
                     });
+    
+    $("#input-chat").css("display","flex");
+    
+    $.get("modulo.php?marcarNotif=&idpedido="+id+"&user="+envia,function(data){});      
 
-      $.get("modulo.php?marcarNotif=&idpedido="+id+"&user="+envia,function(data){});      
   }
 
   function myTimer() {
@@ -216,7 +215,7 @@
   			$.post("serverChat.php",{
   				verChatApp: document.getElementById('ticked').value,
           IDusuario: document.getElementById('envia').value
-  			},function(data) {
+  			},function(data) {           
   				$("#chat").html(data);
           $('#chat').scrollTop($('#chat').prop('scrollHeight'));
   			});
@@ -248,26 +247,26 @@
   }
 
   function cambiarEstado() {
-    $.post("block",
+    let resultado =  confirm("Estas seguro de cambiar el estatus de la orden?");
+    if(resultado){
+      $.post("block",
   	  {
-        setEstatus: document.getElementById("cambioEstado").value,      
+        setEstatus: document.getElementById("cambioEstado").value,
   	    idapuesta: document.getElementById('ticked').value
   	  },
   	  function(data){
-  		  $("#estado").html(data);  		  
   	  });    
+    }
+
   }
 
     
 function seltickect(){
-  document.getElementById('ticked').value = document.getElementById('selectTicket').value;
-  readTicket();
-  inicio();
-  $("#input-chat").css("display","flex");
+
 }
 
   </script>
-<body >
+<body onload="inicio()">
 
 <?php $page = "chat"; ?>
       <!--Iniciar Barra de Navegación @media 1200px-->
@@ -301,20 +300,8 @@ function seltickect(){
 <div class='data'>
   <h3 >SOPORTE CRIPTO SIGNAL GROUP</h3>
     <div>
-      Seleccione un Ticket Abierto: 
-      <select id="selectTicket" onchange="seltickect()" style="color:black;">
-      <option value="">seleccione</option>
-      <?php 
-        $correo= readClienteId($_SESSION['user'])['CORREO'];
-        $resultado = sqlconector("SELECT * FROM TRANSACCIONES WHERE PAGADO=0 AND CLIENTE='$correo'");
-        while($row = mysqli_fetch_array($resultado)){
-          $ticket = $row['TICKET'];
-          $monto = price($row['MONTO']);
-          $moneda = $row['MONEDA'];
-          echo "<option value='{$ticket}'>".$row['DESCRIPCION']." por {$monto}{$moneda}</option>";
-        }        
-      ?>
-      </select>     
+      Ticket Abierto: 
+      <span id="numTicket"></span>
       <br>
       Fecha: <span id=fecha></span><br>
     </div>
@@ -323,9 +310,9 @@ function seltickect(){
 
  
 <div>
-  Mi Wallet: <div id="wallet"></div>
-  <b><span id="detalle"></span></b><br>
-  <span id="msj"></span> <b><span class='pay' id=totalPagar></span></b> <span style='font-size:1rem;'></span><br>
+  Wallet del Cliente: <div id="wallet"></div>
+  Estas Procesando un  <b><span id="tipo"></span></b><br>
+  Monto: <b><span class='pay' id=totalPagar></span></b> <span style='font-size:2rem;'></span><br>
   Metodo de Pago: <b><span id=metodoPago></span></b><br>
 
 </div>
@@ -333,14 +320,14 @@ function seltickect(){
 <div class='estadoContainer'>
     <p>
 
-      Estatus en : <span id=estado></span>
+      Cambiar Estatus: 
       <?php 
         if($_SESSION['nivel']==1){
           ?>
         <select id="cambioEstado" name="estado" onchange="cambiarEstado()">
             <option id="">selecciona...</option>
             <option id="REVISION" value="REVISION">En Revision</option>
-            <option id="ESPERA" value="ESPERA">En Proceso</option>
+            <option id="ESPERA" value="ESPERA">En Espera</option>
             <option id="EXITOSO" value="EXITOSO">Exitoso</option>                    
             <option id="APOSTADO" value="APOSTADO">Apostado</option>
             <option id="GANADOR" value="GANADOR">Ganador</option>                    

@@ -34,14 +34,14 @@
                     
                     //echo "<a href='referidos'>Referidos</a>";
                     if($page=="histcliente"){
-                      echo "<a href='historialcliente' class='active'>Historial</a>";
+                      echo "<a href='historialcliente' class='active'>Suscripciones</a>";
                     }
                     else{
-                      echo "<a href='historialcliente'>Historial</a>";
+                      echo "<a href='historialcliente'>Suscripciones</a>";
                     }                    
                     
                     echo "<a href='block?cerrarSesion'>Cerrar Sesion</a>"; 
-                    echo "<a style='cursor:pointer;' href='miwallet' class='saldo' id='saldo'></a>";
+                    echo "<a style='cursor:pointer;' href='miwallet' class='saldo' id='saldo'> Saldo ".price(readClienteId($_SESSION['user'])['SALDO'])." USDC</a>";
                     echo "<a class='perfil'>".readClienteId($_SESSION['user'])['CORREO']."</a>";
                     echo "<a href=\"javascript:void(0);\" class='icon' onclick=\" myFunctionMenu();\"><i class='fa fa-bars'></i></a></div>";
                 }
@@ -52,22 +52,22 @@
                     echo "<a href='index' >Home</a>";
                   }                  
                   if($page=="histadmin"){
-                    echo "<a href='historialadmin' class='active'>Historial</a>";
+                    echo "<a href='historialadmin' class='active'>Suscripciones</a>";
                   }
                   else{
-                    echo "<a href='historialadmin'>Historial</a>";
+                    echo "<a href='historialadmin'>Suscripciones</a>";
                   }
                   if($page=="trabajos"){
-                    echo "<a href='trabajos' class='active'>Trabajos</a>";
+                    echo "<a href='trabajos' class='active'>Depositos/Retiros</a>";
                   }
                   else{                  
-                    echo "<a href='trabajos'>Trabajos</a>";
+                    echo "<a href='trabajos'>Depositos/Retiros</a>";
                   }
                   if($page=="jugadas"){
-                    echo "<a href='jugadas' class='active'>Jugadas</a>";
+                    echo "<a href='jugadas' class='active'>Productos</a>";
                   }
                   else{                  
-                    echo "<a href='jugadas'>Jugadas</a>";
+                    echo "<a href='jugadas'>Productos</a>";
                   }
                   if($page=="promo"){
                     echo "<a href='promo' class='active'>Promociones</a>";
@@ -76,8 +76,8 @@
                     echo "<a href='promo'>Promociones</a>";
                   }
                     echo "<a href='block?cerrarSesion'>Cerrar Sesion</a>"; 
-                    echo "<a style='cursor:pointer;' href='miwallet' class='saldo' id='saldo'> Saldo ".readClienteId($_SESSION['user'])['SALDO']." USDT</a>";
-                    echo "<a class='perfil'>".readClienteId($_SESSION['user'])['CORREO']."</a>";
+                    echo "<a style='cursor:pointer;' href='miwallet' class='saldo' id='saldo'> Saldo ".price(readClienteId($_SESSION['user'])['SALDO'])." USDC</a>";
+                    echo "<a class='perfil'><span style='color:white;'>Admin: </span>".readClienteId($_SESSION['user'])['CORREO']."</a>";
                     echo "<a href=\"javascript:void(0);\" class='icon' onclick=\" myFunctionMenu();\"><i class='fa fa-bars'></i></a></div>";
                 }                    
             }            
