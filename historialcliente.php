@@ -13,7 +13,8 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <link href='css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-        <link href="css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">         
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
     </head>
     <header>
         <style>
@@ -21,14 +22,14 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <script>
 
             function leerHistorial(){
-                $.get("block?readHistorial=&cliente="+document.getElementById('correo').value, function(data){
+                $.get("block?getSuscripciones=&correo="+document.getElementById('correo').value, function(data){
                 $("#vista").html(data);
                 });
-            }
+            } 
 
             function inicio(){
                 leerHistorial();
-                myVar = setInterval(leerHistorial, 3000);
+                /*myVar = setInterval(leerHistorial, 3000);*/
             }
             
 
@@ -40,13 +41,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->  
 
-        <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">   
+        <input type="hidden" id="correo" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" >
         <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;">
-            <div style='padding:5px;'>
-                <?php statusPromocion(readClienteId($_SESSION['user'])['CORREO']); ?>
-            </div>
-            <hr>
-            <div class="vista" id="vista"></div>
+        <div id="vista" class="grid-container app-grid"></div>
         </div>
               <!--Iniciar footer-->
       <?php include 'footer.php';?>

@@ -8,6 +8,50 @@ function generaTicket(){
     return $referencia;
 }
 
+function calcularFechaDespuesDeUnMes($fecha, $meses) {
+  // Convierte la fecha a un objeto DateTime
+  $fechaObjeto = new DateTime($fecha);
+
+  // Agrega N meses al objeto DateTime (reemplaza N con el valor real)
+  $fechaObjeto->modify("+$meses month");
+
+  // Formatea la fecha resultante en el formato deseado (por ejemplo, 'Y-m-d')
+  $fechaFinal = $fechaObjeto->format('Y-m-d');
+
+  return $fechaFinal;
+}
+
+function calcularDiasEntreFechas($fechaInicial, $fechaFinal) {
+  $fechaInicio = new DateTime($fechaInicial);
+  $fechaFin = new DateTime($fechaFinal);
+
+  $diferencia = $fechaInicio->diff($fechaFin);
+
+  return $diferencia->format('%a');
+}
+
+function calcularInteresMensual($capital, $tasaInteresAnual, $meses) {
+  // Convertir la tasa de interés anual a mensual
+  $tasaInteresMensual = $tasaInteresAnual / 12 / 100;
+
+  // Si la tasa de interés es cero, la cuota mensual es simplemente el capital dividido por el número de meses
+  if ($tasaInteresMensual == 0) {
+      $cuotaMensual = $capital / $meses;
+      $interesMensual = 0;
+  } else {
+      // Calcular el interés mensual
+      $interesMensual = $capital * $tasaInteresMensual;
+
+      // Calcular la cuota mensual
+      $cuotaMensual = $capital * $tasaInteresMensual / (1 - pow(1 + $tasaInteresMensual, -$meses));
+  }
+
+  return array(
+      'interesMensual' => $interesMensual,
+      'cuotaMensual' => $cuotaMensual
+  );
+}
+
 function test_input($data) {
   $data = trim($data);
   $data = stripslashes($data);
@@ -35,7 +79,7 @@ function returnReferente($referido){
 
 function latinFecha($fecha){
     $date=date_create($fecha);
-    return date_format($date,"d/M/y h:ia");
+    return date_format($date,"d/M/y");
 }
 
 function makeAnciEstrellas($rate){
@@ -99,7 +143,21 @@ function readClienteId($id){
   return row_sqlconector("SELECT * FROM USUARIOS WHERE ID={$id}");
 }
 
-function ifUsuarioExist($correo) {
+function ifClienteJuegoExist($idjuego,$correo) { 
+  $conexion = @mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
+  if (!$conexion) {
+      echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
+      exit;
+  }
+
+  $resultado = mysqli_query($conexion, "SELECT 1 FROM APUESTAS WHERE CLIENTE = '$correo' AND IDJUEGO=$idjuego");
+  $existe = mysqli_num_rows($resultado) > 0;
+  mysqli_close($conexion);
+
+  return $existe;
+}
+
+function ifUsuarioExist($correo) { 
   $conexion = @mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
   if (!$conexion) {
       echo "Error: No se pudo conectar a MySQL." . PHP_EOL;

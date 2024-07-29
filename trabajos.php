@@ -13,11 +13,28 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <link href='css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-        <link href="css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">         
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
     </head>
     <header>
         <style>
-       
+         .textAreaContainer{
+            background:white;
+            color: black;
+         }
+         input[type=text]{
+            color:black;
+         }
+         input[type=number]{
+            color:black;
+         }       
+         
+         select{
+            color:black;
+         }
+         button{
+            color:black;
+         }       
                   
         </style>        
         <script>
@@ -92,12 +109,12 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 
 
             function leerTrabajos(){
-                $.get("block?estadisticas=",
+                /*$.get("block?estadisticas=",
                 function(data){
                     var datos= JSON.parse(data);
                     $("#estad").html("Usuarios "+datos.totalReg);
                     $("#reg").html("Referidos "+datos.totalRef);
-                });                
+                });        */        
 
                 recuperarTrabajos();
             } 
@@ -185,10 +202,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <!--FIN Barra de Navegación @media 1200px-->   
 
         <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;">
-            <div class="menu" id="menu">
+            <!--<div class="menu" id="menu">
                 <label style="margin-left:1px; font-weight:bold;" id="estad"></label>
                 <label style="margin-left:13px; font-weight:bold;" id="reg"></label>
-            </div>
+            </div> -->
             <dialog class="dialog_agregar" id="ver" close>
                 <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('ver').close()">X</a><br>
                 <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">

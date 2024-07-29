@@ -30,9 +30,6 @@
                     else{
                       echo "<a href='miwallet'>Mi Wallet</a>";
                     }
-
-                    
-                    //echo "<a href='referidos'>Referidos</a>";
                     if($page=="histcliente"){
                       echo "<a href='historialcliente' class='active'>Suscripciones</a>";
                     }

@@ -13,8 +13,8 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
         <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
         <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />           
-        <link rel="stylesheet" href="css/bootstrap/css/bootstrap.css">      
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>          
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
         <script src="Javascript/miwallet.js"></script>
     </head>
     <header>
@@ -59,20 +59,38 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 z-index: 1000;
             }
 
- 
+            .textAreaContainer{
+            background:white;
+            color: black;
+         }
+         input[type=text]{
+            color:black;
+         }
+         input[type=number]{
+            color:black;
+         }       
+         
+         select{
+            color:black;
+         }
+         button{
+            color:black;
+         }
         </style>                
         <script> 
             function inicio(){
                 leerDatos();
                 recuperarRetiros();  
                 recuperarDepositos();  
+                recuperarHistorial();  
                 myVar = setInterval(refrescar, 2000);
             }
 
             function refrescar(){
                 leerDatos();
                 recuperarRetiros();  
-                recuperarDepositos();                  
+                recuperarDepositos();  
+                recuperarHistorial();                  
             }
                         
         </script>
@@ -104,16 +122,11 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 </select>
                 <div id="detalles" style="display:none;">
                     Cantidad a Depositar: 
-                    <input required type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" style="color:black;"><br>                    
-                    <!--Envia <span id="apuesta"></span><span id="info"></span>-->
+                    <input required type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" style="color:black;"><br>
                     <br><br> Binance Pay Id  CriptoSignalGroup
                     <input readonly class="datcajero" style="" id="paycajero">
                     <img src="Assets/qrbinance.png"><br>
                     <div id="calculo" style="color:green;float:right; background:white;padding:3px;border:solid 1px; border-radius:5px;"></div><br>
-                 <!--   <button title="Has Click para copiar" type="button" style="border:0;cursor:pointer;" onclick="myFunction()"><i class="far fa-copy"></i></button>
-                    <br>
-                    Coloca la Nota Id (txid) de la transferencia realizada:<br>
-                    <input required type="text" id="nota" name="nota">-->
                 </div><br><br>
                 <button onclick="jugar_back()" class='appbtn' style="float:right;color:black;" type="button" id="jugar" name="jugar">Depositar</button>
             </form>
@@ -150,6 +163,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 <li class="active"><a data-toggle="pill" style="color:black;" href="#home">Editar mi perfil</a></li>
                 <li><a data-toggle="pill" style="color:black;" href="#depositos">Depositos</a></li>
                 <li><a data-toggle="pill" style="color:black;" href="#retiros">Retiros</a></li>
+                <li><a data-toggle="pill" style="color:black;" href="#historial">Mis Compras</a></li>
             </ul>
             
             <div class="tab-content">
@@ -173,7 +187,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                         
                 <div id="depositos" class="tab-pane fade">
                     <div class="tab-title">
-                        <h3>Depositar Usdc por Binance Pay</h3>
+                        <h3>Depositar Usdc de Forma Facil y Segura</h3>
                     </div>
                     <div class="container mt-5 mb-5">
                         <button onclick="document.getElementById('jugada').show();">Depositar</button>
@@ -225,6 +239,32 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                                         
                 </div>
 
+                <div id="historial" class="tab-pane fade">
+                    <div class="tab-title">
+                        <h3>Historial de Compras y Suscripciones</h3>
+                    </div>
+                    <div class="container mt-5 mb-5">
+                        <section class='table-section' style='padding:3.5rem;'>  
+
+                            <div class='InventarioBox' style='height: 27rem;  width: auto; overflow-y: scroll;'> 
+                                <table style='width: 100%;'> 
+                                    <thead>
+                                        <tr>
+                                            <th>Finaliza</th>
+                                            <th>Dias</th>
+                                            <th>Suscripcion</th>
+                                            <th>Capital + Interes</th>
+                                            <th>Estatus</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-cuerpo-historial">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>                        
+                    </div>
+                                        
+                </div>                
 
             </div>
         </div>

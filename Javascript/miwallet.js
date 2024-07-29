@@ -4,6 +4,7 @@ Javascript
 
 let retiros = [];
 let depositos = [];
+let historial = [];
 
 function myFunction() {
     var copyText = document.getElementById("cajero");
@@ -247,7 +248,7 @@ function lanzar(){
             window.location.href="historialcliente";
         });  
     }else{
-        Swal.fire({
+        Swal.fire({ 
                         title: 'Depositos',
                         text: "No se puede realizar el deposito o faltan datos",
                         icon: 'warning',
@@ -389,5 +390,58 @@ function recuperarRetiros() {
             });
         
         }
+
+        function mostrarTablaHistorial() {
+            const tablaCuerpo = document.getElementById("tabla-cuerpo-historial");
+            tablaCuerpo.innerHTML = "";
+        
+            historial.forEach((producto, index) => {
+                let color_estatus="#FAD7A0";
+                switch (producto.estatus) {
+                    case 'PAGADO':
+                        color_estatus="#4caf50";
+                        break;
+                        case 'VENCIDO':
+                            color_estatus="#2196f3";
+                            break;        
+        
+                        case 'ACTIVO':
+                            color_estatus="#ff9800";
+                            break;        
+                    default:
+                        color_estatus="#FAD7A0";
+                        break;
+                }
+                const fila = document.createElement("tr");
+                fila.innerHTML = `
+                    <td>${producto.fin}</td>
+                    <td>${producto.faltan_dias}</td>
+                    <td>${producto.juego}</td>
+                    <td>${Math.round(producto.total_pagar * 100) / 100} Usdc</td>
+                    <td style='background:${color_estatus}'>${producto.estatus}</td>
+                `;
+                tablaCuerpo.appendChild(fila);
+            });
+        }          
+
+        function recuperarHistorial() {
+            fetch("block?readHistorial=&cliente="+document.getElementById('correo').value)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Error en la solicitud: " + response.status);
+                    }
+                    return response.json(); // Parsear la respuesta como JSON
+                })
+                .then(data => {
+                    historial = data;                    
+                    mostrarTablaHistorial();
+                    // Aquí puedes procesar los datos recibidos (data)
+                    console.log("Datos Historial:", data);
+                })
+                .catch(error => {
+                    console.error("Error en la solicitud:", error);
+                });
+            
+        }        
     
 

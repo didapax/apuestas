@@ -47,59 +47,77 @@ if(isset($_POST['depositar'])){
         $monto)");
 }
 
-if(isset($_POST['jugar'])){
-  //if(!ifTxidExist($_POST['nota'])){
-      $ticket = generaTicket();
-      $recibe = $_POST['cantidad'] *2;
+if(isset($_POST['jugar'])){    
+      $suscripcion = readJuegoId($_POST['idjuego']);  
+      $ticket = generaTicket();      
+      $monto = $suscripcion['MONTO'];
+      $tipo = $suscripcion['TIPO'];
+      $idJuego = $suscripcion['ID'];
+      $juego = $suscripcion['JUEGO'];
+      $cajero = $suscripcion['CAJERO'];
+      $porciento = $suscripcion['PORCIENTO'];
+      $porAdelantado = $suscripcion['PORADELANTADO'];
+      $correo = $_POST['correo'];
+      $numMes;
+      $cuotaMensual;
+      $interesMensual;
+      $totalCuotas;
+      $numeroPagos;
 
-      if(str_contains($_POST['equipos'], 'desafiox4')){
-        $recibe = $_POST['cantidad'] *4;
-      }     
-
-      if(str_contains($_POST['equipos'], 'desafiox3')){
-        $recibe = $_POST['cantidad'] *3;
-      }     
-
-      if(str_contains($_POST['equipos'], 'desafiox1_5')){
-        $recibe = $_POST['cantidad'] *1.5;
-      }     
-
-      $apuesta = $_POST['equipos'];
-      $lawallet="";
-
-      if($_POST['tipo']=="Empate"){
-          $apuesta = $_POST['tipo'];
+      switch ($tipo) {
+        case 'MENSUAL':
+          $numMes= 1;          
+        break;
+        case 'TRIMESTRAL':
+          $numMes= 3;
+        break;
+        case 'SEMESTRAL':
+          $numMes= 6;
+        break;
+        case 'ANUAL':
+          $numMes= 12;
+        break;                                  
+        default:
+          $numMes= 1;
+        break;
       }
 
-      /*if($_POST['comopago']=="USDT"){
-          $lawallet= $_POST['wallet_usdt'];
-      }else{
-          $lawallet= $_POST['wallet_payeer'];
-      }*/
+      $numeroPagos = $numMes;
+      $resultado = calcularInteresMensual($monto, $porciento, $numMes);
+      $cuotaMensual = $resultado['cuotaMensual'];
+      $interesMensual =  $resultado['interesMensual'];
+      $totalCuotas = $cuotaMensual * $numMes;
 
-      sqlconector("INSERT INTO APUESTAS (TICKET,MEDIO_PAGO,NOTAID,TIPO,APUESTA,JUEGO,CLIENTE,WALLET,REFERENCIA,MONTO,RECIBE,ESTATUS) VALUES(
+      $fechaInicial = date('Y-m-d'); // Tu fecha inicial
+      $fechaFinal = calcularFechaDespuesDeUnMes($fechaInicial,$numMes);
+      
+      $consulta = "INSERT INTO APUESTAS (INICIO,FIN,TICKET,TIPO,IDJUEGO,JUEGO,CAJERO,CLIENTE,MONTO,PORCIENTO,INTERES_MENSUAL,CUOTA_MENSUAL,TOTAL_PAGAR,N_PAGOS) VALUES(
+          '{$fechaInicial}',
+          '{$fechaFinal}',
           '{$ticket}',
-          'USDT',
-          '',
-          '{$_POST['tipo']}',
-          '{$apuesta}',
-          '{$_POST['eljuego']}',
-          '{$_POST['correo']}',
-          '{$lawallet}',
-          '{$_POST['referencia']}',
-          {$_POST['cantidad']},
-          {$recibe},
-          'EN REVISION'
-      )");
+          '{$tipo}',
+           {$idJuego},
+          '{$juego}',
+          '{$cajero}',
+          '{$correo}',
+           {$monto},
+           {$porciento},
+           {$interesMensual},
+           {$cuotaMensual},
+           {$totalCuotas},
+           {$numeroPagos}
+      )";
 
-      $correo = $_POST['correo'];
-      $saldo= readCliente($correo)['SALDO'] - ($_POST['cantidad']);
-      sqlconector("UPDATE USUARIOS SET SALDO={$saldo} WHERE CORREO='{$correo}'");        
-      createPromo($_POST['correo']);
-/*  }
-  else{
-    echo "Nota o TxId Repetido en el Sistema..!";
-  }*/
+      echo $consulta;
+      sqlconector($consulta);
+      
+      $saldo= readCliente($correo)['SALDO'] - $monto;
+      sqlconector("UPDATE USUARIOS SET SALDO={$saldo} WHERE CORREO='{$correo}'");
+
+      if($porAdelantado == 1){
+        $saldo= readCliente($correo)['SALDO'] + $interesMensual;
+        sqlconector("UPDATE USUARIOS SET SALDO={$saldo} WHERE CORREO='{$correo}'");
+      }
 }
 
 if(isset($_POST['sendmail'])){
@@ -201,12 +219,17 @@ if(isset($_GET['cerrarSesion'])) {
 }
 
 if(isset($_GET['datosJuego'])) {
-  $juego = readJuegoId($_GET['idjuego']);
-  $obj = array('juego' => $juego['JUEGO'],'equipo1' => $juego['EQUIPO1'], 'equipo2' => $juego['EQUIPO2'],
-  'cajero' => $juego['CAJERO'], 'wallet' => $juego['WALLET'], 'referencia' => $juego['REFERENCIA'],
-  'min' => $juego['MIN'],'max' => $juego['MAX'],'id' => $juego['ID'],'estatus' => $juego['ESTATUS'],
-  'desafio' => $juego['DESAFIO'],'desafiox1_5' => $juego['DESAFIOX1_5'],'desafiox3' => $juego['DESAFIOX3'],
-  'favorito' => $juego['FAVORITO']);
+  $row = readJuegoId($_GET['idjuego']);
+  $obj = array(
+    'id' => $row['ID'],
+    'fecha' => $row['FECHA'],
+    'juego' => $row['JUEGO'],
+    'descripcion' => $row['DESCRIPCION'],
+    'analisis' => $row['ANALISIS'],
+    'cajero' => $row['CAJERO'],
+    'tipo' => $row['TIPO'],
+    'monto' => $row['MONTO'],
+    'moneda' => $row['MONEDA']);
 
   echo json_encode($obj);  
 }
@@ -233,96 +256,166 @@ if(isset($_GET['datosApuesta'])) {
   echo json_encode($obj);  
 }
 
-if(isset($_GET['getJugadas'])) {
+if(isset($_GET['getSuscripciones'])) {
   $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
+  $correo= $_GET['correo'];
   if (!$conexion) {
     echo "Refresh page, Failed to connect to Data...";
     exit();
   }else{    
-    $consulta = "select * from JUEGOS WHERE ELIMINADO=0 ORDER BY INICIO";
+    $consulta = "select * from APUESTAS WHERE ELIMINADO=0 ORDER BY FECHA";
     $resultado = mysqli_query( $conexion, $consulta );
     while($row = mysqli_fetch_array($resultado)){
-      $fecha = latinFecha($row['INICIO']);
-      $bloqueo = "trade";
+      $fecha = latinFecha($row['FECHA']);
+      $bloqueo = "detalle";
       $mensaje = "";
       $style = "";
       $colorTitle="";
-      $desafio = "";
-      $pagan ="x2";
       $favorito="";
+      $analisis = "";
 
-      if($row['BLOQUEADO']==1){
-        $bloqueo = "bloque";
-        $mensaje = "<span style='color:#FE6080;'>El Juego ha Sido CERRADO</span>";
+      if( isset(readJuegoId($row['ID'])['ANALISIS']) ){
+        $analisis = readJuegoId($row['ID'])['ANALISIS'];
+      }
+
+      if($row['ACTIVO']==0){        
+        $mensaje = "<span style='color:#FE6080;'>Suscripcion Bloqueda</span>";
         $colorAlert = "#F96E1F";
         $style = "background:#D8E8F3; border: 21px solid black;border-image-source: url(marcohielo.png); border-image-slice: 23%;border-image-repeat: round;";
         $colorTitle="darkgray";
       }
       else{
-        $mensaje = "<span style='color:#16A085; font-size:13px;'>El Juego esta ABIERTO</span>
-        <br><span style='color:white; font-size:10px;'>LOS JUEGOS SE CIERRAN 10 HORAS ANTES DEL EVENTO</span>";
+        $bloqueo = "pagar";        
+        $mensaje = "<span style='color:#16A085; font-size:13px;'>Suscripcion Activa</span>";
+        $style = "background:black; border: 21px solid black;border-image-source: url(marcofuego.png); border-image-slice: 23%;border-image-repeat: round;";
+        $colorTitle="white";
+      }  
+        echo "
+        <div class=\"app\" style='{$style}' onclick=\"{$bloqueo}('".$row['ID']."')\">
+          <div >
+            <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
+              <div  style='font-size:14px; text-transform:capitalize;'>
+                <div style='font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;'>".$analisis."</div>
+                <span style='color:white;font-size:12px;font-weight:bold;'>Vence el : ".latinFecha($row['FIN'])."</span><br>
+                <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
+              </div>
+            <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:white;text-decoration:none;'>{$mensaje}</div><br>            
+          </div>
+        </div>";
+      
+    }
+    mysqli_close($conexion);
+  }
+}
+
+if(isset($_GET['getJugadas'])) {
+  $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
+  $correo = $_GET['correo'];
+  $consulta = "select * from JUEGOS WHERE ELIMINADO=0 ORDER BY FECHA";
+
+  if (!$conexion) {
+    echo "Refresh page, Failed to connect to Data...";
+    exit();
+  }else{    
+    $resultado = mysqli_query( $conexion, $consulta );
+    while($row = mysqli_fetch_array($resultado)){
+      $fecha = latinFecha($row['FECHA']);
+      $bloqueo = "trade";
+      $mensaje = "";
+      $style = "";
+      $colorTitle="";
+      $favorito="";
+
+      if($row['BLOQUEADO']==1){
+        $bloqueo = "bloque";
+        $mensaje = "<span style='color:#FE6080;'>Suscripcion Bloqueda</span>";
+        $colorAlert = "#F96E1F";
+        $style = "background:#D8E8F3; border: 21px solid black;border-image-source: url(marcohielo.png); border-image-slice: 23%;border-image-repeat: round;";
+        $colorTitle="darkgray";
+      }
+      else{
+        $mensaje = "<span style='color:#16A085; font-size:13px;'>Suscripcion Abierta</span>";
         $style = "background:black; border: 21px solid black;border-image-source: url(marcofuego.png); border-image-slice: 23%;border-image-repeat: round;";
         $colorTitle="white";
       }  
 
-      if($row['DESAFIO']==1){
-        $desafio = "(Super Desafio Fortuna) ".makeAnciTrebol(4);
-        $pagan ="x4";
-      }
-
-      if($row['DESAFIOX1_5']==1){
-        $desafio = "(Super Favorito) ".makeAnciTrebol(1);
-        $pagan ="x1.5";
-      }
-
-      if($row['DESAFIOX3']==1){
-        $desafio = "(Desafio Fortuna Royal) ".makeAnciTrebol(3);
-        $pagan ="x3";
-      }
-
       if($row['FAVORITO']==1){
-        $favorito = "(FAVORITO)";
+        $favorito = "(Recomendado)";
       }      
       
       if(!isset($_SESSION['user'])){
         echo "
         <div class=\"app\"  onclick=\"initsession()\">
                    
-          <div class='app-content'>
-            <div class='app-title'><br><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
+          <div >
+            <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
               <div  style='font-size:14px; text-transform:capitalize;'>
-                <span style='font-weight:bold; color:white;'>".$row['EQUIPO1']." {$favorito}{$desafio}</span><br>
-                <span style='font-size:12px;'>Vs </span><br>
-                <span style='font-weight:bold; color:white;'>".$row['EQUIPO2']."</span><br>
-                <span style='font-size:12px;font-weight:bold;'>".$row['REFERENCIA']."</span><br>
-                <span style='font-size:12px;'>Maximo a Jugar </span>
-                <span id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'>{$row['MAX']} USDT</span><br>
-                <span style='font-size:12px;'>Paga {$pagan} </span>                
+                <span style='font-size:10px;font-weight:bold; color:{$colorTitle};'>{$favorito}</span>
+                <div style='font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;'>".$row['DESCRIPCION']."</div>
+                <span style='color:white;font-size:12px;font-weight:bold;'>Costo: ".price($row['MONTO'])." Usdc</span><br>
+                <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
               </div>
-            <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:white;text-decoration:none;'>{$mensaje}</div>
+            <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:white;text-decoration:none;'>{$mensaje}</div><br>
             <div class='app-rating app-rating--".$row['RATE']."'></div>
           </div>
         </div>";
       }
       else{
-        echo "
-        <div class=\"app\" style='{$style}' onclick=\"{$bloqueo}('".$row['ID']."')\">
-          
-          <div class='app-content'>
-            <div class='app-title'><br><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
-              <div  style='font-size:14px; text-transform:capitalize;'>
-                <span style='font-weight:bold; color:{$colorTitle};'>".$row['EQUIPO1']." {$favorito}{$desafio}</span><br>
-                <span style='font-size:12px;'>Vs </span><br>
-                <span style='font-weight:bold; color:{$colorTitle};'>".$row['EQUIPO2']."</span><br>
-                <span style='font-size:12px;font-weight:bold;'>".$row['REFERENCIA']."</span><br>
-                <span style='font-size:12px;'>Maximo a Jugar </span>
-                <span id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'>{$row['MAX']} USDT</span><br>
-                <span style='font-size:12px;'>Paga {$pagan} </span>                
+        if(strlen($correo) > 0 ){
+          if(ifClienteJuegoExist($row['ID'],$correo)){
+            if($row['PORCIENTO'] > 0){
+              echo "
+              <div class=\"app\" style='{$style}' onclick=\"{$bloqueo}('".$row['ID']."')\">
+                <input type='hidden' id='M".$row['ID']."' value='".price($row['MONTO'])."'>
+                <div >
+                  <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
+                    <div  style='font-size:14px; text-transform:capitalize;'>
+                      <span style='font-size:10px;font-weight:bold; color:{$colorTitle};'>{$favorito}</span>
+                      <div style='font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;'>".$row['DESCRIPCION']."</div>
+                      <span style='color:white;font-size:12px;font-weight:bold;'>Costo: ".price($row['MONTO'])." Usdc</span><br>
+                      <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
+                    </div>
+                  <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:white;text-decoration:none;'>{$mensaje}</div><br>
+                  <div class='app-rating app-rating--".$row['RATE']."'></div>
+                </div>
+              </div>";
+            }
+          }
+          else{
+            echo "
+            <div class=\"app\" style='{$style}' onclick=\"{$bloqueo}('".$row['ID']."')\">
+              <input type='hidden' id='M".$row['ID']."' value='".price($row['MONTO'])."'>
+              <div >
+                <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
+                  <div  style='font-size:14px; text-transform:capitalize;'>
+                    <span style='font-size:10px;font-weight:bold; color:{$colorTitle};'>{$favorito}</span>
+                    <div style='font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;'>".$row['DESCRIPCION']."</div>
+                    <span style='color:white;font-size:12px;font-weight:bold;'>Costo: ".price($row['MONTO'])." Usdc</span><br>
+                    <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
+                  </div>
+                <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:white;text-decoration:none;'>{$mensaje}</div><br>
+                <div class='app-rating app-rating--".$row['RATE']."'></div>
               </div>
-            <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:white;text-decoration:none;'>{$mensaje}</div>
-            <div class='app-rating app-rating--".$row['RATE']."'></div>
-          </div>
-        </div>";
+            </div>";            
+          }
+        }
+        else{
+          echo "
+          <div class=\"app\" style='{$style}' onclick=\"{$bloqueo}('".$row['ID']."')\">
+            <input type='hidden' id='M".$row['ID']."' value='".price($row['MONTO'])."'>
+            <div >
+              <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
+                <div  style='font-size:14px; text-transform:capitalize;'>
+                  <span style='font-size:10px;font-weight:bold; color:{$colorTitle};'>{$favorito}</span>
+                  <div style='font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;'>".$row['DESCRIPCION']."</div>
+                  <span style='color:white;font-size:12px;font-weight:bold;'>Costo: ".price($row['MONTO'])." Usdc</span><br>
+                  <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
+                </div>
+              <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:white;text-decoration:none;'>{$mensaje}</div><br>
+              <div class='app-rating app-rating--".$row['RATE']."'></div>
+            </div>
+          </div>";
+        }
       }
     }
     mysqli_close($conexion);
@@ -396,14 +489,17 @@ if(isset($_GET['readJuegos'])) {
       exit();
     }else{
       $colorAlert = "#F96E1F";
-      $consulta = "select * from JUEGOS WHERE ELIMINADO=0 ORDER BY INICIO";
+      $consulta = "select * from JUEGOS WHERE ELIMINADO=0 ORDER BY FECHA";
       echo "
-      <table style='width:100%; text-align:center;'>
-        <th>Inicio</th>
-        <th>Juego</th>
-        <th>Evento</th>
-        <th>Jugadores</th>
+      <table style='width:100%; '>
+      <thead>
+        <th>Fecha</th>
+        <th>Producto</th>
+        <th>Descripcion</th>
+        <th>Tipo</th>
+        <th>Usdc</th>
         <th>Opciones</th>
+        </thead><tbody>
       ";
       $resultado = mysqli_query( $conexion, $consulta );
       while($row = mysqli_fetch_array($resultado)){
@@ -411,20 +507,25 @@ if(isset($_GET['readJuegos'])) {
         if($row['BLOQUEADO']==1){
           $bloqueo = "checked";
         }
-        $fecha = latinFecha($row['INICIO']); 
+        $fecha = latinFecha($row['FECHA']); 
        echo "<tr>
         <td><span>{$fecha}</span></td>
         <td><span>".$row['JUEGO']."</span></td>
-        <td><span>".$row['EQUIPO1']." Vs ".$row['EQUIPO2']."</span></td>
-        <td><span>".$row['APUESTAS']."/".$row['MIN']."</span></td>
-        <td>
-          <button title='Eliminar Juego' type='button' style='background:#F0917F;' onclick=\"borrar(".$row['ID'].")\">&#9746;</button>
-          <input id='cerrar{$row['ID']}' type='checkbox' {$bloqueo} onclick=\"cerrar(".$row['ID'].")\"><label for='cerrar{$row['ID']}'>Cerrar</label>
+        <td title='".strip_tags($row['DESCRIPCION'])."'>".substr($row['DESCRIPCION'], 0, 100)."...</td>
+        <td><span>".$row['TIPO']."</span></td>
+        <td><span>".price($row['MONTO'])."</span></td>
+        <td>";
+          if($row['PORCIENTO'] == 0){
+            echo "<button title='Analisis' type='button' onclick=\"analisis('".$row['ID']."')\">Analisis</button>";
+          }
+          
+          echo "<button title='Eliminar' type='button' style='background:#F0917F;' onclick=\"borrar('".$row['ID']."')\">Delete</button>
+          <label for='cerrar{$row['ID']}'><input id='cerrar{$row['ID']}' type='checkbox' {$bloqueo} onclick=\"cerrar(".$row['ID'].")\">Bloquear</label>          
         </td>
         </tr>";
       }
   
-      echo "</table>";
+      echo "</tbody></table>";
       mysqli_close($conexion);
     }
 }
@@ -471,36 +572,39 @@ if(isset($_GET['readHistorialAdmin'])) {
     exit();
   }else{
     $colorAlert = "#F96E1F";
-    $consulta = "select * from APUESTAS ORDER BY FECHA DESC";
+    $consulta = "select * from APUESTAS ORDER BY FECHA";
     echo "
-    <table style='width:100%; text-align:center;'>
-      <th></th>
-      <th>Evento</th>
-      <th>Apuesta</th>
-      <th>Recibio</th>
+    <table style='width:100%; '>
+      <thead>
+      <th>Finaliza el</th>
+      <th>Faltan Dias</th>
+      <th>Suscripcion</th>
+      <th>Tipo</th>
+      <th>Monto Usdc</th>
+      <th>Cliente</th>      
       <th>Estatus</th>
-      <th>Resultados</th>
+      </thead>
+      <tbody>
     ";
     $resultado = mysqli_query( $conexion, $consulta );
     while($row = mysqli_fetch_array($resultado)){
-      $line= "";
-      if(isset($row['JUEGO'])){
-          if(strlen($row['JUEGO'])>0){
-                      $juego = readJuegoId($row['JUEGO']);
-        $line = $juego['JUEGO']." / ".$juego['EQUIPO1']." Vs ".$juego['EQUIPO2'];
-          }
-      }      
-     echo "<tr>
-      <td><span>".$row['REFERENCIA']."</span></td>
-      <td><span>{$line}</span></td>
-      <td><span>".$row['APUESTA']."</span></td>
-      <td><span>".price($row['RECIBE'])."USDT</span></td>
-      <td><span>".$row['ESTATUS']."</span></td>
-      <td><span>".$row['RESULTADO']."</span></td>
+      $color="transparent";
+      if($row['ACTIVO']==0){
+        $color="#AED6F1";
+      }
+      
+     echo "<tr style='background:{$color};'>
+      <td><span>".$row['FIN']."</span></td>
+      <td><span>".calcularDiasEntreFechas(date("Y-m-d"), $row['FIN'])."</span></td>
+      <td><span>".$row['JUEGO']."USDT</span></td>
+      <td><span>".$row['TIPO']."</span></td>      
+      <td><span>".price($row['MONTO'])."</span></td>      
+      <td><span>".$row['CLIENTE']."</span></td>      
+      <td><span>".$row['ESTATUS']."</span></td>      
       </tr>";
     }
 
-    echo "</table>";
+    echo "</tbody></table>";
     mysqli_close($conexion);
   }
 }
@@ -548,50 +652,40 @@ if(isset($_GET['readRetiros'])) {
 }
 
 if(isset($_GET['readHistorial'])) {
+  $obj = array();
+  $cliente = $_GET['cliente'];
   $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
   if (!$conexion) {
     echo "Refresh page, Failed to connect to Data...";
     exit();
   }else{
-    $colorAlert = "#F96E1F";
-    $consulta = "select * from APUESTAS WHERE CLIENTE='{$_GET['cliente']}' AND FECHA BETWEEN (NOW() - INTERVAL 10 DAY) AND NOW() ORDER BY FECHA DESC";
-    echo "
-    <table style='width:100%; text-align:center;'>
-      <th></th>
-      <th>Evento</th>
-      <th>Apuesta</th>
-      <th>Recibes</th>
-      <th>Estatus</th>
-      <th>Resultados</th>
-    ";
+    $consulta = "select * from APUESTAS WHERE CLIENTE='{$cliente}' ORDER BY FECHA DESC";
     $resultado = mysqli_query( $conexion, $consulta );
-    while($row = mysqli_fetch_array($resultado)){
-      $color="transparent";
-      if(str_contains($row['TIPO'], 'Deposito')){
-        $color = "green";
-      }      
-      if(str_contains($row['TIPO'], 'Retiro')){
-        $color = "red";
-      }  
-
-      $line= "";
-      if(strlen($row['JUEGO'])>0){
-        $juego = readJuegoId($row['JUEGO']);
-        $line = $juego['JUEGO']." / ".$juego['EQUIPO1']." Vs ".$juego['EQUIPO2'];
-      }
-      
-     echo "<tr style='background:{$color};'>
-      <td><span>".$row['REFERENCIA']."</span></td>
-      <td><span>{$line}</span></td>
-      <td><span>".$row['APUESTA']."</span></td>
-      <td><span>".price($row['RECIBE'])."USDT</span></td>
-      <td><span>".$row['ESTATUS']."</span></td>
-      <td><span>".$row['RESULTADO']."</span></td>
-      </tr>";
+    while($row = mysqli_fetch_array($resultado)){     
+      $obj[] = array(
+      'id' => $row['ID'],
+      'fecha' => latinFecha($row['FECHA']),
+      'inicio' => latinFecha($row['INICIO']),
+      'fin' => latinFecha($row['FIN']), 
+      'ticket' => $row['TICKET'],
+      'tipo' => $row['TIPO'],
+      'idjuego' => $row['IDJUEGO'],
+      'juego' => $row['JUEGO'],
+      'cajero' => $row['CAJERO'],
+      'cliente' => $row['CLIENTE'],
+      'porciento' => $row['PORCIENTO'],
+      'monto' => price($row['MONTO']),
+      'interes_mensual' => price($row['INTERES_MENSUAL']),
+      'cuota_mensual' => price($row['CUOTA_MENSUAL']),
+      'total_pagar' => price($row['TOTAL_PAGAR']),
+      'n_pagos' => $row['N_PAGOS'],
+      'pagados' => $row['PAGADOS'],
+      'activo' => $row['ACTIVO'],
+      'estatus' => $row['ESTATUS'],
+      'faltan_dias' => calcularDiasEntreFechas( date("Y/m/d"), $row['FIN']));
     }
-
-    echo "</table>";
     mysqli_close($conexion);
+    echo json_encode($obj);
   }
 }
 
@@ -599,6 +693,12 @@ if(isset($_POST['borrar'])){
     //sqlconector("DELETE FROM JUEGOS WHERE ID={$_POST['borrar']}");
     sqlconector("UPDATE JUEGOS SET ELIMINADO=1 WHERE ID={$_POST['borrar']}");
 }
+
+if(isset($_POST['setAnalis'])){
+  $consulta = "UPDATE JUEGOS SET ANALISIS='".$_POST['analisis']."' WHERE ID=".$_POST['setAnalis'];
+  sqlconector($consulta);
+}
+
 
 if(isset($_POST['borrarPromo'])){
   deletePromo($_POST['borrarPromo']);
@@ -661,31 +761,25 @@ if(isset($_POST['setEstatus'])){
 }
 
 if(isset($_POST['crear'])){
-    sqlconector("INSERT INTO JUEGOS(JUEGO,CAJERO,EQUIPO1,EQUIPO2,REFERENCIA,WALLET,MIN,MAX,DESAFIO,DESAFIOX1_5,DESAFIOX3,FAVORITO,RATE) VALUES(
+    sqlconector("INSERT INTO JUEGOS(JUEGO,CAJERO,MIN,DESCRIPCION,TIPO,FAVORITO,RATE,MONTO,PORCIENTO,PORADELANTADO) VALUES(
       '{$_POST['nombre']}',
       '{$_POST['cajero']}',
-      '{$_POST['equipo1']}',
-      '{$_POST['equipo2']}',
+      {$_POST['min']},      
       '{$_POST['descripcion']}',
-      '{$_POST['wallet']}',
-      {$_POST['min']},
-      {$_POST['max']},
-      {$_POST['desafio']},
-      {$_POST['desafiox1_5']},
-      {$_POST['desafiox3']},
+      '{$_POST['tipo']}',
       {$_POST['favorito']},
-      {$_POST['rate']}
+      {$_POST['rate']},
+      {$_POST['monto']},
+      {$_POST['porciento']},
+      {$_POST['poradelantado']}
     )");
 }
 
 if(isset($_POST['crearPromo'])){
-  sqlconector("INSERT INTO PROMO(NOMBRE,CODIGO,MENSAJE,NUMPROMO,PREMIO,GANADOR,DIFUSION,FLOTANTE) VALUES(
+  sqlconector("INSERT INTO PROMO(NOMBRE,CODIGO,MENSAJE,DIFUSION,FLOTANTE) VALUES(
     '{$_POST['nombre']}',
     '".generaTicket()."',
     '{$_POST['mensaje']}',
-    {$_POST['numpromo']},
-    {$_POST['premio']},
-    {$_POST['promoGanador']},
     {$_POST['promoDifu']},
     {$_POST['promoFlotante']}
   )");
@@ -756,26 +850,4 @@ if( isset($_POST['sendlista']) ){
   }
 }
 
-if (isset($_POST['cerrarchat'])){
-  if (strlen($_POST['tickedchat'])>0){
-    cerrarChat($_POST['tickedchat']);
-  }
-}
-
-if (isset($_POST['insertmychat'])){
-  
-  $recibe="khorazi57@gmail.com";
-  
-  if (strlen($_POST['mensaje'])>0){
-    insertChat($_POST['email'],$_POST['tickedchat'],$_POST['email'],$recibe,$_POST['mensaje']);
-  }
-
-  if (readClienteId($_SESSION['user'])['NIVEL'] > 0) updateColor($_POST['tickedchat'],$_POST['email'],"#BABAEE","#000000");
-
-  dibujaChatApp($_POST['tickedchat']);
-}
-
-if(isset($_POST['verChatApp'])) {
-  dibujaChatApp($_POST['verChatApp']);
-}
 ?>

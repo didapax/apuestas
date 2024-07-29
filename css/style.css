@@ -409,12 +409,12 @@
   color: #BCAED6;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 3px;
   overflow: hidden;
   font-size: 13px;
   position: relative;
-  width: 340px;
-  height: 245px;
+  width: 345px;
+  height: 250px;
   /*margin-left: 0px;*/
   margin-bottom: 10px;  
   text-align: left;
@@ -482,9 +482,8 @@
 }
 
 .app-rating {
-  position: absolute;
+  position: relative;
   color: white;
-
   left: 10px;
   bottom: 10px;
   height: 16px;
