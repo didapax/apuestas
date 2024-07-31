@@ -8,6 +8,20 @@ function generaTicket(){
     return $referencia;
 }
 
+function obtenerIntervalosMensuales($fechaInicio, $fechaFin) {
+  $inicio = new DateTime($fechaInicio);
+  $fin = new DateTime($fechaFin);
+  $intervalo = new DateInterval('P1M');
+  $periodo = new DatePeriod($inicio, $intervalo, $fin->add($intervalo));
+
+  $fechas = [];
+  foreach ($periodo as $fecha) {
+      $fechas[] = $fecha->format('Y-m-d');
+  }
+
+  return $fechas;
+}
+
 function calcularFechaDespuesDeUnMes($fecha, $meses) {
   // Convierte la fecha a un objeto DateTime
   $fechaObjeto = new DateTime($fecha);
@@ -52,6 +66,93 @@ function calcularInteresMensual($capital, $tasaInteresAnual, $meses) {
   );
 }
 
+function recalcularSuscripciones($correo){
+  $resultado = sqlconector("SELECT * FROM LIBROCONTABLE WHERE CLIENTE='$correo' AND PAGADO=0 AND ACTIVO=1");
+  if($resultado){
+    while ($row = mysqli_fetch_array($resultado)) {
+      $inversion = $row['INVERSION'];
+      $interes_adelantado = $row['INTERES_ADELANTADO'];
+      $capital = $row['MONTO'];
+      $interes = $row['INTERES_MENSUAL'];
+      $saldo = readCliente($row['CLIENTE'])['SALDO'];
+      $dia_actual = date("Y-m-d");
+      $vencimiento = $row['FECHA'];
+      $ticket = $row['TICKET'];
+      $cliente = $row['CLIENTE'];
+      $suscripcion = readApuestaTicket($ticket);
+      $n_pagos = $suscripcion['N_PAGOS'];
+
+      if($inversion==1){        
+        if($interes_adelantado == 1){
+          //la logica si tiene interes adelantado
+          if($vencimiento <= $dia_actual){
+            if($n_pagos > 1){
+              $valor = $n_pagos - 1;
+              sqlconector("UPDATE APUESTAS SET N_PAGOS=$valor WHERE TICKET='$ticket'");
+              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND CLIENTE='$cliente'");
+            }
+            else{
+              $saldo = readCliente($cliente)['SALDO'] + $capital;
+              sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cliente'");
+              sqlconector("UPDATE APUESTAS SET PAGADOS=1, ACTIVO=0, ELIMINADO=1 WHERE TICKET='$ticket'");
+              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND CLIENTE='$cliente'");              
+            }
+          }
+        }
+        else{
+          //la logica si es solo una inversion
+          if($vencimiento <= $dia_actual){
+            if($n_pagos > 1){
+              $saldo = readCliente($cliente)['SALDO'] + $interes;
+              sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cliente'");              
+              $valor = $n_pagos - 1;
+              sqlconector("UPDATE APUESTAS SET N_PAGOS=$valor WHERE TICKET='$ticket'");
+              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND CLIENTE='$cliente'");
+            }
+            else{
+              $saldo = readCliente($cliente)['SALDO'] + $capital + $intereses;
+              sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cliente'");
+              sqlconector("UPDATE APUESTAS SET PAGADOS=1, ACTIVO=0, ELIMINADO=1 WHERE TICKET='$ticket'");
+              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND CLIENTE='$cliente'");              
+            }
+          }
+        }
+      }else{
+        //La logica si es una suscripcion
+        if($vencimiento <= $dia_actual){
+          if(readCliente($cliente)['SALDO'] >= $capital){
+            $idJuego = $row['IDJUEGO'];
+            $juego = $row['JUEGO'];
+            $cajero =$row['CAJERO'];
+            $saldo = readCliente($cliente)['SALDO'] - $capital;
+            sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cliente'");
+            sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND CLIENTE='$cliente'");
+            $fechaFinal = calcularFechaDespuesDeUnMes($dia_actual,$n_pagos);
+            sqlconector("INSERT INTO LIBROCONTABLE(FECHA,TICKET,TIPO,IDJUEGO,INVERSION,JUEGO,CAJERO,CLIENTE,INTERES_ADELANTADO,MONTO,INTERES_MENSUAL,CUOTA_MENSUAL,TOTAL_PAGAR) VALUES(
+              '$fechaFinal',
+              '$ticket',
+              'DEBITO',
+               $idJuego,
+               0,
+              '$juego',
+              '$cajero',
+              '$correo',
+               0,
+               $capital,
+               0,
+               $capital,
+               $capital
+              )");            
+          }else{
+            sqlconector("UPDATE APUESTAS SET ACTIVO=0, ESTATUS='NO PAGO' WHERE TICKET='$ticket'");
+          }     
+        }
+      }
+
+    }
+  }
+}
+
 function test_input($data) {
   $data = trim($data);
   $data = stripslashes($data);
@@ -79,7 +180,7 @@ function returnReferente($referido){
 
 function latinFecha($fecha){
     $date=date_create($fecha);
-    return date_format($date,"d/M/y");
+    return date_format($date,"d/m/Y");
 }
 
 function makeAnciEstrellas($rate){

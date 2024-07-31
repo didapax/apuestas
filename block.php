@@ -47,7 +47,7 @@ if(isset($_POST['depositar'])){
         $monto)");
 }
 
-if(isset($_POST['jugar'])){    
+if(isset($_POST['jugar'])){
       $suscripcion = readJuegoId($_POST['idjuego']);  
       $ticket = generaTicket();      
       $monto = $suscripcion['MONTO'];
@@ -107,17 +107,44 @@ if(isset($_POST['jugar'])){
            {$totalCuotas},
            {$numeroPagos}
       )";
-
-      echo $consulta;
-      sqlconector($consulta);
       
+      sqlconector($consulta);
+
       $saldo= readCliente($correo)['SALDO'] - $monto;
       sqlconector("UPDATE USUARIOS SET SALDO={$saldo} WHERE CORREO='{$correo}'");
 
       if($porAdelantado == 1){
-        $saldo= readCliente($correo)['SALDO'] + $interesMensual;
-        sqlconector("UPDATE USUARIOS SET SALDO={$saldo} WHERE CORREO='{$correo}'");
+        $saldo= readCliente($correo)['SALDO'] + ($interesMensual * $numeroPagos);
+        sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$correo'");
+      }      
+
+      $inversion = 0;
+      $tipo = "DEBITO";
+      if($porciento > 0){
+        $inversion = 1;
+        $tipo = "CREDITO";
       }
+
+      $fechas = obtenerIntervalosMensuales($fechaInicial, $fechaFinal);
+      foreach ($fechas as $fecha) {
+        sqlconector("INSERT INTO LIBROCONTABLE(FECHA,TICKET,TIPO,IDJUEGO,INVERSION,JUEGO,CAJERO,CLIENTE,INTERES_ADELANTADO,MONTO,INTERES_MENSUAL,CUOTA_MENSUAL,TOTAL_PAGAR) VALUES(
+        '$fecha',
+        '$ticket',
+        '$tipo',
+         $idJuego,
+         $inversion,
+        '$juego',
+        '$cajero',
+        '$correo',
+         $porAdelantado,
+         $monto,
+         $interesMensual,
+         $cuotaMensual,
+         $totalCuotas
+        )");
+      }
+
+      sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND FECHA='$fechaInicial'");
 }
 
 if(isset($_POST['sendmail'])){
@@ -273,30 +300,30 @@ if(isset($_GET['getSuscripciones'])) {
       $colorTitle="";
       $favorito="";
       $analisis = "";
-
-      if( isset(readJuegoId($row['ID'])['ANALISIS']) ){
-        $analisis = readJuegoId($row['ID'])['ANALISIS'];
-      }
-
-      if($row['ACTIVO']==0){        
+  
+      if($row['ACTIVO']==0){     
+        $analisis = "<button onclick=\"renovar('".$row['ID']."')\">Renovar</button>";
         $mensaje = "<span style='color:#FE6080;'>Suscripcion Bloqueda</span>";
         $colorAlert = "#F96E1F";
-        $style = "background:#D8E8F3; border: 21px solid black;border-image-source: url(marcohielo.png); border-image-slice: 23%;border-image-repeat: round;";
+        $style = "background: url(Assets/tarjetamaster.png); border: 3px solid black; border-radius: 15px;";
         $colorTitle="darkgray";
       }
       else{
+        if( isset(readJuegoId($row['IDJUEGO'])['ANALISIS']) ){
+          $analisis = readJuegoId($row['IDJUEGO'])['ANALISIS'];
+        }        
         $bloqueo = "pagar";        
-        $mensaje = "<span style='color:#16A085; font-size:13px;'>Suscripcion Activa</span>";
-        $style = "background:black; border: 21px solid black;border-image-source: url(marcofuego.png); border-image-slice: 23%;border-image-repeat: round;";
-        $colorTitle="white";
+        $mensaje = "<span style='color:gray; font-size:13px;'>Suscripcion Activa</span>";
+        $style = "background: url(Assets/tarjetadorada.png); border: 3px solid black; border-radius: 15px;";
+        $colorTitle="black";
       }  
         echo "
         <div class=\"app\" style='{$style}' onclick=\"{$bloqueo}('".$row['ID']."')\">
           <div >
-            <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
+            <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:black;'>".$row['JUEGO']."</span></div>
               <div  style='font-size:14px; text-transform:capitalize;'>
-                <div style='font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;'>".$analisis."</div>
-                <span style='color:white;font-size:12px;font-weight:bold;'>Vence el : ".latinFecha($row['FIN'])."</span><br>
+                <div style='padding:5px;font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 170px;  overflow-y: auto; overflow-x: hidden;margin-left: 80px;'>".$analisis."</div>
+                <span style='color:gray;font-size:13px;font-weight:bold;'>Vence el : ".latinFecha($row['FIN'])."</span><br>
                 <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
               </div>
             <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:white;text-decoration:none;'>{$mensaje}</div><br>            
@@ -324,23 +351,23 @@ if(isset($_GET['getJugadas'])) {
       $mensaje = "";
       $style = "";
       $colorTitle="";
-      $favorito="";
+      $favorito="&#169;";
 
       if($row['BLOQUEADO']==1){
         $bloqueo = "bloque";
         $mensaje = "<span style='color:#FE6080;'>Suscripcion Bloqueda</span>";
         $colorAlert = "#F96E1F";
-        $style = "background:#D8E8F3; border: 21px solid black;border-image-source: url(marcohielo.png); border-image-slice: 23%;border-image-repeat: round;";
+        $style = "background: url(Assets/tarjetagris.png); border: 3px solid black; border-radius: 15px;";
         $colorTitle="darkgray";
       }
       else{
         $mensaje = "<span style='color:#16A085; font-size:13px;'>Suscripcion Abierta</span>";
-        $style = "background:black; border: 21px solid black;border-image-source: url(marcofuego.png); border-image-slice: 23%;border-image-repeat: round;";
+        $style = "background: url(Assets/tarjetanegra.png); border: 3px solid black; border-radius: 15px;";
         $colorTitle="white";
       }  
 
       if($row['FAVORITO']==1){
-        $favorito = "(Recomendado)";
+        $favorito = "&#169; Recomendado";
       }      
       
       if(!isset($_SESSION['user'])){
@@ -350,9 +377,9 @@ if(isset($_GET['getJugadas'])) {
           <div >
             <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
               <div  style='font-size:14px; text-transform:capitalize;'>
-                <span style='font-size:10px;font-weight:bold; color:{$colorTitle};'>{$favorito}</span>
-                <div style='font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;'>".$row['DESCRIPCION']."</div>
-                <span style='color:white;font-size:12px;font-weight:bold;'>Costo: ".price($row['MONTO'])." Usdc</span><br>
+                <div style='font-size:10px;font-weight:bold; color:{$colorTitle};'>{$favorito}</div>
+                <div style='padding:5px;font-weight:bold; color:{$colorTitle};font-size:13px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;margin-left: 90px;'>".$row['DESCRIPCION']."</div>
+                <div style='background: darkslategrey;text-align: right;color:white;font-size:12px;font-weight:bold;'>Costo: ".price($row['MONTO'])." Usdc</div>
                 <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
               </div>
             <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:white;text-decoration:none;'>{$mensaje}</div><br>
@@ -370,9 +397,9 @@ if(isset($_GET['getJugadas'])) {
                 <div >
                   <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
                     <div  style='font-size:14px; text-transform:capitalize;'>
-                      <span style='font-size:10px;font-weight:bold; color:{$colorTitle};'>{$favorito}</span>
-                      <div style='font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;'>".$row['DESCRIPCION']."</div>
-                      <span style='color:white;font-size:12px;font-weight:bold;'>Costo: ".price($row['MONTO'])." Usdc</span><br>
+                      <div style='font-size:10px;font-weight:bold; color:{$colorTitle};'>{$favorito}</div>
+                      <div style='padding:5px;font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;margin-left: 90px;'>".$row['DESCRIPCION']."</div>
+                      <div style='background: darkslategrey;text-align: right;color:white;font-size:12px;font-weight:bold;'>Costo: ".price($row['MONTO'])." Usdc</div>
                       <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
                     </div>
                   <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:white;text-decoration:none;'>{$mensaje}</div><br>
@@ -480,7 +507,7 @@ if(isset($_GET['readPromos'])) {
     echo "</table>";
     mysqli_close($conexion);
   }
-}
+} 
 
 if(isset($_GET['readJuegos'])) { 
     $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);

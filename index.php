@@ -8,7 +8,7 @@
         <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="favicon.png">        
+        <link rel="shortcut icon" href="Assets/favicon.png">        
         <link rel="stylesheet" href="css/animate.min.css" />
         <link rel="stylesheet" type="text/css" href="css/Common.css">
         <link href='css/boxicons.min.css' rel='stylesheet'>
@@ -102,50 +102,45 @@
             function inicio(){ 
                 leerJuegos();
                 leerDatos();
-                myVar = setInterval(leerJuegos, 3000);
+                //myVar = setInterval(leerJuegos, 3000);
             }
         </script>
 
-    <body onload='inicio()'>   
-    <input type="hidden" id="correo" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" >        
+    <body onload='inicio()'>       
       <?php $page = "home"; ?>
       <!--Iniciar Barra de Navegación @media 1200px-->
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->        
 
         <?php
-           if(!isset($_SESSION['user'])){
-            echo "<div id=\"cuerpo\" class=\"cuerpo\">
-            <div id=\"vista\" class=\"grid-container app-grid\"></div>
-        </div>";
-            promoFlotante();
-        }else{
-            promoFlotante();
-        
-        ?>        
-
+            $correo = "";
+            if(isset($_SESSION['user'])){
+                $correo = readClienteId($_SESSION['user'])['CORREO'];
+                $saldo = readClienteId($_SESSION['user'])['SALDO'];
+                recalcularSuscripciones($correo);
+                promoFlotante();
+            }
+        ?>
         <div id="cuerpo" class="cuerpo">            
-            <input type="hidden" id="actualsaldo">
-
+            <input type="hidden" id="actualsaldo" value="<?php echo $saldo;?>">
+            <input type="hidden" id="correo" value="<?php echo $correo;?>" > 
             <div id="vista" class="grid-container app-grid"></div>
         </div>
-        <?php
-        }
-        ?>      
+        
       <!--Iniciar footer-->
       <?php include 'footer.php';?>
         <!--FIN footer-->     
 
-    <script>
+        <script>
 
-function myFunctionMenu() {    
-    var x = document.getElementById("myTopnav");
-    if (x.className === "topnav") {
-        x.className += " responsive";
-    } else {
-        x.className = "topnav";
-    }
-}
-</script>
+            function myFunctionMenu() {    
+                var x = document.getElementById("myTopnav");
+                if (x.className === "topnav") {
+                    x.className += " responsive";
+                } else {
+                    x.className = "topnav";
+                }
+            }
+        </script>
     </body>
 </html>

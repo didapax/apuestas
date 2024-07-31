@@ -15,9 +15,9 @@
                 if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){                                   
                    
                     if($page=="home"){
-                      echo "<a href='index' class='active'>Home</a>";
+                      echo "<a href='index' class='active'>Tienda</a>";
                     }else{
-                      echo "<a href='index' >Home</a>";
+                      echo "<a href='index' >Tienda</a>";
                     }
                     if($page=="chat"){
                       echo "<a href='chat' class='active'>Soporte</a>";
@@ -44,9 +44,9 @@
                 }
                 else if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                   if($page=="home"){
-                    echo "<a href='index' class='active'>Home</a>";
+                    echo "<a href='index' class='active'>Tienda</a>";
                   }else{
-                    echo "<a href='index' >Home</a>";
+                    echo "<a href='index' >Tienda</a>";
                   }                  
                   if($page=="histadmin"){
                     echo "<a href='historialadmin' class='active'>Suscripciones</a>";
