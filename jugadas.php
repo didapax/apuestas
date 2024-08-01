@@ -7,7 +7,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
     <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="favicon.png">        
+        <link rel="shortcut icon" href="Assets/favicon.png">        
         <link rel="stylesheet" href="css/animate.min.css" />
         <link rel="stylesheet" type="text/css" href="css/Common.css">
         <link href='css/boxicons.min.css' rel='stylesheet'>       
@@ -42,6 +42,61 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 
         </style>        
         <script>
+
+            function calcularInteresMensual(capital, tasaInteresAnual, meses) {
+                // Convertir la tasa de interés anual a mensual
+                let tasaInteresMensual = tasaInteresAnual / 12 / 100;
+
+                let cuotaMensual, interesMensual;
+
+                // Si la tasa de interés es cero, la cuota mensual es simplemente el capital dividido por el número de meses
+                if (tasaInteresMensual === 0) {
+                    cuotaMensual = capital / meses;
+                    interesMensual = 0;
+                } else {
+                    // Calcular el interés mensual
+                    interesMensual = capital * tasaInteresMensual;
+
+                    // Calcular la cuota mensual
+                    cuotaMensual = capital * tasaInteresMensual / (1 - Math.pow(1 + tasaInteresMensual, -meses));
+                }
+
+                return {
+                    interesMensual: interesMensual,
+                    cuotaMensual: cuotaMensual
+                };
+            }
+
+            function calcular() {
+                let capital = document.getElementById("monto").value;
+                let interes = document.getElementById("porciento").value;
+                let tipo = document.getElementById("tipoJuego").value;
+                let numMes;
+
+                switch (tipo) {
+                    case 'MENSUAL':
+                        numMes = 1;
+                        break;
+                    case 'TRIMESTRAL':
+                        numMes = 3;
+                        break;
+                    case 'SEMESTRAL':
+                        numMes = 6;
+                        break;
+                    case 'ANUAL':
+                        numMes = 12;
+                        break;
+                    default:
+                        numMes = 1;
+                        break;
+                }
+
+                let resultados = calcularInteresMensual(capital, interes, numMes);
+
+                $("#calculos").html(`Interes Mensuales: ${Math.round(resultados['interesMensual'] * 100) / 100}<br>
+                Cuota Mensual de: ${Math.round(resultados['cuotaMensual'] * 100) / 100}`);
+            }
+
             function crear(){
                 let orderFavorito = 0;
                 let orderAdelantado = 0;
@@ -148,14 +203,13 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         </div>
         <dialog class="dialog_agregar" id="agregar" close>
             <form action="jugadas">
-                <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer; color:black;" onclick="document.getElementById('agregar').close()">X</a><br>                
+                <a title="Cerrar" style="font-weight:bold;float:right;cursor:pointer; color:yellow;" onclick="document.getElementById('agregar').close()">X</a><br>                
                 Titulo: <input type="text" id="nombre"><br>
-                Detalles: <br>
                 Normal: <input title="Solo Insertar la Tarjeta" type="radio" id="ninguno" name="selectx">
-                Favorito: <input title="Poner la tarjeta como Favorita" type="radio" value="1" id="favorito" name="selectx">
-                Paga Por Adelantado: <input title="se paga por Adelantado" type="checkbox" value="1" id="adelantado" ><br>
-                Tipo: <select id="tipoJuego" >
-                    <option value="">selecciona</option>
+                Favorito: <input title="Poner la tarjeta como Favorita" type="radio" value="1" id="favorito" name="selectx"><br>
+                <input title="se paga por Adelantado" type="checkbox" value="1" id="adelantado" > Paga Por Adelantado: <br>
+                <select id="tipoJuego" >
+                    <option value="">selecciona..</option>
                     <option value="MENSUAL">Mensual</option>
                     <option value="TRIMESTRAL">Trimestral</option>
                     <option value="SEMESTRAL">Semestral</option>
@@ -163,8 +217,8 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 </select>
                 <br>                
                 Costo de la Suscripción: <input required type="number" id="monto"  value="0" style="color:black;"  step="1"> Usdc<br>
-                Interes Anual del: <input required type="number" id="porciento"  value="0" style="color:black;"  step="1"> % <br>
-                <br>
+                Interes Anual del: <input required type="number" id="porciento" onchange="calcular()" onkeyup="calcular()" value="0" style="color:black;"  step="1"> % <br>
+                <div id="calculos" style="color:black; background:white;"></div>
                 Descripcion: <br>
                 <div class="textAreaContainer">                
                     <textarea row="10" id="summernote"> </textarea>

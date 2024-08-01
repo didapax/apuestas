@@ -424,7 +424,7 @@ function recuperarRetiros() {
             });
         }          
 
-        function recuperarHistorial() {
+        function recuperarHistorial() { 
             fetch("block?readHistorial=&cliente="+document.getElementById('correo').value)
                 .then(response => {
                     if (!response.ok) {

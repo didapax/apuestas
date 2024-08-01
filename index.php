@@ -32,7 +32,7 @@
                                 function(data){                        
                                     var datos= JSON.parse(data);
                                     Swal.fire({
-                                        title: 'Comprar',
+                                        title: 'Suscripciones',
                                         text: `Estas Seguro de realizar la Compra de la Suscripcion ${datos.tipo} de ${datos.juego}, las Suscripciones tardan entre 24 a 48 horas en realizarse dependiendo de la congestion de la red.`,
                                         icon: 'info',
                                         confirmButtonColor: '#EC7063',
@@ -53,8 +53,8 @@
                                 });
                 }else{
                     Swal.fire({
-                                    title: 'Depositos',
-                                    text: "Saldo Insuficiente para realizar esta Suscripcion..",
+                                    title: 'Suscripciones',
+                                    text: "Saldo Insuficiente para realizar esta Operacion..",
                                     icon: 'info',
                                     confirmButtonColor: '#3085d6',
                                     confirmButtonText: 'Continuar'
