@@ -7,7 +7,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <title>Fortuna Royal</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="favicon.png">
+        <link rel="shortcut icon" href="Assets/favicon.png">
         <link rel="stylesheet" type="text/css" href="css/Common.css">        
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">                
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
@@ -76,7 +76,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
          button{
             color:black;
          }
-        </style>                
+        </style>             
         <script> 
             function inicio(){
                 leerDatos();

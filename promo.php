@@ -7,14 +7,20 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
     <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="favicon.png">        
+        <link rel="shortcut icon" href="Assets/favicon.png">        
         <link rel="stylesheet" href="css/animate.min.css" />
         <link rel="stylesheet" type="text/css" href="css/Common.css">
         <link href='css/boxicons.min.css' rel='stylesheet'>
+        <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />               
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
+       <!-- include summernote css/js -->
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>           
     </head>
     <header>
         <style>
@@ -55,7 +61,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 $.post("block",{
                     crearPromo: "",
                     nombre: document.getElementById("nombre").value,
-                    mensaje:document.getElementById("mensaje").value,
+                    mensaje:document.getElementById("summernote").value,
                     promoDifu: difusion,
                     promoFlotante: flotante
                 },function(data){
@@ -66,18 +72,23 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
             }
 
             function borrar(codigo){
-                var r = confirm("Estas Seguro de Eliminar la Promocion.?");
-                if (r == true) {
-                    $.post("block",{
-                        borrarPromo: codigo
-                    },function(data){
-                        leerVista();
-                        /*window.location.href="index";*/
-                    });
-                }
-                else {
-                   /*txt = "You pressed Cancel!";*/
-                }
+                Swal.fire({
+                                        title: 'Promocion',
+                                        text: `Estas Seguro de Eliminar la Promocion del Sistema`,
+                                        icon: 'warning',
+                                        confirmButtonColor: '#EC7063',
+                                        confirmButtonText: 'Si Eliminar',
+                                        showCancelButton: true,
+                                        cancelButtonText: "Cancelar"
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                $.post("block",{
+                                                    borrarPromo: codigo
+                                                },function(data){
+                                                    leerVista();
+                                                });  
+                                            }
+                                        });  
             }      
 
             function leerVista(){
@@ -112,8 +123,13 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                     sendlista: ""
                     },function(data){
                         leerVista();
-                        alert("Correos Enviados");
-                        /*window.location.href="promo";*/
+                        Swal.fire({
+                                    title: 'Difucion',
+                                    text: "Los Correos con la promocion han sido Enviados..",
+                                    icon: 'info',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Continuar'
+                                    }); 
                     });                               
             }              
 
@@ -138,11 +154,14 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
             <button style="margin-left:21px;" id="btn_difundir" type="button" onclick="difundir()">Difundir Promocion</button>
             <button style="margin-left:21px; background:#E9B2B2; display:none;" id="btn_reset" type="button" onclick="reset()">Reset Promocion</button>
         </div>
-        <dialog class="dialog_agregar" id="agregar" close>
+        <dialog  id="agregar" close>
             <form action="promo">
-                <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('agregar').close()">X</a><br>            
+                <a title="Cerrar" style="color:black;font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('agregar').close()">X</a><br>            
                 Titulo: <input type="text" id="nombre"><br>
-                Detalle:<br> <textarea style="width:100%; height:100px;"id="mensaje"></textarea><br>
+                Detalle:<br>
+                <div class="textAreaContainer">                
+                    <textarea row="10" id="summernote"> </textarea>
+                </div>                 
                 <label for="difuFlotante">Flotante </label><input type="radio" id="difuFlotante" name="idpromo"><br>
                 <label for="difu"> Difusion </label><input type="radio" id="difu" name="idpromo">&#128266;<br>
                 <button class='appbtn' style="float:right;" type="button" id="btncrear" onclick="crear()">Agregar</button>
@@ -152,7 +171,22 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         </div>
       <!--Iniciar footer-->
       <?php include 'footer.php';?>
-        <!--FIN footer-->      
+        <!--FIN footer-->     
+        <script>
+        $(document).ready(function() {
+            $('#summernote').summernote({
+                placeholder: 'Escribe aquí...',
+                height: 150,
+                toolbar: [
+                    ['basic', ['fontname', 'fontsize']],
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height', 'codeview', 'undo', 'redo']]
+                ]
+            });
+        });
+        </script>         
     </body>
 </html>
 

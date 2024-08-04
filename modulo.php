@@ -524,7 +524,7 @@ function insertLista($correo){
 function sendMail($correo,$asunto,$mensaje){
   ini_set( 'display_errors', 1 );
   error_reporting( E_ALL );
-  $from = "soporte@fortunaroyal.com";
+  $from = "criptosignalgroup@criptosignalgroup.online";
   $to = $correo;
   $subject = $asunto;
   $message = $mensaje;

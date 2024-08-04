@@ -2,15 +2,17 @@
 include "modulo.php";
 if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 ?>
-<html>
+<html> 
     <head>
     <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="favicon.png">        
+        <link rel="shortcut icon" href="Assets/favicon.png">        
         <link rel="stylesheet" href="css/animate.min.css" />
         <link rel="stylesheet" type="text/css" href="css/Common.css">
         <link href='css/boxicons.min.css' rel='stylesheet'>
+        <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />                       
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -92,19 +94,29 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
             }        
             
 
-            function enviar(){
-                let resultado  = confirm("Estas seguro de cambiar es estatus de la orden?");
-                if(resultado){
-                    $.post("block",{
-                        setEstatus: document.getElementById("selestatus").value,
-                        idapuesta: document.getElementById("idapuesta").value
-                    },function(data){
-                        leerTrabajos();
-                        document.getElementById('ver').close();
-                    });
-                }else{
-                    document.getElementById('ver').close();
-                }
+            function enviar(){ 
+                Swal.fire({
+                                        title: 'Promocion',
+                                        text: `Estas seguro de cambiar es estatus de la orden?`,
+                                        icon: 'warning',
+                                        confirmButtonColor: '#EC7063',
+                                        confirmButtonText: 'Si Cambiar Estatus',
+                                        showCancelButton: true,
+                                        cancelButtonText: "No Estoy Seguro"
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                $.post("block",{
+                                                setEstatus: document.getElementById("selestatus").value,
+                                                idapuesta: document.getElementById("idapuesta").value
+                                            },function(data){
+                                                leerTrabajos();
+                                                document.getElementById('ver').close();
+                                            });
+                                            }
+                                            else{
+                                                document.getElementById('ver').close();
+                                            }
+                                        });
             }
 
 
@@ -206,26 +218,26 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 <label style="margin-left:1px; font-weight:bold;" id="estad"></label>
                 <label style="margin-left:13px; font-weight:bold;" id="reg"></label>
             </div> -->
-            <dialog class="dialog_agregar" id="ver" close>
-                <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('ver').close()">X</a><br>
+            <dialog  id="ver" close>
+                <a title="Cerrar" style="color:black;font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('ver').close()">X</a><br>
                 <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
                 <input type="hidden" id="idapuesta">
                 Transaccion: <span id="evento"></span><br>
                 Cliente: <span id="emailCliente"></span><br>
                 Medio de Pago: <span id="mediopago"></span><br>
-                <span id="wallet"></span>
+                <span style='background:yellow;' id="wallet"></span>
                 <br>
                 Monto: <span id="monto"></span><br>
-                Estatus:<span id="estatus"></span> 
-                <select id="selestatus" >
-                    <option id="">selecciona...</option>
+                Estatus:<span id="estatus"></span><br>
+                Cambiar: <select id="selestatus" >
+                    <option id="">selecciona estatus...</option>
                     <option id="REVISION" value="REVISION">En Revision</option>
                     <option id="ESPERA" value="ESPERA">En Espera</option>
                     <option id="EXITOSO" value="EXITOSO">Exitoso</option>                    
                     <option id="APOSTADO" value="APOSTADO">Apostado</option>
                     <option id="GANADOR" value="GANADOR">Ganador</option>                    
                     <option id="FALLIDO" value="FALLIDO">Fallido</option> 
-                </select><br>
+                </select><br><br>
                 <button class='appbtn' style="float:right;" type="button" id="btnenviar" onclick="enviar()">Cambiar Estatus</button>
             </dialog>        
 

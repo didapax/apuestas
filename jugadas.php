@@ -10,7 +10,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <link rel="shortcut icon" href="Assets/favicon.png">        
         <link rel="stylesheet" href="css/animate.min.css" />
         <link rel="stylesheet" type="text/css" href="css/Common.css">
-        <link href='css/boxicons.min.css' rel='stylesheet'>       
+        <link href='css/boxicons.min.css' rel='stylesheet'>     
+        <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />                 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
@@ -130,18 +132,23 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
             }
 
             function borrar(id){
-                var r = confirm("Estas Seguro de Eliminar el Juego.?");
-                if (r == true) {
-                    $.post("block",{
-                        borrar: id
-                    },function(data){
-                        leerVista();
-                        /*window.location.href="index";*/
-                    });
-                }
-                else {
-                   /*txt = "You pressed Cancel!";*/
-                }
+                Swal.fire({
+                                        title: 'Suscripciones',
+                                        text: `Estas Seguro de Eliminar la Suscripcion del Sistema`,
+                                        icon: 'warning',
+                                        confirmButtonColor: '#EC7063',
+                                        confirmButtonText: 'Si Eliminar',
+                                        showCancelButton: true,
+                                        cancelButtonText: "Cancelar"
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                $.post("block",{
+                                                    borrar: id
+                                                },function(data){
+                                                    leerVista();
+                                                });  
+                                            }
+                                        });  
             }
 
             function cerrar(id){

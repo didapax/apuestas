@@ -7,7 +7,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <title>Fortuna Royal</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="favicon.png">
+        <link rel="shortcut icon" href="Assets/favicon.png">
         <link rel="stylesheet" type="text/css" href="css/Common.css">        
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -41,10 +41,6 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 
         <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
         <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;"> 
-            <div style='padding:5px;'>
-                <?php statusPromocion(readClienteId($_SESSION['user'])['CORREO']); ?>
-            </div>
-            <hr>
         <div class="vista" id="vista"></div>
         </div>
               <!--Iniciar footer-->

@@ -521,37 +521,32 @@ if(isset($_GET['readPromos'])) {
     $colorAlert = "#F96E1F";
     $consulta = "select * from PROMO ORDER BY FECHA";
     echo "
-    <table style='width:100%; text-align:center;'>
+    <table style='width:100%;'>
       <th>Fecha</th>
       <th>Nombre</th>
       <th>Mensaje</th>
-      <th>Triunfos</th>
+      <th>Tipo</th>
       <th>Opciones</th>
     ";
     $resultado = mysqli_query( $conexion, $consulta );
     while($row = mysqli_fetch_array($resultado)){
       $difu = "";
       $flotante = "";
-      $ganador = "";
       if($row['DIFUSION']==1){
         $difu = "Correo";
-      } 
-      if($row['GANADOR']==1){
-        $ganador = "Ganador";
-      }       
+      }
       if($row['FLOTANTE']==1){
         $flotante = "Flotante";
       }       
 
       $fecha = latinFecha($row['FECHA']);
      echo "<tr>
-      <td><span>{$fecha}</span></td>
+      <td><span>".latinFecha($fecha)."</span></td>
       <td><span>".$row['NOMBRE']."</span></td>
       <td><span>".$row['MENSAJE']."</span></td>
-      <td><span>".$row['NUMPROMO']."</span></td>
+      <td><label>{$difu}{$flotante}</label></td>
       <td style='text-align: left;'>
-        <button title='Eliminar Promocion' type='button' style='background:#F0917F;' onclick=\"borrar('".$row['CODIGO']."')\">&#9746;</button>
-        <label>{$difu}{$flotante}{$ganador}</label>
+        <button title='Eliminar Promocion' type='button' style='background:#F0917F;' onclick=\"borrar('".$row['CODIGO']."')\">&#9746;</button>        
       </td>
       </tr>";
     }
@@ -651,7 +646,7 @@ if(isset($_GET['readHistorialAdmin'])) {
     exit();
   }else{
     $colorAlert = "#F96E1F";
-    $consulta = "select * from APUESTAS ORDER BY FECHA";
+    $consulta = "select * from APUESTAS WHERE ACTIVO=1 ORDER BY FECHA";
     echo "
     <table style='width:100%; '>
       <thead>
@@ -913,7 +908,7 @@ if( isset($_POST['resetlista']) ){
   }
 }
 
-if( isset($_POST['sendlista']) ){  
+if( isset($_POST['sendlista']) ){
   if(ifNotDayExists("ENVIOLISTA")){
     sqlconector("INSERT INTO ENVIOLISTA(ENVIADO) VALUES(1)");
   }  

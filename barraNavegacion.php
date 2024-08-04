@@ -54,6 +54,9 @@
                   else{
                     echo "<a href='historialadmin'>Suscripciones</a>";
                   }
+                  if($page=="chat"){
+                    echo "<a href='trabajos' class='active'>Chat</a>";
+                  }                  
                   if($page=="trabajos"){
                     echo "<a href='trabajos' class='active'>Depositos/Retiros</a>";
                   }

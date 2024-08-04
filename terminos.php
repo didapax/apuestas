@@ -6,7 +6,7 @@ include "modulo.php";
     <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="favicon.png">        
+        <link rel="shortcut icon" href="Assets/favicon.png">        
         <link rel="stylesheet" href="css/animate.min.css" />
         <link rel="stylesheet" type="text/css" href="css/Common.css">
         <link href='css/boxicons.min.css' rel='stylesheet'>

@@ -215,7 +215,7 @@ function retirar(){
             if(data.length>0){
                 document.getElementById("retirar_btn").disabled = false;
             }
-            window.location.href="historialcliente";
+            //window.location.href="historialcliente";
         });  
     }else{
         Swal.fire({
@@ -245,7 +245,7 @@ function lanzar(){
             if(data.length>0){
                 document.getElementById("jugar").disabled = false;
             }
-            window.location.href="historialcliente";
+            //window.location.href="historialcliente";
         });  
     }else{
         Swal.fire({ 
