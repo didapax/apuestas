@@ -23,6 +23,8 @@
         <!--BOXICONS-->
         <link rel="stylesheet" type="text/css" href="css/icons.css">
         <!-- Animate CSS -->
+        <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />                                
         <link rel="stylesheet" type="text/css" href="css/animate.min.css">
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script> 
 </head>
@@ -247,17 +249,29 @@
   		chat();}
   }
 
-  function cambiarEstado() {
-    let resultado =  confirm("Estas seguro de cambiar el estatus de la orden?");
-    if(resultado){
-      $.post("block",
-  	  {
-        setEstatus: document.getElementById("cambioEstado").value,
-  	    idapuesta: document.getElementById('ticked').value
-  	  },
-  	  function(data){
-  	  });    
-    }
+  function cambiarEstado() { 
+    Swal.fire({
+                                        title: 'Promocion',
+                                        text: `Estas seguro de cambiar es estatus de la orden?`,
+                                        icon: 'warning',
+                                        confirmButtonColor: '#EC7063',
+                                        confirmButtonText: 'Si Cambiar Estatus',
+                                        showCancelButton: true,
+                                        cancelButtonText: "No Estoy Seguro"
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                              $.post("block",
+                                              {
+                                                setEstatus: document.getElementById("cambioEstado").value,
+                                                idapuesta: document.getElementById('ticked').value
+                                              },
+                                              function(data){
+                                              });
+                                            }
+                                            else{
+                                                document.getElementById('ver').close();
+                                            }
+                                        });
 
   }
 
@@ -325,7 +339,7 @@ function seltickect(){
       <?php 
         if($_SESSION['nivel']==1){
           ?>
-        <select id="cambioEstado" name="estado" onchange="cambiarEstado()">
+        <select id="cambioEstado" name="cambioEstado" onchange="cambiarEstado()">
             <option id="">selecciona...</option>
             <option id="REVISION" value="REVISION">En Revision</option>
             <option id="ESPERA" value="ESPERA">En Espera</option>

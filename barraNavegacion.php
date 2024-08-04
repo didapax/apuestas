@@ -12,6 +12,11 @@
             if(!isset($_SESSION['user'])){
                 echo "<a style=\"color:yellow;\" href='sesion'>Iniciar Sesion / Unirse</a>";
             }else{
+                $notificaciones = countNotif($_SESSION['user']);
+                $style = "";
+                if($notificaciones>0){
+                  $style = "style='border-top: solid 1px red;'";
+                }
                 if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){                                   
                    
                     if($page=="home"){
@@ -61,7 +66,7 @@
                     echo "<a href='trabajos' class='active'>Depositos/Retiros</a>";
                   }
                   else{                  
-                    echo "<a href='trabajos'>Depositos/Retiros</a>";
+                    echo "<a href='trabajos' $style>Depositos/Retiros</a>";
                   }
                   if($page=="jugadas"){
                     echo "<a href='jugadas' class='active'>Productos</a>";
