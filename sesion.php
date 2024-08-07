@@ -196,9 +196,23 @@
                         correo: document.getElementById('correo').value
                     },
                     function(data){
-                        alert("Revisa tu Correo y Ejecuta el Link que se te envio, Cambia tu clave Nuevamente..!");
+                        Swal.fire({
+                        title: 'Recuperar o Cambiar',
+                        text: "Revisa tu Correo y Ejecuta el Link que se te envio, Cambia tu clave Nuevamente..!",
+                        icon: 'info',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                        }); 
                     });            
-                }else alert("Coloca tu Correo de Usuario a Recuperar...");
+                }else{
+                    Swal.fire({
+                        title: 'Error',
+                        text: "Coloque un correo Valido para Recuperar o cambiar tu Contraseña",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                        });
+                } 
 	        }
         </script>
     </head>

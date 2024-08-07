@@ -8,6 +8,39 @@ function generaTicket(){
     return $referencia;
 }
 
+function obtenerCalificaciones($cajero) {
+  $calificaciones = [];
+  $consulta = "SELECT RATE FROM TRANSACCIONES WHERE CAJERO='$cajero'";   
+  $resultado = sqlconector($consulta);
+
+  if ($resultado) {
+      while ($fila = mysqli_fetch_assoc($resultado)) {
+          $calificaciones[] = (int)$fila['RATE'];
+      }
+  }
+
+  return $calificaciones;
+}
+
+function calcularPromedio($calificaciones) {
+  $totalCalificaciones = count($calificaciones);
+  $sumaCalificaciones = array_sum($calificaciones);
+  
+  if ($totalCalificaciones > 0) {
+      $promedio = $sumaCalificaciones / $totalCalificaciones;
+  } else {
+      $promedio = 0;
+  }
+  
+  return round($promedio);
+}
+
+/* example
+$calificaciones = [5, 2, 4, 3, 5,5,5,5,5,3,4,5,5,4,5,5,5,5,5]; // Puedes agregar más calificaciones aquí
+$promedio = calcularPromedio($calificaciones);
+echo "El promedio de las calificaciones es: " . $promedio;
+*/
+
 function obtenerIntervalosMensuales($fechaInicio, $fechaFin) {
   $inicio = new DateTime($fechaInicio);
   $fin = new DateTime($fechaFin);

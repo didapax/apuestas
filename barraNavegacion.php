@@ -80,6 +80,12 @@
                   else{                        
                     echo "<a href='promo'>Promociones</a>";
                   }
+                  if($page=="perfiladmin"){
+                    echo "<a href='perfiladmin' class='active'>Mi Perfil</a>";
+                  }
+                  else{                        
+                    echo "<a href='perfiladmin'>Mi Perfil</a>";
+                  }                  
                     echo "<a href='block?cerrarSesion'>Cerrar Sesion</a>"; 
                     echo "<a style='cursor:pointer;' href='miwallet' class='saldo' id='saldo'> Saldo ".price(readClienteId($_SESSION['user'])['SALDO'])." USDC</a>";
                     echo "<a class='perfil'><span style='color:white;'>Admin: </span>".readClienteId($_SESSION['user'])['CORREO']."</a>";

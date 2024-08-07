@@ -202,7 +202,7 @@
                         $("#metodoPago").html(datos.medio_pago);
                         $("#totalPagar").html(datos.monto+"<span style='font-size:10px;'>"+datos.moneda+"<span>");
                         $("#estado").html(datos.estatus);                        
-                        $("#wallet").html(datos.wallet);
+                        $("#wallet").html(`Origen: ${datos.origen}<br>Destino: ${datos.destino}`);
                         $("#tipo").html(datos.tipo);
                         document.getElementById(datos.estatus).selected = true;
                     });
@@ -325,8 +325,8 @@ function seltickect(){
 
  
 <div>
-  Wallet del Cliente: <div id="wallet"></div>
   Estas Procesando un  <b><span id="tipo"></span></b><br>
+  Datos Wallet: <div id="wallet"></div>  
   Monto: <b><span class='pay' id=totalPagar></span></b> <span style='font-size:2rem;'></span><br>
   Metodo de Pago: <b><span id=metodoPago></span></b><br>
 

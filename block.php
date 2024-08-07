@@ -9,16 +9,20 @@ if(isset($_POST['retirar'])){
   $comision = $_POST['comision'];
   $cajero = $_POST['cajero'];
   $cliente = $_POST['correo'];
-  $wallet = $_POST['nota'];
+  $origen = $_POST['origen'];
+  $destino = $_POST['destino'];
   $descripcion= $_POST['tipo'];
+  $comopago = $_POST['comopago'];
 
-  sqlconector("INSERT INTO TRANSACCIONES (TICKET,TIPO,DESCRIPCION,CAJERO,CLIENTE,WALLET,MONTO,RECIBE) VALUES(
+  sqlconector("INSERT INTO TRANSACCIONES (TICKET,TIPO,DESCRIPCION,CAJERO,CLIENTE,ORIGEN,DESTINO,MEDIO_PAGO,MONTO,RECIBE) VALUES(
       '$ticket',
       'RETIRO',
       '$descripcion',
       '$cajero',
       '$cliente',
-      '$wallet',
+      '$origen',
+      '$destino',      
+      '$comopago',      
       $monto,
       $recibe)");
 
@@ -34,15 +38,19 @@ if(isset($_POST['depositar'])){
     $monto = $_POST['cantidad'];
     $cajero = $_POST['cajero'];
     $cliente = $_POST['correo'];
-    $wallet = $_POST['nota'];
+    $origen = $_POST['origen'];
+    $destino = $_POST['destino'];
     $descripcion= $_POST['tipo'];
+    $comopago = $_POST['comopago'];
 
-    sqlconector("INSERT INTO TRANSACCIONES (TICKET,DESCRIPCION,CAJERO,CLIENTE,WALLET,MONTO,RECIBE) VALUES(
+    sqlconector("INSERT INTO TRANSACCIONES (TICKET,DESCRIPCION,CAJERO,CLIENTE,ORIGEN,DESTINO,MEDIO_PAGO,MONTO,RECIBE) VALUES(
         '$ticket',
         '$descripcion',
         '$cajero',
         '$cliente',
-        '$wallet',
+        '$origen',
+        '$destino',
+        '$comopago',        
         $monto,
         $monto)");
 }
@@ -163,7 +171,11 @@ if(isset($_POST['sendmail'])){
 
 }
 
-if(isset($_POST['getUsuario'])){
+if(isset($_GET{'listCajeros'})){
+  echo json_encode (array_sqlconector("SELECT * FROM USUARIOS WHERE NIVEL=1"));
+}
+
+if(isset($_POST['getUsuario'])){ 
   $correo = $_POST['correo'];
   $respuestaClave = array('success' => false);
   $obj = array('result' => false, 'capcha' => $respuestaClave,'paso'=>false,'verificado' => 0);
@@ -203,8 +215,9 @@ if(isset($_POST['getUsuario'])){
   if(isset($_POST['sesion'])){
     $usuario = readCliente($correo);
     $obj = array('nombre' => $usuario['NOMBRE'],'correo' => $usuario['CORREO'], 
-    'binance' => $usuario['BINANCE'], 'bloqueado' => $usuario['BLOQUEADO'],
-    'nivel' => $usuario['NIVEL'],'activo' => $usuario['ACTIVO'],'rate' => $usuario['RATE'],'saldo' => price($usuario['SALDO']),'verificado' => $usuario['VERIFICADO']);
+    'binance' => $usuario['BINANCE'], 'bep20' => $usuario['BEP20'],'bloqueado' => $usuario['BLOQUEADO'],
+    'nivel' => $usuario['NIVEL'],'activo' => $usuario['ACTIVO'],'rate' => $usuario['RATE'],
+    'saldo' => price($usuario['SALDO']),'verificado' => $usuario['VERIFICADO']);
   }
 
     echo json_encode($obj);
@@ -627,8 +640,10 @@ if(isset($_GET['readTrabajos'])) {
       'cliente' => $row['CLIENTE'],
       'cajero' => $row['CAJERO'],
       'tipo' => $row['TIPO'],
-      'medio_pago' => $row['MEDIO_PAGO'],
+      'medio_pago' => $row['MEDIO_PAGO'],      
       'wallet' => $row['WALLET'],
+      'origen' => $row['ORIGEN'],      
+      'destino' => $row['DESTINO'],      
       'monto' => $row['MONTO'],
       'recibe' => $row['RECIBE'],
       'moneda' => $row['MONEDA'],
@@ -683,6 +698,17 @@ if(isset($_GET['readHistorialAdmin'])) {
   }
 }
 
+if(isset($_POST['setCal'])){
+  $id = $_POST['id'];
+  $rate = $_POST['rate'];
+  $cajero = $_POST['cajero'];
+
+  sqlconector("UPDATE TRANSACCIONES SET RATE=$rate, CALIFICADO=1 WHERE ID=$id");
+  $calificacion = obtenerCalificaciones($cajero);
+  $promedio = calcularPromedio($calificacion);
+  sqlconector("UPDATE USUARIOS SET RATE=$promedio WHERE CORREO='$cajero'");
+}
+
 if(isset($_GET['readDepositos'])) {
   $obj = array();
   $correo = $_GET['correo'];
@@ -698,6 +724,8 @@ if(isset($_GET['readDepositos'])) {
     'cliente' => $row['CLIENTE'],
     'cajero' => $row['CAJERO'],
     'pagado' => $row['PAGADO'],
+    'rate' => $row['RATE'],
+    'calificado' => $row['CALIFICADO'],    
     'estatus' => $row['ESTATUS']);
   }
   mysqli_close($conexion);
@@ -719,6 +747,8 @@ if(isset($_GET['readRetiros'])) {
     'cliente' => $row['CLIENTE'],
     'cajero' => $row['CAJERO'],
     'pagado' => $row['PAGADO'],
+    'rate' => $row['RATE'],
+    'calificado' => $row['CALIFICADO'],
     'estatus' => $row['ESTATUS']);
   }
   mysqli_close($conexion);
@@ -862,6 +892,16 @@ if(isset($_POST['crearPromo'])){
 if(isset($_POST['guardarWallet'])){
   $result = false;
   if (sqlconector("UPDATE USUARIOS SET BINANCE='{$_POST['payid']}' WHERE CORREO='{$_POST['correo']}'")){
+    $result = true; 
+  }
+
+  $obj = array('result' => $result);
+  echo json_encode($obj);
+}
+
+if(isset($_POST['guardarWalletBep20'])){
+  $result = false;
+  if (sqlconector("UPDATE USUARIOS SET BEP20='{$_POST['bep20']}' WHERE CORREO='{$_POST['correo']}'")){
     $result = true; 
   }
 

@@ -1,33 +1,40 @@
 <?php
 	include "modulo.php";
 
-	sqlconector("CREATE TABLE IF NOT EXISTS LINKS (
-					ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-					FECHA TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					LINK VARCHAR(255),
-					CORREO VARCHAR(255),
-					BLOQUEADO INT NOT NULL DEFAULT 0)");
-
 	if(isset($_POST['guardar'])){
-		sqlconector("update USUARIOS SET PASSWORD='".$_POST['psw']."' WHERE CORREO='{$_POST['asociado']}'");
+		$vkey = $_POST['asociado'];
+		$contrasena = test_input($_POST['psw']);
+		$hashContrasena = password_hash($contrasena, PASSWORD_BCRYPT);		
+		sqlconector("update USUARIOS SET PASSWORD='$hashContrasena' WHERE VKEY='$vkey'");
 		sqlconector("delete from LINKS where LINK='".$_POST['code']."'");
-		header("Location:index");
+		header("Location:sesion");
 	}
 
-	if(isset($_POST['recuperar'])){
-		$bytes = random_bytes(8);
-		$codigo = bin2hex($bytes);
-		sqlconector("insert into LINKS (LINK,CORREO) values ('".$codigo."','".$_POST['correo']."')");
+	if(isset($_POST['recuperar'])){ 
+		$correo = $_POST['correo'];
+		$obj = array('result' => false);
 
-		ini_set( 'display_errors', 1 );
-		error_reporting( E_ALL );
-		$from = "activar@fortunaroyal.com";
-		$to = $_POST['correo'];
-		$subject = "Cambio de Contraseña Apuestas Fortuna Royal";
-		$message = "No Conteste este Email solo Copie y Pegue el Link en su navegador para Cambiar su Contraseña: 
-		http://fortunaroyal.com/apuestas/recuperar?code={$codigo}&email={$_POST['correo']}";
-		$headers = "From:" . $from;
-		mail($to,$subject,$message, $headers);
+		if(ifUsuarioExist($correo)){
+			echo json_encode($obj);
+			$bytes = random_bytes(8);
+			$codigo = bin2hex($bytes);			
+			$idUsuario= readCliente($correo)['VKEY'];
+			
+			sqlconector("insert into LINKS (LINK,CORREO) values ('".$codigo."','".$_POST['correo']."')");
+	
+			ini_set( 'display_errors', 1 );
+			error_reporting( E_ALL );
+			$from = "criptosignalgroup@criptosignalgroup.online";
+			$to = $_POST['correo'];
+			$subject = "Cambio de Contraseña criptosignalgroup online";
+			$message = "No Conteste este Email solo Copie y Pegue el Link en su navegador para Cambiar su Contraseña: 
+			http://www.criptosignalgroup.online/recuperar?code=$codigo&key=$idUsuario";
+			$headers = "From:" . $from;
+			mail($to,$subject,$message, $headers);
+
+			$obj = array('result' => true);
+		}
+
 	}
 
 	function ifCodeExist($link) {
@@ -37,54 +44,70 @@
 ?>
 
 <html>
-	<head>
-		<link rel="stylesheet" href="css/stylesd.css">
+<head>
+    <title>CriptoSignalGroup</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
+        <link rel="shortcut icon" href="Assets/favicon.png">        
+        <link rel="stylesheet" href="css/animate.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/Common.css">
+        <link href='css/boxicons.min.css' rel='stylesheet'>
+        <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />           
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
+        <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
+    </head>		
 	  	<style>
-			body{
-			background:#F8F9F9;
-			}
-			a{
-			text-decoration: none;
-			color: var(--gris_claro);
-			}
-			label{
-			color:#4D4D4D;
-			}
-			a {
-			text-decoration: none;
-			-webkit-transition: all 1s;
-			-moz-transition: all 1s;
-			transition: all 1s;
-			display:inline-block;
-			}
-	   </style>
-	</head>
-<body>
-	<nav style="top:0" class="nav">
-		<h3 style="font-family: Bebas Neue, cursive;">FORTUNA ROYAL</h3>
-	</nav>
-	<div class="formulario_contenedor">
-	<?php
-	if(isset($_GET['code'])) {
-		if (ifCodeExist($_GET['code'])) {
-	?>
-	<form id="form" action="recuperar" method="POST" autocomplete="off">
-		<input type="hidden" name="asociado" id="asociado" value="<?php echo $_GET['email']; ?>">
-		<input type="hidden" name="code" id="code" value="<?php echo $_GET['code']; ?>">
-		<span>Recuperar Contraseña</span>
-		<input type="password" placeholder="Enter New Password" name="psw" id="psw" required >
-		<button type="submit" style="background:#BCE7BC;" name="guardar" class="btn btn-form">Cambiar Contraseña</button>
-		<br>
-	</form>
 
-  <?php }
-  	else {
-  		echo "<span style='color:black;'>El Link de Recuperacion ha Expirado....!</span>";
-  	}
-  }
-  ?>
-    </div>
-  <br>
-  <h5 style="text-align:center;">Copyright &copy; 2020 FortunaRoyal All Rights Reserved (by) Triángulo Rojo</h5>
+	   </style>
+	
+<body>
+	<?php $page = "recuperar"; ?>
+      <!--Iniciar Barra de Navegación @media 1200px-->
+      <?php include 'barraNavegacion.php';?>
+        <!--FIN Barra de Navegación @media 1200px-->  
+
+        <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;">
+        <div id="vista" class="grid-container app-grid">
+		<?php
+			if(isset($_GET['code'])) {
+				if (ifCodeExist($_GET['code'])) {
+			?>
+			<form id="form" action="recuperar" method="POST" autocomplete="off">
+				<input type="hidden" name="asociado" id="asociado" value="<?php echo $_GET['key']; ?>">
+				<input type="hidden" name="code" id="code" value="<?php echo $_GET['code']; ?>">
+				<h2>Recuperar Contraseña</h2>
+				<input type="password" placeholder="Enter New Password" name="psw" id="psw" required >
+				<br><br>
+				<button type="submit" style="background:#BCE7BC;" name="guardar" class="btn btn-form">Cambiar Contraseña</button>
+				<br>
+			</form>
+
+		<?php 
+		}
+			else {
+				echo "<span style='color:black;'>El Link de Recuperacion ha Expirado....!</span>";
+			}
+		}  
+		?>
+		</div>
+        </div>
+
+	<?php include 'footer.php';?>
+        <!--FIN footer-->     
+        <script>
+
+function myFunctionMenu() {    
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+        x.className += " responsive";
+    } else {
+        x.className = "topnav";
+    }
+}
+</script> 	
+  
 </body>
 </html>

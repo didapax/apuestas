@@ -205,7 +205,7 @@
                         $("#msj").html(msj);
                         $("#totalPagar").html(monto+"<span style='font-size:10px;'>"+datos.moneda+"<span>");
                         $("#estado").html(datos.estatus);                        
-                        $("#wallet").html(datos.wallet);
+                        //$("#wallet").html(datos.origen);
                         $("#detalle").html(`${datos.tipo} #${datos.ticket}`);
                     });
 
@@ -324,7 +324,7 @@ function seltickect(){
 
  
 <div>
-  Mi Wallet: <div id="wallet"></div>
+  <div id="wallet">Calificaciones</div>
   <b><span id="detalle"></span></b><br>
   <span id="msj"></span> <b><span class='pay' id=totalPagar></span></b> <span style='font-size:1rem;'></span><br>
   Metodo de Pago: <b><span id=metodoPago></span></b><br>

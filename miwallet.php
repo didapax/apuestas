@@ -3,7 +3,7 @@ include "modulo.php";
 if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
 ?>
 <html>
-    <head>
+    <head> 
         <title>Fortuna Royal</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
@@ -22,7 +22,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
 
 
             .dialog_agregar{
-                width:350px;
+                width:400px;
                 border: solid 1px black;
                 box-shadow: 4px 3px 8px 1px #969696;
                 background: #16A085;              
@@ -48,8 +48,8 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 display:inline-block;
                 padding:5px;
                 margin:2px;
-                width:360px;
-                height: 290px;
+                width:400px;
+                height: 330px;
                 border: solid 1px black;
                 box-shadow: 4px 3px 8px 1px #969696;
                 background: #1B2224;              
@@ -77,22 +77,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
             color:black;
          }
         </style>             
-        <script> 
-            function inicio(){
-                leerDatos();
-                recuperarRetiros();  
-                recuperarDepositos();  
-                recuperarHistorial();  
-                myVar = setInterval(refrescar, 2000);
-            }
-
-            function refrescar(){
-                leerDatos();
-                recuperarRetiros();  
-                recuperarDepositos();  
-                recuperarHistorial();                  
-            }
-                        
+        <script>
         </script>
     </header>
     <body onload="inicio()">
@@ -101,56 +86,60 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->     
 
-        <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
-        <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['SALDO']; ?>" name="tsaldo" id="tsaldo">
-        <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['BINANCE']; ?>" name="wallet_binance" id="wallet_binance">        
-        <input type="hidden" name="cajero" id="cajero" value="alfonsi.acosta@gmail.com">
+        <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" id="correo">
+        <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['SALDO']; ?>"  id="tsaldo">
+        <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['BINANCE']; ?>" id="wallet_binance">        
+        <input type="hidden" name="cajero" id="cajero" value="">
         <input type="hidden" name="tipo" id="tipo">
         <input type="hidden" id="recibe">
         <input type="hidden" id="comision_retiro">
 
         <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;">
 
-        <dialog class="dialog_agregar" id="jugada" close>
+        <dialog class="dialog_agregar" style='width:400px;' id="jugada" close>
             <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('jugada').close()">X</a><br>
-            <form method="post" action="miwallet">
+            <form >
                 <br>
-                Como Vas a Pagar: 
-                <select required onchange="selpago()" name="comopago" id="comopago" style="color:black;">
-                    <option id="comopago_back" value=""></option>
-                    <option value="BINANCE">Binance Pay</option>                
+                Selecciona un Cajero: 
+                <select onchange="selcajero()" id="micajero" style="color:black;">
                 </select>
-                <div id="detalles" style="display:none;">
+                <br>                
+                Como Vas a Pagar: 
+                <select required onchange="selpago()" id="comopago" style="color:black;">            
+                </select>
+                <div id="detalles" style="display:none;width:100%;">
                     Cantidad a Depositar: 
                     <input required type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" style="color:black;"><br>
-                    <br><br> Binance Pay Id  CriptoSignalGroup
-                    <input readonly class="datcajero" style="" id="paycajero">
-                    <img src="Assets/qrbinance.png"><br>
-                    <div id="calculo" style="color:green;float:right; background:white;padding:3px;border:solid 1px; border-radius:5px;"></div><br>
+                    <br><br> <div id='descripcionMetodo'></div>
+                    <input readonly class="datcajero" style="width:100%;" id="paycajero"><br>
+                    <img id='QRdeposito' src=""><br>
+                    <div id="calculo" style="width:100%;color:black;float:right; background:white;padding:3px;border:solid 1px; border-radius:5px;"></div><br>
                 </div><br><br>
-                <button onclick="jugar_back()" class='appbtn' style="float:right;color:black;" type="button" id="jugar" name="jugar">Depositar</button>
+                <button onclick="jugar_back()" class='appbtn' style="float:right;color:black;padding:8px;" type="button" id="jugar" name="jugar">Depositar</button>
             </form>
         </dialog>
 
-        <dialog class="dialog_retirar" id="retirar" close>
+        <dialog class="dialog_retirar" style='width:400px;' id="retirar" close>
             <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('retirar').close()">X</a><br>
-            <form method="post" action="miwallet">
-                <input type="hidden" id="tipo_retiro" name="tipo_retiro"><br>
-                Retirar con: 
-                <select required onchange="selretiro()" name="como_retiro" id="como_retiro" style="color:black;">
-                    <option id="comopago_back" value=""></option>
-                    <option value="BINANCE">Binance Pay</option>
+            <form >
+                <input type="hidden" id="tipo_retiro" name="tipo_retiro">
+                <br>
+                Selecciona un Cajero: 
+                <select onchange="selcajero_retiro()" id="micajero_retiro" style="color:black;">
                 </select>
-                <div id="detalles_retiro" style="display:none;">
+                <br>
+                Retirar con: 
+                <select required onchange="selretiro()" id="como_retiro" style="color:black;">
+                </select>
+                <div id="detalles_retiro" style="display:none;width:100%;">
                     Cantidad a Retirar: 
                     <input required type="number" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0" style="color:black;"  step="1"><br>
-                    <div id="calculo_retiro" style="color:green;float:right; background:white;padding:3px; border:solid 1px; border-radius:3px;"></div><br><br>
-                    <!--Recibe <span id="apuesta_retiro"></span><span id="info_retiro"></span>-->
-                    <br><br>Mi Binance Pay Id:
-                    <input readonly class="datcajero" style="" id="cajero_retiro">                    
+                    <div id="calculo_retiro" style="width:100%;color:black;float:right; background:white;padding:3px; border:solid 1px; border-radius:3px;"></div><br><br>
+                    <br><br><div id='descripcionMetodoRetiro'></div>
+                    <input readonly class="datcajero" style="width:100%;" id="paycliente">                    
                     <br>
-                </div><br>
-                <button onclick="retirar_back()" class='appbtn' style="float:right;color:black;" type="button" id="retirar_btn" name="retirar_btn">Retirar</button>
+                </div><br><br>
+                <button onclick="retirar_back()" class='appbtn' style="float:right;color:black;padding:8px;" type="button" id="retirar_btn" name="retirar_btn">Retirar</button>
             </form>
         </dialog>
 
@@ -160,10 +149,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
       <!-- Inicio de la pestaña -->
       <div class="container">
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="pill" style="color:black;" href="#home">Editar mi perfil</a></li>
-                <li><a data-toggle="pill" style="color:black;" href="#depositos">Depositos</a></li>
-                <li><a data-toggle="pill" style="color:black;" href="#retiros">Retiros</a></li>
-                <li><a data-toggle="pill" style="color:black;" href="#historial">Mis Compras</a></li>
+                <li class="active"><a data-toggle="pill" style="color:black;" href="#home" onclick="inicio()">Mi Perfil</a></li>
+                <li><a data-toggle="pill" style="color:black;" href="#depositos" onclick="recuperarDepositos()">Depositos</a></li>
+                <li><a data-toggle="pill" style="color:black;" href="#retiros" onclick="recuperarRetiros()">Retiros</a></li>
+                <li><a data-toggle="pill" style="color:black;" href="#historial" onclick="recuperarHistorial()">Mis Compras</a></li>
             </ul>
             
             <div class="tab-content">
@@ -174,12 +163,15 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                     </div>
                     <div class="vista" id="vista">
                     <div class="dialog_wallet" id="agregar">                                   
-                        Esta Direccion  de Binance Pay Id de sera Utlizada para los Depositos y Retiros, 
+                        Esta Direccion de Binance Pay Id y Bep-20 seran Utlizadas para los Depositos y Retiros, 
                         asegurate que sea correcta, Cripto Signal Group no se hace responsable por la informacion 
                         erronea que suministres.<br><br>
                         <image src="Assets/minibina.png"><br>
-                        Mi Pay ID: <br> <input style="width:300px; color:black;" type="text" id="payid"><br>
+                        Mi Pay ID: <br> <input style="width:300px; color:black;" type="text" id="payid">
                         <button id="guardar" class='appbtn' style="float:right; color:black;" type="button" onclick="guardar()">Guardar</button>
+                        <br>
+                        Wallet BSC Bep-20: <br> <input style="width:300px; color:black;" type="text" id="bep20">
+                        <button id="guardarbep20" class='appbtn' style="float:right; color:black;" type="button" onclick="savebep20()">Guardar</button>                        
                     </div> 
                     </div>
                 </div>
@@ -190,7 +182,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                         <h3>Depositar Usdc de Forma Facil y Segura</h3>
                     </div>
                     <div class="container mt-5 mb-5">
-                        <button onclick="document.getElementById('jugada').show();">Depositar</button>
+                        <button id="buttonDeposito" onclick="initDeposito()">Depositar</button>
                         <section class='table-section' style='padding:3.5rem;'>  
 
                             <div class='InventarioBox' style='height: 27rem;  width: auto; overflow-y: scroll;'> 
@@ -201,6 +193,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                                             <th>Descripcion</th>
                                             <th>Monto</th>
                                             <th>Estatus</th>
+                                            <th>Calificacion</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tabla-cuerpo-depositos">
@@ -217,7 +210,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                         <h3>Retirar Tus Usdc de la Plataforma</h3>
                     </div>
                     <div class="container mt-5 mb-5">
-                        <button onclick="document.getElementById('retirar').show();">Retirar</button>
+                        <button id="buttonRetiro" onclick="document.getElementById('retirar').show();">Retirar</button>
                         <section class='table-section' style='padding:3.5rem;'>  
 
                             <div class='InventarioBox' style='height: 27rem;  width: auto; overflow-y: scroll;'> 
@@ -228,6 +221,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                                             <th>Descripcion</th>
                                             <th>Monto</th>
                                             <th>Estatus</th>
+                                            <th>Calificacion</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tabla-cuerpo-retiro">

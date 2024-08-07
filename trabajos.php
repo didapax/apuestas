@@ -49,10 +49,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 if (datos) {  
                     
                     let monto = datos.monto;
-                    let destino = `Emitido desde la Wallet: ${datos.wallet}`
+                    let destino = `Origen: ${datos.origen}<br>Wallet de Destino: ${datos.destino}`
                     if(datos.tipo == "RETIRO"){
                         monto = datos.recibe;
-                        destino = `Wallet de Retiro: ${datos.wallet}`
+                        //destino = `Wallet de Destino: ${datos.origen}`
                     }
                     
                     $("#evento").html(datos.tipo);

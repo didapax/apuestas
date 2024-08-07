@@ -14,15 +14,19 @@ $data = "";
 $usuario = "";
 
 function sqlconector($consulta) {
-   $conexion = @mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
-   if (!$conexion) {
-     echo "Refresh page, Failed to connect to Data: " . mysqli_connect_error();
-     exit();
-   }else{
-     $resultado = mysqli_query( $conexion, $consulta );
-     mysqli_close($conexion);
-   }
-   return $resultado;
+  $conexion = mysqli_connect($GLOBALS["servidor"], $GLOBALS["user"], $GLOBALS["password"], $GLOBALS["database"]);
+  if (!$conexion) {
+    die("Failed to connect to Data: " . mysqli_connect_error());
+  }
+  
+  $resultado = mysqli_query($conexion, $consulta);
+  
+  if (!$resultado) {
+      die("Error in query: " . mysqli_error($conexion));
+  }
+  
+  mysqli_close($conexion);
+  return $resultado;
 }
 
 function row_sqlconector($consulta) {
@@ -34,7 +38,7 @@ function row_sqlconector($consulta) {
   }else{
     $resultado = mysqli_query($conexion, $consulta);
     if($resultado){
-  		$row = mysqli_fetch_array($resultado, MYSQLI_ASSOC);
+  		$row = mysqli_fetch_assoc($resultado);
   	}
   	mysqli_close($conexion);
   }
@@ -45,7 +49,7 @@ function array_sqlconector($consulta){
   $obj= array();
   $resultado = sqlconector($consulta);
   if($resultado){
-    while($row = mysqli_fetch_array($resultado)){
+    while($row = mysqli_fetch_assoc($resultado)){
       $obj[]=$row;
     }
   }
@@ -83,10 +87,8 @@ if( isset($_GET['install']) ){
         NACIONALIDAD VARCHAR(34),
         LINKREFERIDO VARCHAR(255),
         CODIGOREFERIDO VARCHAR(255),
-        WALLET VARCHAR(255),
-        PAYEER VARCHAR(255),
+        BEP20 VARCHAR(255),
         BINANCE VARCHAR(255),
-        AIRTM VARCHAR(255),
         RATE INT NOT NULL DEFAULT 0,
         SALDO DECIMAL(13,4) UNSIGNED NOT NULL DEFAULT 0.00,
         USDT DECIMAL(13,4) UNSIGNED NOT NULL DEFAULT 0.00,
@@ -94,8 +96,13 @@ if( isset($_GET['install']) ){
         SALDOREFERIDO DECIMAL(13,4) UNSIGNED NOT NULL DEFAULT 0.00,
         VERIFICADO INT NOT NULL DEFAULT 0,
         ACTIVO INT NOT NULL DEFAULT 0,
+        LABORANDO INT NOT NULL DEFAULT 0,
         BLOQUEADO INT NOT NULL DEFAULT 0,
         NIVEL INT NOT NULL DEFAULT 0,
+        ACTIVE_BEP20 INT NOT NULL DEFAULT 0,
+        ACTIVE_BINANCE INT NOT NULL DEFAULT 0,
+        QR_BEP20 VARCHAR(255) DEFAULT 'perfil.jpg',
+        QR_BINANCE VARCHAR(255) DEFAULT 'perfil.jpg',
         PERFIL VARCHAR(255) DEFAULT 'perfil.jpg')");
 
     sqlconector("CREATE TABLE IF NOT EXISTS APUESTAS (
@@ -132,6 +139,8 @@ if( isset($_GET['install']) ){
       CLIENTE VARCHAR(35),
       MEDIO_PAGO VARCHAR(35) DEFAULT 'BINANCE PAY',     
       WALLET VARCHAR(255),
+      ORIGEN VARCHAR(255),
+      DESTINO VARCHAR(255),
       NOTAID VARCHAR(255),
       RESULTADO VARCHAR(255),
       REFERENCIA VARCHAR(255),
@@ -142,6 +151,8 @@ if( isset($_GET['install']) ){
       ENVIADO INT NOT NULL DEFAULT 0,
       ELIMINADO INT NOT NULL DEFAULT 0,
       TOMADO INT NOT NULL DEFAULT 0,
+      RATE INT NOT NULL DEFAULT 0,
+      CALIFICADO INT NOT NULL DEFAULT 0,
       ESTATUS VARCHAR(35) DEFAULT 'REVISION',
       MONEDA VARCHAR(20) DEFAULT 'USDC')");        
 
@@ -241,6 +252,14 @@ if( isset($_GET['install']) ){
     BG VARCHAR(34) DEFAULT '#DEEEF3',
     FG VARCHAR(34) DEFAULT '#4D4D4D')");
 
+sqlconector("CREATE TABLE IF NOT EXISTS LINKS (
+  ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  FECHA TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  LINK VARCHAR(255),
+  CORREO VARCHAR(255),
+  BLOQUEADO INT NOT NULL DEFAULT 0)");
+
+  
 sqlconector("CREATE TABLE NOTIFICACIONES (
   ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   IDPEDIDO VARCHAR(80),

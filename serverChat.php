@@ -25,6 +25,8 @@
 			'cliente' => readCliente($row['CLIENTE'])['ID'],
 			'medio_pago' => $row['MEDIO_PAGO'],
 			'wallet' => $row['WALLET'],
+			'origen' => $row['ORIGEN'],
+			'destino' => $row['DESTINO'],
 			'monto' => price($row['MONTO']),
 			'recibe' => price($row['RECIBE']),
 			'estatus' => $row['ESTATUS'],
