@@ -1,5 +1,6 @@
 <?php
 require "init.php";
+require "php-binance-api.php";
 session_start();
 
 function generaTicket(){
@@ -102,7 +103,7 @@ function calcularInteresMensual($capital, $tasaInteresAnual, $meses) {
 function recalcularSuscripciones($correo){
   $resultado = sqlconector("SELECT * FROM LIBROCONTABLE WHERE CLIENTE='$correo' AND PAGADO=0 AND ACTIVO=1");
   if($resultado){
-    while ($row = mysqli_fetch_array($resultado)) {
+    while ($row = mysqli_fetch_assoc($resultado)) {
       $inversion = $row['INVERSION'];
       $interes_adelantado = $row['INTERES_ADELANTADO'];
       $capital = $row['MONTO'];
@@ -223,6 +224,406 @@ function test_input($data) {
   $data = stripslashes($data);
   $data = htmlspecialchars($data);
   return $data;
+}
+
+function sqlApiKey(){
+  return readParametros()['APIKEY'];
+}
+
+function sqlApiSecret(){
+  return readParametros()['SECRET'];
+}
+
+function ifMonedaExist($moneda) {
+  if(row_sqlconector("select COUNT(*) AS TOTAL from DATOS where MONEDA='{$moneda}'")['TOTAL']==1 )
+  return TRUE;
+  return FALSE;
+}
+
+function readDatos($mon){
+  return row_sqlconector("select * from DATOS WHERE MONEDA='$mon'");
+}
+
+function readDatosMoneda($moneda){
+  return row_sqlconector("select * from DATOS WHERE MONEDA='{$moneda}'");
+}
+
+function readParametros(){
+  return row_sqlconector("select * from PARAMETROS");
+}
+
+function readPrices($moneda){
+  if(ifNotDayExists("PRICES",$moneda)){
+    if(strlen($moneda)>0){
+      sqlconector("INSERT INTO PRICES(MONEDA) VALUES('{$moneda}')");
+    }
+  }
+  return row_sqlconector("select * from PRICES WHERE MONEDA='{$moneda}' AND DAY(FECHA)= DAY(CURRENT_TIMESTAMP()) AND MONTH(FECHA)= MONTH(CURRENT_TIMESTAMP()) AND YEAR(FECHA)= YEAR(CURRENT_TIMESTAMP())");
+}
+
+function ifNotDayExists($tabla,$moneda){
+  $interval = row_sqlconector("SELECT DAY(NOW()) AS DIA, MONTH(NOW()) AS MES, YEAR(NOW()) AS ANO");
+  $fecha1 = "{$interval['ANO']}-{$interval['MES']}-{$interval['DIA']} 00:00";
+  $fecha2 = "{$interval['ANO']}-{$interval['MES']}-{$interval['DIA']} 23:59";
+  if (row_sqlconector("select COUNT(*) AS TOTAL from {$tabla} WHERE MONEDA='{$moneda}' AND FECHA BETWEEN '{$fecha1}' AND '{$fecha2}'")['TOTAL'] == 0)
+  return TRUE;
+  return FALSE;
+}
+
+function formatPrice($valor,$moneda){
+  switch ($moneda) {
+    case "ADAUSDC":
+    case "MATICUSDC":
+        return number_format($valor,4,".","");
+        break;    
+    case "TRXUSDC":
+    case "DOGEUSDC":        
+        return number_format($valor,5,".","");
+        break;      
+    case "RUNEUSDC":
+    case "RUNEUSDC":
+    case "ATOMUSDC":
+    case "NEARUSDC":
+    case "INJUSDC":
+          return number_format($valor,3,".","");
+          break;          
+    case "BTCUSDC":
+    case "ETHUSDC":
+    case "LTCUSDC":
+          return number_format($valor,2,".","");
+          break;
+    case "BNBUSDC":
+        return number_format($valor,1,".","");
+        break;
+    case "PAXGUSDC":
+        return number_format($valor,0,".","");
+        break;        
+    default:
+      return $valor;
+  }
+}
+
+function porcenConjunto($min, $max, $variable) {
+  $maxcien = $max - $min; 
+  $conjunto = $variable - $min; 
+  if($conjunto < 0) $conjunto = 0;
+  if($maxcien == 0) $maxcien = 1;
+  $resultado = ($conjunto * 100) / $maxcien;
+  if($resultado > 100) $resultado = 100;
+  if($min > $max) $resultado = 100;
+  return number_format($resultado,0,"","");
+}
+
+function readMinAnterior($moneda){
+  if(isset(row_sqlconector("select ABAJO from PRICES WHERE MONEDA='{$moneda}' AND DAY(FECHA)= DAY(CURRENT_TIMESTAMP()  - INTERVAL 1 DAY) AND MONTH(FECHA)= MONTH(CURRENT_TIMESTAMP()) AND YEAR(FECHA)= YEAR(CURRENT_TIMESTAMP())")['ABAJO'])){
+    return row_sqlconector("select ABAJO from PRICES WHERE MONEDA='{$moneda}' AND DAY(FECHA)= DAY(CURRENT_TIMESTAMP()  - INTERVAL 1 DAY) AND MONTH(FECHA)= MONTH(CURRENT_TIMESTAMP()) AND YEAR(FECHA)= YEAR(CURRENT_TIMESTAMP())")['ABAJO'];
+  }
+  else{
+    return row_sqlconector("select ABAJO from PRICES WHERE MONEDA='{$moneda}' AND DAY(FECHA)= DAY(CURRENT_TIMESTAMP()) AND MONTH(FECHA)= MONTH(CURRENT_TIMESTAMP()) AND YEAR(FECHA)= YEAR(CURRENT_TIMESTAMP())")['ABAJO'];
+  }  
+}
+
+function nivel($moneda){
+  $nprice = readPrices($moneda);
+  $asset = "SELL"; //readDatosMoneda($moneda)['ASSET']
+  $min= 0;
+  $max= 0;
+
+  if($nprice['ARRIBA'] < readFlotadorAnterior($moneda)){
+    $min = $nprice['ARRIBA'];
+    $max = readFlotadorAnterior($moneda);
+  }else{
+    $min = readFlotadorAnterior($moneda);
+    $max = $nprice['ARRIBA'];
+  }
+
+  $porcenmax = (porcenConjunto(price($min), price($max), $nprice['ACTUAL']) *3.6 )."deg";
+  $nivel = "<div class=odometros style=--data:{$porcenmax};><div id=grad2>{$asset}</div></div>";
+
+  return $nivel;
+}
+
+function nivelAnterior($moneda){
+  $nprice = readPrices($moneda);
+  $asset = "BUY";
+  $min= 0;
+  $max= 0;
+
+  if($nprice['ABAJO'] < readMinAnterior($moneda)){
+    $min = $nprice['ABAJO'];
+    $max = readMinAnterior($moneda);
+  }else{
+    $min = readMinAnterior($moneda);
+    $max = $nprice['ABAJO'];
+  }
+
+  $porcenmax = (porcenConjunto(price($min), price($max), $nprice['ABAJO']) *3.6 )."deg";
+  $nivel = "<div class=odometros style=--data:{$porcenmax};><div id=grad2>{$asset}</div></div>";
+
+  return $nivel; 
+}
+
+function nivelBtc(){
+  $nprice = readPrices("BTCUSDT");
+  $min= 0;
+  $max= 0;
+
+  if($nprice['ARRIBA'] < readFlotadorAnterior("BTCUSDT")){
+    $min = $nprice['ARRIBA'];
+    $max = readFlotadorAnterior("BTCUSDT");
+  }else{
+    $min = readFlotadorAnterior("BTCUSDT");
+    $max = $nprice['ARRIBA'];
+  }
+
+  $porcenmax = (porcenConjunto(price($min), price($max), $nprice['ACTUAL']) *3.6 )."deg";
+  $nivel = "<div class=odometros style=--data:{$porcenmax};><div id=grad2>BTC</div></div>";
+
+  return $nivel;
+}
+
+function updatePrices($moneda,$valores){
+  sqlconector("UPDATE PRICES SET {$valores} WHERE MONEDA='{$moneda}' AND DAY(FECHA)= DAY(CURRENT_TIMESTAMP()) AND MONTH(FECHA)= MONTH(CURRENT_TIMESTAMP()) AND YEAR(FECHA)= YEAR(CURRENT_TIMESTAMP())");
+}
+
+function updateTendenciaBajista($moneda){ 
+  if(!ifNotDayExists("PRICES",$moneda)){
+    updatePrices($moneda,"BAJISTA = 1, ALCISTA=0");
+  }
+}
+
+function updateTendenciaAlcista($moneda){
+  if(!ifNotDayExists("PRICES",$moneda)){
+    updatePrices($moneda,"BAJISTA = 0, ALCISTA=1");
+  }
+}
+
+function dayTendencia($moneda){
+  $tendencia = "";
+  $priceArriba = readPrices($moneda)['ARRIBA'];
+  if($priceArriba > readFlotadorAnterior($moneda)){
+    updateTendenciaAlcista($moneda);
+    $tendencia = "<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>";
+  }else{
+    updateTendenciaBajista($moneda);
+    $tendencia = "<span style=color:#EA465C;font-weight:bold;>&#9660;</span>";
+  }
+  return $tendencia;
+}
+
+function readFlotadorAnterior($moneda){
+  if(isset(row_sqlconector("select ARRIBA from PRICES WHERE MONEDA='{$moneda}' AND DAY(FECHA)= DAY(CURRENT_TIMESTAMP()  - INTERVAL 1 DAY) AND MONTH(FECHA)= MONTH(CURRENT_TIMESTAMP()) AND YEAR(FECHA)= YEAR(CURRENT_TIMESTAMP())")['ARRIBA'])){
+    return row_sqlconector("select ARRIBA from PRICES WHERE MONEDA='{$moneda}' AND DAY(FECHA)= DAY(CURRENT_TIMESTAMP()  - INTERVAL 1 DAY) AND MONTH(FECHA)= MONTH(CURRENT_TIMESTAMP()) AND YEAR(FECHA)= YEAR(CURRENT_TIMESTAMP())")['ARRIBA'];
+  }
+  else{
+    return row_sqlconector("select ARRIBA from PRICES WHERE MONEDA='{$moneda}' AND DAY(FECHA)= DAY(CURRENT_TIMESTAMP()) AND MONTH(FECHA)= MONTH(CURRENT_TIMESTAMP()) AND YEAR(FECHA)= YEAR(CURRENT_TIMESTAMP())")['ARRIBA'];
+  }  
+}
+
+function totalTendencia($moneda){
+  $bajista = row_sqlconector("select SUM(BAJISTA) AS ROJO from PRICES WHERE MONEDA='{$moneda}'")['ROJO'];
+  $alcista = row_sqlconector("select SUM(ALCISTA) AS VERDE from PRICES WHERE MONEDA='{$moneda}'")['VERDE'];
+  $tendencia = "";
+  if($alcista > $bajista){
+    $tendencia = "<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>";
+  }else{
+    $tendencia = "<span style=color:#EA465C;font-weight:bold;>&#9660;</span>";
+  }
+  return $tendencia;
+}
+
+function returnAlertas($totalPromedio,$moneda){
+  $readPrice = readPrices($moneda);
+  $precio = $readPrice['ACTUAL'];
+  $priceArriba= $readPrice['ARRIBA'];
+  $priceAbajo= $readPrice['ABAJO']; 
+  
+  $variable = "";
+  
+  $porcenmax = porcenConjunto($priceAbajo, $priceArriba, $precio);
+  $sane=0;
+  if($readPrice['ABAJO'] < readMinAnterior($moneda)){
+    $sane=1;
+  }
+
+  if($porcenmax > 19 && $porcenmax < 30 && $sane==0){
+    $variable = "verde";
+  }
+
+  if( $porcenmax > 9 && $porcenmax < 20 && $sane==0 ){
+    $variable = "naranja";
+  }
+  
+  if($porcenmax > -1 && $porcenmax < 10 && $sane==0){
+    $variable = "roja";
+  }
+
+  return $variable;  
+}
+
+function listAsset(){
+  $cadena="";
+
+    $consulta = "select * from DATOS";
+    $resultado = sqlconector($consulta);
+    $cadena = "";
+    while($row = mysqli_fetch_assoc($resultado)){
+      $moneda = $row['MONEDA'];
+      $promedioUndante = row_sqlconector("SELECT (SUM(ABAJO) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='{$moneda}'")['PROMEDIO'];
+      $promedioFlotante = row_sqlconector("SELECT (SUM(ARRIBA) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='{$moneda}'")['PROMEDIO'];
+      $totalPromedio = ($promedioFlotante + $promedioUndante) /2;       
+      $alerta = returnAlertas($totalPromedio,$moneda);
+      $color = "red";
+      $colorAlerta="red";
+      $asset = $row['ASSET'];
+      $elid = $row['ID'];
+      $price = formatPrice(readPrices($moneda)['ACTUAL'],$moneda);
+      if($price < $promedioFlotante){
+        $color = "#F37A8B";
+      }
+      else{
+          $color = "#4BC883";
+      }     
+
+      if($alerta=="roja") $colorAlerta="green";
+      $cadena = $cadena ." <span style=cursor:pointer;color:{$color};>{$asset}</span> <span style=color:{$color};font-weight:bold;>".formatPrice($price,$moneda)."</span> <span class=bolita style=color:{$colorAlerta};>&#9679;</span>";
+    }
+
+    return $cadena; 
+}
+
+
+function nivelCompra($moneda){
+  $promedioUndante = row_sqlconector("SELECT (SUM(ABAJO) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='{$moneda}'")['PROMEDIO'];
+  $promedioFlotante = row_sqlconector("SELECT (SUM(ARRIBA) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='{$moneda}'")['PROMEDIO'];
+  $promedioFlotanteBtc = row_sqlconector("SELECT (SUM(ARRIBA) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='BTCUSDT'")['PROMEDIO'];
+  $totalPromedio = ($promedioFlotante + $promedioUndante) /2;
+  $alerta = returnAlertas($totalPromedio,$moneda);
+  $asset = "BUY";
+  $nivel="<div class=odometroalert style=--color1:#089981;--data1:-80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>{$asset}</div></div>";
+  if($alerta == "verde"){
+    $nivel="<div class=odometroalert style=--color1:#089981;--data1:80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>{$asset}</div></div>";
+  }
+  if($alerta == "naranja"){
+    $nivel="<div class=odometroalert style=--color1:#089981;--data1:80deg;--color2:#089981;--data2:220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>{$asset}</div></div>";
+  }
+  if($alerta == "roja"){
+    $nivel="<div class=odometroalert style=--color1:#089981;--data1:80deg;--color2:#089981;--data2:220deg;--color3:#089981;--data3:360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>{$asset}</div></div>";
+  }
+
+  return $nivel; 
+}
+
+function verPromo(){
+  if(recordCount("APUESTAS")>0){
+    $json =  readPrices("BTCUSDC")['DATOS'];
+    $data = json_decode($json, true);
+    echo $data['listasset']. " Tendencia del Mercado" .$data['totalTendencia']." Animo".$data['tendencia']." Hora UTC ".$data['utc'];
+  }else{
+    echo "Suscribete con ua minima compra de nuestros productos y disfruta de los mejores análisis y señales del mercado de criptomonedas...";
+  }
+
+}
+
+function refreshDatos($mon){
+  $row = readDatos($mon);
+  $row2 = readParametros();
+  $moneda=$row['MONEDA'];
+  $auto = $row2['LOCAL'];  
+  if(strlen($moneda) > 0){
+    $readPrice = readPrices($moneda);
+    $bitcoin = readPrices('BTCUSDC')['ACTUAL'];
+    $priceMoneda = $readPrice['ACTUAL'];
+    $priceArriba= $readPrice['ARRIBA'];
+    $priceAbajo= $readPrice['ABAJO'];
+    $labelPriceMoneda = formatPrice($priceMoneda,$moneda);
+    $labelPriceBitcoin = formatPrice($bitcoin,"BTCUSDT");
+    $color = "red";
+    $colorbtc = "red";
+    $colorDisp = "red";
+    $symbol = "&#9660;";
+    $promedioUndante = row_sqlconector("SELECT (SUM(ABAJO) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='{$moneda}'")['PROMEDIO'];
+    $promedioFlotante = row_sqlconector("SELECT (SUM(ARRIBA) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='{$moneda}'")['PROMEDIO'];
+    $promedioFlotanteBtc = row_sqlconector("SELECT (SUM(ARRIBA) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='BTCUSDT'")['PROMEDIO'];
+    $totalPromedio = ($promedioFlotante + $promedioUndante) /2;  
+    $porcenmax = porcenConjunto($priceAbajo, $priceArriba, $priceMoneda)."%";  
+    $capital = $row2['CAPITAL'];
+    $bina = $row2['BINANCE'];
+    $symbol = nivelAnterior($moneda);
+        
+    if($priceMoneda < $promedioFlotante){
+        $color = "#F37A8B";
+    }
+    else{
+        $color = "#4BC883";
+    }
+
+    if($row2['DISPONIBLE'] < $row2['INVXCOMPRA']){
+      $colorDisp = "#F37A8B";
+    }
+    else{
+      $colorDisp = "#4BC883";
+    }    
+  
+    if($bitcoin < $promedioFlotanteBtc){
+      $colorbtc = "#F37A8B";
+    }
+    else{
+      $colorbtc = "#4BC883";
+    }  
+    
+    $obj = array('asset' => $row['ASSET'], 'ultimaventa' => $row['ULTIMAVENTA'], 'price' => $priceMoneda,'btc' => $bitcoin, 
+    'colorbtc' => $colorbtc, 'symbol' => $symbol, 'moneda' => $moneda,'tendencia' => dayTendencia($moneda),'color' => $color,
+    'maxdia' => $priceArriba,'mindia' => $priceAbajo, 'totalTendencia' => totalTendencia($moneda),
+    'utc' => date('g:i A'),'techo' => $promedioFlotante,'piso' => $promedioUndante, 
+    'ant' => readFlotadorAnterior($moneda),'nivel' => nivel($moneda),'nivelbtc' => nivelBtc(),
+    'porcenmax' => $porcenmax,'ganancia' => $row2['GANANCIA'],'perdida' => $row2['PERDIDA'],'capital' => $row2['CAPITAL'],
+    'disponible' => $row2['DISPONIBLE'], 'escalones' => $row2['ESCALONES'],'invxcompra' => $row2['INVXCOMPRA'],
+    'totalpromedio' => $totalPromedio,'auto' => $auto,'bina' => $bina,'impuesto' => $row2['IMPUESTO'], 
+    'colordisp' => $colorDisp,'labelpricebitcoin' => $labelPriceBitcoin,
+    'labelpricemoneda' => $labelPriceMoneda,'precio_venta' => $row['PRECIO_VENTA'],'listasset' => listAsset(),
+    'nivelcompra' => nivelCompra($moneda) ); 
+
+    sqlconector("UPDATE PRICES SET DATOS='".json_encode($obj)."' WHERE MONEDA='$moneda'");
+  }  
+}
+
+function refreshDataAuto(){
+    $api = new Binance\API(sqlApiKey(), sqlApiSecret());
+    $api->useServerTime();
+    $price = $api->prices();
+    $api->useServerTime();
+    $balances = $api->balances();
+    
+    $consulta = "select * from DATOS";
+    $resultado = sqlconector($consulta);
+    while($row = mysqli_fetch_assoc($resultado)){        
+      $asset = $row['ASSET'];    
+      $available_mon=$row['MONEDA'];
+      $available = $price[$available_mon];
+      $axie = readPrices($available_mon);
+      $priceArriba = formatPrice($axie['ARRIBA'],$available_mon);
+      $priceAbajo = formatPrice($axie['ABAJO'],$available_mon);
+      updatePrices($available_mon,"ACTUAL={$available}");
+
+      if( $priceArriba == 0){
+        updatePrices($available_mon,"ARRIBA={$available}");
+      }
+    
+      if( $priceAbajo == 0){
+        updatePrices($available_mon,"ABAJO={$available}");
+      }
+      
+      if( $priceArriba <  $available){
+        updatePrices($available_mon,"ARRIBA={$available}");
+      }
+       
+      if( $priceAbajo >  $available){
+        updatePrices($available_mon,"ABAJO={$available}");
+      }
+      refreshDatos($available_mon);
+    }
+    
 }
 
 function ifReferidoExist($referido){
@@ -382,7 +783,7 @@ function createPromo($correo){
       exit();
     }else{
       $resultado = mysqli_query( $conexion, $consulta );
-      while($row = mysqli_fetch_array($resultado)){
+      while($row = mysqli_fetch_assoc($resultado)){
         if(!ifPromoExist($correo,$row['CODIGO'])){
           sqlconector("INSERT INTO USERPROMO (CORREO,CODIGO,NUMPROMO) VALUES('{$correo}','{$row['CODIGO']}',{$row['NUMPROMO']})");
         }
@@ -466,7 +867,7 @@ function revisaGanadorPromo($correo,$idApuesta){
     }else{      
       $consulta = "select * from USERPROMO WHERE CORREO='{$correo}'";
       $resultado = mysqli_query( $conexion, $consulta );
-      while($row = mysqli_fetch_array($resultado)){        
+      while($row = mysqli_fetch_assoc($resultado)){        
         if($row['RATE'] < $row['NUMPROMO']-1 && readApuestaId($_POST['idapuesta'])['MONTO'] >9){
           sumPromo($correo,$row['CODIGO']);
         }else{
@@ -512,42 +913,13 @@ function statusPromocion($correo){
       <span>Promociones:</span>
       <table>        
       ";
-      while($row = mysqli_fetch_array($resultado)){
+      while($row = mysqli_fetch_assoc($resultado)){
         $max = "".readPromo($row['CODIGO'])['NUMPROMO']." Triunfos";
         echo "<tr><td>{$max}</td><td>".makeAnciEstrellas($row['RATE'])."</td></tr>";
       }    
       echo "</table>";
     }
   }   
-}
-
-function verPromo(){
-  if(recordCount("PROMO")>0){
-    $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
-    $consulta = "select * from PROMO WHERE GANADOR=1";
-    if (!$conexion) {
-      echo "Refresh page, Failed to connect to Data...";
-      exit();
-    }else{
-      $resultado = mysqli_query( $conexion, $consulta );
-      $cadena = "- JUEGA Y GANA EL DOBLE -";
-      while($row = mysqli_fetch_array($resultado)){
-        $cadena = $cadena . " - {$row['MENSAJE']} -";
-      }
-    }
-  }else{
-    $cadena =  " - JUEGA Y GANA EL DOBLE -";
-  }
-  echo $cadena;
-}
-
-function ifNotDayExists($tabla){
-  $interval = row_sqlconector("SELECT DAY(NOW()) AS DIA, MONTH(NOW()) AS MES, YEAR(NOW()) AS ANO");
-  $fecha1 = "{$interval['ANO']}-{$interval['MES']}-{$interval['DIA']} 00:00";
-  $fecha2 = "{$interval['ANO']}-{$interval['MES']}-{$interval['DIA']} 23:59";
-  if (row_sqlconector("select COUNT(*) AS TOTAL from {$tabla} WHERE FECHA BETWEEN '{$fecha1}' AND '{$fecha2}'")['TOTAL'] == 0)
-  return TRUE;
-  return FALSE;
 }
 
 function insertLista($correo){
@@ -603,7 +975,7 @@ function notif($IDusuario){
     $resultado = sqlconector("SELECT * FROM NOTIFICACIONES WHERE IDUSUARIO=".$IDusuario." AND VISTO=0");
     if($resultado){
         $obj=array();
-        while($row = mysqli_fetch_array($resultado)){
+        while($row = mysqli_fetch_assoc($resultado)){
             $obj[] = "<a href='{$row['ubicacion']}&notif={$row['ID']}'>".$row['noticia']."</a>";
         }
        }

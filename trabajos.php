@@ -20,9 +20,12 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
     </head>
     <header>
         <style>
-         .textAreaContainer{
+          .textAreaContainer{
             background:white;
             color: black;
+         }
+         textarea{
+            color:black;
          }
          input[type=text]{
             color:black;
@@ -33,11 +36,47 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
          
          select{
             color:black;
+            border:none;
          }
-         button{
-            color:black;
-         }       
-                  
+         
+         input[type="number"] { 
+margin: 5px;
+border-radius: 3px;
+border: 0;
+outline: 0;
+padding: 2px;
+width: 80px;
+background: #CFCFD3;
+text-align: right;
+}
+
+input[type="text"] {
+margin: 5px;
+border-radius: 3px;
+border: 0;
+outline: 0;
+padding: 2px;
+width: 80px;
+text-transform: uppercase;
+}
+
+input[type="checkbox"] {
+  margin: 5px;
+  border-radius: 3px;
+  border: 0;
+  padding: 3px;
+  text-transform: uppercase;
+}
+
+         .dialog_retiro{
+            top: 150px;
+            border: solid 1px black;
+            box-shadow: 4px 3px 8px 1px #969696;
+            background: #c1cae0;
+            border-radius: 5px;
+            z-index: 99;
+        }           
+    
         </style>        
         <script>
             let trabajos = [];            
@@ -218,7 +257,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 <label style="margin-left:1px; font-weight:bold;" id="estad"></label>
                 <label style="margin-left:13px; font-weight:bold;" id="reg"></label>
             </div> -->
-            <dialog  id="ver" close>
+            <dialog class="dialog_retiro" id="ver" close>
                 <a title="Cerrar" style="color:black;font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('ver').close()">X</a><br>
                 <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
                 <input type="hidden" id="idapuesta">

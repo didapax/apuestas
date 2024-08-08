@@ -2,6 +2,7 @@
 <?php
     include "modulo.php";
     date_default_timezone_set('America/Caracas');
+    refreshDataAuto();
 ?>
 <html style="overflow: scroll;">
     <head>

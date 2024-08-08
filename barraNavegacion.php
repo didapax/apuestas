@@ -75,11 +75,17 @@
                     echo "<a href='jugadas'>Productos</a>";
                   }
                   if($page=="promo"){
-                    echo "<a href='promo' class='active'>Promociones</a>";
+                    echo "<a href='promo' class='active'>Promos</a>";
                   }
                   else{                        
-                    echo "<a href='promo'>Promociones</a>";
+                    echo "<a href='promo'>Promos</a>";
                   }
+                  if($page=="criptos"){
+                    echo "<a href='criptos' class='active'>Criptos</a>";
+                  }
+                  else{                        
+                    echo "<a href='criptos'>Criptos</a>";
+                  }                  
                   if($page=="perfiladmin"){
                     echo "<a href='perfiladmin' class='active'>Mi Perfil</a>";
                   }

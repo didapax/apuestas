@@ -24,9 +24,12 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
     </head>
     <header>
         <style>
-         .textAreaContainer{
+          .textAreaContainer{
             background:white;
             color: black;
+         }
+         textarea{
+            color:black;
          }
          input[type=text]{
             color:black;
@@ -38,9 +41,44 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
          select{
             color:black;
          }
-         button{
-            color:black;
-         }
+         
+         input[type="number"] { 
+margin: 5px;
+border-radius: 3px;
+border: 0;
+outline: 0;
+padding: 2px;
+width: 80px;
+background: #CFCFD3;
+text-align: right;
+}
+
+input[type="text"] {
+margin: 5px;
+border-radius: 3px;
+border: 0;
+outline: 0;
+padding: 2px;
+width: 80px;
+text-transform: uppercase;
+}
+
+input[type="checkbox"] {
+  margin: 5px;
+  border-radius: 3px;
+  border: 0;
+  padding: 3px;
+  text-transform: uppercase;
+}
+
+         .dialog_retiro{
+            top: 150px;
+            border: solid 1px black;
+            box-shadow: 4px 3px 8px 1px #969696;
+            background: #c1cae0;
+            border-radius: 5px;
+            z-index: 99;
+        }   
 
         </style>        
         <script>
@@ -208,15 +246,16 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <div class="menu" id="menu">
             <button type="button" onclick="showDialog()">Agregar +</button>
         </div>
-        <dialog class="dialog_agregar" id="agregar" close>
+        <dialog class="dialog_retiro" id="agregar" close>
             <form action="jugadas">
                 <a title="Cerrar" style="font-weight:bold;float:right;cursor:pointer; color:yellow;" onclick="document.getElementById('agregar').close()">X</a><br>                
                 Titulo: <input type="text" id="nombre"><br>
                 Normal: <input title="Solo Insertar la Tarjeta" type="radio" id="ninguno" name="selectx">
                 Favorito: <input title="Poner la tarjeta como Favorita" type="radio" value="1" id="favorito" name="selectx"><br>
                 <input title="se paga por Adelantado" type="checkbox" value="1" id="adelantado" > Paga Por Adelantado: <br>
+                Periodo:                
                 <select id="tipoJuego" >
-                    <option value="">selecciona..</option>
+                    <option value="">selecciona Duracion..</option>
                     <option value="MENSUAL">Mensual</option>
                     <option value="TRIMESTRAL">Trimestral</option>
                     <option value="SEMESTRAL">Semestral</option>
