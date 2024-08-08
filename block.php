@@ -55,6 +55,28 @@ if(isset($_POST['depositar'])){
         $monto)");
 }
 
+if(isset($_POST['addpar'])){
+  if(!ifMonedaExist($_POST['moneda'])){
+    sqlconector("UPDATE DATOS SET ACTIVO=0");
+    sqlconector("INSERT INTO DATOS(MONEDA,ASSET,ACTIVO) VALUES('{$_POST['moneda']}','{$_POST['asset']}',0)");
+  }
+  refreshDatos($_POST['moneda']);
+}
+
+if(isset($_POST['deletepar'])){  
+  sqlconector("DELETE FROM DATOS WHERE MONEDA='{$_POST['deletepar']}'");
+  sqlconector("DELETE FROM PRICES WHERE MONEDA='{$_POST['deletepar']}'");
+  sqlconector("UPDATE DATOS SET ACTIVO=0");
+}
+
+if(isset($_GET{'listMonedas'})){
+  echo json_encode (array_sqlconector("SELECT * FROM DATOS"));
+}
+
+if(isset($_GET['getPriceBinance'])){
+      refreshDataAuto();
+}
+
 if(isset($_POST['jugar'])){
       $suscripcion = readJuegoId($_POST['idjuego']);  
       $ticket = generaTicket();      
@@ -354,7 +376,7 @@ if(isset($_GET['getSuscripciones'])) {
   }else{    
     $consulta = "select * from APUESTAS WHERE ELIMINADO=0 AND CLIENTE='$correo' ORDER BY FECHA";
     $resultado = mysqli_query( $conexion, $consulta );
-    while($row = mysqli_fetch_array($resultado)){
+    while($row = mysqli_fetch_assoc($resultado)){
       $fecha = latinFecha($row['FECHA']);
       $bloqueo = "detalle";
       $mensaje = "";
@@ -411,7 +433,7 @@ if(isset($_GET['getJugadas'])) {
     exit();
   }else{    
     $resultado = mysqli_query( $conexion, $consulta );
-    while($row = mysqli_fetch_array($resultado)){
+    while($row = mysqli_fetch_assoc($resultado)){
       $fecha = latinFecha($row['FECHA']);
       $bloqueo = "trade";
       $mensaje = "";
@@ -518,7 +540,7 @@ if( isset($_GET['bot']) ){
   $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
   $consulta = "select * from USUARIOS";
   $resultado = mysqli_query( $conexion, $consulta );
-  while($row = mysqli_fetch_array($resultado)){
+  while($row = mysqli_fetch_assoc($resultado)){
     if(!ifReferidoExist($row['CODIGOREFERIDO'])){
       insertReferido($row['CODIGOREFERIDO'],"a4050f5ac6267099");
     }
@@ -542,7 +564,7 @@ if(isset($_GET['readPromos'])) {
       <th>Opciones</th>
     ";
     $resultado = mysqli_query( $conexion, $consulta );
-    while($row = mysqli_fetch_array($resultado)){
+    while($row = mysqli_fetch_assoc($resultado)){
       $difu = "";
       $flotante = "";
       if($row['DIFUSION']==1){
@@ -589,7 +611,7 @@ if(isset($_GET['readJuegos'])) {
         </thead><tbody>
       ";
       $resultado = mysqli_query( $conexion, $consulta );
-      while($row = mysqli_fetch_array($resultado)){
+      while($row = mysqli_fetch_assoc($resultado)){
         $bloqueo = "";
         if($row['BLOQUEADO']==1){
           $bloqueo = "checked";
@@ -622,7 +644,7 @@ if(isset($_GET['readTrabajos'])) {
     $total = 0;
     $resultado = sqlconector("SELECT COUNT(IDPEDIDO) AS TOTAL FROM NOTIFICACIONES WHERE IDPEDIDO='$Idpedido' AND VISTO = 0 AND IDUSUARIO = ".readCliente($_GET['correo'])['ID']);
     if($resultado){
-      $row = mysqli_fetch_array($resultado);
+      $row = mysqli_fetch_assoc($resultado);
       $total = $row['TOTAL'];
     }
     return $total;
@@ -632,7 +654,7 @@ if(isset($_GET['readTrabajos'])) {
     $consulta = "select * from TRANSACCIONES WHERE ELIMINADO=0 AND PAGADO=0 ORDER BY FECHA"; 
     $resultado = sqlconector($consulta);
     if($resultado){
-      while($row = mysqli_fetch_array($resultado)){
+      while($row = mysqli_fetch_assoc($resultado)){
         $obj[]= array('id' => $row['ID'],
       'fecha' => latinFecha($row['FECHA']),
       'ticket' => $row['TICKET'],
@@ -676,7 +698,7 @@ if(isset($_GET['readHistorialAdmin'])) {
       <tbody>
     ";
     $resultado = mysqli_query( $conexion, $consulta );
-    while($row = mysqli_fetch_array($resultado)){
+    while($row = mysqli_fetch_assoc($resultado)){
       $color="transparent";
       if($row['ACTIVO']==0){
         $color="#AED6F1";
@@ -715,7 +737,7 @@ if(isset($_GET['readDepositos'])) {
   $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
   $consulta = "select * from TRANSACCIONES WHERE TIPO='DEPOSITO' AND CLIENTE='$correo' ORDER BY FECHA DESC";
   $resultado = mysqli_query( $conexion, $consulta );
-  while($row = mysqli_fetch_array($resultado)){
+  while($row = mysqli_fetch_assoc($resultado)){
     $obj[] = array('fecha' => latinFecha($row['FECHA']),
     'id' => $row['ID'],
     'ticket' => $row['TICKET'],
@@ -738,7 +760,7 @@ if(isset($_GET['readRetiros'])) {
   $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
   $consulta = "select * from TRANSACCIONES WHERE TIPO='RETIRO' AND CLIENTE='$correo' ORDER BY FECHA DESC";
   $resultado = mysqli_query( $conexion, $consulta );
-  while($row = mysqli_fetch_array($resultado)){
+  while($row = mysqli_fetch_assoc($resultado)){
     $obj[] = array('fecha' => latinFecha($row['FECHA']),
     'id' => $row['ID'],
     'ticket' => $row['TICKET'],
@@ -765,7 +787,7 @@ if(isset($_GET['readHistorial'])) {
   }else{
     $consulta = "select * from APUESTAS WHERE CLIENTE='{$cliente}' ORDER BY FECHA DESC";
     $resultado = mysqli_query( $conexion, $consulta );
-    while($row = mysqli_fetch_array($resultado)){     
+    while($row = mysqli_fetch_assoc($resultado)){     
       $obj[] = array(
       'id' => $row['ID'],
       'fecha' => latinFecha($row['FECHA']),
@@ -943,7 +965,7 @@ if( isset($_POST['resetlista']) ){
   $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
   $consulta = "select * from USUARIOS";
   $resultado = mysqli_query( $conexion, $consulta );
-  while($row = mysqli_fetch_array($resultado)){
+  while($row = mysqli_fetch_assoc($resultado)){
     insertLista($row['CORREO']);
   }
 }
@@ -956,7 +978,7 @@ if( isset($_POST['sendlista']) ){
   $consulta = "select * from LISTA WHERE ENVIADO=0";
   $resultado = mysqli_query( $conexion, $consulta );
   $i=0;
-  while($row = mysqli_fetch_array($resultado)){
+  while($row = mysqli_fetch_assoc($resultado)){
     sendMail($row['CORREO'],readMailPromo()['NOMBRE'],readMailPromo()['MENSAJE']);
     setEnviado($row['CORREO'],1);
     if($i == 4) break;

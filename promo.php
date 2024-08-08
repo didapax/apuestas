@@ -41,9 +41,45 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
          select{
             color:black;
          }
-         button{
-            color:black;
-         }          
+         
+         input[type="number"] { 
+margin: 5px;
+border-radius: 3px;
+border: 0;
+outline: 0;
+padding: 2px;
+width: 80px;
+background: #CFCFD3;
+text-align: right;
+}
+
+input[type="text"] {
+margin: 5px;
+border-radius: 3px;
+border: 0;
+outline: 0;
+padding: 2px;
+width: 80px;
+text-transform: uppercase;
+}
+
+input[type="checkbox"] {
+  margin: 5px;
+  border-radius: 3px;
+  border: 0;
+  padding: 3px;
+  text-transform: uppercase;
+}
+
+         .dialog_retiro{
+            top: 150px;
+            border: solid 1px black;
+            box-shadow: 4px 3px 8px 1px #969696;
+            background: #c1cae0;
+            border-radius: 5px;
+            z-index: 99;
+        }           
+
         </style>        
         <script>
             function crear(){
@@ -154,7 +190,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
             <button style="margin-left:21px;" id="btn_difundir" type="button" onclick="difundir()">Difundir Promocion</button>
             <button style="margin-left:21px; background:#E9B2B2; display:none;" id="btn_reset" type="button" onclick="reset()">Reset Promocion</button>
         </div>
-        <dialog  id="agregar" close>
+        <dialog class="dialog_retiro"  id="agregar" close>
             <form action="promo">
                 <a title="Cerrar" style="color:black;font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('agregar').close()">X</a><br>            
                 Titulo: <input type="text" id="nombre"><br>

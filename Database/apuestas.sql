@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-08-2024 a las 04:11:31
+-- Tiempo de generación: 08-08-2024 a las 19:56:11
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -57,7 +57,7 @@ CREATE TABLE `apuestas` (
 --
 
 INSERT INTO `apuestas` (`ID`, `FECHA`, `INICIO`, `FIN`, `TICKET`, `TIPO`, `IDJUEGO`, `JUEGO`, `CAJERO`, `CLIENTE`, `PORCIENTO`, `MONTO`, `INTERES_MENSUAL`, `CUOTA_MENSUAL`, `TOTAL_PAGAR`, `COMISION`, `N_PAGOS`, `PAGADOS`, `ACTIVO`, `ELIMINADO`, `ESTATUS`, `MONEDA`) VALUES
-(17, '2024-08-06 21:04:36', '2024-08-06', '2024-09-06', '09f56bb35ebbf4f9', 'MENSUAL', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 0, 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 1, 0, 1, 0, 'ACTIVO', 'USDC');
+(18, '2024-08-08 17:54:41', '2024-08-08', '2024-09-08', '875e084b25619b5b', 'MENSUAL', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 0, 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 1, 0, 1, 0, 'ACTIVO', 'USDC');
 
 -- --------------------------------------------------------
 
@@ -93,6 +93,32 @@ INSERT INTO `chat` (`ID`, `FECHA`, `IDPEDIDO`, `AMO`, `ENVIA`, `RECIBE`, `MENSAJ
 (6, '2024-08-04 02:10:07', '6ac682ad408aeaea', '5', '5', '3', 'que ha pasado con esto', 0, 1, 0, '#DADFE8', '#4D4D4D'),
 (7, '2024-08-04 02:11:06', '6ac682ad408aeaea', '3', '3', '5', 'ya procedo', 0, 1, 0, '#ff7380', '#4D4D4D'),
 (8, '2024-08-04 02:34:26', '6ac682ad408aeaea', '5', '5', '3', 'estoy esperando', 0, 1, 0, '#DADFE8', '#4D4D4D');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `datos`
+--
+
+CREATE TABLE `datos` (
+  `ID` int(11) NOT NULL,
+  `MONEDA` varchar(10) DEFAULT 'BTCUSDT',
+  `ASSET` varchar(10) DEFAULT 'BTC',
+  `PAR` varchar(10) DEFAULT 'USDC',
+  `BALANCE_ASSET` decimal(16,8) NOT NULL DEFAULT 0.00000000,
+  `PRECIO_VENTA` decimal(16,8) NOT NULL DEFAULT 0.00000000,
+  `PANTE` decimal(16,8) NOT NULL DEFAULT 0.00000000,
+  `ACTIVO` int(11) DEFAULT 0,
+  `ULTIMAVENTA` decimal(16,5) NOT NULL DEFAULT 0.00000
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `datos`
+--
+
+INSERT INTO `datos` (`ID`, `MONEDA`, `ASSET`, `PAR`, `BALANCE_ASSET`, `PRECIO_VENTA`, `PANTE`, `ACTIVO`, `ULTIMAVENTA`) VALUES
+(4, 'BTCUSDC', 'BTC', 'USDC', 0.00000000, 0.00000000, 0.00000000, 0, 0.00000),
+(5, 'ETHUSDC', 'ETH', 'USDC', 0.00000000, 0.00000000, 0.00000000, 0, 0.00000);
 
 -- --------------------------------------------------------
 
@@ -190,17 +216,8 @@ CREATE TABLE `librocontable` (
 --
 
 INSERT INTO `librocontable` (`ID`, `FECHA`, `TICKET`, `TIPO`, `IDJUEGO`, `JUEGO`, `CAJERO`, `CLIENTE`, `MONTO`, `INTERES_MENSUAL`, `CUOTA_MENSUAL`, `TOTAL_PAGAR`, `COMISION`, `INVERSION`, `INTERES_ADELANTADO`, `PAGADO`, `ACTIVO`, `ELIMINADO`, `ESTATUS`, `MONEDA`) VALUES
-(13, '2024-07-30', '72b3d68c1ec373cb', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 1, 0, 0, 'CERRADO', 'USDC'),
-(14, '2024-07-31', '72b3d68c1ec373cb', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 1, 0, 0, 'CERRADO', 'USDC'),
-(15, '2024-07-30', 'f8a390fa76967b15', 'CREDITO', 5, 'Intereses por adelantado', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 100.000000, 2.083333, 102.083333, 102.083333, 0.000000, 1, 1, 1, 0, 0, 'CERRADO', 'USDC'),
-(16, '2024-07-31', 'f8a390fa76967b15', 'CREDITO', 5, 'Intereses por adelantado', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 100.000000, 2.083333, 102.083333, 102.083333, 0.000000, 1, 1, 1, 0, 0, 'CERRADO', 'USDC'),
-(17, '2024-07-30', '26d7cbe9d9c5d7a2', 'CREDITO', 1, 'Plazo Fijo Mensual', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 100.000000, 1.666667, 101.666667, 101.666667, 0.000000, 1, 0, 1, 0, 0, 'CERRADO', 'USDC'),
-(18, '2024-07-31', '26d7cbe9d9c5d7a2', 'CREDITO', 1, 'Plazo Fijo Mensual', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 100.000000, 1.666667, 101.666667, 101.666667, 0.000000, 1, 0, 1, 0, 0, 'CERRADO', 'USDC'),
-(19, '2024-07-31', '72b3d68c1ec373cb', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 1, 0, 0, 'CERRADO', 'USDC'),
-(22, '2024-08-01', 'd4cb49b11c3d20a4', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 1, 0, 0, 'CERRADO', 'USDC'),
-(23, '2024-09-01', 'd4cb49b11c3d20a4', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 0, 1, 0, 'ACTIVO', 'USDC'),
-(24, '2024-08-06', '09f56bb35ebbf4f9', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 1, 0, 0, 'CERRADO', 'USDC'),
-(25, '2024-09-06', '09f56bb35ebbf4f9', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 0, 1, 0, 'ACTIVO', 'USDC');
+(26, '2024-08-08', '875e084b25619b5b', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 1, 0, 0, 'CERRADO', 'USDC'),
+(27, '2024-09-08', '875e084b25619b5b', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 0, 1, 0, 'ACTIVO', 'USDC');
 
 -- --------------------------------------------------------
 
@@ -275,6 +292,67 @@ INSERT INTO `notificaciones` (`ID`, `IDPEDIDO`, `FECHA`, `IDUSUARIO`, `UBICACION
 (5, '6ac682ad408aeaea', '2024-08-04 02:10:07', 3, 'chat.php?chat=&idpedido=6ac682ad408aeaea', 'Pedido #6ac682ad408aeaea Tiene un Nuevo Mensaje ', '#FFC0CB', '#1A1A1A', 1, 0),
 (6, '6ac682ad408aeaea', '2024-08-04 02:11:06', 5, 'chat.php?chat=&idpedido=6ac682ad408aeaea', 'Pedido #6ac682ad408aeaea Tiene un Nuevo Mensaje ', '#FFC0CB', '#1A1A1A', 1, 0),
 (7, '6ac682ad408aeaea', '2024-08-04 02:34:26', 3, 'chat.php?chat=&idpedido=6ac682ad408aeaea', 'Pedido #6ac682ad408aeaea Tiene un Nuevo Mensaje ', '#FFC0CB', '#1A1A1A', 1, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `parametros`
+--
+
+CREATE TABLE `parametros` (
+  `ID` int(11) NOT NULL,
+  `CAPITAL` decimal(16,8) NOT NULL DEFAULT 0.00000000,
+  `ESCALONES` int(11) DEFAULT 4,
+  `INVXCOMPRA` decimal(16,8) NOT NULL DEFAULT 0.00000000,
+  `DISPONIBLE` decimal(16,8) NOT NULL DEFAULT 0.00000000,
+  `GANANCIA` decimal(16,8) NOT NULL DEFAULT 0.00000000,
+  `PERDIDA` decimal(16,8) NOT NULL DEFAULT 0.00000000,
+  `IMPUESTO` decimal(16,8) NOT NULL DEFAULT 0.02000000,
+  `LOCAL` int(11) DEFAULT 1,
+  `BINANCE` int(11) DEFAULT 0,
+  `APIKEY` varchar(255) DEFAULT NULL,
+  `SECRET` varchar(255) DEFAULT NULL,
+  `PUNTOS` decimal(16,8) NOT NULL DEFAULT 0.00000000,
+  `DATOS` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`DATOS`)),
+  `GRAFICO` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `parametros`
+--
+
+INSERT INTO `parametros` (`ID`, `CAPITAL`, `ESCALONES`, `INVXCOMPRA`, `DISPONIBLE`, `GANANCIA`, `PERDIDA`, `IMPUESTO`, `LOCAL`, `BINANCE`, `APIKEY`, `SECRET`, `PUNTOS`, `DATOS`, `GRAFICO`) VALUES
+(1, 0.00000000, 1, 0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.02000000, 1, 0, 'iwmGI5RxUzQrnVgVQsnGuiif2PfGvx5cXuuT9wYJ8nZFUqrrhXBTLv9WQHezUd3v', '22ifWVZjo9qiDqF14hWA56IAbLPjtavlGxHYrN9It0VI5fCFcHxsIwxwxi0GvG9N', 0.00000000, '{\"asset\":\"BTC\",\"ultimaventa\":\"0.00000\",\"price\":\"0.00000000\",\"btc\":\"0.00000000\",\"colorbtc\":\"#4BC883\",\"symbol\":\"<div class=odometros style=--data:0deg;><div id=grad2>BUY</div></div>\",\"moneda\":\"BTCUSDC\",\"tendencia\":\"<span style=color:#EA465C;font-weight:bold;>&#9660;</span>\",\"color\":\"#4BC883\",\"maxdia\":\"0.00000000\",\"mindia\":\"0.00000000\",\"totalTendencia\":\"<span style=color:#EA465C;font-weight:bold;>&#9660;</span>\",\"utc\":\"5:10 AM\",\"techo\":\"0.000000000000\",\"piso\":\"0.000000000000\",\"ant\":\"0.00000000\",\"nivel\":\"<div class=odometros style=--data:0deg;><div id=grad2>SELL</div></div>\",\"nivelbtc\":\"<div class=odometros style=--data:0deg;><div id=grad2>BTC</div></div>\",\"porcenmax\":\"0%\",\"ganancia\":\"0.00000000\",\"perdida\":\"0.00000000\",\"capital\":\"0.00000000\",\"disponible\":\"0.00000000\",\"escalones\":\"1\",\"invxcompra\":\"0.00000000\",\"totalpromedio\":0,\"xdisponible\":0,\"auto\":\"1\",\"bina\":\"0\",\"impuesto\":\"0.02000000\",\"recordCount\":null,\"colordisp\":\"#4BC883\",\"labelpricebitcoin\":\"0.00\",\"labelpricemoneda\":\"0.00000000\",\"precio_venta\":\"0.00000000\",\"listasset\":\"<table style=text-align:right;><td><span style=cursor:pointer;color:#4BC883;>BTC</span></td><td><span style=color:#4BC883;font-weight:bold;>0.00000000</span></td><td><span class=bolita style=color:green;>&#9679;</span></td></table>\",\"nivelcompra\":\"<div class=odometroalert style=--color1:#089981;--data1:80deg;--color2:#089981;--data2:220deg;--color3:#089981;--data3:360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>BUY</div></div>\"}', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `prices`
+--
+
+CREATE TABLE `prices` (
+  `ID` int(11) NOT NULL,
+  `FECHA` timestamp NOT NULL DEFAULT current_timestamp(),
+  `MONEDA` varchar(10) DEFAULT 'BTCUSDT',
+  `DATOS` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`DATOS`)),
+  `ACTUAL` decimal(16,8) NOT NULL DEFAULT 0.00000000,
+  `ARRIBA` decimal(16,8) NOT NULL DEFAULT 0.00000000,
+  `ABAJO` decimal(16,8) NOT NULL DEFAULT 0.00000000,
+  `BAJISTA` int(11) DEFAULT 0,
+  `ALCISTA` int(11) DEFAULT 0,
+  `VERDE` int(11) DEFAULT 0,
+  `NARANJA` int(11) DEFAULT 0,
+  `ROJO` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `prices`
+--
+
+INSERT INTO `prices` (`ID`, `FECHA`, `MONEDA`, `DATOS`, `ACTUAL`, `ARRIBA`, `ABAJO`, `BAJISTA`, `ALCISTA`, `VERDE`, `NARANJA`, `ROJO`) VALUES
+(3, '2024-08-08 14:31:48', 'BTCUSDC', '{\"asset\":\"BTC\",\"ultimaventa\":\"0.00000\",\"price\":\"59586.01000000\",\"btc\":\"59586.01000000\",\"colorbtc\":\"#4BC883\",\"symbol\":\"<div class=odometros style=--data:0deg;><div id=grad2>BUY</div></div>\",\"moneda\":\"BTCUSDC\",\"tendencia\":\"<span style=color:#EA465C;font-weight:bold;>&#9660;</span>\",\"color\":\"#F37A8B\",\"maxdia\":\"59662.00000000\",\"mindia\":\"58734.00000000\",\"totalTendencia\":\"<span style=color:#EA465C;font-weight:bold;>&#9660;</span>\",\"utc\":\"1:54 PM\",\"techo\":\"59662.000000000000\",\"piso\":\"58734.000000000000\",\"ant\":\"59662.00000000\",\"nivel\":\"<div class=odometros style=--data:0deg;><div id=grad2>SELL</div></div>\",\"nivelbtc\":\"<div class=odometros style=--data:0deg;><div id=grad2>BTC</div></div>\",\"porcenmax\":\"92%\",\"ganancia\":\"0.00000000\",\"perdida\":\"0.00000000\",\"capital\":\"0.00000000\",\"disponible\":\"0.00000000\",\"escalones\":\"1\",\"invxcompra\":\"0.00000000\",\"totalpromedio\":59198,\"auto\":\"1\",\"bina\":\"0\",\"impuesto\":\"0.02000000\",\"colordisp\":\"#4BC883\",\"labelpricebitcoin\":\"59586.01000000\",\"labelpricemoneda\":\"59586.01\",\"precio_venta\":\"0.00000000\",\"listasset\":\" <span style=cursor:pointer;color:#F37A8B;>BTC</span> <span style=color:#F37A8B;font-weight:bold;>59586.01</span> <span class=bolita style=color:red;>&#9679;</span> <span style=cursor:pointer;color:#F37A8B;>ETH</span> <span style=color:#F37A8B;font-weight:bold;>2584.31</span> <span class=bolita style=color:red;>&#9679;</span>\",\"nivelcompra\":\"<div class=odometroalert style=--color1:#089981;--data1:-80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>BUY</div></div>\"}', 59586.01000000, 59662.00000000, 58734.00000000, 1, 0, 0, 0, 0),
+(4, '2024-08-08 14:31:49', 'BTCUSDT', NULL, 0.00000000, 0.00000000, 0.00000000, 0, 0, 0, 0, 0),
+(5, '2024-08-08 17:09:27', 'ETHUSDC', '{\"asset\":\"ETH\",\"ultimaventa\":\"0.00000\",\"price\":\"2583.40000000\",\"btc\":\"59586.01000000\",\"colorbtc\":\"#4BC883\",\"symbol\":\"<div class=odometros style=--data:0deg;><div id=grad2>BUY</div></div>\",\"moneda\":\"ETHUSDC\",\"tendencia\":\"<span style=color:#EA465C;font-weight:bold;>&#9660;</span>\",\"color\":\"#F37A8B\",\"maxdia\":\"2589.20000000\",\"mindia\":\"2579.84000000\",\"totalTendencia\":\"<span style=color:#EA465C;font-weight:bold;>&#9660;</span>\",\"utc\":\"1:54 PM\",\"techo\":\"2589.200000000000\",\"piso\":\"2579.840000000000\",\"ant\":\"2589.20000000\",\"nivel\":\"<div class=odometros style=--data:0deg;><div id=grad2>SELL</div></div>\",\"nivelbtc\":\"<div class=odometros style=--data:0deg;><div id=grad2>BTC</div></div>\",\"porcenmax\":\"38%\",\"ganancia\":\"0.00000000\",\"perdida\":\"0.00000000\",\"capital\":\"0.00000000\",\"disponible\":\"0.00000000\",\"escalones\":\"1\",\"invxcompra\":\"0.00000000\",\"totalpromedio\":2584.52,\"auto\":\"1\",\"bina\":\"0\",\"impuesto\":\"0.02000000\",\"colordisp\":\"#4BC883\",\"labelpricebitcoin\":\"59586.01000000\",\"labelpricemoneda\":\"2583.40\",\"precio_venta\":\"0.00000000\",\"listasset\":\" <span style=cursor:pointer;color:#F37A8B;>BTC</span> <span style=color:#F37A8B;font-weight:bold;>59586.01</span> <span class=bolita style=color:red;>&#9679;</span> <span style=cursor:pointer;color:#F37A8B;>ETH</span> <span style=color:#F37A8B;font-weight:bold;>2583.40</span> <span class=bolita style=color:red;>&#9679;</span>\",\"nivelcompra\":\"<div class=odometroalert style=--color1:#089981;--data1:-80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>BUY</div></div>\"}', 2583.40000000, 2589.20000000, 2579.84000000, 1, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -426,7 +504,7 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`ID`, `FECHA`, `IP`, `NOMBRE_USUARIO`, `PASSWORD`, `VKEY`, `CORREO`, `TELEFONO`, `NOMBRE`, `NACIONALIDAD`, `LINKREFERIDO`, `CODIGOREFERIDO`, `BEP20`, `BINANCE`, `RATE`, `SALDO`, `USDT`, `P2P`, `SALDOREFERIDO`, `VERIFICADO`, `ACTIVO`, `LABORANDO`, `BLOQUEADO`, `NIVEL`, `ACTIVE_BEP20`, `ACTIVE_BINANCE`, `QR_BEP20`, `QR_BINANCE`, `PERFIL`) VALUES
 (3, '2024-07-18 15:12:20', '::1', 'Didapax', '$2y$10$iz6Cyr2pj9.g0gz9Yh5N6Oit2MXAT8PMYnM5hksLMPDkItBSWRLei', '88c99461e5d51625', 'alfonsi.acosta@gmail.com', NULL, 'alfonsi.acosta@gmail.com', NULL, NULL, '1092e38b3bfe123b', '0x9Ad41AAeaDcc2A9A3285dC82DbF95C0CEaD09718', '834916814', 2, 6.6300, 0.0000, 0.0000, 0.0000, 1, 1, 1, 0, 1, 1, 1, '0e51ba406d.png', 'fbe1223b2f.png', '2812b740cd.png'),
 (4, '2024-07-18 23:01:27', '::1', NULL, '$2y$10$nlwRdUti0f6KfGHlFxxPxO5Wss8ekUOpUYLBCMCfQVmcqx7e2vH1q', '9776e14db528aa0d', 'alfonsi@gmail.com', NULL, 'alfonsi@gmail.com', NULL, NULL, 'f57dc7a0254af0bc', NULL, NULL, 0, 0.0000, 0.0000, 0.0000, 0.0000, 0, 0, 0, 0, 0, 0, 0, 'perfil.jpg', 'perfil.jpg', 'perfil.jpg'),
-(5, '2024-07-18 23:12:17', '::1', NULL, '$2y$10$qqzuKPChM4NXdlsWJ.eFb.pjKYD/UwPKAi.XkY6f63znTdPC/2m.S', '504c0d2e6db8a604', 'pepe@gmail.com', NULL, 'pepe@gmail.com', NULL, NULL, '6d0433aef2547f52', NULL, 'alfonsi.acosta@gmail.com', 0, 270.0000, 0.0000, 0.0000, 0.0000, 1, 1, 0, 0, 0, 0, 0, 'perfil.jpg', 'perfil.jpg', 'perfil.jpg');
+(5, '2024-07-18 23:12:17', '::1', NULL, '$2y$10$qqzuKPChM4NXdlsWJ.eFb.pjKYD/UwPKAi.XkY6f63znTdPC/2m.S', '504c0d2e6db8a604', 'pepe@gmail.com', NULL, 'pepe@gmail.com', NULL, NULL, '6d0433aef2547f52', NULL, 'alfonsi.acosta@gmail.com', 0, 265.0000, 0.0000, 0.0000, 0.0000, 1, 1, 0, 0, 0, 0, 0, 'perfil.jpg', 'perfil.jpg', 'perfil.jpg');
 
 --
 -- Índices para tablas volcadas
@@ -442,6 +520,12 @@ ALTER TABLE `apuestas`
 -- Indices de la tabla `chat`
 --
 ALTER TABLE `chat`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indices de la tabla `datos`
+--
+ALTER TABLE `datos`
   ADD PRIMARY KEY (`ID`);
 
 --
@@ -478,6 +562,18 @@ ALTER TABLE `lista`
 -- Indices de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indices de la tabla `parametros`
+--
+ALTER TABLE `parametros`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indices de la tabla `prices`
+--
+ALTER TABLE `prices`
   ADD PRIMARY KEY (`ID`);
 
 --
@@ -518,13 +614,19 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `apuestas`
 --
 ALTER TABLE `apuestas`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `chat`
 --
 ALTER TABLE `chat`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT de la tabla `datos`
+--
+ALTER TABLE `datos`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `enviolista`
@@ -542,7 +644,7 @@ ALTER TABLE `juegos`
 -- AUTO_INCREMENT de la tabla `librocontable`
 --
 ALTER TABLE `librocontable`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `links`
@@ -561,6 +663,18 @@ ALTER TABLE `lista`
 --
 ALTER TABLE `notificaciones`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `parametros`
+--
+ALTER TABLE `parametros`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `prices`
+--
+ALTER TABLE `prices`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `promo`
