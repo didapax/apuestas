@@ -474,7 +474,7 @@ function listAsset(){
       $totalPromedio = ($promedioFlotante + $promedioUndante) /2;       
       $alerta = returnAlertas($totalPromedio,$moneda);
       $color = "red";
-      $colorAlerta="red";
+      $colorAlerta="#171A1E";
       $asset = $row['ASSET'];
       $elid = $row['ID'];
       $price = formatPrice(readPrices($moneda)['ACTUAL'],$moneda);
