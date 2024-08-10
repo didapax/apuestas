@@ -1,5 +1,5 @@
 <?php 
- //hola
+ //hola est es un comentario
     ?>
 <link rel="stylesheet" href="css/style.css">
 <header > 
