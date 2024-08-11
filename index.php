@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <?php
     include "modulo.php";
-    date_default_timezone_set('America/Caracas');
-    refreshDataAuto();
+    date_default_timezone_set('America/Caracas');    
 ?>
 <html style="overflow: scroll;">
     <head>
@@ -119,6 +118,7 @@
                 $correo = readClienteId($_SESSION['user'])['CORREO'];
                 $saldo = readClienteId($_SESSION['user'])['SALDO'];
                 recalcularSuscripciones($correo);
+                refreshDataAuto();
                 promoFlotante();
             }
         ?>

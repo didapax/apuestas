@@ -105,6 +105,7 @@ function recalcularSuscripciones($correo){
   if($resultado){
     while ($row = mysqli_fetch_assoc($resultado)) {
       $inversion = $row['INVERSION'];
+      $devuelveCapital = $row['DEVUELVE_CAPITAL'];
       $interes_adelantado = $row['INTERES_ADELANTADO'];
       $capital = $row['MONTO'];
       $interes = $row['INTERES_MENSUAL'];
@@ -117,7 +118,7 @@ function recalcularSuscripciones($correo){
       $n_pagos = $suscripcion['N_PAGOS'];
 
       if($inversion==1){        
-        if($interes_adelantado == 1){ 
+        if($interes_adelantado == 1){
           //la logica si tiene interes adelantado
           if($vencimiento <= $dia_actual){
             if($n_pagos > 1){
@@ -144,7 +145,12 @@ function recalcularSuscripciones($correo){
               sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND CLIENTE='$cliente'");
             }
             else{
-              $saldo = readCliente($cliente)['SALDO'] + $capital + $interes;
+              if($devuelveCapital == 0){
+                $saldo = readCliente($cliente)['SALDO'] + $interes;
+              }
+              else{
+                $saldo = readCliente($cliente)['SALDO'] + $capital + $interes;
+              }              
               sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cliente'");
               sqlconector("UPDATE APUESTAS SET PAGADOS=1, ACTIVO=0, ELIMINADO=1,ESTATUS='CERRADO' WHERE TICKET='$ticket'");
               sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND CLIENTE='$cliente'");              
@@ -474,7 +480,7 @@ function listAsset(){
       $totalPromedio = ($promedioFlotante + $promedioUndante) /2;       
       $alerta = returnAlertas($totalPromedio,$moneda);
       $color = "red";
-      $colorAlerta="red";
+      $colorAlerta="#171A1E";
       $asset = $row['ASSET'];
       $elid = $row['ID'];
       $price = formatPrice(readPrices($moneda)['ACTUAL'],$moneda);
