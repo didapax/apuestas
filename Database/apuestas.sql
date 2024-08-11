@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-08-2024 a las 19:56:11
+-- Tiempo de generación: 11-08-2024 a las 04:11:47
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -47,6 +47,7 @@ CREATE TABLE `apuestas` (
   `N_PAGOS` int(11) NOT NULL DEFAULT 0,
   `PAGADOS` int(11) NOT NULL DEFAULT 0,
   `ACTIVO` int(11) NOT NULL DEFAULT 1,
+  `DEVUELVE_CAPITAL` int(11) NOT NULL DEFAULT 0,
   `ELIMINADO` int(11) NOT NULL DEFAULT 0,
   `ESTATUS` varchar(35) DEFAULT 'ACTIVO',
   `MONEDA` varchar(20) DEFAULT 'USDC'
@@ -56,8 +57,9 @@ CREATE TABLE `apuestas` (
 -- Volcado de datos para la tabla `apuestas`
 --
 
-INSERT INTO `apuestas` (`ID`, `FECHA`, `INICIO`, `FIN`, `TICKET`, `TIPO`, `IDJUEGO`, `JUEGO`, `CAJERO`, `CLIENTE`, `PORCIENTO`, `MONTO`, `INTERES_MENSUAL`, `CUOTA_MENSUAL`, `TOTAL_PAGAR`, `COMISION`, `N_PAGOS`, `PAGADOS`, `ACTIVO`, `ELIMINADO`, `ESTATUS`, `MONEDA`) VALUES
-(18, '2024-08-08 17:54:41', '2024-08-08', '2024-09-08', '875e084b25619b5b', 'MENSUAL', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 0, 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 1, 0, 1, 0, 'ACTIVO', 'USDC');
+INSERT INTO `apuestas` (`ID`, `FECHA`, `INICIO`, `FIN`, `TICKET`, `TIPO`, `IDJUEGO`, `JUEGO`, `CAJERO`, `CLIENTE`, `PORCIENTO`, `MONTO`, `INTERES_MENSUAL`, `CUOTA_MENSUAL`, `TOTAL_PAGAR`, `COMISION`, `N_PAGOS`, `PAGADOS`, `ACTIVO`, `DEVUELVE_CAPITAL`, `ELIMINADO`, `ESTATUS`, `MONEDA`) VALUES
+(18, '2024-08-08 17:54:41', '2024-08-08', '2024-09-08', '875e084b25619b5b', 'MENSUAL', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 0, 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 1, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(19, '2024-08-10 13:05:58', '2024-08-10', '2025-08-10', '66faacdeaca1dac1', 'ANUAL', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 190, 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 12, 0, 1, 0, 0, 'ACTIVO', 'USDC');
 
 -- --------------------------------------------------------
 
@@ -169,6 +171,7 @@ CREATE TABLE `juegos` (
   `FAVORITO` int(11) NOT NULL DEFAULT 0,
   `ELIMINADO` int(11) NOT NULL DEFAULT 0,
   `ACTIVO` int(11) NOT NULL DEFAULT 1,
+  `DEVUELVE_CAPITAL` int(11) NOT NULL DEFAULT 0,
   `IMAGEN` blob DEFAULT NULL,
   `MONEDA` varchar(20) DEFAULT 'USDC'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -177,10 +180,11 @@ CREATE TABLE `juegos` (
 -- Volcado de datos para la tabla `juegos`
 --
 
-INSERT INTO `juegos` (`ID`, `FECHA`, `JUEGO`, `DESCRIPCION`, `ANALISIS`, `CAJERO`, `TIPO`, `WALLET`, `REFERENCIA`, `PORCIENTO`, `MONTO`, `COMISION`, `MIN`, `MAX`, `RATE`, `BLOQUEADO`, `VISIBLE`, `ESTATUS`, `PORADELANTADO`, `FAVORITO`, `ELIMINADO`, `ACTIVO`, `IMAGEN`, `MONEDA`) VALUES
-(1, '2024-07-27 22:36:31', 'Plazo Fijo Mensual', '<p><span style=\"font-weight: normal;\">Plazo Fijo Mensual el capital se Retiene y se Libera al final del plazo junto con los intereses</span></p><p>20% de interés&nbsp; Anual</p>', NULL, 'alfonsi.acosta@gmail.com', 'MENSUAL', NULL, NULL, 20, 100.000000, 0.000000, 10, 10, 3, 0, 0, 'ACTIVO', 0, 0, 0, 1, NULL, 'USDC'),
-(2, '2024-07-28 01:43:17', 'Suscripción Por 4 Señales', '<p><span style=\"font-weight: normal;\">Con la compra de esta suscripción tendrás 4 señales diarias&nbsp; de la tendencia para compra y venta de</span> ADA, DOGE, ETH, BTC</p><p><i>Por tan solo<span style=\"font-size: 18px;\"> 5 Usdc</span> Mensuales&nbsp;</i></p>', '<p id=\"edit\"><p>Análisis Técnico</p><ul><li>ADA (comprar)</li><li>DOGE (Comprar)</li><li>ETH (vender)</li><li>BTC (Vender)</li></ul><p>el mercado esta mixto en promedio se debe tener en cuenta</p></p>', 'alfonsi.acosta@gmail.com', 'MENSUAL', NULL, NULL, 0, 5.000000, 0.000000, 100, 10, 4, 0, 0, 'ACTIVO', 0, 0, 0, 1, NULL, 'USDC'),
-(5, '2024-07-28 02:13:00', 'Intereses por adelantado', 'Interes oor adelantado', NULL, 'alfonsi.acosta@gmail.com', 'MENSUAL', NULL, NULL, 25, 100.000000, 0.000000, 10, 10, 5, 0, 0, 'ACTIVO', 1, 1, 1, 1, NULL, 'USDC');
+INSERT INTO `juegos` (`ID`, `FECHA`, `JUEGO`, `DESCRIPCION`, `ANALISIS`, `CAJERO`, `TIPO`, `WALLET`, `REFERENCIA`, `PORCIENTO`, `MONTO`, `COMISION`, `MIN`, `MAX`, `RATE`, `BLOQUEADO`, `VISIBLE`, `ESTATUS`, `PORADELANTADO`, `FAVORITO`, `ELIMINADO`, `ACTIVO`, `DEVUELVE_CAPITAL`, `IMAGEN`, `MONEDA`) VALUES
+(1, '2024-07-27 22:36:31', 'Plazo Fijo Mensual', '<p><span style=\"font-weight: normal;\">Plazo Fijo Mensual el capital se Retiene y se Libera al final del plazo junto con los intereses</span></p><p>20% de interés&nbsp; Anual</p>', NULL, 'alfonsi.acosta@gmail.com', 'MENSUAL', NULL, NULL, 20, 100.000000, 0.000000, 10, 10, 3, 0, 0, 'ACTIVO', 0, 0, 0, 1, 0, NULL, 'USDC'),
+(2, '2024-07-28 01:43:17', 'Suscripción Por 4 Señales', '<p><span style=\"font-weight: normal;\">Con la compra de esta suscripción tendrás 4 señales diarias&nbsp; de la tendencia para compra y venta de</span> ADA, DOGE, ETH, BTC</p><p><i>Por tan solo<span style=\"font-size: 18px;\"> 5 Usdc</span> Mensuales&nbsp;</i></p>', '<p id=\"edit\"><p>Análisis Técnico</p><ul><li>ADA (comprar)</li><li>DOGE (Comprar)</li><li>ETH (vender)</li><li>BTC (Vender)</li></ul><p>el mercado esta mixto en promedio se debe tener en cuenta</p></p>', 'alfonsi.acosta@gmail.com', 'MENSUAL', NULL, NULL, 0, 5.000000, 0.000000, 100, 10, 4, 0, 0, 'ACTIVO', 0, 0, 0, 1, 0, NULL, 'USDC'),
+(5, '2024-07-28 02:13:00', 'Intereses por adelantado', 'Interes oor adelantado', NULL, 'alfonsi.acosta@gmail.com', 'MENSUAL', NULL, NULL, 25, 100.000000, 0.000000, 10, 10, 5, 0, 0, 'ACTIVO', 1, 1, 1, 1, 0, NULL, 'USDC'),
+(6, '2024-08-10 01:37:45', '190% RENTABILIDAD ANUAL INVERSIÓN 20$', '<div>OBTIENES EN&nbsp; EL AÑO UN TOTAL DE 38$</div><div>UTILIDAD Y UN PORCENTAJE DEL CAPITAL INVERTIDO </div><div>DISPONIBLE MENSUAL 3.16$</div><div><br></div> ', NULL, 'alfonsi.acosta@gmail.com', 'ANUAL', NULL, NULL, 190, 20.000000, 0.000000, 10, 10, 2, 0, 0, 'ACTIVO', 0, 0, 0, 1, 0, NULL, 'USDC');
 
 -- --------------------------------------------------------
 
@@ -206,6 +210,7 @@ CREATE TABLE `librocontable` (
   `INTERES_ADELANTADO` int(11) NOT NULL DEFAULT 0,
   `PAGADO` int(11) NOT NULL DEFAULT 0,
   `ACTIVO` int(11) NOT NULL DEFAULT 1,
+  `DEVUELVE_CAPITAL` int(11) NOT NULL DEFAULT 0,
   `ELIMINADO` int(11) NOT NULL DEFAULT 0,
   `ESTATUS` varchar(35) DEFAULT 'ACTIVO',
   `MONEDA` varchar(4) DEFAULT 'USDC'
@@ -215,9 +220,22 @@ CREATE TABLE `librocontable` (
 -- Volcado de datos para la tabla `librocontable`
 --
 
-INSERT INTO `librocontable` (`ID`, `FECHA`, `TICKET`, `TIPO`, `IDJUEGO`, `JUEGO`, `CAJERO`, `CLIENTE`, `MONTO`, `INTERES_MENSUAL`, `CUOTA_MENSUAL`, `TOTAL_PAGAR`, `COMISION`, `INVERSION`, `INTERES_ADELANTADO`, `PAGADO`, `ACTIVO`, `ELIMINADO`, `ESTATUS`, `MONEDA`) VALUES
-(26, '2024-08-08', '875e084b25619b5b', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 1, 0, 0, 'CERRADO', 'USDC'),
-(27, '2024-09-08', '875e084b25619b5b', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 0, 1, 0, 'ACTIVO', 'USDC');
+INSERT INTO `librocontable` (`ID`, `FECHA`, `TICKET`, `TIPO`, `IDJUEGO`, `JUEGO`, `CAJERO`, `CLIENTE`, `MONTO`, `INTERES_MENSUAL`, `CUOTA_MENSUAL`, `TOTAL_PAGAR`, `COMISION`, `INVERSION`, `INTERES_ADELANTADO`, `PAGADO`, `ACTIVO`, `DEVUELVE_CAPITAL`, `ELIMINADO`, `ESTATUS`, `MONEDA`) VALUES
+(26, '2024-08-08', '875e084b25619b5b', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 1, 0, 0, 0, 'CERRADO', 'USDC'),
+(27, '2024-09-08', '875e084b25619b5b', 'DEBITO', 2, 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 5.000000, 0.000000, 5.000000, 5.000000, 0.000000, 0, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(28, '2024-08-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 1, 0, 0, 0, 'CERRADO', 'USDC'),
+(29, '2024-09-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(30, '2024-10-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(31, '2024-11-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(32, '2024-12-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(33, '2025-01-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(34, '2025-02-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(35, '2025-03-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(36, '2025-04-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(37, '2025-05-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(38, '2025-06-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(39, '2025-07-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(40, '2025-08-10', '66faacdeaca1dac1', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC');
 
 -- --------------------------------------------------------
 
@@ -350,9 +368,15 @@ CREATE TABLE `prices` (
 --
 
 INSERT INTO `prices` (`ID`, `FECHA`, `MONEDA`, `DATOS`, `ACTUAL`, `ARRIBA`, `ABAJO`, `BAJISTA`, `ALCISTA`, `VERDE`, `NARANJA`, `ROJO`) VALUES
-(3, '2024-08-08 14:31:48', 'BTCUSDC', '{\"asset\":\"BTC\",\"ultimaventa\":\"0.00000\",\"price\":\"59586.01000000\",\"btc\":\"59586.01000000\",\"colorbtc\":\"#4BC883\",\"symbol\":\"<div class=odometros style=--data:0deg;><div id=grad2>BUY</div></div>\",\"moneda\":\"BTCUSDC\",\"tendencia\":\"<span style=color:#EA465C;font-weight:bold;>&#9660;</span>\",\"color\":\"#F37A8B\",\"maxdia\":\"59662.00000000\",\"mindia\":\"58734.00000000\",\"totalTendencia\":\"<span style=color:#EA465C;font-weight:bold;>&#9660;</span>\",\"utc\":\"1:54 PM\",\"techo\":\"59662.000000000000\",\"piso\":\"58734.000000000000\",\"ant\":\"59662.00000000\",\"nivel\":\"<div class=odometros style=--data:0deg;><div id=grad2>SELL</div></div>\",\"nivelbtc\":\"<div class=odometros style=--data:0deg;><div id=grad2>BTC</div></div>\",\"porcenmax\":\"92%\",\"ganancia\":\"0.00000000\",\"perdida\":\"0.00000000\",\"capital\":\"0.00000000\",\"disponible\":\"0.00000000\",\"escalones\":\"1\",\"invxcompra\":\"0.00000000\",\"totalpromedio\":59198,\"auto\":\"1\",\"bina\":\"0\",\"impuesto\":\"0.02000000\",\"colordisp\":\"#4BC883\",\"labelpricebitcoin\":\"59586.01000000\",\"labelpricemoneda\":\"59586.01\",\"precio_venta\":\"0.00000000\",\"listasset\":\" <span style=cursor:pointer;color:#F37A8B;>BTC</span> <span style=color:#F37A8B;font-weight:bold;>59586.01</span> <span class=bolita style=color:red;>&#9679;</span> <span style=cursor:pointer;color:#F37A8B;>ETH</span> <span style=color:#F37A8B;font-weight:bold;>2584.31</span> <span class=bolita style=color:red;>&#9679;</span>\",\"nivelcompra\":\"<div class=odometroalert style=--color1:#089981;--data1:-80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>BUY</div></div>\"}', 59586.01000000, 59662.00000000, 58734.00000000, 1, 0, 0, 0, 0),
+(3, '2024-08-08 14:31:48', 'BTCUSDC', '{\"asset\":\"BTC\",\"ultimaventa\":\"0.00000\",\"price\":\"61072.65000000\",\"btc\":\"61072.65000000\",\"colorbtc\":\"#4BC883\",\"symbol\":\"<div class=odometros style=--data:360deg;><div id=grad2>BUY</div></div>\",\"moneda\":\"BTCUSDC\",\"tendencia\":\"<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>\",\"color\":\"#4BC883\",\"maxdia\":\"61072.65000000\",\"mindia\":\"60619.64000000\",\"totalTendencia\":\"<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>\",\"utc\":\"10:10 PM\",\"techo\":\"60492.986666666667\",\"piso\":\"59962.550000000000\",\"ant\":\"60728.00000000\",\"nivel\":\"<div class=odometros style=--data:360deg;><div id=grad2>SELL</div></div>\",\"nivelbtc\":\"<div class=odometros style=--data:0deg;><div id=grad2>BTC</div></div>\",\"porcenmax\":\"100%\",\"ganancia\":\"0.00000000\",\"perdida\":\"0.00000000\",\"capital\":\"0.00000000\",\"disponible\":\"0.00000000\",\"escalones\":\"1\",\"invxcompra\":\"0.00000000\",\"totalpromedio\":60227.76833333333,\"auto\":\"1\",\"bina\":\"0\",\"impuesto\":\"0.02000000\",\"colordisp\":\"#4BC883\",\"labelpricebitcoin\":\"61072.65000000\",\"labelpricemoneda\":\"61072.65\",\"precio_venta\":\"0.00000000\",\"listasset\":\" <span style=cursor:pointer;color:#4BC883;>BTC</span> <span style=color:#4BC883;font-weight:bold;>61072.65</span> <span class=bolita style=color:#171A1E;>&#9679;</span> <span style=cursor:pointer;color:#F37A8B;>ETH</span> <span style=color:#F37A8B;font-weight:bold;>2607.02</span> <span class=bolita style=color:#171A1E;>&#9679;</span>\",\"nivelcompra\":\"<div class=odometroalert style=--color1:#089981;--data1:-80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>BUY</div></div>\"}', 59620.00000000, 59678.31000000, 58734.00000000, 1, 0, 0, 0, 0),
 (4, '2024-08-08 14:31:49', 'BTCUSDT', NULL, 0.00000000, 0.00000000, 0.00000000, 0, 0, 0, 0, 0),
-(5, '2024-08-08 17:09:27', 'ETHUSDC', '{\"asset\":\"ETH\",\"ultimaventa\":\"0.00000\",\"price\":\"2583.40000000\",\"btc\":\"59586.01000000\",\"colorbtc\":\"#4BC883\",\"symbol\":\"<div class=odometros style=--data:0deg;><div id=grad2>BUY</div></div>\",\"moneda\":\"ETHUSDC\",\"tendencia\":\"<span style=color:#EA465C;font-weight:bold;>&#9660;</span>\",\"color\":\"#F37A8B\",\"maxdia\":\"2589.20000000\",\"mindia\":\"2579.84000000\",\"totalTendencia\":\"<span style=color:#EA465C;font-weight:bold;>&#9660;</span>\",\"utc\":\"1:54 PM\",\"techo\":\"2589.200000000000\",\"piso\":\"2579.840000000000\",\"ant\":\"2589.20000000\",\"nivel\":\"<div class=odometros style=--data:0deg;><div id=grad2>SELL</div></div>\",\"nivelbtc\":\"<div class=odometros style=--data:0deg;><div id=grad2>BTC</div></div>\",\"porcenmax\":\"38%\",\"ganancia\":\"0.00000000\",\"perdida\":\"0.00000000\",\"capital\":\"0.00000000\",\"disponible\":\"0.00000000\",\"escalones\":\"1\",\"invxcompra\":\"0.00000000\",\"totalpromedio\":2584.52,\"auto\":\"1\",\"bina\":\"0\",\"impuesto\":\"0.02000000\",\"colordisp\":\"#4BC883\",\"labelpricebitcoin\":\"59586.01000000\",\"labelpricemoneda\":\"2583.40\",\"precio_venta\":\"0.00000000\",\"listasset\":\" <span style=cursor:pointer;color:#F37A8B;>BTC</span> <span style=color:#F37A8B;font-weight:bold;>59586.01</span> <span class=bolita style=color:red;>&#9679;</span> <span style=cursor:pointer;color:#F37A8B;>ETH</span> <span style=color:#F37A8B;font-weight:bold;>2583.40</span> <span class=bolita style=color:red;>&#9679;</span>\",\"nivelcompra\":\"<div class=odometroalert style=--color1:#089981;--data1:-80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>BUY</div></div>\"}', 2583.40000000, 2589.20000000, 2579.84000000, 1, 0, 0, 0, 0);
+(5, '2024-08-08 17:09:27', 'ETHUSDC', '{\"asset\":\"ETH\",\"ultimaventa\":\"0.00000\",\"price\":\"2627.81000000\",\"btc\":\"61072.65000000\",\"colorbtc\":\"#4BC883\",\"symbol\":\"<div class=odometros style=--data:0deg;><div id=grad2>BUY</div></div>\",\"moneda\":\"ETHUSDC\",\"tendencia\":\"<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>\",\"color\":\"#4BC883\",\"maxdia\":\"2631.80000000\",\"mindia\":\"2601.60000000\",\"totalTendencia\":\"<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>\",\"utc\":\"10:10 PM\",\"techo\":\"2610.463333333333\",\"piso\":\"2593.676666666667\",\"ant\":\"2610.39000000\",\"nivel\":\"<div class=odometros style=--data:291.6deg;><div id=grad2>SELL</div></div>\",\"nivelbtc\":\"<div class=odometros style=--data:0deg;><div id=grad2>BTC</div></div>\",\"porcenmax\":\"87%\",\"ganancia\":\"0.00000000\",\"perdida\":\"0.00000000\",\"capital\":\"0.00000000\",\"disponible\":\"0.00000000\",\"escalones\":\"1\",\"invxcompra\":\"0.00000000\",\"totalpromedio\":2602.07,\"auto\":\"1\",\"bina\":\"0\",\"impuesto\":\"0.02000000\",\"colordisp\":\"#4BC883\",\"labelpricebitcoin\":\"61072.65000000\",\"labelpricemoneda\":\"2627.81\",\"precio_venta\":\"0.00000000\",\"listasset\":\" <span style=cursor:pointer;color:#4BC883;>BTC</span> <span style=color:#4BC883;font-weight:bold;>61072.65</span> <span class=bolita style=color:#171A1E;>&#9679;</span> <span style=cursor:pointer;color:#4BC883;>ETH</span> <span style=color:#4BC883;font-weight:bold;>2627.81</span> <span class=bolita style=color:#171A1E;>&#9679;</span>\",\"nivelcompra\":\"<div class=odometroalert style=--color1:#089981;--data1:-80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>BUY</div></div>\"}', 2577.22000000, 2589.20000000, 2577.22000000, 1, 0, 0, 0, 0),
+(6, '2024-08-10 01:32:37', 'BTCUSDC', '{\"asset\":\"BTC\",\"ultimaventa\":\"0.00000\",\"price\":\"61072.65000000\",\"btc\":\"61072.65000000\",\"colorbtc\":\"#4BC883\",\"symbol\":\"<div class=odometros style=--data:360deg;><div id=grad2>BUY</div></div>\",\"moneda\":\"BTCUSDC\",\"tendencia\":\"<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>\",\"color\":\"#4BC883\",\"maxdia\":\"61072.65000000\",\"mindia\":\"60619.64000000\",\"totalTendencia\":\"<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>\",\"utc\":\"10:10 PM\",\"techo\":\"60492.986666666667\",\"piso\":\"59962.550000000000\",\"ant\":\"60728.00000000\",\"nivel\":\"<div class=odometros style=--data:360deg;><div id=grad2>SELL</div></div>\",\"nivelbtc\":\"<div class=odometros style=--data:0deg;><div id=grad2>BTC</div></div>\",\"porcenmax\":\"100%\",\"ganancia\":\"0.00000000\",\"perdida\":\"0.00000000\",\"capital\":\"0.00000000\",\"disponible\":\"0.00000000\",\"escalones\":\"1\",\"invxcompra\":\"0.00000000\",\"totalpromedio\":60227.76833333333,\"auto\":\"1\",\"bina\":\"0\",\"impuesto\":\"0.02000000\",\"colordisp\":\"#4BC883\",\"labelpricebitcoin\":\"61072.65000000\",\"labelpricemoneda\":\"61072.65\",\"precio_venta\":\"0.00000000\",\"listasset\":\" <span style=cursor:pointer;color:#4BC883;>BTC</span> <span style=color:#4BC883;font-weight:bold;>61072.65</span> <span class=bolita style=color:#171A1E;>&#9679;</span> <span style=cursor:pointer;color:#F37A8B;>ETH</span> <span style=color:#F37A8B;font-weight:bold;>2607.02</span> <span class=bolita style=color:#171A1E;>&#9679;</span>\",\"nivelcompra\":\"<div class=odometroalert style=--color1:#089981;--data1:-80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>BUY</div></div>\"}', 60534.01000000, 60728.00000000, 60534.01000000, 0, 1, 0, 0, 0),
+(7, '2024-08-10 01:32:37', 'BTCUSDT', NULL, 0.00000000, 0.00000000, 0.00000000, 0, 0, 0, 0, 0),
+(8, '2024-08-10 01:32:38', 'ETHUSDC', '{\"asset\":\"ETH\",\"ultimaventa\":\"0.00000\",\"price\":\"2627.81000000\",\"btc\":\"61072.65000000\",\"colorbtc\":\"#4BC883\",\"symbol\":\"<div class=odometros style=--data:0deg;><div id=grad2>BUY</div></div>\",\"moneda\":\"ETHUSDC\",\"tendencia\":\"<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>\",\"color\":\"#4BC883\",\"maxdia\":\"2631.80000000\",\"mindia\":\"2601.60000000\",\"totalTendencia\":\"<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>\",\"utc\":\"10:10 PM\",\"techo\":\"2610.463333333333\",\"piso\":\"2593.676666666667\",\"ant\":\"2610.39000000\",\"nivel\":\"<div class=odometros style=--data:291.6deg;><div id=grad2>SELL</div></div>\",\"nivelbtc\":\"<div class=odometros style=--data:0deg;><div id=grad2>BTC</div></div>\",\"porcenmax\":\"87%\",\"ganancia\":\"0.00000000\",\"perdida\":\"0.00000000\",\"capital\":\"0.00000000\",\"disponible\":\"0.00000000\",\"escalones\":\"1\",\"invxcompra\":\"0.00000000\",\"totalpromedio\":2602.07,\"auto\":\"1\",\"bina\":\"0\",\"impuesto\":\"0.02000000\",\"colordisp\":\"#4BC883\",\"labelpricebitcoin\":\"61072.65000000\",\"labelpricemoneda\":\"2627.81\",\"precio_venta\":\"0.00000000\",\"listasset\":\" <span style=cursor:pointer;color:#4BC883;>BTC</span> <span style=color:#4BC883;font-weight:bold;>61072.65</span> <span class=bolita style=color:#171A1E;>&#9679;</span> <span style=cursor:pointer;color:#4BC883;>ETH</span> <span style=color:#4BC883;font-weight:bold;>2627.81</span> <span class=bolita style=color:#171A1E;>&#9679;</span>\",\"nivelcompra\":\"<div class=odometroalert style=--color1:#089981;--data1:-80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>BUY</div></div>\"}', 2602.21000000, 2610.39000000, 2602.21000000, 0, 1, 0, 0, 0),
+(9, '2024-08-10 13:02:09', 'BTCUSDC', '{\"asset\":\"BTC\",\"ultimaventa\":\"0.00000\",\"price\":\"61072.65000000\",\"btc\":\"61072.65000000\",\"colorbtc\":\"#4BC883\",\"symbol\":\"<div class=odometros style=--data:360deg;><div id=grad2>BUY</div></div>\",\"moneda\":\"BTCUSDC\",\"tendencia\":\"<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>\",\"color\":\"#4BC883\",\"maxdia\":\"61072.65000000\",\"mindia\":\"60619.64000000\",\"totalTendencia\":\"<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>\",\"utc\":\"10:10 PM\",\"techo\":\"60492.986666666667\",\"piso\":\"59962.550000000000\",\"ant\":\"60728.00000000\",\"nivel\":\"<div class=odometros style=--data:360deg;><div id=grad2>SELL</div></div>\",\"nivelbtc\":\"<div class=odometros style=--data:0deg;><div id=grad2>BTC</div></div>\",\"porcenmax\":\"100%\",\"ganancia\":\"0.00000000\",\"perdida\":\"0.00000000\",\"capital\":\"0.00000000\",\"disponible\":\"0.00000000\",\"escalones\":\"1\",\"invxcompra\":\"0.00000000\",\"totalpromedio\":60227.76833333333,\"auto\":\"1\",\"bina\":\"0\",\"impuesto\":\"0.02000000\",\"colordisp\":\"#4BC883\",\"labelpricebitcoin\":\"61072.65000000\",\"labelpricemoneda\":\"61072.65\",\"precio_venta\":\"0.00000000\",\"listasset\":\" <span style=cursor:pointer;color:#4BC883;>BTC</span> <span style=color:#4BC883;font-weight:bold;>61072.65</span> <span class=bolita style=color:#171A1E;>&#9679;</span> <span style=cursor:pointer;color:#F37A8B;>ETH</span> <span style=color:#F37A8B;font-weight:bold;>2607.02</span> <span class=bolita style=color:#171A1E;>&#9679;</span>\",\"nivelcompra\":\"<div class=odometroalert style=--color1:#089981;--data1:-80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>BUY</div></div>\"}', 61072.65000000, 61072.65000000, 60619.64000000, 0, 1, 0, 0, 0),
+(10, '2024-08-10 13:02:10', 'BTCUSDT', NULL, 0.00000000, 0.00000000, 0.00000000, 0, 0, 0, 0, 0),
+(11, '2024-08-10 13:02:10', 'ETHUSDC', '{\"asset\":\"ETH\",\"ultimaventa\":\"0.00000\",\"price\":\"2627.81000000\",\"btc\":\"61072.65000000\",\"colorbtc\":\"#4BC883\",\"symbol\":\"<div class=odometros style=--data:0deg;><div id=grad2>BUY</div></div>\",\"moneda\":\"ETHUSDC\",\"tendencia\":\"<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>\",\"color\":\"#4BC883\",\"maxdia\":\"2631.80000000\",\"mindia\":\"2601.60000000\",\"totalTendencia\":\"<span style=color:#4DCB85;font-weight:bold;>&#9650;</span>\",\"utc\":\"10:10 PM\",\"techo\":\"2610.463333333333\",\"piso\":\"2593.676666666667\",\"ant\":\"2610.39000000\",\"nivel\":\"<div class=odometros style=--data:291.6deg;><div id=grad2>SELL</div></div>\",\"nivelbtc\":\"<div class=odometros style=--data:0deg;><div id=grad2>BTC</div></div>\",\"porcenmax\":\"87%\",\"ganancia\":\"0.00000000\",\"perdida\":\"0.00000000\",\"capital\":\"0.00000000\",\"disponible\":\"0.00000000\",\"escalones\":\"1\",\"invxcompra\":\"0.00000000\",\"totalpromedio\":2602.07,\"auto\":\"1\",\"bina\":\"0\",\"impuesto\":\"0.02000000\",\"colordisp\":\"#4BC883\",\"labelpricebitcoin\":\"61072.65000000\",\"labelpricemoneda\":\"2627.81\",\"precio_venta\":\"0.00000000\",\"listasset\":\" <span style=cursor:pointer;color:#4BC883;>BTC</span> <span style=color:#4BC883;font-weight:bold;>61072.65</span> <span class=bolita style=color:#171A1E;>&#9679;</span> <span style=cursor:pointer;color:#4BC883;>ETH</span> <span style=color:#4BC883;font-weight:bold;>2627.81</span> <span class=bolita style=color:#171A1E;>&#9679;</span>\",\"nivelcompra\":\"<div class=odometroalert style=--color1:#089981;--data1:-80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>BUY</div></div>\"}', 2627.81000000, 2631.80000000, 2601.60000000, 0, 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -441,8 +465,8 @@ CREATE TABLE `transacciones` (
 INSERT INTO `transacciones` (`ID`, `FECHA`, `TICKET`, `TIPO`, `DESCRIPCION`, `CAJERO`, `CLIENTE`, `MEDIO_PAGO`, `WALLET`, `ORIGEN`, `DESTINO`, `NOTAID`, `RESULTADO`, `REFERENCIA`, `MONTO`, `RECIBE`, `COMISION`, `PAGADO`, `ENVIADO`, `ELIMINADO`, `TOMADO`, `RATE`, `CALIFICADO`, `ESTATUS`, `MONEDA`) VALUES
 (15, '2024-08-06 20:42:58', '80de63da8146e402', 'DEPOSITO', 'Deposito Binance Pay', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 'BINANCE', NULL, 'alfonsi.acosta@gmail.com', '834916814', NULL, NULL, NULL, 10.000000, 10.000000, 0.000000, 0, 0, 0, 0, 3, 1, 'REVISION', 'USDC'),
 (16, '2024-08-06 20:46:46', 'fd8e0f75bdb9e3a2', 'RETIRO', 'Retiro Binance Pay', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 'BINANCE', NULL, '834916814', 'alfonsi.acosta@gmail.com', NULL, NULL, NULL, 40.000000, 38.800000, 0.000000, 0, 0, 0, 0, 1, 1, 'REVISION', 'USDC'),
-(17, '2024-08-07 01:50:21', '0f06d6dd7d081328', 'DEPOSITO', 'Deposito Binance Pay', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 'BINANCE', NULL, 'alfonsi.acosta@gmail.com', '834916814', NULL, NULL, NULL, 2.000000, 2.000000, 0.000000, 0, 0, 0, 0, 0, 0, 'REVISION', 'USDC'),
-(18, '2024-08-07 01:50:49', '8471b7201cb9c439', 'RETIRO', 'Retiro Binance Pay', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 'BINANCE', NULL, '834916814', 'alfonsi.acosta@gmail.com', NULL, NULL, NULL, 5.000000, 4.850000, 0.000000, 0, 0, 0, 0, 0, 0, 'REVISION', 'USDC');
+(17, '2024-08-07 01:50:21', '0f06d6dd7d081328', 'DEPOSITO', 'Deposito Binance Pay', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 'BINANCE', NULL, 'alfonsi.acosta@gmail.com', '834916814', NULL, NULL, NULL, 2.000000, 2.000000, 0.000000, 0, 0, 0, 0, 4, 1, 'REVISION', 'USDC'),
+(18, '2024-08-07 01:50:49', '8471b7201cb9c439', 'RETIRO', 'Retiro Binance Pay', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 'BINANCE', NULL, '834916814', 'alfonsi.acosta@gmail.com', NULL, NULL, NULL, 5.000000, 4.850000, 0.000000, 0, 0, 0, 0, 3, 1, 'REVISION', 'USDC');
 
 -- --------------------------------------------------------
 
@@ -502,9 +526,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`ID`, `FECHA`, `IP`, `NOMBRE_USUARIO`, `PASSWORD`, `VKEY`, `CORREO`, `TELEFONO`, `NOMBRE`, `NACIONALIDAD`, `LINKREFERIDO`, `CODIGOREFERIDO`, `BEP20`, `BINANCE`, `RATE`, `SALDO`, `USDT`, `P2P`, `SALDOREFERIDO`, `VERIFICADO`, `ACTIVO`, `LABORANDO`, `BLOQUEADO`, `NIVEL`, `ACTIVE_BEP20`, `ACTIVE_BINANCE`, `QR_BEP20`, `QR_BINANCE`, `PERFIL`) VALUES
-(3, '2024-07-18 15:12:20', '::1', 'Didapax', '$2y$10$iz6Cyr2pj9.g0gz9Yh5N6Oit2MXAT8PMYnM5hksLMPDkItBSWRLei', '88c99461e5d51625', 'alfonsi.acosta@gmail.com', NULL, 'alfonsi.acosta@gmail.com', NULL, NULL, '1092e38b3bfe123b', '0x9Ad41AAeaDcc2A9A3285dC82DbF95C0CEaD09718', '834916814', 2, 6.6300, 0.0000, 0.0000, 0.0000, 1, 1, 1, 0, 1, 1, 1, '0e51ba406d.png', 'fbe1223b2f.png', '2812b740cd.png'),
+(3, '2024-07-18 15:12:20', '::1', 'Didapax', '$2y$10$iz6Cyr2pj9.g0gz9Yh5N6Oit2MXAT8PMYnM5hksLMPDkItBSWRLei', '88c99461e5d51625', 'alfonsi.acosta@gmail.com', NULL, 'alfonsi.acosta@gmail.com', NULL, NULL, '1092e38b3bfe123b', '0x9Ad41AAeaDcc2A9A3285dC82DbF95C0CEaD09718', '834916814', 3, 6.6300, 0.0000, 0.0000, 0.0000, 1, 1, 1, 0, 1, 1, 1, '0e51ba406d.png', 'fbe1223b2f.png', '2812b740cd.png'),
 (4, '2024-07-18 23:01:27', '::1', NULL, '$2y$10$nlwRdUti0f6KfGHlFxxPxO5Wss8ekUOpUYLBCMCfQVmcqx7e2vH1q', '9776e14db528aa0d', 'alfonsi@gmail.com', NULL, 'alfonsi@gmail.com', NULL, NULL, 'f57dc7a0254af0bc', NULL, NULL, 0, 0.0000, 0.0000, 0.0000, 0.0000, 0, 0, 0, 0, 0, 0, 0, 'perfil.jpg', 'perfil.jpg', 'perfil.jpg'),
-(5, '2024-07-18 23:12:17', '::1', NULL, '$2y$10$qqzuKPChM4NXdlsWJ.eFb.pjKYD/UwPKAi.XkY6f63znTdPC/2m.S', '504c0d2e6db8a604', 'pepe@gmail.com', NULL, 'pepe@gmail.com', NULL, NULL, '6d0433aef2547f52', NULL, 'alfonsi.acosta@gmail.com', 0, 265.0000, 0.0000, 0.0000, 0.0000, 1, 1, 0, 0, 0, 0, 0, 'perfil.jpg', 'perfil.jpg', 'perfil.jpg');
+(5, '2024-07-18 23:12:17', '::1', NULL, '$2y$10$qqzuKPChM4NXdlsWJ.eFb.pjKYD/UwPKAi.XkY6f63znTdPC/2m.S', '504c0d2e6db8a604', 'pepe@gmail.com', NULL, 'pepe@gmail.com', NULL, NULL, '6d0433aef2547f52', NULL, 'alfonsi.acosta@gmail.com', 0, 245.0000, 0.0000, 0.0000, 0.0000, 1, 1, 0, 0, 0, 0, 0, 'perfil.jpg', 'perfil.jpg', 'perfil.jpg');
 
 --
 -- Índices para tablas volcadas
@@ -614,7 +638,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `apuestas`
 --
 ALTER TABLE `apuestas`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `chat`
@@ -638,13 +662,13 @@ ALTER TABLE `enviolista`
 -- AUTO_INCREMENT de la tabla `juegos`
 --
 ALTER TABLE `juegos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `librocontable`
 --
 ALTER TABLE `librocontable`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT de la tabla `links`
@@ -674,7 +698,7 @@ ALTER TABLE `parametros`
 -- AUTO_INCREMENT de la tabla `prices`
 --
 ALTER TABLE `prices`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `promo`

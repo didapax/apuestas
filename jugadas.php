@@ -131,15 +131,20 @@ input[type="checkbox"] {
                         break;
                 }
 
-                let resultados = calcularInteresMensual(capital, interes, numMes);
-
-                $("#calculos").html(`Interes Mensuales: ${Math.round(resultados['interesMensual'] * 100) / 100}<br>
-                Cuota Mensual de: ${Math.round(resultados['cuotaMensual'] * 100) / 100}`);
+                if(capital *1 > 0 ){
+                    let resultados = calcularInteresMensual(capital, interes, numMes);
+                    $("#calculos").html(`Interes Mensuales: ${Math.round(resultados['interesMensual'] * 100) / 100}<br>
+                    Cuota Mensual de: ${Math.round(resultados['cuotaMensual'] * 100) / 100}`);
+                }
+                else{
+                    document.getElementById("monto").focus();                    
+                }
             }
 
             function crear(){
                 let orderFavorito = 0;
                 let orderAdelantado = 0;
+                let devuelveCapital = 0;
 
                 if(document.getElementById('favorito').checked === true){
                     orderFavorito = 1;
@@ -148,6 +153,10 @@ input[type="checkbox"] {
                 if(document.getElementById('adelantado').checked){
                     orderAdelantado = 1;
                 }
+
+                if(document.getElementById('devuelve_capital').checked){
+                    devuelveCapital = 1;
+                }                
 
                 document.getElementById("btncrear").disabled = true;
                 $.post("block",{
@@ -161,7 +170,8 @@ input[type="checkbox"] {
                     tipo: document.getElementById("tipoJuego").value,
                     monto: document.getElementById("monto").value,
                     porciento: document.getElementById("porciento").value,
-                    poradelantado: orderAdelantado
+                    poradelantado: orderAdelantado,
+                    devuelveCapital: devuelveCapital
                 },function(data){
                     leerVista();
                     document.getElementById("btncrear").disabled = false;
@@ -232,6 +242,25 @@ input[type="checkbox"] {
                 document.getElementById('analisis').show();
             }
 
+            function pagaIntereses(){                
+                if(document.getElementById('paga_intereses').checked){
+                    $("#zona_intereses").css("display","block");
+                }
+                else{
+                    document.getElementById('porciento').value=0;
+                    $("#zona_intereses").css("display","none");                    
+                }                
+            }
+
+            function ifAdelantado(){
+                if(document.getElementById('adelantado').checked){
+                    document.getElementById('devuelve_capital').checked = true;
+                }
+                else{
+                    document.getElementById('devuelve_capital').checked = false;
+                }
+            }
+
         </script>
     </header>
     <body onload="inicio()">
@@ -251,8 +280,7 @@ input[type="checkbox"] {
                 <a title="Cerrar" style="font-weight:bold;float:right;cursor:pointer; color:yellow;" onclick="document.getElementById('agregar').close()">X</a><br>                
                 Titulo: <input type="text" id="nombre"><br>
                 Normal: <input title="Solo Insertar la Tarjeta" type="radio" id="ninguno" name="selectx">
-                Favorito: <input title="Poner la tarjeta como Favorita" type="radio" value="1" id="favorito" name="selectx"><br>
-                <input title="se paga por Adelantado" type="checkbox" value="1" id="adelantado" > Paga Por Adelantado: <br>
+                Favorito: <input title="Poner la tarjeta como Favorita" type="radio" value="1" id="favorito" name="selectx"><br>                
                 Periodo:                
                 <select id="tipoJuego" >
                     <option value="">selecciona Duracion..</option>
@@ -261,10 +289,15 @@ input[type="checkbox"] {
                     <option value="SEMESTRAL">Semestral</option>
                     <option value="ANUAL">ANUAL</option>
                 </select>
-                <br>                
-                Costo de la Suscripción: <input required type="number" id="monto"  value="0" style="color:black;"  step="1"> Usdc<br>
-                Interes Anual del: <input required type="number" id="porciento" onchange="calcular()" onkeyup="calcular()" value="0" style="color:black;"  step="1"> % <br>
-                <div id="calculos" style="color:black; background:white;"></div>
+                <hr>                
+                Costo: <input required type="number" id="monto"  value="0" style="color:black;"  step="1"> Usdc<br>
+                <input title="Paga Intereses.." type="checkbox" value="1" id="paga_intereses" onchange="pagaIntereses()"> Paga Intereses: <br>                
+                <div id="zona_intereses" style="display:none;">
+                    <input title="se paga por Adelantado" type="checkbox" value="1" id="adelantado" onchange="ifAdelantado()"> Paga intereses Por Adelantado: <br>
+                    <input title="Devuelve el capital.." type="checkbox" value="1" id="devuelve_capital" > Devuelve Capital: <br>                    
+                    Interes Anual del: <input required type="number" id="porciento" onchange="calcular()" onkeyup="calcular()" value="0" style="color:black;"  step="1"> % <br>
+                    <div id="calculos" style="color:black; background:white;"></div>
+                </div>
                 Descripcion: <br>
                 <div class="textAreaContainer">                
                     <textarea row="10" id="summernote"> </textarea>

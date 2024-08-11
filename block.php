@@ -87,7 +87,8 @@ if(isset($_POST['jugar'])){
       $cajero = $suscripcion['CAJERO'];
       $porciento = $suscripcion['PORCIENTO'];
       $porAdelantado = $suscripcion['PORADELANTADO'];
-      $correo = $_POST['correo'];
+      $devuelveCapital = $suscripcion['DEVUELVE_CAPITAL'];
+      $correo = $_POST['correo'];      
       $numMes;
       $cuotaMensual;
       $interesMensual;
@@ -121,22 +122,22 @@ if(isset($_POST['jugar'])){
       $fechaInicial = date('Y-m-d'); // Tu fecha inicial
       $fechaFinal = calcularFechaDespuesDeUnMes($fechaInicial,$numMes);
       
-      $consulta = "INSERT INTO APUESTAS (INICIO,FIN,TICKET,TIPO,IDJUEGO,JUEGO,CAJERO,CLIENTE,MONTO,PORCIENTO,INTERES_MENSUAL,CUOTA_MENSUAL,TOTAL_PAGAR,N_PAGOS) VALUES(
-          '{$fechaInicial}',
-          '{$fechaFinal}',
-          '{$ticket}',
-          '{$tipo}',
-           {$idJuego},
-          '{$juego}',
-          '{$cajero}',
-          '{$correo}',
-           {$monto},
-           {$porciento},
-           {$interesMensual},
-           {$cuotaMensual},
-           {$totalCuotas},
-           {$numeroPagos}
-      )";
+      $consulta = "INSERT INTO APUESTAS (INICIO,FIN,TICKET,TIPO,IDJUEGO,JUEGO,CAJERO,CLIENTE,MONTO,PORCIENTO,INTERES_MENSUAL,CUOTA_MENSUAL,TOTAL_PAGAR,N_PAGOS,DEVUELVE_CAPITAL) VALUES(
+          '$fechaInicial',
+          '$fechaFinal',
+          '$ticket',
+          '$tipo',
+           $idJuego,
+          '$juego',
+          '$cajero',
+          '$correo',
+           $monto,
+           $porciento,
+           $interesMensual,
+           $cuotaMensual,
+           $totalCuotas,
+           $numeroPagos,
+           $devuelveCapital)";
       
       sqlconector($consulta);
 
@@ -157,7 +158,7 @@ if(isset($_POST['jugar'])){
 
       $fechas = obtenerIntervalosMensuales($fechaInicial, $fechaFinal);
       foreach ($fechas as $fecha) {
-        sqlconector("INSERT INTO LIBROCONTABLE(FECHA,TICKET,TIPO,IDJUEGO,INVERSION,JUEGO,CAJERO,CLIENTE,INTERES_ADELANTADO,MONTO,INTERES_MENSUAL,CUOTA_MENSUAL,TOTAL_PAGAR) VALUES(
+        sqlconector("INSERT INTO LIBROCONTABLE(FECHA,TICKET,TIPO,IDJUEGO,INVERSION,JUEGO,CAJERO,CLIENTE,INTERES_ADELANTADO,MONTO,INTERES_MENSUAL,CUOTA_MENSUAL,TOTAL_PAGAR,DEVUELVE_CAPITAL) VALUES(
         '$fecha',
         '$ticket',
         '$tipo',
@@ -170,7 +171,8 @@ if(isset($_POST['jugar'])){
          $monto,
          $interesMensual,
          $cuotaMensual,
-         $totalCuotas
+         $totalCuotas,
+         $devuelveCapital
         )");
       }
 
@@ -887,7 +889,7 @@ if(isset($_POST['setEstatus'])){
 }
 
 if(isset($_POST['crear'])){
-    sqlconector("INSERT INTO JUEGOS(JUEGO,CAJERO,MIN,DESCRIPCION,TIPO,FAVORITO,RATE,MONTO,PORCIENTO,PORADELANTADO) VALUES(
+    sqlconector("INSERT INTO JUEGOS(JUEGO,CAJERO,MIN,DESCRIPCION,TIPO,FAVORITO,RATE,MONTO,PORCIENTO,PORADELANTADO,DEVUELVE_CAPITAL) VALUES(
       '{$_POST['nombre']}',
       '{$_POST['cajero']}',
       {$_POST['min']},      
@@ -897,8 +899,8 @@ if(isset($_POST['crear'])){
       {$_POST['rate']},
       {$_POST['monto']},
       {$_POST['porciento']},
-      {$_POST['poradelantado']}
-    )");
+      {$_POST['poradelantado']},
+      {$_POST['devuelveCapital']})");
 }
 
 if(isset($_POST['crearPromo'])){
