@@ -521,7 +521,7 @@ function nivelCompra($moneda){
 }
 
 function verPromo(){
-  if(recordCount("APUESTAS")>0){
+  if(recordCount("APUESTAS")>0 && isset($_SESSION['user'])){
     $json =  readPrices("BTCUSDC")['DATOS'];
     $data = json_decode($json, true);
     echo $data['listasset']. " Tendencia del Mercado" .$data['totalTendencia']." Animo".$data['tendencia']." Hora UTC ".$data['utc'];
