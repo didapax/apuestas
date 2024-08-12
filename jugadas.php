@@ -171,7 +171,9 @@ input[type="checkbox"] {
                     monto: document.getElementById("monto").value,
                     porciento: document.getElementById("porciento").value,
                     poradelantado: orderAdelantado,
-                    devuelveCapital: devuelveCapital
+                    devuelveCapital: devuelveCapital,
+                    imagen: document.getElementById("imagen").value,
+                    foreground: document.getElementById("foreground").value
                 },function(data){
                     leerVista();
                     document.getElementById("btncrear").disabled = false;
@@ -281,7 +283,7 @@ input[type="checkbox"] {
                 Titulo: <input type="text" id="nombre"><br>
                 Normal: <input title="Solo Insertar la Tarjeta" type="radio" id="ninguno" name="selectx">
                 Favorito: <input title="Poner la tarjeta como Favorita" type="radio" value="1" id="favorito" name="selectx"><br>                
-                Periodo:                
+                Periodo: 
                 <select id="tipoJuego" >
                     <option value="">selecciona Duracion..</option>
                     <option value="MENSUAL">Mensual</option>
@@ -289,6 +291,27 @@ input[type="checkbox"] {
                     <option value="SEMESTRAL">Semestral</option>
                     <option value="ANUAL">ANUAL</option>
                 </select>
+                <br>
+                Color de Fondo: 
+                <select id="imagen" >
+                    <option value="">background..</option>
+                    <option value="amarillo.png">Amarillo</option>
+                    <option value="azul.png">Azul</option>
+                    <option value="rojo.png">Rojo</option>
+                    <option value="dorado.png">Dorado</option>
+                    <option value="verde.png">Verde</option>
+                </select>
+                <br>     
+                Color de Letra: 
+                <select id="foreground" >
+                    <option value="">foreground..</option>
+                    <option value="yellow">Amarillo</option>
+                    <option value="blue">Azul</option>
+                    <option value="red">Rojo</option>
+                    <option value="white">Blanco</option>
+                    <option value="black">Negro</option>
+                    <option value="green">Verde</option>
+                </select>                                
                 <hr>                
                 Costo: <input required type="number" id="monto"  value="0" style="color:black;"  step="1"> Usdc<br>
                 <input title="Paga Intereses.." type="checkbox" value="1" id="paga_intereses" onchange="pagaIntereses()"> Paga Intereses: <br>                

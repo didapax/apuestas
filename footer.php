@@ -24,7 +24,7 @@
         </div>
 
            
-        <div class="social-media" style='display:flex;flex-direction: column-reverse;align-items: center;'>
+        <div class="social-media" style='display:none;flex-direction: column-reverse;align-items: center;'>
                 <span class="facebook">
                     <a href=# style='font-size: .9rem;'>Facebook<img style='width:2rem;' src="Assets/facebook.png"></a>
                 </span>
