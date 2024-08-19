@@ -290,7 +290,7 @@ function seltickect(){
   <input type='hidden' id='notif' value='{$notificaciones}'>";
    ?>
 <!-- partial:index.partial.html -->
-<div id="cuerpo" class="cuerpo" style='margin-top: 8rem;padding:1rem;'>
+<div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
 <div class="progress-container">
     <div class="progress-label" id="label1"></div>
     <div class="progress-label" id="label2"></div>

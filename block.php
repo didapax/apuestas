@@ -390,7 +390,7 @@ if(isset($_GET['getSuscripciones'])) {
 		  $bloqueo = readJuegoId($row['IDJUEGO'])['BLOQUEADO'];
 		  $imagen= $row['IMAGEN'];
 		  $foreground = $row['FOREGROUND'];
-		  $titulo = $row['JUEGO'];
+		  $titulo = strip_tags($row['JUEGO']);
 		  $estrellas = readJuegoId($row['IDJUEGO'])['RATE'];
 		  $costo = $row['MONTO'];
 		  $interes = price($row['INTERES_MENSUAL']);
@@ -404,9 +404,9 @@ if(isset($_GET['getSuscripciones'])) {
 		 }
 		 else{
 			if( isset(readJuegoId($row['IDJUEGO'])['ANALISIS']) ){
-			  $analisis = readJuegoId($row['IDJUEGO'])['ANALISIS'];
+			  $analisis = strip_tags(readJuegoId($row['IDJUEGO'])['ANALISIS']);
 			}else{
-			  $analisis = readJuegoId($row['IDJUEGO'])['DESCRIPCION'];
+			  $analisis = strip_tags(readJuegoId($row['IDJUEGO'])['DESCRIPCION']);
 			}
 		  } 
 		  
@@ -452,8 +452,8 @@ if(isset($_GET['getJugadas'])) {
 		  $sesion = 1;
 		  $suscripcionExiste = false;
 		  $pagaIntereses = false;
-		  $titulo = $row['JUEGO'];
-		  $detalle = $row['DESCRIPCION'];
+		  $titulo = strip_tags($row['JUEGO']);
+		  $detalle = strip_tags($row['DESCRIPCION']);
 		  $estrellas = $row['RATE'];
 		  $costo = price($row['MONTO']);
 		  
@@ -509,14 +509,6 @@ if(isset($_GET['readPromos'])) {
   }else{
     $colorAlert = "#F96E1F";
     $consulta = "select * from PROMO ORDER BY FECHA";
-    echo "
-    <table style='width:100%;'>
-      <th>Fecha</th>
-      <th>Nombre</th>
-      <th>Mensaje</th>
-      <th>Tipo</th>
-      <th>Opciones</th>
-    ";
     $resultado = mysqli_query( $conexion, $consulta );
     while($row = mysqli_fetch_assoc($resultado)){
       $difu = "";
@@ -530,17 +522,15 @@ if(isset($_GET['readPromos'])) {
 
       $fecha = latinFecha($row['FECHA']);
      echo "<tr>
-      <td><span>".latinFecha($fecha)."</span></td>
-      <td><span>".$row['NOMBRE']."</span></td>
-      <td><span>".$row['MENSAJE']."</span></td>
-      <td><label>{$difu}{$flotante}</label></td>
+      <td>".latinFecha($fecha)."</td>
+      <td>".$row['NOMBRE']."</td>
+      <td>".$row['MENSAJE']."</td>
+      <td>{$difu}{$flotante}</td>
       <td style='text-align: left;'>
-        <button title='Eliminar Promocion' type='button' style='background:#F0917F;' onclick=\"borrar('".$row['CODIGO']."')\">&#9746;</button>        
+        <button title='Eliminar Promocion' type='button' style='background:#F0917F;' onclick=\"borrar('".$row['CODIGO']."')\">&#9746; Borrar</button>        
       </td>
       </tr>";
     }
-
-    echo "</table>";
     mysqli_close($conexion);
   }
 } 
@@ -553,17 +543,7 @@ if(isset($_GET['readJuegos'])) {
     }else{
       $colorAlert = "#F96E1F";
       $consulta = "select * from JUEGOS WHERE ELIMINADO=0 ORDER BY FECHA";
-      echo "
-      <table style='width:100%; '>
-      <thead>
-        <th>Fecha</th>
-        <th>Producto</th>
-        <th>Descripcion</th>
-        <th>Tipo</th>
-        <th>Usdc</th>
-        <th>Opciones</th>
-        </thead><tbody>
-      ";
+
       $resultado = mysqli_query( $conexion, $consulta );
       while($row = mysqli_fetch_assoc($resultado)){
         $bloqueo = "";
@@ -572,23 +552,21 @@ if(isset($_GET['readJuegos'])) {
         }
         $fecha = latinFecha($row['FECHA']); 
        echo "<tr>
-        <td><span>{$fecha}</span></td>
-        <td><span>".$row['JUEGO']."</span></td>
-        <td title='".strip_tags($row['DESCRIPCION'])."'>".substr($row['DESCRIPCION'], 0, 100)."...</td>
-        <td><span>".$row['TIPO']."</span></td>
-        <td><span>".price($row['MONTO'])."</span></td>
+        <td>{$fecha}</td>
+        <td>".$row['JUEGO']."</td>
+        <td title='".strip_tags($row['DESCRIPCION'])."'>".$row['DESCRIPCION']."</td>
+        <td>".$row['TIPO']."</td>
+        <td>".price($row['MONTO'])."</td>
         <td>";
           if($row['PORCIENTO'] == 0){
             echo "<button title='Analisis' type='button' onclick=\"analisis('".$row['ID']."')\">Analisis</button>";
           }
           
-          echo "<button title='Eliminar' type='button' style='background:#F0917F;' onclick=\"borrar('".$row['ID']."')\">Delete</button>
+          echo "<button title='Borrar' type='button' style='background:#F0917F;' onclick=\"borrar('".$row['ID']."')\">Borrar</button>
           <label for='cerrar{$row['ID']}'><input id='cerrar{$row['ID']}' type='checkbox' {$bloqueo} onclick=\"cerrar(".$row['ID'].")\">Bloquear</label>          
         </td>
         </tr>";
       }
-  
-      echo "</tbody></table>";
       mysqli_close($conexion);
     }
 }
@@ -631,47 +609,29 @@ if(isset($_GET['readTrabajos'])) {
 }
 
 if(isset($_GET['readHistorialAdmin'])) {
-  $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
-  if (!$conexion) {
-    echo "Refresh page, Failed to connect to Data...";
-    exit();
-  }else{
-    $colorAlert = "#F96E1F";
-    $consulta = "select * from APUESTAS WHERE ACTIVO=1 ORDER BY FECHA";
-    echo "
-    <table style='width:100%; '>
-      <thead>
-      <th>Finaliza el</th>
-      <th>Faltan Dias</th>
-      <th>Suscripcion</th>
-      <th>Tipo</th>
-      <th>Monto Usdc</th>
-      <th>Cliente</th>      
-      <th>Estatus</th>
-      </thead>
-      <tbody>
-    ";
-    $resultado = mysqli_query( $conexion, $consulta );
-    while($row = mysqli_fetch_assoc($resultado)){
-      $color="transparent";
-      if($row['ACTIVO']==0){
-        $color="#AED6F1";
-      }
-      
-     echo "<tr style='background:{$color};'>
-      <td><span>".$row['FIN']."</span></td>
-      <td><span>".calcularDiasEntreFechas(date("Y-m-d"), $row['FIN'])."</span></td>
-      <td><span>".$row['JUEGO']."USDT</span></td>
-      <td><span>".$row['TIPO']."</span></td>      
-      <td><span>".price($row['MONTO'])."</span></td>      
-      <td><span>".$row['CLIENTE']."</span></td>      
-      <td><span>".$row['ESTATUS']."</span></td>      
-      </tr>";
-    }
+  $obj = array();
+  $consulta = "select * from APUESTAS WHERE ACTIVO=1 ORDER BY FECHA";
+  $resultado = sqlconector( $consulta );
 
-    echo "</tbody></table>";
-    mysqli_close($conexion);
-  }
+    if($resultado){
+      while($row = mysqli_fetch_assoc($resultado)){
+        $color="transparent";
+        if($row['ACTIVO']==0){
+          $color="#AED6F1";
+        }
+
+        $obj[] = array('color'=>$color,
+        'fin' =>$row['FIN'],
+        'dias'=>calcularDiasEntreFechas(date("Y-m-d"), $row['FIN']),
+        'suscripcion' =>$row['JUEGO'],
+        'tipo' =>$row['TIPO'],
+        'monto' => price($row['MONTO']),
+        'cliente' => $row['CLIENTE'],
+        'estatus'=>$row['ESTATUS']);
+      }
+    }
+    
+    echo json_encode($obj);
 }
 
 if(isset($_POST['setCal'])){

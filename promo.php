@@ -22,6 +22,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
        <!-- include summernote css/js -->
        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>           
+       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">    
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css">    
+
     </head>
     <header>
         <style>
@@ -131,7 +134,7 @@ input[type="checkbox"] {
             function leerVista(){
                 
                 $.get("block?readPromos=", function(data){
-                $("#vista").html(data);
+                $("#tabla-cuerpo").html(data);
                 });
 
                 $.get("block?estatuslista=", function(data){
@@ -185,7 +188,7 @@ input[type="checkbox"] {
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->  
 
-        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem;padding:1rem;'>
+        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
         <div class="menu" id="menu">
             <button type="button" onclick="showDialog()">Crear Promocion</button>
             <button style="margin-left:21px;" id="btn_difundir" type="button" onclick="difundir()">Difundir Promocion</button>
@@ -197,7 +200,7 @@ input[type="checkbox"] {
                 Titulo: <input type="text" id="nombre"><br>
                 Detalle:<br>
                 <div class="textAreaContainer">                
-                    <textarea row="10" id="summernote"> </textarea>
+                    <textarea row="10" id="summernote"></textarea>
                 </div>                 
                 <label for="difuFlotante">Flotante </label><input type="radio" id="difuFlotante" name="idpromo"><br>
                 <label for="difu"> Difusion </label><input type="radio" id="difu" name="idpromo">&#128266;<br>
@@ -205,12 +208,36 @@ input[type="checkbox"] {
             </form>
         </dialog>        
         <div class="vista" id="vista"></div>
+                    <table id='example' class='ui celled table' style='width:100%; '> 
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Nombre</th>
+                                <th>Mensaje</th>
+                                <th>Tipo</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-cuerpo">
+                        </tbody>
+                    </table>   
         </div>
       <!--Iniciar footer-->
       <?php include 'footer.php';?>
         <!--FIN footer-->     
+
+
+    <script src='https://code.jquery.com/jquery-3.7.1.js'></script> 
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
+    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
+    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
+
+    <script>
+        new DataTable('#example');
+    </script>        
         <script>
-        $(document).ready(function() {
+      /*  $(document).ready(function() {
             $('#summernote').summernote({
                 placeholder: 'Escribe aquí...',
                 height: 150,
@@ -222,7 +249,7 @@ input[type="checkbox"] {
                     ['height', ['height', 'codeview', 'undo', 'redo']]
                 ]
             });
-        });
+        });*/
         </script>         
     </body>
 </html>

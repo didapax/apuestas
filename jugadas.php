@@ -23,6 +23,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>       
        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
+       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">    
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css">    
+
     </head>
     <header>
         <style>
@@ -223,7 +226,7 @@ input[type="checkbox"] {
             
             function leerVista(){
                 $.get("block?readJuegos=", function(data){
-                $("#vista").html(data);
+                $("#tabla-cuerpo").html(data);
                 });
             }
 
@@ -273,7 +276,7 @@ input[type="checkbox"] {
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->             
 
-        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem;padding:1rem;'>
+        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
         <input type="hidden" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" id="correo">
         <input type="hidden"  id="idAnalisis">
         <div class="menu" id="menu">
@@ -350,10 +353,36 @@ input[type="checkbox"] {
         </dialog> 
 
         <div class="vista" id="vista"></div>
+        <table id='example' class='ui celled table' style='width:100%; '> 
+                        <thead>
+                            <tr>
+                            <th>Fecha</th>
+                            <th>Producto</th>
+                            <th>Descripcion</th>
+                            <th>Tipo</th>
+                            <th>Usdc</th>
+                            <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-cuerpo">
+                        </tbody>
+                    </table>        
         </div>
       <!--Iniciar footer-->
       <?php include 'footer.php';?>
         <!--FIN footer-->     
+
+
+    <script src='https://code.jquery.com/jquery-3.7.1.js'></script> 
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
+    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
+    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
+
+    <script>
+        new DataTable('#example');
+    </script>
+
 
         <script>
        /* $(document).ready(function() {
@@ -382,7 +411,8 @@ input[type="checkbox"] {
             });
 
         });*/
-    </script>    
+    </script>   
+
     </body>
 </html>
 

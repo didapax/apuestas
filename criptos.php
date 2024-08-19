@@ -18,6 +18,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">    
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css">    
+
         
     </head>
     <header>
@@ -126,7 +129,7 @@ cursor: pointer;
                             <td>${producto.MONEDA}</td>
                             <td>${producto.ASSET}</td>
                             <td>${producto.PAR}</td>
-                            <td><button type="button" onclick="borrar('${producto.MONEDA}')">Eliminar</button></td>
+                            <td><button type="button" onclick="borrar('${producto.MONEDA}')">Borrar</button></td>
                         `;
                         tablaCuerpo.appendChild(fila);
                     });
@@ -199,7 +202,7 @@ cursor: pointer;
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->  
 
-        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem;padding:1rem;'>
+        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
         <div class="menu" id="menu">
             <button type="button" onclick="showDialog()">Incluir Cripto</button>
         </div>
@@ -212,7 +215,7 @@ cursor: pointer;
             </form>
         </dialog>        
         <div class="vista" id="vista">
-        <table style='width: 100%;'> 
+        <table id='example' class='ui celled table' style='width:100%; '> 
                                     <thead>
                                         <tr>
                                             <th>Moneda</th>
@@ -229,6 +232,15 @@ cursor: pointer;
       <!--Iniciar footer-->
       <?php include 'footer.php';?>
         <!--FIN footer-->     
+    <script src='https://code.jquery.com/jquery-3.7.1.js'></script> 
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
+    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
+    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
+
+    <script>
+        new DataTable('#example');
+    </script>
 
     </body>
 </html>

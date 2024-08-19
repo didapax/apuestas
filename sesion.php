@@ -5,7 +5,6 @@
 ?>
 <html>
     <head>
-        <title>Fortuna Royal</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
         <link rel="shortcut icon" href="Assets/favicon.png">        
@@ -15,60 +14,134 @@
         <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />        
 
         <style>
-            .conten{
-                text-align:center;
+
+            @font-face {
+                font-family: futurist;
+                src: url(./css/fonts/futurist.otf);
+            }
+
+            body{
+                background: lightblue;
+            }            
+
+            .content{
+                text-align: center;
                 display: flex;
                 justify-content: center;
+                flex-direction: column;
+                align-items: center;
             }   
 
             form{
-                color:white;
-                font-weight:bold;
-                top: 15%;
-                width: 350px;
-                height: 430px;
-                border: 1px solid black;
+                color: white;
+                font-weight: bold;
+                width: 25rem;
+                height: auto;
                 border-radius: 13px;
                 text-align: center;
-                padding: 13px;
-                /*background: #D4DEE2;*/
-                background-image: url('Assets/balon2.png');
+                padding: 40px;
+                background: #181a20;
                 background-repeat: no-repeat;
-                background-size: cover; 
-                position: absolute;
-                box-shadow: 4px 3px 8px 1px #969696;                
+                background-size: cover;
+                border: 1px solid #67676778;
+                margin-top: 5vh;
+            }
+
+            form h2{
+               font-family: futurist;
+               letter-spacing:1px; 
+               margin-top:0.5rem;
+            }
+
+            .input-container{
+                font-family: "Poppins", sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.2rem;
+                padding: 0 50px;
             }
 
             input[type="email"]{
+                margin-top: 5px;
                 padding: 8px;
-                font-size: 13px;
-                width: 60%;
+                font-size: 14px;
+                width: 270px;
+                background: #212631;
+                border: 1px solid #ffffff94;
+                border-radius: 8px;
+                padding: 14px;
+                color: #ffffffe8;
+                font-family: "Poppins", sans-serif;
+                font-weight: 600;
             }
 
             input[type="password"]{
                 margin-top: 5px;
                 padding: 8px;
-                font-size: 13px;
-                width: 60%;
+                font-size: 14px;
+                width: 270px;
+                background: #212631;
+                border: 1px solid #ffffff94;
+                border-radius: 8px;
+                padding: 14px;
+                color: #ffffffe8;
+                font-family: "Poppins", sans-serif;
+                font-weight: 600;
             }
 
             button{
-                padding: 8px;
-                border: 0;
-                border-radius: 3px;
+                background: linear-gradient(45deg, #97dfef, #4a6ed9);
+                border-radius: 7px;
+                color: #fff;
+                font-family: "Poppins", sans-serif;
+                font-size: 16px;
+                font-weight: 700;
+                padding: 16px;
+                width: 300px;
+                border:none;
+                margin-top:16px;
+                margin-bottom:16px;
+
             }
 
             button:hover{
                 font-weight: bold;
                 cursor: pointer;
+                transform: scale(1.1);
+                transition: ease(0.5s);
             }
 
-            .condiciones{
-                font-size: 11px;
+            .terms p{
+                font-family: "Poppins", sans-serif;
+                text-align: justify;
+                font-weight: 200;
+                font-size:10px;
+                margin-top: 0px;
             }
-            body{
-                background:black;
+
+            .terms u{
+                text-align:center;
+                font-weight: 200;
+                font-size:10px;
+                font-family: "Poppins", sans-serif;
             }
+
+            .forgot-password-container{
+                font-family: "Poppins", sans-serif;
+                color: #4a6ed9;
+                text-decoration:none;
+                font-weight:600;
+                cursor:pointer;
+                padding:.5rem;
+            }
+
+            .forgot-password-container a:hover{
+                color: #4a6ee9;
+                text-decoration: underline;
+            }
+
+
         </style>        
         <script>            
             function registro(){
@@ -217,10 +290,8 @@
         </script>
     </head>
     <body>
-        <div class="conten">
-            <h2>Fortuna Royal</h2>
-        </div>
-        <div class="conten">
+
+        <div class="content">
             <form>
                 <?php 
 			        if(isset($_GET['code'])){
@@ -230,24 +301,30 @@
                     }
 		        ?>               
                 <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="window.location.href='index'">X</a>
-                <h3>Cripto Signal Group</h>
+                <img style='width:3.5rem;' src='Assets/logotype.png'>
+                <h2>CryptoSignal</h2>
                 <br><br>
-                <div style="width:85px;display:inline-block;">Correo:</div><input id="correo" required type="email" ><br>
-                <div style="width:85px;display:inline-block;">Password:</div><input id="password" required type="password" >
-                <br><br>
-                <div name="g-recaptcha-response" id="g-recaptcha-response" class="g-recaptcha" data-sitekey="6Ld1nA0aAAAAAA7F7eJOY7CMwg7aaQAfg3WZy6P0"></div>
-                <p class="condiciones" id="terminos" ><u>Terminos y Condiciones</u><br>
-                    Al hacer Click Usted esta Aceptando estos Terminos y Condiciones, Nuestra Pagina
+                <div class='outer-input-container'> 
+                    <div class='input-container'>Email:<input id="correo" required type="email" ></div><br>
+                    <div class='input-container'>Password:<input id="password" required type="password" ></div>
+                </div>
+                <br>
+                <div name="g-recaptcha-response" id="g-recaptcha-response" class="g-recaptcha" data-sitekey="6Ld1nA0aAAAAAA7F7eJOY7CMwg7aaQAfg3WZy6P0" style='display: flex;align-items: center;justify-content: center;'></div>
+
+                <button type="button" onclick="registro()" id="btn_registro">Inicio / Unirse</button> 
+
+                <div class="terms" id="terminos" ><u>Terminos y Condiciones</u><br>
+                    <p>Al hacer Click Usted esta Aceptando estos Terminos y Condiciones, Nuestra Pagina
                     No se hace responsable por el manejo de la Informacion suministrada, usted debe  
                     Registrarse con un correo Valido para BINANCE, su correo de Binance sera su Identificacion   
                     el Operador de la Pagina, no se hace responsable por extravios de Dinero, 
                     para depositos y retiros se utiliza <u>Binance Pay</u>
                     usted certifica que es Mayor de Edad y Unico Responsable del uso de la informacion aqui suministgrada. 
-                    Los Depositos y Retiros se realizan en un plazo de 24 a 48 Horas.
-                </p>
-                <button type="button" onclick="registro()" id="btn_registro">Inicio / Unirse</button> 
-                <div style="margin-top:8px;"><a style="font-size:12px; cursor:pointer; color:blue;" onclick="recuperar()">Olvide Mi Contraseña</a></div>
+                    Los Depositos y Retiros se realizan en un plazo de 24 a 48 Horas.</p>
+                </div>
             </form>
+            <div class='forgot-password-container'> <a onclick="recuperar()">Olvide Mi Contraseña</a> </div>
         </div>
+
     </body>
 </html>
