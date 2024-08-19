@@ -10,6 +10,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <link rel="shortcut icon" href="Assets/favicon.png">        
         <link rel="stylesheet" href="css/animate.min.css" />
         <link rel="stylesheet" type="text/css" href="css/Common.css">
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
         <link href='css/boxicons.min.css' rel='stylesheet'>     
         <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
         <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />                 
@@ -21,6 +22,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
        <!-- include summernote css/js -->
        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>       
+       <link rel="stylesheet" type="text/css" href="css/newStyles.css">
     </head>
     <header>
         <style>
@@ -239,7 +241,7 @@ input[type="checkbox"] {
                     var datos= JSON.parse(data);                    
                     $("#nameAnalisis").html(datos.juego);
                     $("#analisisDescripcion").html(datos.descripcion);
-                    $("#edit").html(datos.analisis);
+                    $("#summerNoteAnalisis").html(datos.analisis);
                 });
                 document.getElementById('analisis').show();
             }
@@ -271,7 +273,7 @@ input[type="checkbox"] {
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->             
 
-        <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;">
+        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem;padding:1rem;'>
         <input type="hidden" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" id="correo">
         <input type="hidden"  id="idAnalisis">
         <div class="menu" id="menu">
@@ -295,11 +297,13 @@ input[type="checkbox"] {
                 Color de Fondo: 
                 <select id="imagen" >
                     <option value="">background..</option>
-                    <option value="amarillo.png">Amarillo</option>
+                    <option value="amarillo.png">Dorado</option>
                     <option value="azul.png">Azul</option>
+                    <option value="azul_oscuro.png">Azul Oscuro</option>
+                    <option value="verde.png">Verde</option>                    
+                    <option value="naranja.png">Naranja</option>                    
                     <option value="rojo.png">Rojo</option>
-                    <option value="dorado.png">Dorado</option>
-                    <option value="verde.png">Verde</option>
+                    <option value="plateado.png">Plata</option>
                 </select>
                 <br>     
                 Color de Letra: 
@@ -323,7 +327,7 @@ input[type="checkbox"] {
                 </div>
                 Descripcion: <br>
                 <div class="textAreaContainer">                
-                    <textarea row="10" id="summernote"> </textarea>
+                    <textarea row="10"  id="summernote"></textarea>
                 </div>
                 Limite de Usuarios: <input type="number" id="min" value="10"><br>
                 Estrellas: <input type="number" id="rate" min="0" max="5" value="0"><br>
@@ -339,7 +343,7 @@ input[type="checkbox"] {
                 <div id="nameAnalisis"></div>
                 <div id="analisisDescripcion"></div>
                 <div class="textAreaContainer">                
-                    <textarea row="10" id="summerNoteAnalisis"><p id="edit"></p></textarea>
+                    <textarea row="10"  id="summerNoteAnalisis"></textarea>
                 </div>
                 <button class='appbtn' style="float:right;" type="button" id="btncrear" onclick="setAnalis()">Enviar Analisis</button>
             </form>
@@ -352,7 +356,7 @@ input[type="checkbox"] {
         <!--FIN footer-->     
 
         <script>
-        $(document).ready(function() {
+       /* $(document).ready(function() {
             $('#summernote').summernote({
                 placeholder: 'Escribe aquí...',
                 height: 150,
@@ -377,7 +381,7 @@ input[type="checkbox"] {
                 ]
             });
 
-        });
+        });*/
     </script>    
     </body>
 </html>

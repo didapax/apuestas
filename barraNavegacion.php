@@ -1,105 +1,213 @@
-<?php 
- //hola est es un comentario
-    ?>
-<link rel="stylesheet" href="css/style.css">
-<header > 
+<!DOCTYPE html>
+   <html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <nav class="nav-media1200 main-nav-media1200" style='position:relative;z-index:5; background:white;height:6rem'>
-        <div id="cabeza" class="cabeza">
-            <marquee><?php verPromo(); ?></marquee>
-            <div class="topnav" id="myTopnav">
-            <?php             
-            if(!isset($_SESSION['user'])){
-                echo "<a style=\"color:yellow;\" href='sesion'>Iniciar Sesion / Unirse</a>";
-            }else{
-                $notificaciones = countNotif($_SESSION['user']);
-                $style = "";
-                if($notificaciones>0){
-                  $style = "style='border-top: solid 1px red;'";
-                }
-                if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){                                   
+      <!--=============== REMIXICONS ===============-->
+      <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+
+      <!--=============== CSS ===============-->
+      <link rel="stylesheet" href="css/navBar.css">
+
+      <title>Responsive dropdown menu </title>
+   </head>
+   <body>
+      <!--=============== HEADER ===============-->
+      <header class="header">
+         <nav class="navbar navbar-container">
+            <div class="nav__data">
+               <a href="#" class="nav__logo">
+                  <img class='logo' src='./Assets/logotype.png'> CryptoSignal
+               </a>
+               
+               <div class="nav__toggle" id="nav-toggle">
+                  <i class="ri-menu-line nav__burger"></i>
+                  <i class="ri-close-line nav__close"></i>
+               </div>
+      
+
+            <!--=============== NAV MENU ===============-->
+            <div class="nav__menu" id="nav-menu">
+               <ul class="nav__list">
+                  <?php 
+                   if(!isset($_SESSION['user'])){
+                     echo "<li><a href='sesion' class='nav__link'>Iniciar Sesión</a></li>";
+                 }else{
+                     $notificaciones = countNotif($_SESSION['user']);
+                     $style = "";
+                     if($notificaciones>0){
+                       $style = "style='border-top: solid 1px red;'";
+                     }
+                  }
+
+                  if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){                                   
                    
-                    if($page=="home"){
-                      echo "<a href='index' class='active'>Tienda</a>";
-                    }else{
-                      echo "<a href='index' >Tienda</a>";
-                    }
-                    if($page=="chat"){
-                      echo "<a href='chat' class='active'>Soporte</a>";
-                    }else{
-                      echo "<a href='chat' >Soporte</a>";
-                    }
-                    if($page=="wallet"){
-                      echo "<a href='miwallet' class='active'>Mi Wallet</a>";
-                    }
-                    else{
-                      echo "<a href='miwallet'>Mi Wallet</a>";
-                    }
-                    if($page=="histcliente"){
-                      echo "<a href='historialcliente' class='active'>Suscripciones</a>";
-                    }
-                    else{
-                      echo "<a href='historialcliente'>Suscripciones</a>";
-                    }                    
-                    
-                    echo "<a href='block?cerrarSesion'>Cerrar Sesion</a>"; 
-                    echo "<a style='cursor:pointer;' href='miwallet' class='saldo' id='saldo'> Saldo ".price(readClienteId($_SESSION['user'])['SALDO'])." USDC</a>";
-                    echo "<a class='perfil'>".readClienteId($_SESSION['user'])['CORREO']."</a>";
-                    echo "<a href=\"javascript:void(0);\" class='icon' onclick=\" myFunctionMenu();\"><i class='fa fa-bars'></i></a></div>";
-                }
-                else if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
+                     if($page=="home"){
+                       echo "<li><a href='index' class='nav__link active'>Tienda</a></li>";
+                     }else{
+                        echo "<li><a href='index' class='nav__link'>Tienda</a></li>";
+                     }
+                     if($page=="chat"){
+                       echo "<li><a href='chat' class='nav__link active'>Soporte</a></li>";
+                     }else{
+                        echo "<li><a href='chat' class='nav__link'>Soporte</a></li>";
+                     }
+                     if($page=="wallet"){
+                       echo "<li><a href='miwallet' class='nav__link active'>Cartera</a></li>";
+                     }
+                     else{
+                        echo "<li><a href='miwallet' class='nav__link'>Cartera</a></li>";
+                     }
+                     if($page=="histcliente"){
+                       echo "<li><a href='historialcliente' class='nav__link active'>Suscripciones</a></li>";
+                     }
+                     else{
+                        echo "<li><a href='historialcliente' class='nav__link'>Suscripciones</a></li>";
+                     }                    
+                     
+                     echo "
+                     <li class='dropdown__item'>
+                        <div class='nav__link'>
+                           ".readClienteId($_SESSION['user'])['CORREO']." <i class='ri-arrow-down-s-line dropdown__arrow'></i>
+                        </div>
+                     
+                        <ul class='dropdown__menu'>
+                       
+                           <li>
+                              <a href='miwallet' class='dropdown__link'>
+                                 <i class='ri-pie-chart-line'></i> Saldo: <p style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
+                              </a>                          
+                           </li>
+
+                           <li>
+                              <a href='block?cerrarSesion' class='dropdown__link'>
+                                 <i class='ri-arrow-up-down-line'></i> Cerrar Sesion
+                              </a>
+                           </li>
+                     </ul>
+                  </li>                 
+                     "; 
+                 }
+///////////////////////////////////FIN NAV MENU///////////////////////////////////////////////
+
+
+
+/////////////////////////////////////INICIO MENU ADMINISTRADOR//////////////////////////////////////////////////////
+                 else if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                   if($page=="home"){
-                    echo "<a href='index' class='active'>Tienda</a>";
+                     echo "<li><a href='index' class='nav__link active'>Tienda</a></li>";
                   }else{
-                    echo "<a href='index' >Tienda</a>";
+                     echo "<li><a href='index' class='nav__link'>Tienda</a></li>";
                   }                  
                   if($page=="histadmin"){
-                    echo "<a href='historialadmin' class='active'>Suscripciones</a>";
+                    echo "<a href='historialadmin' class='nav__link active' >Suscripciones</a>";
                   }
                   else{
-                    echo "<a href='historialadmin'>Suscripciones</a>";
+                    echo "<a href='historialadmin' class='nav__link'>Suscripciones</a>";
                   }
                   if($page=="chat"){
-                    echo "<a href='trabajos' class='active'>Chat</a>";
+                    echo "<li><a href='trabajos' class='nav__link active'>Trabajos</a></li>";
                   }                  
                   if($page=="trabajos"){
-                    echo "<a href='trabajos' class='active'>Depositos/Retiros</a>";
+                     echo "<li><a href='trabajos' class='nav__link active'>Trabajos</a></li>";
                   }
                   else{                  
-                    echo "<a href='trabajos' $style>Depositos/Retiros</a>";
+                     echo "<li><a href='trabajos' class='nav__link'>Trabajos</a></li>";
                   }
                   if($page=="jugadas"){
-                    echo "<a href='jugadas' class='active'>Productos</a>";
+                    echo "<a href='jugadas' class='nav__link active'>Productos</a>";
                   }
                   else{                  
-                    echo "<a href='jugadas'>Productos</a>";
+                    echo "<a href='jugadas' class='nav__link'>Productos</a>";
                   }
                   if($page=="promo"){
-                    echo "<a href='promo' class='active'>Promos</a>";
+                    echo "<a href='promo' class='nav__link active'>Promos</a>";
                   }
                   else{                        
-                    echo "<a href='promo'>Promos</a>";
+                    echo "<a href='promo' class='nav__link'>Promos</a>";
                   }
                   if($page=="criptos"){
-                    echo "<a href='criptos' class='active'>Criptos</a>";
+                    echo "<a href='criptos' class='nav__link active'>Criptos</a>";
                   }
                   else{                        
-                    echo "<a href='criptos'>Criptos</a>";
+                    echo "<a href='criptos' class='nav__link'>Criptos</a>";
                   }                  
                   if($page=="perfiladmin"){
-                    echo "<a href='perfiladmin' class='active'>Mi Perfil</a>";
+                    echo "
+                     <li class='dropdown__item'>
+                        <div class='nav__link'>
+                           ".readClienteId($_SESSION['user'])['CORREO']." <i class='ri-arrow-down-s-line dropdown__arrow'></i>
+                        </div>
+                     
+                        <ul class='dropdown__menu'>
+                       
+                          <li>
+                              <a  href='perfiladmin' class='dropdown__link'>
+                                 <i class='ri-pie-chart-line'></i> Perfil
+                              </a>                          
+                           </li>
+
+                           <li>
+                              <a href='miwallet' class='dropdown__link'>
+                                 <i class='ri-pie-chart-line'></i> Saldo: <p style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
+                              </a>                          
+                           </li>
+
+                           <li>
+                              <a href='block?cerrarSesion' class='dropdown__link'>
+                                 <i class='ri-arrow-up-down-line'></i> Cerrar Sesion
+                              </a>
+                           </li>
+                      
+                     </ul>
+                  </li>                 
+                    ";
                   }
                   else{                        
-                    echo "<a href='perfiladmin'>Mi Perfil</a>";
-                  }                  
-                    echo "<a href='block?cerrarSesion'>Cerrar Sesion</a>"; 
-                    echo "<a style='cursor:pointer;' href='miwallet' class='saldo' id='saldo'> Saldo ".price(readClienteId($_SESSION['user'])['SALDO'])." USDC</a>";
-                    echo "<a class='perfil'><span style='color:white;'>Admin: </span>".readClienteId($_SESSION['user'])['CORREO']."</a>";
-                    echo "<a href=\"javascript:void(0);\" class='icon' onclick=\" myFunctionMenu();\"><i class='fa fa-bars'></i></a></div>";
-                }                    
-            }            
-            ?>            
-        </div>
+                    echo "
+                       <li class='dropdown__item'>
+                        <div class='nav__link'>
+                           ".readClienteId($_SESSION['user'])['CORREO']." <i class='ri-arrow-down-s-line dropdown__arrow'></i>
+                        </div>
+                     
+                        <ul class='dropdown__menu'>
+                       
+                          <li>
+                              <a  href='perfiladmin' class='dropdown__link'>
+                                 <i class='ri-pie-chart-line'></i> Perfil
+                              </a>                          
+                           </li>
 
-    </nav>    
-</header>
+                           <li>
+                              <a href='miwallet' class='dropdown__link'>
+                                 <i class='ri-pie-chart-line'></i> Saldo: <p style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
+                              </a>                          
+                           </li>
+
+                           <li>
+                              <a href='block?cerrarSesion' class='dropdown__link'>
+                                 <i class='ri-arrow-up-down-line'></i> Cerrar Sesion
+                              </a>
+                           </li>
+                      
+                     </ul>
+                  </li>                 
+                    ";
+                  }                  
+                }                            
+                  ?>
+
+                  <!--=============== DROPDOWN 2 ===============-->
+               </ul>
+               </div>
+            </div>
+         </nav>
+         <marquee><?php verPromo(); ?></marquee>
+
+      </header>
+
+      <!--=============== MAIN JS ===============-->
+      <script src="Javascript/navBar.js"></script>
+   </body>
+</html>

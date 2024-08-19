@@ -374,176 +374,120 @@ if(isset($_POST['refreshSuscripcion'])){
 }
 
 if(isset($_GET['getSuscripciones'])) {
-  $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
-  $correo= $_GET['correo'];
-  if (!$conexion) {
-    echo "Refresh page, Failed to connect to Data...";
-    exit();
-  }else{    
-    $consulta = "select * from APUESTAS WHERE ELIMINADO=0 AND CLIENTE='$correo' ORDER BY FECHA";
-    $resultado = mysqli_query( $conexion, $consulta );
-    while($row = mysqli_fetch_assoc($resultado)){
-      $fecha = latinFecha($row['FECHA']);
-      $bloqueo = "detalle";
-      $mensaje = "";
-      $style = "";
-      $colorTitle="";
-      $favorito="";
-      $analisis = "";
-      $imagen = $row['IMAGEN'];
-      $foreground = $row['FOREGROUND'];
-  
-      if($row['ACTIVO']==0){     
-        $analisis = "<button style='float: right;color:black;border:solid 1px black;border-radius:5px;' onclick=\"renovar('".$row['ID']."')\">Renovar</button>
-                      <button style='background:coral;float: right;color:black;border:solid 1px black;border-radius:5px;' onclick=\"eliminar('".$row['ID']."')\">Eliminar</button>";
-        $mensaje = "<span style='color:#FE6080;'>Suscripcion Suspendida</span>";
-        $colorAlert = "#F96E1F";
-        $style = "background: url(Assets/gris.png); border: 3px solid black; border-radius: 15px;";
-        $colorTitle="darkgray";
-      }
-      else{
-        if( isset(readJuegoId($row['IDJUEGO'])['ANALISIS']) ){
-          $analisis = readJuegoId($row['IDJUEGO'])['ANALISIS'];
-        }else{
-          $analisis = readJuegoId($row['IDJUEGO'])['DESCRIPCION'];
-        }        
-        $bloqueo = "pagar";        
-        $mensaje = "<span style='color:gray; font-size:13px;'>Suscripcion Activa</span>";
-        $style = "background: url(Assets/$imagen); border: 3px solid black; border-radius: 15px;";
-        $colorTitle=$foreground;
-      }  
-        echo "
-        <div class=\"app\" style='{$style}' onclick=\"{$bloqueo}('".$row['ID']."')\">
-          <div >
-            <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:{$colorTitle};'>".$row['JUEGO']."</span></div>
-              <div  style='font-size:14px; text-transform:capitalize;'>
-                <div style='padding:5px;font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 160px;  overflow-y: auto; overflow-x: hidden;margin-left: 80px;'>".$analisis."</div>
-                <div style='color:{$colorTitle};'> Interes Mensual de ".price($row['INTERES_MENSUAL'])."Usdc</div>
-                <div style='color:{$colorTitle};font-size:13px;font-weight:bold;'>Vence el : ".latinFecha($row['FIN'])."</div>
-                <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
-              </div>
-            <div style='text-transform: uppercase;font-weight: bold; margin-top:2px;text-align:center; width:100%;font-size:12px;color:{$colorTitle};text-decoration:none;'>{$mensaje}</div><br>            
-          </div>
-        </div>";
-      
-    }
-    mysqli_close($conexion);
-  }
+	$correo = $_GET['correo'];
+	$analisis = "";
+	$activo = true;
+	$interes = 0;
+	$pagaIntereses = false;
+	
+	$obj = array();
+	$consulta = "select * from APUESTAS WHERE ELIMINADO=0 AND CLIENTE='$correo' ORDER BY FECHA";
+  $resultado = sqlconector($consulta);
+	
+	if($resultado){
+		while($row = mysqli_fetch_assoc($resultado)){
+		  $fecha = latinFecha($row['FECHA']);
+		  $bloqueo = readJuegoId($row['IDJUEGO'])['BLOQUEADO'];
+		  $imagen= $row['IMAGEN'];
+		  $foreground = $row['FOREGROUND'];
+		  $titulo = $row['JUEGO'];
+		  $estrellas = readJuegoId($row['IDJUEGO'])['RATE'];
+		  $costo = $row['MONTO'];
+		  $interes = price($row['INTERES_MENSUAL']);
+		  $pagaIntereses = false;
+
+		  if(readJuegoId($row['IDJUEGO'])['PORCIENTO'] > 0){
+			$pagaIntereses = true;
+		  }		  
+		 if($row['ACTIVO']==0){     
+			$activo = false;
+		 }
+		 else{
+			if( isset(readJuegoId($row['IDJUEGO'])['ANALISIS']) ){
+			  $analisis = readJuegoId($row['IDJUEGO'])['ANALISIS'];
+			}else{
+			  $analisis = readJuegoId($row['IDJUEGO'])['DESCRIPCION'];
+			}
+		  } 
+		  
+		  $obj[]= array(
+		  'id' => $row['ID'],
+		  'idJuego' => $row['IDJUEGO'],
+		  'correo'=>$correo, 
+		  'fecha'=>$fecha,
+		  'bloqueo'=>$bloqueo,
+		  'imagen'=>$imagen,
+		  'foreground'=>$foreground,
+		  'pagaIntereses'=>$pagaIntereses,
+		  'titulo'=>$titulo,
+		  'analisis'=>$analisis,
+		  'estrellas'=>$estrellas,
+		  'interes'=>$interes,
+		  'pagaIntereses'=>$pagaIntereses,
+		  'activo'=>$activo,
+		  'costo'=>$costo);
+		}	
+	}
+	echo json_encode($obj);
 }
 
 if(isset($_GET['getJugadas'])) {
-  $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
-  $correo = $_GET['correo'];
-  $consulta = "select * from JUEGOS WHERE ELIMINADO=0 ORDER BY FECHA";
-
-  if (!$conexion) {
-    echo "Refresh page, Failed to connect to Data...";
-    exit();
-  }else{    
-    $resultado = mysqli_query( $conexion, $consulta );
-    while($row = mysqli_fetch_assoc($resultado)){
-      $fecha = latinFecha($row['FECHA']);
-      $bloqueo = "trade";
-      $mensaje = "";
-      $style = "";
-      $colorTitle="";
-      $favorito="&#169;";
-      $imagen= $row['IMAGEN'];
-      $foreground = $row['FOREGROUND'];
-
-      if($row['BLOQUEADO']==1){
-        $bloqueo = "bloque";
-        $mensaje = "<span style='color:#FE6080;'>Suscripcion Bloqueda</span>";
-        $colorAlert = "#F96E1F";
-        $style = "background: url(Assets/gris.png); border: 3px solid black; border-radius: 15px;";
-        $colorTitle="darkgray";
-      }
-      else{
-        $mensaje = "<span style='color:#16A085; font-size:13px;'>Suscripcion Abierta</span>";
-        $style = "background: url(Assets/$imagen); border: 3px solid black; border-radius: 15px;";
-        $colorTitle= $foreground;
-      }  
-
-      if($row['FAVORITO']==1){
-        $favorito = "&#169; Recomendado";
-      }      
-      
-      if(!isset($_SESSION['user'])){
-        echo "
-        <div class=\"app\" style='{$style}' onclick=\"initsession()\">  
-          <div >
-            <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
-            <div  style='font-size:14px; text-transform:capitalize;'>
-                <div style='font-size:10px;font-weight:bold; color:{$colorTitle};'>{$favorito}</div>
-                <div style='padding:5px;font-weight:bold; color:{$colorTitle};font-size:13px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;margin-left: 90px;'>".$row['DESCRIPCION']."</div>
-                <div style='text-align: right;color:{$colorTitle};font-size:12px;font-weight:bold;'>Costo: ".price($row['MONTO'])." Usdc</div>
-                <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
-            </div>
-            <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:{$colorTitle};text-decoration:none;'>{$mensaje}</div>
-            <div class='app-rating app-rating--".$row['RATE']."'></div>
-          </div>
-        </div>";
-      }
-      else{
-        if(strlen($correo) > 0 ){
-          if(ifClienteJuegoExist($row['ID'],$correo)){
-            if($row['PORCIENTO'] > 0){
-              echo "
-              <div class=\"app\" style='{$style}' onclick=\"{$bloqueo}('".$row['ID']."')\">
-                <input type='hidden' id='M".$row['ID']."' value='".price($row['MONTO'])."'>
-                <div >
-                  <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
-                    <div  style='font-size:14px; text-transform:capitalize;'>
-                      <div style='font-size:10px;font-weight:bold; color:{$colorTitle};'>{$favorito}</div>
-                      <div style='padding:5px;font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;margin-left: 90px;'>".$row['DESCRIPCION']."</div>
-                      <div style='text-align: right;color:{$colorTitle};font-size:12px;font-weight:bold;'>Costo: ".price($row['MONTO'])." Usdc</div>
-                      <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
-                    </div>
-                  <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:{$colorTitle};text-decoration:none;'>{$mensaje}</div><br>
-                  <div class='app-rating app-rating--".$row['RATE']."'></div>
-                </div>
-              </div>";
-            }
-          }
-          else{
-            echo "
-              <div class=\"app\" style='{$style}' onclick=\"{$bloqueo}('".$row['ID']."')\">
-                <input type='hidden' id='M".$row['ID']."' value='".price($row['MONTO'])."'>
-                <div >
-                  <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
-                    <div  style='font-size:14px; text-transform:capitalize;'>
-                      <div style='font-size:10px;font-weight:bold; color:{$colorTitle};'>{$favorito}</div>
-                      <div style='padding:5px;font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;margin-left: 90px;'>".$row['DESCRIPCION']."</div>
-                      <div style='text-align: right;color:{$colorTitle};font-size:12px;font-weight:bold;'>Costo: ".price($row['MONTO'])." Usdc</div>
-                      <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
-                    </div>
-                  <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:{$colorTitle};text-decoration:none;'>{$mensaje}</div><br>
-                  <div class='app-rating app-rating--".$row['RATE']."'></div>
-                </div>
-              </div>";          
-          }
-        }
-        else{
-          echo "
-              <div class=\"app\" style='{$style}' onclick=\"{$bloqueo}('".$row['ID']."')\">
-                <input type='hidden' id='M".$row['ID']."' value='".price($row['MONTO'])."'>
-                <div >
-                  <div class='app-title'><span style='text-transform: uppercase;font-size:2.1vh;font-weight:bold;color:#FB8107;'>".$row['JUEGO']."</span></div>
-                    <div  style='font-size:14px; text-transform:capitalize;'>
-                      <div style='font-size:10px;font-weight:bold; color:{$colorTitle};'>{$favorito}</div>
-                      <div style='padding:5px;font-weight:bold; color:{$colorTitle};font-size:12px; whidth:100%; height: 110px;  overflow-y: auto; overflow-x: hidden;margin-left: 90px;'>".$row['DESCRIPCION']."</div>
-                      <div style='text-align: right;color:{$colorTitle};font-size:12px;font-weight:bold;'>Costo: ".price($row['MONTO'])." Usdc</div>
-                      <div id='V_{$row['ID']}' style='font-size:12px;font-weight:bold;'></div>
-                    </div>
-                  <div style='text-transform: uppercase;font-weight: bold; margin-top:5px;text-align:center; width:100%;font-size:12px;color:{$colorTitle};text-decoration:none;'>{$mensaje}</div><br>
-                  <div class='app-rating app-rating--".$row['RATE']."'></div>
-                </div>
-              </div>";
-        }
-      }
-    }
-    mysqli_close($conexion);
-  }
+	$correo = $_GET['correo'];
+	$sesion = 1;
+	$suscripcionExiste = false;
+	$pagaIntereses = false;
+	
+	$obj = array();
+	$consulta = "select * from JUEGOS WHERE ELIMINADO=0 ORDER BY FECHA";
+   
+    $resultado = sqlconector($consulta );
+	
+	if($resultado){
+		while($row = mysqli_fetch_assoc($resultado)){
+		  $fecha = latinFecha($row['FECHA']);
+		  $bloqueo = $row['BLOQUEADO'];
+		  $imagen= $row['IMAGEN'];
+		  $foreground = $row['FOREGROUND'];
+		  $favorito = $row['FAVORITO'];
+		  $sesion = 1;
+		  $suscripcionExiste = false;
+		  $pagaIntereses = false;
+		  $titulo = $row['JUEGO'];
+		  $detalle = $row['DESCRIPCION'];
+		  $estrellas = $row['RATE'];
+		  $costo = price($row['MONTO']);
+		  
+		  if(!isset($_SESSION['user'])){
+			$sesion = 0;
+		  }
+		  else{
+			if(strlen($correo) > 0 ){ 
+			  if(ifClienteJuegoExist($row['ID'],$correo)){				  
+				  $suscripcionExiste = true;
+				if($row['PORCIENTO'] > 0){
+					$pagaIntereses = true;
+				}
+			  }
+			}
+		  }
+		  $obj[]= array(
+		  'id' => $row['ID'],
+		  'correo'=>$correo, 
+		  'fecha'=>$fecha,
+		  'bloqueo'=>$bloqueo,
+		  'imagen'=>$imagen,
+		  'foreground'=>$foreground,
+		  'favorito'=>$favorito,
+		  'sesion'=>$sesion,
+		  'suscripcionExiste'=>$suscripcionExiste,
+		  'pagaIntereses'=>$pagaIntereses,
+		  'titulo'=>$titulo,
+		  'detalle'=>$detalle,
+		  'estrellas'=>$estrellas,
+		  'costo'=>$costo);
+		}
+	}
+	echo json_encode($obj);
 }
 
 if( isset($_GET['bot']) ){

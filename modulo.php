@@ -526,7 +526,7 @@ function verPromo(){
     $data = json_decode($json, true);
     echo $data['listasset']. " Tendencia del Mercado" .$data['totalTendencia']." Animo".$data['tendencia']." Hora UTC ".$data['utc'];
   }else{
-    echo "Suscribete con ua minima compra de nuestros productos y disfruta de los mejores análisis y señales del mercado de criptomonedas...";
+    echo "Suscribete con una minima compra de nuestros productos y disfruta de los mejores análisis y señales del mercado de criptomonedas...";
   }
 
 }
@@ -954,10 +954,22 @@ function readMailPromo(){
 function promoFlotante(){
   if(ifReadPromo()){
     $row = row_sqlconector("select * from PROMO where FLOTANTE=1 LIMIT 1");
-    echo 	"<dialog open id='promoFlotante' class='dialog_mss'>      
-      <a href='javascript:void(0);' class='icon-close' style='float:right;' onclick=\"$('#promoFlotante').fadeOut()\">✖️</a><br>
-      <div style='padding:21px;'>".$row['MENSAJE']."</div>      
-      </dialog>
+    echo 	"
+    <div class='overlay-dialog' id='promoFlotante'> 
+      <dialog open id='promoFlotante' class='index-dialog'>      
+        <div style='padding:21px;'>
+        
+        <h2>".$row['NOMBRE']."</h2>
+        
+        ".$row['MENSAJE']."
+        </div>
+
+        <div class='dialog-image-container'>
+          <img src='Assets/dialog-image.png'>
+          <a href='javascript:void(0);' class='close-icon' onclick=\"$('#promoFlotante').fadeOut()\">X</a><br>
+        </div>
+        </dialog>
+    </div> 
       ";
   }
 }

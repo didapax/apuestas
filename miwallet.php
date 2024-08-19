@@ -8,14 +8,15 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
         <link rel="shortcut icon" href="Assets/favicon.png">
-        <link rel="stylesheet" type="text/css" href="css/Common.css">        
+        <link rel="stylesheet" type="text/css" href="css/Common.css">    
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">    
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">                
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
         <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />           
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />
         <script src="Javascript/miwallet.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>               
     </head>
     <header>
         <style>
@@ -94,7 +95,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <input type="hidden" id="recibe">
         <input type="hidden" id="comision_retiro">
 
-        <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;">
+        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem;padding:1rem;'>
 
         <dialog class="dialog_agregar" style='width:400px;' id="jugada" close>
             <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('jugada').close()">X</a><br>
@@ -272,16 +273,21 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
       <?php include 'footer.php';?>
         <!--FIN footer-->     
 
-        <script>
+<script>
+   $(document).ready(function(){
+        $('.nav-tabs a').click(function(){
+            $(this).tab('show');
+        });
+    });
 
-function myFunctionMenu() {    
-    var x = document.getElementById("myTopnav");
-    if (x.className === "topnav") {
-        x.className += " responsive";
-    } else {
-        x.className = "topnav";
+    function myFunctionMenu() {    
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+            x.className = "topnav";
+        }
     }
-}
 </script>    
     </body>
 </html>

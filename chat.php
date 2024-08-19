@@ -18,6 +18,7 @@
         <!--CSS File-->
         <link rel="stylesheet" type="text/css" href="css/Common.css">
         <link rel="stylesheet" type="text/css" href="css/Account.css">
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
         <!-- Font Awesome -->
 
         <!--BOXICONS-->
@@ -289,7 +290,7 @@ function seltickect(){
   <input type='hidden' id='notif' value='{$notificaciones}'>";
    ?>
 <!-- partial:index.partial.html -->
-<div id="cuerpo" class="cuerpo" style="background-image:none; background:white;">
+<div id="cuerpo" class="cuerpo" style='margin-top: 8rem;padding:1rem;'>
 <div class="progress-container">
     <div class="progress-label" id="label1"></div>
     <div class="progress-label" id="label2"></div>

@@ -10,6 +10,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <link rel="shortcut icon" href="Assets/favicon.png">        
         <link rel="stylesheet" href="css/animate.min.css" />
         <link rel="stylesheet" type="text/css" href="css/Common.css">
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
         <link href='css/boxicons.min.css' rel='stylesheet'>
         <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
         <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />               
@@ -184,7 +185,7 @@ input[type="checkbox"] {
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->  
 
-        <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;">
+        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem;padding:1rem;'>
         <div class="menu" id="menu">
             <button type="button" onclick="showDialog()">Crear Promocion</button>
             <button style="margin-left:21px;" id="btn_difundir" type="button" onclick="difundir()">Difundir Promocion</button>

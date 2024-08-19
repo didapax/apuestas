@@ -53,7 +53,8 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
         <link rel="shortcut icon" href="Assets/favicon.png">
-        <link rel="stylesheet" type="text/css" href="css/Common.css">        
+        <link rel="stylesheet" type="text/css" href="css/Common.css">    
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
         <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
         <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />           
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
@@ -147,7 +148,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <!--FIN Barra de Navegación @media 1200px-->   
 
         <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
-        <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;"> 
+        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem;padding:1rem;'> 
         <div class="vista" id="vista">
         <form action="perfiladmin" method="POST">
             <table>
