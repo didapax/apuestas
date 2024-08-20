@@ -2,7 +2,7 @@
 include "modulo.php";
 
 if(isset($_POST['retirar'])){
-  $wallet_comisiones = "alfonsi.acosta@gmail.com";
+  $wallet_comisiones = $_POST['cajero'];
   $ticket = generaTicket();
   $monto = $_POST['monto'];
   $recibe = $_POST['recibe'];
