@@ -47,16 +47,6 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
             color:black;
          }
          
-         input[type="number"] { 
-margin: 5px;
-border-radius: 3px;
-border: 0;
-outline: 0;
-padding: 2px;
-width: 80px;
-background: #CFCFD3;
-text-align: right;
-}
 
 input[type="text"] {
 margin: 5px;
@@ -235,8 +225,15 @@ input[type="checkbox"] {
             }
 
             function showDialog(){
+                document.getElementById('overlayCommonDialog').style.display = "flex";
                 document.getElementById('agregar').show();
-            }    
+            }
+            
+            function closeDialog(){
+                document.getElementById('agregar').close();
+                document.getElementById('overlayCommonDialog').style.display = "none";
+
+            }
 
             function analisis(id){    
                 document.getElementById('idAnalisis').value = id;
@@ -279,65 +276,131 @@ input[type="checkbox"] {
         <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
         <input type="hidden" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" id="correo">
         <input type="hidden"  id="idAnalisis">
-        <div class="menu" id="menu">
-            <button type="button" onclick="showDialog()">Agregar +</button>
+        <div class="button-menu" id="menu">
+            <button class='add-button' type="button" onclick="showDialog()">Agregar +</button>
         </div>
-        <dialog class="dialog_retiro" id="agregar" close>
-            <form action="jugadas">
-                <a title="Cerrar" style="font-weight:bold;float:right;cursor:pointer; color:yellow;" onclick="document.getElementById('agregar').close()">X</a><br>                
-                Titulo: <input type="text" id="nombre"><br>
-                Normal: <input title="Solo Insertar la Tarjeta" type="radio" id="ninguno" name="selectx">
-                Favorito: <input title="Poner la tarjeta como Favorita" type="radio" value="1" id="favorito" name="selectx"><br>                
-                Periodo: 
-                <select id="tipoJuego" >
-                    <option value="">selecciona Duracion..</option>
-                    <option value="MENSUAL">Mensual</option>
-                    <option value="TRIMESTRAL">Trimestral</option>
-                    <option value="SEMESTRAL">Semestral</option>
-                    <option value="ANUAL">ANUAL</option>
-                </select>
-                <br>
-                Color de Fondo: 
-                <select id="imagen" >
-                    <option value="">background..</option>
-                    <option value="amarillo.png">Dorado</option>
-                    <option value="azul.png">Azul</option>
-                    <option value="azul_oscuro.png">Azul Oscuro</option>
-                    <option value="verde.png">Verde</option>                    
-                    <option value="naranja.png">Naranja</option>                    
-                    <option value="rojo.png">Rojo</option>
-                    <option value="plateado.png">Plata</option>
-                </select>
-                <br>     
-                Color de Letra: 
-                <select id="foreground" >
-                    <option value="">foreground..</option>
-                    <option value="yellow">Amarillo</option>
-                    <option value="blue">Azul</option>
-                    <option value="red">Rojo</option>
-                    <option value="white">Blanco</option>
-                    <option value="black">Negro</option>
-                    <option value="green">Verde</option>
-                </select>                                
-                <hr>                
-                Costo: <input required type="number" id="monto"  value="0" style="color:black;"  step="1"> Usdc<br>
-                <input title="Paga Intereses.." type="checkbox" value="1" id="paga_intereses" onchange="pagaIntereses()"> Paga Intereses: <br>                
-                <div id="zona_intereses" style="display:none;">
-                    <input title="se paga por Adelantado" type="checkbox" value="1" id="adelantado" onchange="ifAdelantado()"> Paga intereses Por Adelantado: <br>
-                    <input title="Devuelve el capital.." type="checkbox" value="1" id="devuelve_capital" > Devuelve Capital: <br>                    
-                    Interes Anual del: <input required type="number" id="porciento" onchange="calcular()" onkeyup="calcular()" value="0" style="color:black;"  step="1"> % <br>
-                    <div id="calculos" style="color:black; background:white;"></div>
-                </div>
-                Descripcion: <br>
-                <div class="textAreaContainer">                
-                    <textarea row="10"  id="summernote"></textarea>
-                </div>
-                Limite de Usuarios: <input type="number" id="min" value="10"><br>
-                Estrellas: <input type="number" id="rate" min="0" max="5" value="0"><br>
-                <button class='appbtn' style="float:right;" type="button" id="btncrear" onclick="crear()">Agregar</button>
-            </form>
+
+        <div class='overlay-common-dialog' id='overlayCommonDialog'>  
+            <dialog class="common-dialog" id="agregar" close>
+                    <div style='display: flex;align-self: end;'>
+                        <a title="Cerrar" class='close-common-dialog' onclick="closeDialog()">X</a>
+                    </div>               
+
+                    <form action="jugadas">
+
+                    
+                    <div class='common-dialog-input-container'>
+                        <h3>Titulo:</h3> 
+                        <input type="text" id="nombre">
+                    </div>
+                    
+                       
+                    <div class='common-dialog-input-container'>
+                        <h3>Tipo: </h3>
+
+                        <div style='display: flex;gap: 1rem;justify-content: center;'>
+                            <div style='display: flex;align-items: flex-start;gap: .2rem;'>
+                            Normal: 
+                                <input title="Solo Insertar la Tarjeta" type="radio" id="ninguno" name="selectx">
+                            </div>
+                            <div style='display: flex;align-items: flex-start;gap: .2rem;'>
+                                Favorito: 
+                                <input title="Poner la tarjeta como Favorita" type="radio" value="1" id="favorito" name="selectx"><br>                
+                            </div>
+                        </div>
+                    </div>
+                   
+                    
+                    <div class='common-dialog-input-container'>
+                        <h3>Periodo:</h3> 
+
+                        <select id="tipoJuego" >
+                            <option value="">selecciona Duracion..</option>
+                            <option value="MENSUAL">Mensual</option>
+                            <option value="TRIMESTRAL">Trimestral</option>
+                            <option value="SEMESTRAL">Semestral</option>
+                            <option value="ANUAL">ANUAL</option>
+                        </select>
+                    </div>
+                    
+                    <div class='common-dialog-input-container'>
+                        <h3>Color de Fondo:</h3> 
+                        <select id="imagen" >
+                            <option value="">background..</option>
+                            <option value="amarillo.png">Dorado</option>
+                            <option value="azul.png">Azul</option>
+                            <option value="azul_oscuro.png">Azul Oscuro</option>
+                            <option value="verde.png">Verde</option>                    
+                            <option value="naranja.png">Naranja</option>                    
+                            <option value="rojo.png">Rojo</option>
+                            <option value="plateado.png">Plata</option>
+                        </select>
+                    </div>
+                    
+                    <div class='common-dialog-input-container'>
+                        <h3>Color de Letra:</h3> 
+                        <select id="foreground" >
+                            <option value="">foreground..</option>
+                            <option value="yellow">Amarillo</option>
+                            <option value="blue">Azul</option>
+                            <option value="red">Rojo</option>
+                            <option value="white">Blanco</option>
+                            <option value="black">Negro</option>
+                            <option value="green">Verde</option>
+                        </select>   
+                    </div>
+                                                 
+                    <hr style='border: 1px solid black;'>
+    
+                    <div class='common-dialog-input-container'>
+                        <h3>Costo:</h3> 
+                        <input required type="number" id="monto" value="0" style="color:black;" step="1"><span style='color:green;'>Usdc</span>
+                    </div>
+
+                    
+                    
+                    <div class='common-dialog-input-container'>
+                            <h3>Paga Intereses: </h3>
+                        <div style='display: flex;align-items: flex-start;justify-content: center;'>   
+                            Si:   <input title="Paga Intereses.." type="checkbox" value="1" id="paga_intereses" onchange="pagaIntereses()">              
+                        </div>
+
+                        <div id="zona_intereses" style="display:none;">
+                            <div style='display: flex;align-items: flex-start;'>   
+                                Paga intereses Por Adelantado: <input title="se paga por Adelantado" type="checkbox" value="1" id="adelantado" onchange="ifAdelantado()"><br>
+                            </div>
+                            <div style='display: flex;align-items: flex-start;'>   
+                                Devuelve Capital: <input title="Devuelve el capital.." type="checkbox" value="1" id="devuelve_capital" >  <br>                    
+                            </div>
+                        <div class='common-dialog-input-container'>
+                            <h3>Interes Anual:</h3> 
+                            <input required type="number" id="porciento" onchange="calcular()" onkeyup="calcular()" value="0" style="color:black;"  step="1"> % <br>                        </div>
+                            <div id="calculos" style="color:black; background:white;"></div>
+                        </div>
+                    </div> 
+
+                    <div class='common-dialog-input-container'>
+                        <h3>Descripcion:</h3> 
+                        <textarea row="10"  id="summernote"></textarea>
+                    </div>
+
+                    <div class='common-dialog-input-container'>
+                        <h3>Limite de Usuarios:</h3> 
+                        <input type="number" id="min" value="10">
+                    </div>
+
+                    <div class='common-dialog-input-container'>
+                        <h3>Estrellas:</h3> 
+                        <input type="number" id="rate" min="0" max="5" value="0">
+                    </div>
+
+                    <div style='display: flex;align-self: end;align-items: center;justify-content: center;'>
+                        <button style='margin-bottom:2rem;' class='add-button' type="button" id="btncrear" onclick="crear()">Agregar</button>
+                    </div>
+                </form>
+
         </dialog>    
-        
+    </div>
         
         <dialog style="color:black;" id="analisis" close>
             <form>

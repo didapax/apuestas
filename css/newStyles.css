@@ -297,85 +297,142 @@ marquee span{
 
 
 
+/***********************************End Common-Dialog*****************************************************/
 
-
-
-
-.atvImg {
-  border-radius: 8px;
-  transform-style: preserve-3d;
-  -webkit-tap-highlight-color: rgba(#000, 0);
-}
-
-
-.atvImg-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  transition: all 0.2s ease-out;
-}
-
-.atvImg-shadow {
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  width: 90%;
-  height: 90%;
-  transition: all 0.2s ease-out;
-  box-shadow: 0 8px 30px rgba(14, 21, 47, 0.6);
-}
-
-.atvImg-container.over .atvImg-shadow {
-  box-shadow: 0 45px 100px rgba(14,21,47,0.4), 0 16px 40px rgba(14,21,47,0.4);
-}
-
-
-.atvImg-layers {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  overflow: hidden;
-  transform-style: preserve-3d;
-}
-
-.atvImg-rendered-layer {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0%;
-  left: 0%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: transparent;
-  background-size: cover;
-  transition: all 0.1s ease-out;
-  overflow: hidden;
-  border-radius: 8px;
-}
-
-.atvImg-rendered-layer {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0%;
-  left: 0%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: transparent;
-  background-size: cover;
-  transition: all 0.1s ease-out;
-  overflow: hidden;
-  border-radius: 8px;
-}
-
-.atvImg-shine {
-  position: absolute;
+.overlay-common-dialog{
+  position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, .25) 0%, rgba(255, 255, 255, 0) 60%);
+  width: 100%;
+  height: 100%;
+  background: rgba(21, 57, 87, .6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+  z-index:10000000;
+  display:none;
 }
+
+.common-dialog{
+  position: relative;
+  width: 30rem;
+  background: #ededed;
+  display: flex;
+  align-items: center;
+  border: none;
+  box-shadow: 5px 13px 14px rgb(148, 148, 148);
+  color: #0f0f14;
+  height: 60vh;
+  overflow: auto;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+.close-common-dialog{
+  font-weight: bold;
+  float: right;
+  cursor: pointer;
+  color: #515151;
+  font-size: 1.8rem;
+}
+
+.close-common-dialog:hover{
+  font-weight: bold;
+  float: right;
+  cursor: pointer;
+  color: #272727;
+  font-size: 1.8rem;
+  transform: scale(1.1);
+}
+
+.common-dialog form{
+  height:100%;
+}
+
+.common-dialog h3{
+  margin-bottom:0;
+}
+
+
+.common-dialog-input-container{
+  margin-bottom: 1rem;
+}
+
+.common-dialog-input-container input[type="text"],select{
+  margin: 0;
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.6rem;
+  border: 1px solid black;
+}
+
+.common-dialog-input-container input[type="number"]{
+  margin: 0;
+  width: 85%;
+  font-size: 1rem;
+  padding: 0.6rem;
+  border: 1px solid black;
+}
+
+.common-dialog-input-container textarea{
+  max-width: 307px;
+  min-height: 104px;
+  min-width: 307px;
+  max-height: 104px;
+}
+
+
+
+
+/***********************************End Common-Dialog*****************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***********************************Buttons*****************************************************/
+
+.add-button{
+  padding: 1rem;
+  border: none;
+  background: #4fbfd9;
+  color: white;
+  font-family: 'Poppins';
+  font-weight: 600;
+  border-radius: 8px;
+  transition: ease 0.4s;
+}
+
+.add-button:hover{
+  transform: scale(1.1);
+  background: #457bad;
+}
+
+
+/***********************************End Buttons *****************************************************/
+
+
+
+/***********************************Tables*****************************************************/
+
+.button-menu{
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+
+/***********************************End Tables *****************************************************/
