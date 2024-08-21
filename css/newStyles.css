@@ -499,6 +499,45 @@ marquee span{
   background: #457bad;
 }
 
+.retire-button{
+  padding: 1rem;
+  border: none;
+  background: #d42d57;
+  color: white;
+  font-family: 'Poppins';
+  font-weight: 600;
+  border-radius: 8px;
+  transition: ease 0.4s;
+  width: 10rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.retire-button:hover{
+  transform: scale(1.1);
+  background: #c94e4e;
+}
+
+.deposit-button{
+  padding: 1rem;
+  border: none;
+  background: #4bb866;
+  color: white;
+  font-family: 'Poppins';
+  font-weight: 600;
+  border-radius: 8px;
+  transition: ease 0.4s;
+  width: 10rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.deposit-button:hover{
+  transform: scale(1.1);
+  background: #409158;
+}
 
 /***********************************End Buttons *****************************************************/
 

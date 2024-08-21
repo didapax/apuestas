@@ -402,20 +402,20 @@ function mostrarTablaRetiros() {
     tablaCuerpo.innerHTML = "";
 
     retiros.forEach((producto, index) => {
-        let color_estatus="#FAD7A0";
+        let color_estatus="#ff7b7b";
         switch (producto.estatus) {
             case 'REVISION':
-                color_estatus="#4caf50";
+                color_estatus="#25d596";
                 break;
                 case 'ESPERA':
-                    color_estatus="#2196f3";
+                    color_estatus="#478cf7";
                     break;        
 
                 case 'EXITOSO':
-                    color_estatus="#ff9800";
+                    color_estatus="#f78c3d";
                     break;        
             default:
-                color_estatus="#FAD7A0";
+                color_estatus="#ff7b7b";
                 break;
         }        
         const fila = document.createElement("tr");
@@ -423,7 +423,7 @@ function mostrarTablaRetiros() {
             <td>${producto.ticket}</td>
             <td>${producto.descripcion}</td>
             <td>${Math.round(producto.monto * 100) / 100} Usdc</td>
-            <td style='background:${color_estatus}'>${producto.estatus}</td>
+            <td style='color: #fff;font-weight: 600;text-align: center;background:${color_estatus}'>${producto.estatus}</td>
             <td>${calificacion(producto.rate,producto.calificado,producto.id)}</td>
         `;
         tablaCuerpo.appendChild(fila);
@@ -436,20 +436,20 @@ function mostrarTablaDepositos() {
     tablaCuerpo.innerHTML = "";
 
     depositos.forEach((producto, index) => {
-        let color_estatus="#FAD7A0";
+        let color_estatus="#ff7b7b";
         switch (producto.estatus) {
             case 'REVISION':
-                color_estatus="#4caf50";
+                color_estatus="#25d596";
                 break;
                 case 'ESPERA':
-                    color_estatus="#2196f3";
+                    color_estatus="#478cf7";
                     break;        
 
                 case 'EXITOSO':
-                    color_estatus="#ff9800";
+                    color_estatus="#f78c3d";
                     break;        
             default:
-                color_estatus="#FAD7A0";
+                color_estatus="#ff7b7b";
                 break;
         }
         const fila = document.createElement("tr");
@@ -457,7 +457,7 @@ function mostrarTablaDepositos() {
             <td>${producto.ticket}</td>
             <td>${producto.descripcion}</td>
             <td>${Math.round(producto.monto * 100) / 100} Usdc</td>
-            <td style='background:${color_estatus}'>${producto.estatus}</td>
+            <td style='color: #fff;font-weight: 600;text-align: center;background:${color_estatus}'>${producto.estatus}</td>
             <td>${calificacion(producto.rate,producto.calificado,producto.id)}</td>
         `;
         tablaCuerpo.appendChild(fila);
@@ -614,20 +614,20 @@ function recuperarRetiros() {
             tablaCuerpo.innerHTML = "";
         
             historial.forEach((producto, index) => {
-                let color_estatus="#FAD7A0";
+                let color_estatus="#ff7b7b";
                 switch (producto.estatus) {
                     case 'PAGADO':
-                        color_estatus="#4caf50";
+                        color_estatus="#25d596";
                         break;
                         case 'VENCIDO':
-                            color_estatus="#2196f3";
+                            color_estatus="#478cf7";
                             break;        
         
                         case 'ACTIVO':
-                            color_estatus="#ff9800";
+                            color_estatus="#f78c3d";
                             break;        
                     default:
-                        color_estatus="#FAD7A0";
+                        color_estatus="#ff7b7b";
                         break;
                 }
                 const fila = document.createElement("tr");
@@ -636,7 +636,7 @@ function recuperarRetiros() {
                     <td>${producto.faltan_dias}</td>
                     <td>${producto.juego}</td>
                     <td>${Math.round(producto.total_pagar * 100) / 100} Usdc</td>
-                    <td style='background:${color_estatus}'>${producto.estatus}</td>
+                    <td style='color: #fff;font-weight: 600;text-align: center;background:${color_estatus}'>${producto.estatus}</td>
                 `;
                 tablaCuerpo.appendChild(fila);
             });

@@ -73,7 +73,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <input type="hidden" id="recibe">
         <input type="hidden" id="comision_retiro">
 
-        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
+        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; overflow-x: hidden; padding:5rem; min-height: calc(100vh - 24rem);'>
 
         <div id="modalOverlay" class="modal-overlay">
             <div class="modal">
@@ -162,7 +162,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                         <h3>Depositar Usdc de Forma Facil y Segura</h3>
                     </div>
                     <div class="container mt-5 mb-5">
-                        <button id="buttonDeposito" onclick="initDeposito()">Depositar</button>
+                        <button id="buttonDeposito" class='deposit-button' onclick="initDeposito()"><img style='width:1.2rem' src='Assets/icons/cash_icon.png'>Depositar</button>
                                 <table id='example' class='ui celled table' style='width:100%; '> 
                                     <thead>
                                         <tr>
@@ -185,7 +185,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                         <h3>Retirar Tus Usdc de la Plataforma</h3>
                     </div>
                     <div class="container mt-5 mb-5">
-                        <button id="buttonRetiro" onclick="document.getElementById('modalOverlay2').style.display = 'flex';">Retirar</button>
+                        <button id="buttonRetiro" class='retire-button' onclick="document.getElementById('modalOverlay2').style.display = 'flex';"><img style='width:1.2rem' src='Assets/icons/withdrawal_icon.png'> Retirar</button>
 
                                 <table id='example1' class='ui celled table' style='width:100%; '> 
                                     <thead>
