@@ -172,7 +172,7 @@ input[type="checkbox"] {
                 },function(data){
                     leerVista();
                     document.getElementById("btncrear").disabled = false;
-                    document.getElementById('agregar').close();
+                    document.getElementById('modalOverlay').style.display = "none";
                 });
             }
 
@@ -209,7 +209,7 @@ input[type="checkbox"] {
                         setAnalis: document.getElementById('idAnalisis').value,
                         analisis: document.getElementById('summerNoteAnalisis').value
                     },function(data){
-                        document.getElementById('analisis').close();
+                        document.getElementById('modalOverlay2').style.display = "none";
                         leerVista();
                     });
             }
@@ -225,14 +225,7 @@ input[type="checkbox"] {
             }
 
             function showDialog(){
-                document.getElementById('overlayCommonDialog').style.display = "flex";
-                document.getElementById('agregar').show();
-            }
-            
-            function closeDialog(){
-                document.getElementById('agregar').close();
-                document.getElementById('overlayCommonDialog').style.display = "none";
-
+                document.getElementById('modalOverlay').style.display = "flex";
             }
 
             function analisis(id){    
@@ -243,7 +236,7 @@ input[type="checkbox"] {
                     $("#analisisDescripcion").html(datos.descripcion);
                     $("#summerNoteAnalisis").html(datos.analisis);
                 });
-                document.getElementById('analisis').show();
+                document.getElementById('modalOverlay2').style.display = "flex";
             }
 
             function pagaIntereses(){                
@@ -280,24 +273,18 @@ input[type="checkbox"] {
             <button class='add-button' type="button" onclick="showDialog()">Agregar +</button>
         </div>
 
-        <div class='overlay-common-dialog' id='overlayCommonDialog'>  
-            <dialog class="common-dialog" id="agregar" close>
-                    <div style='display: flex;align-self: end;'>
-                        <a title="Cerrar" class='close-common-dialog' onclick="closeDialog()">X</a>
-                    </div>               
 
-                    <form action="jugadas">
-
-                    
-                    <div class='common-dialog-input-container'>
+        <div id="modalOverlay" class="modal-overlay">
+            <div class="modal">
+                <span id="closeModalBtn" class="close-btn">X</span>
+                <h2>Agregar Tarjeta</h2>
+                    <div>
                         <h3>Titulo:</h3> 
                         <input type="text" id="nombre">
                     </div>
-                    
-                       
-                    <div class='common-dialog-input-container'>
+                                           
+                    <div >
                         <h3>Tipo: </h3>
-
                         <div style='display: flex;gap: 1rem;justify-content: center;'>
                             <div style='display: flex;align-items: flex-start;gap: .2rem;'>
                             Normal: 
@@ -309,9 +296,8 @@ input[type="checkbox"] {
                             </div>
                         </div>
                     </div>
-                   
-                    
-                    <div class='common-dialog-input-container'>
+                                       
+                    <div >
                         <h3>Periodo:</h3> 
 
                         <select id="tipoJuego" >
@@ -323,7 +309,7 @@ input[type="checkbox"] {
                         </select>
                     </div>
                     
-                    <div class='common-dialog-input-container'>
+                    <div >
                         <h3>Color de Fondo:</h3> 
                         <select id="imagen" >
                             <option value="">background..</option>
@@ -337,7 +323,7 @@ input[type="checkbox"] {
                         </select>
                     </div>
                     
-                    <div class='common-dialog-input-container'>
+                    <div >
                         <h3>Color de Letra:</h3> 
                         <select id="foreground" >
                             <option value="">foreground..</option>
@@ -349,17 +335,13 @@ input[type="checkbox"] {
                             <option value="green">Verde</option>
                         </select>   
                     </div>
-                                                 
-                    <hr style='border: 1px solid black;'>
     
-                    <div class='common-dialog-input-container'>
+                    <div >
                         <h3>Costo:</h3> 
                         <input required type="number" id="monto" value="0" style="color:black;" step="1"><span style='color:green;'>Usdc</span>
                     </div>
 
-                    
-                    
-                    <div class='common-dialog-input-container'>
+                    <div >
                             <h3>Paga Intereses: </h3>
                         <div style='display: flex;align-items: flex-start;justify-content: center;'>   
                             Si:   <input title="Paga Intereses.." type="checkbox" value="1" id="paga_intereses" onchange="pagaIntereses()">              
@@ -372,24 +354,24 @@ input[type="checkbox"] {
                             <div style='display: flex;align-items: flex-start;'>   
                                 Devuelve Capital: <input title="Devuelve el capital.." type="checkbox" value="1" id="devuelve_capital" >  <br>                    
                             </div>
-                        <div class='common-dialog-input-container'>
+                        <div >
                             <h3>Interes Anual:</h3> 
                             <input required type="number" id="porciento" onchange="calcular()" onkeyup="calcular()" value="0" style="color:black;"  step="1"> % <br>                        </div>
                             <div id="calculos" style="color:black; background:white;"></div>
                         </div>
                     </div> 
 
-                    <div class='common-dialog-input-container'>
+                    <div >
                         <h3>Descripcion:</h3> 
                         <textarea row="10"  id="summernote"></textarea>
                     </div>
 
-                    <div class='common-dialog-input-container'>
-                        <h3>Limite de Usuarios:</h3> 
+                    <div >
+                        <h3>Cantidad de Tarjetas a la Venta:</h3> 
                         <input type="number" id="min" value="10">
                     </div>
 
-                    <div class='common-dialog-input-container'>
+                    <div >
                         <h3>Estrellas:</h3> 
                         <input type="number" id="rate" min="0" max="5" value="0">
                     </div>
@@ -397,23 +379,21 @@ input[type="checkbox"] {
                     <div style='display: flex;align-self: end;align-items: center;justify-content: center;'>
                         <button style='margin-bottom:2rem;' class='add-button' type="button" id="btncrear" onclick="crear()">Agregar</button>
                     </div>
-                </form>
+            </div>
+        </div>
 
-        </dialog>    
-    </div>
-        
-        <dialog style="color:black;" id="analisis" close>
-            <form>
-                <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;color:black;" onclick="document.getElementById('analisis').close()">X</a><br>
-                Analisis Tecnico: <br>
+        <div id="modalOverlay2" class="modal-overlay">
+            <div class="modal">
+                <span id="closeModalBtn2" class="close-btn">X</span>
+                <h2>Analisis Tecnico</h2>
                 <div id="nameAnalisis"></div>
                 <div id="analisisDescripcion"></div>
                 <div class="textAreaContainer">                
                     <textarea row="10"  id="summerNoteAnalisis"></textarea>
                 </div>
                 <button class='appbtn' style="float:right;" type="button" id="btncrear" onclick="setAnalis()">Enviar Analisis</button>
-            </form>
-        </dialog> 
+            </div>
+        </div>
 
         <div class="vista" id="vista"></div>
         <table id='example' class='ui celled table' style='width:100%; '> 
@@ -446,7 +426,37 @@ input[type="checkbox"] {
         new DataTable('#example');
     </script>
 
+<script>
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalOverlay2 = document.getElementById('modalOverlay2');
+        const closeModalBtn2 = document.getElementById('closeModalBtn2');        
 
+        // Función para cerrar el modal
+        closeModalBtn.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+        });
+
+        // Cerrar el modal al hacer clic fuera de él
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.style.display = 'none';
+            }
+        });
+
+        // Función para cerrar el modal2
+        closeModalBtn2.addEventListener('click', () => {
+            modalOverlay2.style.display = 'none';
+        });
+
+        // Cerrar el modal al hacer clic fuera de él
+        modalOverlay2.addEventListener('click', (e) => {
+            if (e.target === modalOverlay2) {
+                modalOverlay2.style.display = 'none';
+            }
+        });        
+
+    </script>
         <script>
        /* $(document).ready(function() {
             $('#summernote').summernote({

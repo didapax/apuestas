@@ -116,7 +116,7 @@ function initDeposito(){
         cancelButtonText: "Cancelar"
         }).then((result) => {
             if (result.isConfirmed) {    
-                document.getElementById('jugada').show();    
+                document.getElementById('modalOverlay').style.display = "flex";
             }
         });
 }
@@ -267,7 +267,7 @@ function retirar(){
             recibe: document.getElementById("recibe").value,
             comision: document.getElementById("comision_retiro").value
         },function(data){
-            document.getElementById('retirar').close();
+            document.getElementById('modalOverlay2').style.display = "flex";
             document.getElementById("retirar_btn").disabled = false;
             inicio();
         });  
@@ -303,7 +303,7 @@ function lanzar(){
             cajero: document.getElementById("cajero").value,
             correo: document.getElementById("correo").value
         },function(data){
-            document.getElementById('jugada').close();
+            document.getElementById('modalOverlay').style.display = "none";
             document.getElementById("jugar").disabled = false;
             inicio();
         });  

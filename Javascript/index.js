@@ -2,7 +2,7 @@
 
 let tarjetas = [];
 
-function dibujaTarjeta(acciones,imagen,titulo,texto,mensaje,costo,estrellas){	
+function dibujaTarjeta(id,acciones,imagen,titulo,texto,mensaje,costo,estrellas){	
 	let dibujo = `
     <div class="cover" >
         <div class="content">
@@ -13,7 +13,7 @@ function dibujaTarjeta(acciones,imagen,titulo,texto,mensaje,costo,estrellas){
 							<section class='left-side'>
 								<div class='header-container'>
 									<div class='chip-container'>
-										<img class='chip' style='width:5rem;' src='Assets/vainitas.png'>
+										<img class='chip' style='width:4.5rem;' src='Assets/vainitas.png'>
 									</div>
 									<div class='title-container'>
 										<h2>${titulo}</h2>
@@ -36,13 +36,14 @@ function dibujaTarjeta(acciones,imagen,titulo,texto,mensaje,costo,estrellas){
 							</div>
 							
 							<div class='star-container'> 
-								<div class='stars'> ${estrellas} </div> 	<div class='message'> ${mensaje} </div>
+								<div class='stars'> ${estrellas} </div><div class='message'> ${mensaje} </div>
 							</div>
 						</section>
 					</div>	
 				</div>						             
 			</div>
 			<div class="back-image-back" style="background: url('Assets/${imagen}') no-repeat center/cover; display:flex;align-items: center;justify-content: center;">
+				<input type="hidden" id="M${id}" value="${costo}">
 				<button class='yellow-button' ${acciones}>OBTENER AHORA!!</button>             
 			</div>
 		</div>
@@ -54,35 +55,34 @@ function mostrarTarjetas() {
     const caja = document.getElementById("vista");	
     caja.innerHTML = '';
     tarjetas.forEach((tarjeta) => {
-        let acciones = `onclick="trade(${tarjeta.id})"`;
+        let acciones = `onclick="trade('${tarjeta.id}')"`;
         let texto = tarjeta.detalle;
         let mensaje = "Suscripcion Abierta";
         let costo = tarjeta.costo;
         let estrellas = dibujarEstrellas(tarjeta.estrellas);
         let favorito = "&#169;";
-        if (tarjeta.bloqueo === 1) {
+        if (tarjeta.bloqueo === '1') {
             acciones = `onclick="bloque()"`;
-            mensaje = "Suscripcion Bloqueda";
+            mensaje = "<span style='color:red;'>Suscripcion Bloqueda</span>";
         }
-        if (tarjeta.favorito === 1) {
+        if (tarjeta.favorito === '1') {
             favorito = "&#169; Recomendado";
         }        
-        if (tarjeta.sesion === 0) {
+        if (tarjeta.sesion === '0') {
             acciones = `onclick="initsession()"`;
-            caja.innerHTML += dibujaTarjeta(acciones,tarjeta.imagen,tarjeta.titulo,texto,mensaje,costo,estrellas);
+            caja.innerHTML += dibujaTarjeta(tarjeta.id,acciones,tarjeta.imagen,tarjeta.titulo,texto,mensaje,costo,estrellas);
         } else {
             if (tarjeta.suscripcionExiste) {
                 if (tarjeta.pagaIntereses) {
-                    caja.innerHTML += dibujaTarjeta(acciones,tarjeta.imagen,tarjeta.titulo,texto,mensaje,costo,estrellas);
+                    caja.innerHTML += dibujaTarjeta(tarjeta.id,acciones,tarjeta.imagen,tarjeta.titulo,texto,mensaje,costo,estrellas);
                 }
             }
 			else{
-				caja.innerHTML += dibujaTarjeta(acciones,tarjeta.imagen,tarjeta.titulo,texto,mensaje,costo,estrellas);
+				caja.innerHTML += dibujaTarjeta(tarjeta.id,acciones,tarjeta.imagen,tarjeta.titulo,texto,mensaje,costo,estrellas);
 			}
         }			
     });    
 }
-
 
 function recuperarTarjetas(){ 
 	fetch("block?getJugadas=&correo="+document.getElementById('correo').value)
@@ -112,7 +112,7 @@ function dibujarEstrellas(n) {
     return estrellas;
 }
 
-function trade(id){ 
+function trade(id){
 	let etiqueta =  "M"+id;
 	if(document.getElementById("actualsaldo").value *1 >= document.getElementById(etiqueta).value *1 ){
 		$.get("block?datosJuego&idjuego="+id,

@@ -9,8 +9,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
         <link rel="shortcut icon" href="Assets/favicon.png">        
         <link rel="stylesheet" href="css/animate.min.css" />
-        <link rel="stylesheet" type="text/css" href="css/Common.css">
-        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
+        <link rel="stylesheet" type="text/css" href="css/Common.css">        
         <link href='css/boxicons.min.css' rel='stylesheet'>
         <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
         <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />                       
@@ -20,67 +19,11 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">    
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css">    
-
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
     </head>
     <header>
         <style>
-          .textAreaContainer{
-            background:white;
-            color: black;
-         }
-         textarea{
-            color:black;
-         }
-         input[type=text]{
-            color:black;
-         }
-         input[type=number]{
-            color:black;
-         }       
-         
-         select{
-            color:black;
-            border:none;
-         }
-         
-         input[type="number"] { 
-margin: 5px;
-border-radius: 3px;
-border: 0;
-outline: 0;
-padding: 2px;
-width: 80px;
-background: #CFCFD3;
-text-align: right;
-}
 
-input[type="text"] {
-margin: 5px;
-border-radius: 3px;
-border: 0;
-outline: 0;
-padding: 2px;
-width: 80px;
-text-transform: uppercase;
-}
-
-input[type="checkbox"] {
-  margin: 5px;
-  border-radius: 3px;
-  border: 0;
-  padding: 3px;
-  text-transform: uppercase;
-}
-
-         .dialog_retiro{
-            top: 150px;
-            border: solid 1px black;
-            box-shadow: 4px 3px 8px 1px #969696;
-            background: #c1cae0;
-            border-radius: 5px;
-            z-index: 99;
-        }           
-    
         </style>        
         <script>
             let trabajos = [];            
@@ -107,7 +50,7 @@ input[type="checkbox"] {
                     $("#idapuesta").val(datos.ticket);
                           
                     document.getElementById(datos.estatus).selected = true;
-                    document.getElementById('ver').show();
+                    document.getElementById('modalOverlay').style.display = "flex";
                 }
 
             }
@@ -153,24 +96,17 @@ input[type="checkbox"] {
                                                 idapuesta: document.getElementById("idapuesta").value
                                             },function(data){
                                                 leerTrabajos();
-                                                document.getElementById('ver').close();
+                                                document.getElementById('modalOverlay').style.display = "none";
                                             });
                                             }
                                             else{
-                                                document.getElementById('ver').close();
+                                                document.getElementById('modalOverlay').style.display = "none";
                                             }
                                         });
             }
 
 
             function leerTrabajos(){
-                /*$.get("block?estadisticas=",
-                function(data){
-                    var datos= JSON.parse(data);
-                    $("#estad").html("Usuarios "+datos.totalReg);
-                    $("#reg").html("Referidos "+datos.totalRef);
-                });        */        
-
                 recuperarTrabajos();
             } 
 
@@ -243,10 +179,6 @@ input[type="checkbox"] {
                 leerTrabajos();
                 myVar = setInterval(leerTrabajos, 3000);
             }
-
-            function showDialog(){
-                document.getElementById('agregar').show();
-            }
             
         </script>
     </header>
@@ -261,11 +193,13 @@ input[type="checkbox"] {
                 <label style="margin-left:1px; font-weight:bold;" id="estad"></label>
                 <label style="margin-left:13px; font-weight:bold;" id="reg"></label>
             </div> -->
-            <dialog class="dialog_retiro" id="ver" close>
-                <a title="Cerrar" style="color:black;font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('ver').close()">X</a><br>
+        <div id="modalOverlay" class="modal-overlay">
+            <div class="modal" >
+                <span id="closeModalBtn" class="close-btn">X</span>
+                <h2><span id="evento"></span></h2>
                 <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
                 <input type="hidden" id="idapuesta">
-                Transaccion: <span id="evento"></span><br>
+                Transaccion: <br>
                 Cliente: <span id="emailCliente"></span><br>
                 Medio de Pago: <span id="mediopago"></span><br>
                 <span style='background:yellow;' id="wallet"></span>
@@ -276,13 +210,12 @@ input[type="checkbox"] {
                     <option id="">selecciona estatus...</option>
                     <option id="REVISION" value="REVISION">En Revision</option>
                     <option id="ESPERA" value="ESPERA">En Espera</option>
-                    <option id="EXITOSO" value="EXITOSO">Exitoso</option>                    
-                    <option id="APOSTADO" value="APOSTADO">Apostado</option>
-                    <option id="GANADOR" value="GANADOR">Ganador</option>                    
+                    <option id="EXITOSO" value="EXITOSO">Exitoso</option>
                     <option id="FALLIDO" value="FALLIDO">Fallido</option> 
                 </select><br><br>
                 <button class='appbtn' style="float:right;" type="button" id="btnenviar" onclick="enviar()">Cambiar Estatus</button>
-            </dialog>        
+            </div>        
+        </div>
 
             <div class="vista" id="vista">
                     <table id='example' class='ui celled table' style='width:100%; '> 
@@ -315,6 +248,24 @@ input[type="checkbox"] {
     <script>
         new DataTable('#example');
     </script>
+
+<script>
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        // Función para cerrar el modal
+        closeModalBtn.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+        });
+
+        // Cerrar el modal al hacer clic fuera de él
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.style.display = 'none';
+            }
+        });   
+
+</script>    
 
     </body>    
 </html>
