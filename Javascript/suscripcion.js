@@ -13,7 +13,7 @@ function dibujaTarjeta(acciones,imagen,titulo,texto,mensaje,costo,estrellas){
 						<section class='left-side'>
 							<div class='header-container'>
 								<div class='chip-container'>
-									<img class='chip' style='width:50px;height:50px;' src='Assets/vainitas.png'>
+									<img class='chip' style='width:4.5rem;' src='Assets/vainitas.png'>
 								</div>
 								<div class='title-container'>
 									<h2>${titulo}</h2>
