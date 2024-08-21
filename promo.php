@@ -9,8 +9,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
         <link rel="shortcut icon" href="Assets/favicon.png">        
         <link rel="stylesheet" href="css/animate.min.css" />
-        <link rel="stylesheet" type="text/css" href="css/Common.css">
-        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
+        <link rel="stylesheet" type="text/css" href="css/Common.css">        
         <link href='css/boxicons.min.css' rel='stylesheet'>
         <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
         <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />               
@@ -24,65 +23,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>           
        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">    
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css">    
-
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
     </head>
     <header>
-        <style>
-         .textAreaContainer{
-            background:white;
-            color: black;
-         }
-         textarea{
-            color:black;
-         }
-         input[type=text]{
-            color:black;
-         }
-         input[type=number]{
-            color:black;
-         }       
-         
-         select{
-            color:black;
-         }
-         
-         input[type="number"] { 
-margin: 5px;
-border-radius: 3px;
-border: 0;
-outline: 0;
-padding: 2px;
-width: 80px;
-background: #CFCFD3;
-text-align: right;
-}
-
-input[type="text"] {
-margin: 5px;
-border-radius: 3px;
-border: 0;
-outline: 0;
-padding: 2px;
-width: 80px;
-text-transform: uppercase;
-}
-
-input[type="checkbox"] {
-  margin: 5px;
-  border-radius: 3px;
-  border: 0;
-  padding: 3px;
-  text-transform: uppercase;
-}
-
-         .dialog_retiro{
-            top: 150px;
-            border: solid 1px black;
-            box-shadow: 4px 3px 8px 1px #969696;
-            background: #c1cae0;
-            border-radius: 5px;
-            z-index: 99;
-        }           
+        <style>      
 
         </style>        
         <script>
@@ -107,7 +51,7 @@ input[type="checkbox"] {
                 },function(data){
                     leerVista();
                     document.getElementById("btncrear").disabled = false;
-                    document.getElementById('agregar').close();
+                    document.getElementById('modalOverlay').style.display = "none";
                 });
             }
 
@@ -178,7 +122,7 @@ input[type="checkbox"] {
             }
 
             function showDialog(){
-                document.getElementById('agregar').show();
+                document.getElementById('modalOverlay').style.display = "flex";
             }            
         </script>
     </header> 
@@ -194,19 +138,20 @@ input[type="checkbox"] {
             <button style="margin-left:21px;" id="btn_difundir" type="button" onclick="difundir()">Difundir Promocion</button>
             <button style="margin-left:21px; background:#E9B2B2; display:none;" id="btn_reset" type="button" onclick="reset()">Reset Promocion</button>
         </div>
-        <dialog class="dialog_retiro"  id="agregar" close>
-            <form action="promo">
-                <a title="Cerrar" style="color:black;font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('agregar').close()">X</a><br>            
+        <div id="modalOverlay" class="modal-overlay">
+            <div class="modal">
+                <span id="closeModalBtn" class="close-btn">X</span>
+                <h2>Agregar una Promocion</h2>
                 Titulo: <input type="text" id="nombre"><br>
                 Detalle:<br>
                 <div class="textAreaContainer">                
                     <textarea row="10" id="summernote"></textarea>
                 </div>                 
-                <label for="difuFlotante">Flotante </label><input type="radio" id="difuFlotante" name="idpromo"><br>
-                <label for="difu"> Difusion </label><input type="radio" id="difu" name="idpromo">&#128266;<br>
+                <label for="difuFlotante">Flotante </label><input type="radio" id="difuFlotante" name="idpromo">
+                <label for="difu"> Difusion </label><input type="radio" id="difu" name="idpromo"><br>
                 <button class='appbtn' style="float:right;" type="button" id="btncrear" onclick="crear()">Agregar</button>
-            </form>
-        </dialog>        
+            </div>
+        </div>
         <div class="vista" id="vista"></div>
                     <table id='example' class='ui celled table' style='width:100%; '> 
                         <thead>
@@ -235,7 +180,23 @@ input[type="checkbox"] {
 
     <script>
         new DataTable('#example');
-    </script>        
+    </script>  
+    <script>
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        // Función para cerrar el modal
+        closeModalBtn.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+        });
+
+        // Cerrar el modal al hacer clic fuera de él
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.style.display = 'none';
+            }
+        });
+    </script>          
         <script>
       /*  $(document).ready(function() {
             $('#summernote').summernote({

@@ -9,7 +9,6 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
         <link rel="shortcut icon" href="Assets/favicon.png">
         <link rel="stylesheet" type="text/css" href="css/Common.css">    
-        <link rel="stylesheet" type="text/css" href="css/newStyles.css">    
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">                
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
         <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
@@ -19,34 +18,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>               
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">    
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css">    
-
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">    
     </head>
     <header>
         <style>
-
-
-            .dialog_agregar{
-                width:400px;
-                border: solid 1px black;
-                box-shadow: 4px 3px 8px 1px #969696;
-                background: #16A085;              
-                color:white;
-                font-weight:bold;
-                border-radius: 5px;
-                z-index: 1000;
-            } 
-
-
-            .dialog_retirar{
-                width:350px;
-                border: solid 1px black;
-                box-shadow: 4px 3px 8px 1px #969696;
-                background: #CD6155;              
-                color:white;
-                font-weight:bold;
-                border-radius: 5px;
-                z-index: 1000;
-            } 
 
             .dialog_wallet{
                 display:inline-block;
@@ -100,10 +75,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
 
         <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
 
-        <dialog class="dialog_agregar" style='width:400px;' id="jugada" close>
-            <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('jugada').close()">X</a><br>
-            <form >
-                <br>
+        <div id="modalOverlay" class="modal-overlay">
+            <div class="modal">
+                <span id="closeModalBtn" class="close-btn">X</span>
+                <h2>Depositar</h2>
                 Selecciona un Cajero: 
                 <select onchange="selcajero()" id="micajero" style="color:black;">
                 </select>
@@ -113,19 +88,20 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 </select>
                 <div id="detalles" style="display:none;width:100%;">
                     Cantidad a Depositar: 
-                    <input required type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" style="color:black;"><br>
+                    <input style="border:none;outline: none;" type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" style="color:black;"><br>
+                    <div id="calculo" style="width:100%;color:black;float:right; background:white;padding:3px;border:none border-radius:5px;"></div><br>                    
                     <br><br> <div id='descripcionMetodo'></div>
-                    <input readonly class="datcajero" style="width:100%;" id="paycajero"><br>
-                    <img id='QRdeposito' src=""><br>
-                    <div id="calculo" style="width:100%;color:black;float:right; background:white;padding:3px;border:solid 1px; border-radius:5px;"></div><br>
+                    <input readonly class="datcajero" style="width:100%;border:none;outline: none;" id="paycajero"><br>
+                    <img style="" id='QRdeposito' src=""><br>                    
                 </div><br><br>
                 <button onclick="jugar_back()" class='appbtn' style="float:right;color:black;padding:8px;" type="button" id="jugar" name="jugar">Depositar</button>
-            </form>
-        </dialog>
+            </div>
+        </div>
 
-        <dialog class="dialog_retirar" style='width:400px;' id="retirar" close>
-            <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="document.getElementById('retirar').close()">X</a><br>
-            <form >
+        <div id="modalOverlay2" class="modal-overlay">
+            <div class="modal">
+                <span id="closeModalBtn2" class="close-btn">X</span>
+                <h2>Retiros</h2>
                 <input type="hidden" id="tipo_retiro" name="tipo_retiro">
                 <br>
                 Selecciona un Cajero: 
@@ -137,15 +113,15 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 </select>
                 <div id="detalles_retiro" style="display:none;width:100%;">
                     Cantidad a Retirar: 
-                    <input required type="number" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0" style="color:black;"  step="1"><br>
-                    <div id="calculo_retiro" style="width:100%;color:black;float:right; background:white;padding:3px; border:solid 1px; border-radius:3px;"></div><br><br>
+                    <input style="border:none;outline: none;" type="number" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0" style="color:black;"  step="1"><br>
+                    <div id="calculo_retiro" style="width:100%;color:black;float:right; background:white;padding:3px;border:none border-radius:5px;"></div><br><br>
                     <br><br><div id='descripcionMetodoRetiro'></div>
-                    <input readonly class="datcajero" style="width:100%;" id="paycliente">                    
+                    <input readonly class="datcajero" style="width:100%;border:none;outline: none;" id="paycliente">                    
                     <br>
                 </div><br><br>
                 <button onclick="retirar_back()" class='appbtn' style="float:right;color:black;padding:8px;" type="button" id="retirar_btn" name="retirar_btn">Retirar</button>
-            </form>
-        </dialog>
+            </div>
+        </div>
 
             <br>
            <!-- <div id="saldo"></div>        -->
@@ -209,7 +185,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                         <h3>Retirar Tus Usdc de la Plataforma</h3>
                     </div>
                     <div class="container mt-5 mb-5">
-                        <button id="buttonRetiro" onclick="document.getElementById('retirar').show();">Retirar</button>
+                        <button id="buttonRetiro" onclick="document.getElementById('modalOverlay2').style.display = 'flex';">Retirar</button>
 
                                 <table id='example1' class='ui celled table' style='width:100%; '> 
                                     <thead>
@@ -290,6 +266,37 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         }
     }
 </script>    
+<script>
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalOverlay2 = document.getElementById('modalOverlay2');
+        const closeModalBtn2 = document.getElementById('closeModalBtn2');        
+
+        // Función para cerrar el modal
+        closeModalBtn.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+        });
+
+        // Cerrar el modal al hacer clic fuera de él
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.style.display = 'none';
+            }
+        });
+
+        // Función para cerrar el modal2
+        closeModalBtn2.addEventListener('click', () => {
+            modalOverlay2.style.display = 'none';
+        });
+
+        // Cerrar el modal al hacer clic fuera de él
+        modalOverlay2.addEventListener('click', (e) => {
+            if (e.target === modalOverlay2) {
+                modalOverlay2.style.display = 'none';
+            }
+        });        
+
+    </script>
     </body>
 </html>
 
