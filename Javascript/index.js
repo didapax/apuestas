@@ -68,7 +68,7 @@ function mostrarTarjetas() {
         if (tarjeta.favorito === '1') {
             favorito = "&#169; Recomendado";
         }        
-        if (tarjeta.sesion === '0') {
+        if (tarjeta.sesion === false) {
             acciones = `onclick="initsession()"`;
             caja.innerHTML += dibujaTarjeta(tarjeta.id,acciones,tarjeta.imagen,tarjeta.titulo,texto,mensaje,costo,estrellas);
         } else {
