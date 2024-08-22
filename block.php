@@ -433,14 +433,18 @@ if(isset($_GET['getSuscripciones'])) {
 
 if(isset($_GET['getJugadas'])) {
 	$correo = $_GET['correo'];
-	$sesion = 1;
+	$sesion = false;
 	$suscripcionExiste = false;
 	$pagaIntereses = false;
 	
+  if(isset($_SESSION['user'])){
+    $sesion = true;
+  }
+
 	$obj = array();
 	$consulta = "select * from JUEGOS WHERE ELIMINADO=0 ORDER BY FECHA";
    
-    $resultado = sqlconector($consulta );
+  $resultado = sqlconector($consulta );
 	
 	if($resultado){
 		while($row = mysqli_fetch_assoc($resultado)){
@@ -449,7 +453,6 @@ if(isset($_GET['getJugadas'])) {
 		  $imagen= $row['IMAGEN'];
 		  $foreground = $row['FOREGROUND'];
 		  $favorito = $row['FAVORITO'];
-		  $sesion = 1;
 		  $suscripcionExiste = false;
 		  $pagaIntereses = false;
 		  $titulo = strip_tags($row['JUEGO']);
@@ -457,19 +460,15 @@ if(isset($_GET['getJugadas'])) {
 		  $estrellas = $row['RATE'];
 		  $costo = price($row['MONTO']);
 		  
-		  if(!isset($_SESSION['user'])){
-			$sesion = 0;
-		  }
-		  else{
-			if(strlen($correo) > 0 ){ 
-			  if(ifClienteJuegoExist($row['ID'],$correo)){				  
-				  $suscripcionExiste = true;
-				if($row['PORCIENTO'] > 0){
-					$pagaIntereses = true;
-				}
-			  }
-			}
-		  }
+      if(strlen($correo) > 0 ){ 
+        if(ifClienteJuegoExist($row['ID'],$correo)){				  
+          $suscripcionExiste = true;
+        if($row['PORCIENTO'] > 0){
+          $pagaIntereses = true;
+        }
+        }
+      }        			  
+
 		  $obj[]= array(
 		  'id' => $row['ID'],
 		  'correo'=>$correo, 
