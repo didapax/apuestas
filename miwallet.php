@@ -23,38 +23,22 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
     <header>
         <style>
 
-            .dialog_wallet{
-                display:inline-block;
-                padding:5px;
-                margin:2px;
-                width:400px;
-                height: 330px;
-                border: solid 1px black;
-                box-shadow: 4px 3px 8px 1px #969696;
-                background: #1B2224;              
-                color:white;
-                font-weight:bold;
-                border-radius: 5px;
-                z-index: 1000;
-            }
+
 
             .textAreaContainer{
             background:white;
             color: black;
          }
-         input[type=text]{
-            color:black;
-         }
-         input[type=number]{
-            color:black;
-         }       
+
+
+
+         
          
          select{
             color:black;
          }
-         button{
-            color:black;
-         }
+
+
         </style>             
         <script>
         </script>
@@ -142,16 +126,36 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                         <h3>Editar mi perfil</h3>
                     </div>
                     <div class="vista" id="vista">
-                    <div class="dialog_wallet" id="agregar">                                   
+                    <div class="dialog-wallet" id="agregar">                                   
                         Esta Direccion de Binance Pay Id y Bep-20 seran Utlizadas para los Depositos y Retiros, 
-                        asegurate que sea correcta, Cripto Signal Group no se hace responsable por la informacion 
+                        asegurate que sea correcta, CryptoSignal Group no se hace responsable por la informacion 
                         erronea que suministres.<br><br>
-                        <image src="Assets/minibina.png"><br>
-                        Mi Pay ID: <br> <input style="width:300px; color:black;" type="text" id="payid">
-                        <button id="guardar" class='appbtn' style="float:right; color:black;" type="button" onclick="guardar()">Guardar</button>
-                        <br>
-                        Wallet BSC Bep-20: <br> <input style="width:300px; color:black;" type="text" id="bep20">
-                        <button id="guardarbep20" class='appbtn' style="float:right; color:black;" type="button" onclick="savebep20()">Guardar</button>                        
+                        
+
+
+                        <section class='dialog-wallet-content'> 
+                            <div class='binance-form-outer-container'>
+                                <div class='binance-form-container'>
+                                    <div class='binance-input-container'> 
+                                        <div> 
+                                            <h4>Mi Pay ID:</h4> <input type="text" class='binance-input' id="payid">
+                                        </div>    
+                                        <button id="guardar" class='binance-button' type="button" onclick="guardar()">Guardar</button>
+                                    </div>
+                                    <div class='binance-input-container'>
+                                        <div>  
+                                            <h4> Wallet BSC Bep-20:</h4> <input class='binance-input' type="text" id="bep20">
+                                        </div> 
+                                        <button id="guardarbep20" class='binance-button' type="button" onclick="savebep20()">Guardar</button>                        
+                                    </div>
+                                </div>
+                                
+                                <div class='binance-image-container'>
+                                    <image src="Assets/minibina.png">
+                                </div>
+                            </div>
+                        </section>
+                    
                     </div> 
                     </div>
                 </div>
