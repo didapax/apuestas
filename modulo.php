@@ -278,10 +278,9 @@ function readPrices($moneda) {
 
 function ifNotDayExists($tabla, $moneda) {
   $interval = row_sqlconector("SELECT CURDATE() AS HOY");
-  $fecha1 = "{$interval['HOY']} 00:00:00";
-  $fecha2 = "{$interval['HOY']} 23:59:59";
+  $fecha = $interval['HOY'];
   
-  $query = "SELECT COUNT(*) AS TOTAL FROM {$tabla} WHERE MONEDA = '{$moneda}' AND FECHA BETWEEN '{$fecha1}' AND '{$fecha2}'";
+  $query = "SELECT COUNT(*) AS TOTAL FROM {$tabla} WHERE MONEDA = '{$moneda}' AND DATE(FECHA) = '{$fecha}'";
   $result = row_sqlconector($query);
   
   return $result['TOTAL'] == 0;
