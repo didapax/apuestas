@@ -398,15 +398,15 @@ function nivelAnterior($moneda){
 }
 
 function nivelBtc(){
-  $nprice = readPrices("BTCUSDT");
+  $nprice = readPrices("BTCUSDC");
   $min= 0;
   $max= 0;
 
-  if($nprice['ARRIBA'] < readFlotadorAnterior("BTCUSDT")){
+  if($nprice['ARRIBA'] < readFlotadorAnterior("BTCUSDC")){
     $min = $nprice['ARRIBA'];
-    $max = readFlotadorAnterior("BTCUSDT");
+    $max = readFlotadorAnterior("BTCUSDC");
   }else{
-    $min = readFlotadorAnterior("BTCUSDT");
+    $min = readFlotadorAnterior("BTCUSDC");
     $max = $nprice['ARRIBA'];
   }
 
@@ -547,14 +547,14 @@ function refreshDatos($mon){
     $priceArriba= $readPrice['ARRIBA'];
     $priceAbajo= $readPrice['ABAJO'];
     $labelPriceMoneda = formatPrice($priceMoneda,$moneda);
-    $labelPriceBitcoin = formatPrice($bitcoin,"BTCUSDT");
+    $labelPriceBitcoin = formatPrice($bitcoin,"BTCUSDC");
     $color = "red";
     $colorbtc = "red";
     $colorDisp = "red";
     $symbol = "&#9660;";
     $promedioUndante = row_sqlconector("SELECT (SUM(ABAJO) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='{$moneda}'")['PROMEDIO'];
     $promedioFlotante = row_sqlconector("SELECT (SUM(ARRIBA) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='{$moneda}'")['PROMEDIO'];
-    $promedioFlotanteBtc = row_sqlconector("SELECT (SUM(ARRIBA) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='BTCUSDT'")['PROMEDIO'];
+    $promedioFlotanteBtc = row_sqlconector("SELECT (SUM(ARRIBA) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='BTCUSDC'")['PROMEDIO'];
     $totalPromedio = ($promedioFlotante + $promedioUndante) /2;  
     $porcenmax = porcenConjunto($priceAbajo, $priceArriba, $priceMoneda)."%";  
     $capital = $row2['CAPITAL'];
@@ -639,7 +639,6 @@ function refreshDataAuto() {
           if ($priceAbajo > $available) {
               updatePrices($available_mon, "ABAJO={$available}");
           }
-
           refreshDatos($available_mon);
       }      
   } catch (PDOException $e) {
