@@ -258,22 +258,33 @@ function readParametros(){
   return row_sqlconector("select * from PARAMETROS");
 }
 
-function readPrices($moneda){
-  if(ifNotDayExists("PRICES",$moneda)){
-    if(strlen($moneda)>0){
-      sqlconector("INSERT INTO PRICES(MONEDA) VALUES('{$moneda}')");
-    }
+function readPrices($moneda) {
+  // Validar que la moneda no esté vacía
+  if (strlen($moneda) > 0) {
+      // Verificar si no existe un registro para el día actual
+      if (ifNotDayExists("PRICES", $moneda)) {
+          // Insertar un nuevo registro
+          sqlconector("INSERT INTO PRICES (MONEDA) VALUES ('{$moneda}')");
+      }
+      
+      // Obtener los precios del día actual
+      $query = "SELECT * FROM PRICES WHERE MONEDA = '{$moneda}' AND DATE(FECHA) = CURDATE()";
+      return row_sqlconector($query);
   }
-  return row_sqlconector("select * from PRICES WHERE MONEDA='{$moneda}' AND DAY(FECHA)= DAY(CURRENT_TIMESTAMP()) AND MONTH(FECHA)= MONTH(CURRENT_TIMESTAMP()) AND YEAR(FECHA)= YEAR(CURRENT_TIMESTAMP())");
+  
+  // Retornar null si la moneda está vacía
+  return null;
 }
 
-function ifNotDayExists($tabla,$moneda){
-  $interval = row_sqlconector("SELECT DAY(NOW()) AS DIA, MONTH(NOW()) AS MES, YEAR(NOW()) AS ANO");
-  $fecha1 = "{$interval['ANO']}-{$interval['MES']}-{$interval['DIA']} 00:00";
-  $fecha2 = "{$interval['ANO']}-{$interval['MES']}-{$interval['DIA']} 23:59";
-  if (row_sqlconector("select COUNT(*) AS TOTAL from {$tabla} WHERE MONEDA='{$moneda}' AND FECHA BETWEEN '{$fecha1}' AND '{$fecha2}'")['TOTAL'] == 0)
-  return TRUE;
-  return FALSE;
+function ifNotDayExists($tabla, $moneda) {
+  $interval = row_sqlconector("SELECT CURDATE() AS HOY");
+  $fecha1 = "{$interval['HOY']} 00:00:00";
+  $fecha2 = "{$interval['HOY']} 23:59:59";
+  
+  $query = "SELECT COUNT(*) AS TOTAL FROM {$tabla} WHERE MONEDA = '{$moneda}' AND FECHA BETWEEN '{$fecha1}' AND '{$fecha2}'";
+  $result = row_sqlconector($query);
+  
+  return $result['TOTAL'] == 0;
 }
 
 function formatPrice($valor,$moneda){
@@ -331,9 +342,10 @@ function readMinAnterior($moneda){
 
 function nivel($moneda){
   $nprice = readPrices($moneda);
-  $asset = "SELL"; //readDatosMoneda($moneda)['ASSET']
+  $asset = "SELL"; 
   $min= 0;
   $max= 0;
+  $actual = $nprice['ACTUAL'];
 
   if($nprice['ARRIBA'] < readFlotadorAnterior($moneda)){
     $min = $nprice['ARRIBA'];
@@ -343,10 +355,27 @@ function nivel($moneda){
     $max = $nprice['ARRIBA'];
   }
 
-  $porcenmax = (porcenConjunto(price($min), price($max), $nprice['ACTUAL']) *3.6 )."deg";
+  $porcenmax = (porcenConjunto($min,$max,$actual)*3.6)."deg";  
   $nivel = "<div class=odometros style=--data:{$porcenmax};><div id=grad2>{$asset}</div></div>";
 
   return $nivel;
+}
+
+function nivelCompra($moneda){  
+  $alerta = returnAlertas($moneda);
+  $asset = "BUY";
+  $nivel="<div class=odometroalert style=--color1:#F6465D;--data1:-80deg;--color2:#F6465D;--data2:-220deg;--color3:#F6465D;--data3:-360deg;--color4:#85929e;--data4:-360deg;><div id=grad2>{$asset}</div></div>";
+/*  if($alerta == "yellow"){
+    $nivel="<div class=odometroalert style=--color1:#F6465D;--data1:80deg;--color2:#F6465D;--data2:-220deg;--color3:#F6465D;--data3:-360deg;--color4:#85929e;--data4:-360deg;><div id=grad2>{$asset}</div></div>";
+  }*/
+  if($alerta == "yellow"){
+    $nivel="<div class=odometroalert style=--color1:#F6465D;--data1:80deg;--color2:#F6465D;--data2:220deg;--color3:#F6465D;--data3:-360deg;--color4:#85929e;--data4:-360deg;><div id=grad2>{$asset}</div></div>";
+  }
+  if($alerta == "red"){
+    $nivel="<div class=odometroalert style=--color1:#F6465D;--data1:80deg;--color2:#F6465D;--data2:220deg;--color3:#F6465D;--data3:360deg;--color4:#85929e;--data4:-360deg;><div id=grad2>{$asset}</div></div>";
+  }
+
+  return $nivel; 
 }
 
 function nivelAnterior($moneda){
@@ -438,30 +467,32 @@ function totalTendencia($moneda){
   return $tendencia;
 }
 
-function returnAlertas($totalPromedio,$moneda){
+function returnAlertas($moneda){
   $readPrice = readPrices($moneda);
   $precio = $readPrice['ACTUAL'];
   $priceArriba= $readPrice['ARRIBA'];
   $priceAbajo= $readPrice['ABAJO']; 
   
-  $variable = "";
+  $variable = "black"; //sin alerta
   
   $porcenmax = porcenConjunto($priceAbajo, $priceArriba, $precio);
-  $sane=0;
-  if($readPrice['ABAJO'] < readMinAnterior($moneda)){
-    $sane=1;
+  $stop=0; 
+  if($priceAbajo < readMinAnterior($moneda)){
+    $stop=1; //stop de alerta de compra
+    $variable = "red";
   }
 
-  if($porcenmax > 19 && $porcenmax < 30 && $sane==0){
-    $variable = "verde";
+  //logica de las alerta de venta y sus niveles de posible compras de acuerdo a su posicion. 
+  if($porcenmax > 33 && $porcenmax < 89 && $stop==0){
+    $variable = "green"; //alerta de venta
   }
 
-  if( $porcenmax > 9 && $porcenmax < 20 && $sane==0 ){
-    $variable = "naranja";
+  if( $porcenmax > 12 && $porcenmax < 34 && $stop==0 ){
+    $variable = "orange"; //intension de subir
   }
   
-  if($porcenmax > -1 && $porcenmax < 10 && $sane==0){
-    $variable = "roja";
+  if($porcenmax > 1 && $porcenmax < 13 && $stop==0){
+    $variable = "yellow"; //se puede comprar
   }
 
   return $variable;  
@@ -477,10 +508,9 @@ function listAsset(){
       $moneda = $row['MONEDA'];
       $promedioUndante = row_sqlconector("SELECT (SUM(ABAJO) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='{$moneda}'")['PROMEDIO'];
       $promedioFlotante = row_sqlconector("SELECT (SUM(ARRIBA) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='{$moneda}'")['PROMEDIO'];
-      $totalPromedio = ($promedioFlotante + $promedioUndante) /2;       
-      $alerta = returnAlertas($totalPromedio,$moneda);
+      $totalPromedio = ($promedioFlotante + $promedioUndante) /2;      
       $color = "red";
-      $colorAlerta="#171A1E";
+      $colorAlerta = returnAlertas($moneda);
       $asset = $row['ASSET'];
       $elid = $row['ID'];
       $price = formatPrice(readPrices($moneda)['ACTUAL'],$moneda);
@@ -489,35 +519,11 @@ function listAsset(){
       }
       else{
           $color = "#4BC883";
-      }     
-
-      if($alerta=="roja") $colorAlerta="green";
+      }
       $cadena = $cadena ." <span style=cursor:pointer;color:{$color};>{$asset}</span> <span style=color:{$color};font-weight:bold;>".formatPrice($price,$moneda)."</span> <span class=bolita style=color:{$colorAlerta};>&#9679;</span>";
     }
 
     return $cadena; 
-}
-
-
-function nivelCompra($moneda){
-  $promedioUndante = row_sqlconector("SELECT (SUM(ABAJO) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='{$moneda}'")['PROMEDIO'];
-  $promedioFlotante = row_sqlconector("SELECT (SUM(ARRIBA) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='{$moneda}'")['PROMEDIO'];
-  $promedioFlotanteBtc = row_sqlconector("SELECT (SUM(ARRIBA) / COUNT(*)) AS PROMEDIO FROM  PRICES WHERE MONEDA='BTCUSDT'")['PROMEDIO'];
-  $totalPromedio = ($promedioFlotante + $promedioUndante) /2;
-  $alerta = returnAlertas($totalPromedio,$moneda);
-  $asset = "BUY";
-  $nivel="<div class=odometroalert style=--color1:#089981;--data1:-80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>{$asset}</div></div>";
-  if($alerta == "verde"){
-    $nivel="<div class=odometroalert style=--color1:#089981;--data1:80deg;--color2:#089981;--data2:-220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>{$asset}</div></div>";
-  }
-  if($alerta == "naranja"){
-    $nivel="<div class=odometroalert style=--color1:#089981;--data1:80deg;--color2:#089981;--data2:220deg;--color3:#089981;--data3:-360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>{$asset}</div></div>";
-  }
-  if($alerta == "roja"){
-    $nivel="<div class=odometroalert style=--color1:#089981;--data1:80deg;--color2:#089981;--data2:220deg;--color3:#089981;--data3:360deg;--color4:#F23645;--data4:-360deg;><div id=grad2>{$asset}</div></div>";
-  }
-
-  return $nivel; 
 }
 
 function verPromo(){
