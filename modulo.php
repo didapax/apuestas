@@ -522,7 +522,6 @@ function listAsset(){
       }
       $cadena = $cadena ." <span style=cursor:pointer;color:{$color};>{$asset}</span> <span style=color:{$color};font-weight:bold;>".formatPrice($price,$moneda)."</span> <span class=bolita style=color:{$colorAlerta};>&#9679;</span>";
     }
-
     return $cadena; 
 }
 
@@ -600,42 +599,59 @@ function refreshDatos($mon){
   }  
 }
 
-function refreshDataAuto(){
-    $api = new Binance\API(sqlApiKey(), sqlApiSecret());
-    $api->useServerTime();
-    $price = $api->prices();
-    $api->useServerTime();
-    $balances = $api->balances();
-    
-    $consulta = "select * from DATOS";
-    $resultado = sqlconector($consulta);
-    while($row = mysqli_fetch_assoc($resultado)){        
-      $asset = $row['ASSET'];    
-      $available_mon=$row['MONEDA'];
-      $available = $price[$available_mon];
-      $axie = readPrices($available_mon);
-      $priceArriba = formatPrice($axie['ARRIBA'],$available_mon);
-      $priceAbajo = formatPrice($axie['ABAJO'],$available_mon);
-      updatePrices($available_mon,"ACTUAL={$available}");
+function refreshDataAuto() {
+  try {
+      // Conexión a MySQL
+      $dsn = "mysql:host={$GLOBALS['servidor']};dbname={$GLOBALS['database']};charset=utf8";
+      $conexion = new PDO($dsn, $GLOBALS['user'], $GLOBALS['password']);
+      $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-      if( $priceArriba == 0){
-        updatePrices($available_mon,"ARRIBA={$available}");
+      // Conexión a la API de Binance
+      $api = new Binance\API(sqlApiKey(), sqlApiSecret());
+      $api->useServerTime();
+      $price = $api->prices();
+      $balances = $api->balances();
+
+      // Consulta a la base de datos
+      $consulta = "SELECT * FROM DATOS";
+      $stmt = $conexion->query($consulta);
+
+      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+          $asset = $row['ASSET'];
+          $available_mon = $row['MONEDA'];
+          $available = $price[$available_mon];
+          $axie = readPrices($available_mon);
+          $priceArriba = formatPrice($axie['ARRIBA'], $row['ASSET'], $row['PAR']);
+          $priceAbajo = formatPrice($axie['ABAJO'], $row['ASSET'], $row['PAR']);
+          updatePrices($available_mon, "ACTUAL={$available}");
+
+          if ($priceArriba == 0) {
+              updatePrices($available_mon, "ARRIBA={$available}");
+          }
+
+          if ($priceAbajo == 0) {
+              updatePrices($available_mon, "ABAJO={$available}");
+          }
+
+          if ($priceArriba < $available) {
+              updatePrices($available_mon, "ARRIBA={$available}");
+          }
+
+          if ($priceAbajo > $available) {
+              updatePrices($available_mon, "ABAJO={$available}");
+          }
+
+          refreshDatos($available_mon);
+      }      
+  } catch (PDOException $e) {
+      echo "Error en la conexión a la base de datos: " . $e->getMessage();
+  } catch (Exception $e) {
+      echo "Error en la conexión a la API de Binance: " . $e->getMessage();
+  } finally {
+      if (isset($conexion)) {
+          $conexion = null;
       }
-    
-      if( $priceAbajo == 0){
-        updatePrices($available_mon,"ABAJO={$available}");
-      }
-      
-      if( $priceArriba <  $available){
-        updatePrices($available_mon,"ARRIBA={$available}");
-      }
-       
-      if( $priceAbajo >  $available){
-        updatePrices($available_mon,"ABAJO={$available}");
-      }
-      refreshDatos($available_mon);
-    }
-    
+  }
 }
 
 function ifReferidoExist($referido){
