@@ -1,8 +1,9 @@
 <?php 
 include "modulo.php";
+date_default_timezone_set('America/Caracas');    
 if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
 ?>
-<html>
+<html lang="es">
     <head>
     <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">

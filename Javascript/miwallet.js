@@ -578,6 +578,7 @@ function recuperarRetiros() {
             retiros = data;  
             
             mostrarTablaRetiros();
+            new DataTable('#example1');
             // Aquí puedes procesar los datos recibidos (data)
             console.log("Datos retiros:", data);
         })
@@ -600,6 +601,7 @@ function recuperarRetiros() {
                 depositos = data;  
                 
                 mostrarTablaDepositos();
+                new DataTable('#example');
                 // Aquí puedes procesar los datos recibidos (data)
                 console.log("Datos Depositos:", data);
             })
@@ -653,6 +655,7 @@ function recuperarRetiros() {
                 .then(data => {
                     historial = data;                    
                     mostrarTablaHistorial();
+                    new DataTable('#example2'); 
                     // Aquí puedes procesar los datos recibidos (data)
                     console.log("Datos Historial:", data);
                 })
@@ -667,7 +670,7 @@ function recuperarRetiros() {
             recuperarRetiros();  
             recuperarDepositos();  
             recuperarHistorial();  
-            recuperarCajeros();
+            recuperarCajeros();                               
             //myVar = setInterval(refrescar, 2000);
         }           
 

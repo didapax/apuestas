@@ -236,12 +236,6 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
     <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
 
-    <script>
-        new DataTable('#example');
-        new DataTable('#example1');
-        new DataTable('#example2');
-    </script>
-
 <script>
    $(document).ready(function(){
         $('.nav-tabs a').click(function(){
