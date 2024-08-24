@@ -16,9 +16,8 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <script src="Javascript/miwallet.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>               
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">    
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css">    
-        <link rel="stylesheet" type="text/css" href="css/newStyles.css">    
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">  
+ 
     </head>
     <header>
         <style>
@@ -242,16 +241,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
       <?php include 'footer.php';?>
         <!--FIN footer-->     
 
-    <script src='https://code.jquery.com/jquery-3.7.1.js'></script> 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
-    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
-    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
 
-    <script>
-        new DataTable('#example');
-        new DataTable('#example1');
-        new DataTable('#example2');
+    <script>        
+
     </script>
 
 <script>

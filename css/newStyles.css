@@ -570,8 +570,8 @@ marquee span{
   display: inline-block;
   padding: 1rem;
   font-family: 'Poppins';
-  width: 45rem;
-  height: 25rem;
+  width: 60rem;
+  height: auto;
   border: solid 1px black;
   box-shadow: 4px 3px 8px 1px #969696;
   background: #181A20;
@@ -646,7 +646,7 @@ marquee span{
 }
 
 .binance-image-container img{
-  width:10rem;
+  width:13rem;
   align-self: flex-end;
 }
 
