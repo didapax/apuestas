@@ -22,23 +22,14 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
     </head>
     <header>
         <style>
-
-
-
             .textAreaContainer{
             background:white;
             color: black;
          }
-
-
-
-         
-         
+            
          select{
             color:black;
          }
-
-
         </style>             
         <script>
         </script>
@@ -131,8 +122,6 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                         asegurate que sea correcta, CryptoSignal Group no se hace responsable por la informacion 
                         erronea que suministres.<br><br>
                         
-
-
                         <section class='dialog-wallet-content'> 
                             <div class='binance-form-outer-container'>
                                 <div class='binance-form-container'>
@@ -160,7 +149,6 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                     </div>
                 </div>
                 
-                        
                 <div id="depositos" class="tab-pane fade">
                     <div class="tab-title">
                         <h3>Depositar Usdc de Forma Facil y Segura</h3>
