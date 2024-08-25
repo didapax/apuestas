@@ -30,7 +30,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 
             function inicio(){
                 leerHistorial();
-                myVar = setInterval(leerHistorial, 3000);
+               //myVar = setInterval(leerHistorial, 3000);
             }
 
 
@@ -46,6 +46,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                         tabla = data;  
                         
                         mostrarTabla();
+                        new DataTable('#example');
                         // Aquí puedes procesar los datos recibidos (data)
                         console.log("Datos retiros:", data);
                     })
@@ -113,10 +114,6 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
     <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
     <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
-
-    <script>
-        new DataTable('#example');
-    </script>
 
     </body>
 </html>

@@ -217,6 +217,7 @@ input[type="checkbox"] {
             function leerVista(){
                 $.get("block?readJuegos=", function(data){
                 $("#tabla-cuerpo").html(data);
+                new DataTable('#example');
                 });
             }
 
@@ -363,7 +364,7 @@ input[type="checkbox"] {
 
                     <div >
                         <h3>Descripcion:</h3> 
-                        <textarea row="10"  id="summernote"></textarea>
+                        <textarea  id="summernote"></textarea>
                     </div>
 
                     <div >
@@ -388,10 +389,8 @@ input[type="checkbox"] {
                 <h2>Analisis Tecnico</h2>
                 <div id="nameAnalisis"></div>
                 <div id="analisisDescripcion"></div>
-                <div class="textAreaContainer">                
-                    <textarea row="10"  id="summerNoteAnalisis"></textarea>
-                </div>
-                <button class='appbtn' style="float:right;" type="button" id="btncrear" onclick="setAnalis()">Enviar Analisis</button>
+                    <textarea   id="summerNoteAnalisis"></textarea>
+                <button class='add-button' style="float:right;" type="button" id="btncrear" onclick="setAnalis()">Enviar Analisis</button>
             </div>
         </div>
 
@@ -421,10 +420,6 @@ input[type="checkbox"] {
     <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
     <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
-
-    <script>
-        new DataTable('#example');
-    </script>
 
 <script>
         const modalOverlay = document.getElementById('modalOverlay');

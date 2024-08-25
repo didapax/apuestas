@@ -67,9 +67,12 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                     <div id="calculo" style="width:100%;color:black;float:right; background:white;padding:3px;border:none border-radius:5px;"></div><br>                    
                     <br><br> <div id='descripcionMetodo'></div>
                     <input readonly class="datcajero" style="width:100%;border:none;outline: none;" id="paycajero"><br>
-                    <img style="" id='QRdeposito' src=""><br>                    
+                    <div style="width:100%;text-align: center;">
+                        <img style="" id='QRdeposito' src="">
+                    </div>
+                    <br>                    
                 </div><br><br>
-                <button onclick="jugar_back()" class='appbtn' style="float:right;color:black;padding:8px;" type="button" id="jugar" name="jugar">Depositar</button>
+                <button onclick="jugar_back()" class='deposit-button' style="float:right;color:black;padding:8px;" type="button" id="jugar" name="jugar"><img style='width:1.2rem' src='Assets/icons/cash_icon.png'>Depositar</button>
             </div>
         </div>
 
@@ -94,7 +97,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                     <input readonly class="datcajero" style="width:100%;border:none;outline: none;" id="paycliente">                    
                     <br>
                 </div><br><br>
-                <button onclick="retirar_back()" class='appbtn' style="float:right;color:black;padding:8px;" type="button" id="retirar_btn" name="retirar_btn">Retirar</button>
+                <button onclick="retirar_back()" class='retire-button' style="float:right;color:black;padding:8px;" type="button" id="retirar_btn" name="retirar_btn"><img style='width:1.2rem' src='Assets/icons/withdrawal_icon.png'> Retirar</button>
             </div>
         </div>
 
@@ -231,9 +234,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <!--FIN footer-->     
 
     <script src='https://code.jquery.com/jquery-3.7.1.js'></script> 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
+    <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> -->
     <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
-    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
+    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
 
 <script>

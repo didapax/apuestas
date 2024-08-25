@@ -40,7 +40,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                     .then(data => {
                         monedas = data;    
                         mostrarTablaMonedas();
-                        console.log("Monedas:", data);
+                        new DataTable('#example');
                     })
                     .catch(error => {
                         console.error("Error en la solicitud:", error);
@@ -58,7 +58,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                             <td>${producto.MONEDA}</td>
                             <td>${producto.ASSET}</td>
                             <td>${producto.PAR}</td>
-                            <td><button type="button" onclick="borrar('${producto.MONEDA}')">Borrar</button></td>
+                            <td><button class="retire-button" type="button" onclick="borrar('${producto.MONEDA}')">Borrar</button></td>
                         `;
                         tablaCuerpo.appendChild(fila);
                     });
@@ -133,7 +133,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 
         <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
         <div class="menu" id="menu">
-            <button type="button" onclick="showDialog()">Incluir Cripto</button>
+            <button type="button" class="add-button" onclick="showDialog()">Incluir Cripto +</button>
         </div>
         <div id="modalOverlay" class="modal-overlay">
             <div class="modal">
@@ -141,7 +141,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 <h2>Agregar Criptomoneda</h2>
                 Moneda Par <br><input style="width:300px;" title="Par Existente en Binance: BTCUSDT, HNTBUSD" type="text" maxlength="10" id="moneda" value=""><br>
                 Asset <br><input style="width:120px;" title="Abreviacion de la Moneda: HNT, BNB, BTC" type="text" maxlength="10" id="asset" value=""><br>
-                <button class='appbtn' style="float:right;" type="button" id="btncrear" onclick="crear()">Agregar</button>
+                <button class='deposit-button'  type="button" id="btncrear" onclick="crear()">Agregar</button>
             </div>
         </div>        
         <div class="vista" id="vista">
@@ -168,9 +168,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
     <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
 
-    <script>
-        new DataTable('#example');
-    </script>
+
 <script>
         const modalOverlay = document.getElementById('modalOverlay');
         const closeModalBtn = document.getElementById('closeModalBtn');

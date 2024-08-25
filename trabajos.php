@@ -122,6 +122,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                         trabajos = data;  
                         
                         mostrarTablaTrabajos();
+                        new DataTable('#example');
                         // Aquí puedes procesar los datos recibidos (data)
                     })
                     .catch(error => {
@@ -167,7 +168,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                         <td style='background:${color_estatus}'>${producto.estatus}</td>
                         <td>
                             <!--<button type='button' onclick='borrar(${producto.id})' >Delete</button>-->                            
-                            <button type='button' onclick='ver(${producto.id})' >Trabajar</button>
+                            <button type='button' class='add-button' onclick='ver(${producto.id})' >Trabajar</button>
                             <a href='chatAdmin?ticket=${producto.ticket}'>&#128231;<sup style='color:red; font-weight: bold;'>${producto.notif}</sup></a>                            
                         </td>
                     `;
@@ -177,7 +178,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 
             function inicio(){
                 leerTrabajos();
-                myVar = setInterval(leerTrabajos, 3000);
+                //myVar = setInterval(leerTrabajos, 3000);
             }
             
         </script>
@@ -213,7 +214,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                     <option id="EXITOSO" value="EXITOSO">Exitoso</option>
                     <option id="FALLIDO" value="FALLIDO">Fallido</option> 
                 </select><br><br>
-                <button class='appbtn' style="float:right;" type="button" id="btnenviar" onclick="enviar()">Cambiar Estatus</button>
+                <button class='add-button' style="float:right;" type="button" id="btnenviar" onclick="enviar()">Cambiar Estatus</button>
             </div>        
         </div>
 
@@ -244,10 +245,6 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
     <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
     <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
-
-    <script>
-        new DataTable('#example');
-    </script>
 
 <script>
         const modalOverlay = document.getElementById('modalOverlay');

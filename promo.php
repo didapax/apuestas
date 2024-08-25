@@ -79,6 +79,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 
                 $.get("block?readPromos=", function(data){
                 $("#tabla-cuerpo").html(data);
+                new DataTable('#example');
                 });
 
                 $.get("block?estatuslista=", function(data){
@@ -134,7 +135,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 
         <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
         <div class="menu" id="menu">
-            <button type="button" onclick="showDialog()">Crear Promocion</button>
+            <button class='add-button' type="button" onclick="showDialog()">Crear Promocion +</button>
             <button style="margin-left:21px;" id="btn_difundir" type="button" onclick="difundir()">Difundir Promocion</button>
             <button style="margin-left:21px; background:#E9B2B2; display:none;" id="btn_reset" type="button" onclick="reset()">Reset Promocion</button>
         </div>
@@ -144,12 +145,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 <h2>Agregar una Promocion</h2>
                 Titulo: <input type="text" id="nombre"><br>
                 Detalle:<br>
-                <div class="textAreaContainer">                
-                    <textarea row="10" id="summernote"></textarea>
-                </div>                 
+                <textarea id="summernote"></textarea>
                 <label for="difuFlotante">Flotante </label><input type="radio" id="difuFlotante" name="idpromo">
                 <label for="difu"> Difusion </label><input type="radio" id="difu" name="idpromo"><br>
-                <button class='appbtn' style="float:right;" type="button" id="btncrear" onclick="crear()">Agregar</button>
+                <button style='margin-bottom:2rem;' class='add-button'  style="float:right;" type="button" id="btncrear" onclick="crear()">Agregar</button>
             </div>
         </div>
         <div class="vista" id="vista"></div>
@@ -178,9 +177,6 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
     <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
 
-    <script>
-        new DataTable('#example');
-    </script>  
     <script>
         const modalOverlay = document.getElementById('modalOverlay');
         const closeModalBtn = document.getElementById('closeModalBtn');

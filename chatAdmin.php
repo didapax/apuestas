@@ -29,7 +29,7 @@
         <link rel="stylesheet" type="text/css" href="css/animate.min.css">
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script> 
 </head>
-  <style>
+<style>
 .progress-container {
     width: 100%;
     background-color: #f1f1f1;
@@ -92,7 +92,8 @@
 
 
 .chatOuterContainer{
-  display: flex;
+  display: inline-block;
+  width:100%;
   flex-direction: row;
   justify-content: space-between;
 }
@@ -155,11 +156,11 @@
 }
 
 .chatSec{
-  width:40%;
+  display: inline;
 }
 
 .data{
-  display: flex;
+  /*display: flex;*/
   gap: 3rem;
   border-bottom: 1px solid #a7a7a7;
 }
