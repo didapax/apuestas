@@ -5,7 +5,7 @@
     $vkey = $_GET['vkey'];
     $para = $correo;
     $asunto = "Verificación de correo electrónico";
-    $mensaje = "<a href='http://localhost/apuestas/verificarEmail?vkey=$vkey'>Registrar cuenta</a>";
+    $mensaje = "<a href='http://criptosignalgroup.online/verificarEmail?vkey=$vkey'>Registrar cuenta</a>";
     $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
     $cabeceras .= "MIME-Version: 1.0" . "\r\n";
     $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
@@ -18,6 +18,7 @@
     <head>
         <meta charset="utf-8">
         <title>CriptoSigals | GRACIAS</title>
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--CSS File-->
         <link rel="stylesheet" type="text/css" href="css/Common.css">
@@ -42,6 +43,8 @@
                     <span class="message">Un Email de Verificación ha sido enviado. Entra a tu correo.</span>
                     <br><br>
                     <span class="tip">Tip: Si no has recibido el email, busca en tu carpeta de SPAM o eliminados.</span>
+                    <br><br>
+                    <a href="index" class="add-button" style="text-decoration:none;">Continuar</a>
                 </div>
             </div>
         </div>

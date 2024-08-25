@@ -91,7 +91,7 @@
         </li>
 
         <li class="social-icon__item">
-            <a class="social-icon__link" href="#">
+            <a class="social-icon__link" href="mailto:crptsgnlgrpspprt@gmail.com">
                 <ion-icon name="mail-open-outline"></ion-icon>
             </a>
         </li>
@@ -113,11 +113,10 @@
     </ul>
     <h1 style='font-family:futurist;color:#fff'>CryptoSignal</h1>
     <ul class="menu">
-      <li class="menu__item"><a class="menu__link" href="#">Home</a></li>
-      <li class="menu__item"><a class="menu__link" href="#">About</a></li>
-      <li class="menu__item"><a class="menu__link" href="#">Services</a></li>
-      <li class="menu__item"><a class="menu__link" href="#">Team</a></li>
-      <li class="menu__item"><a class="menu__link" href="#">Contact</a></li>
+      <li class="menu__item"><a class="menu__link" href="index">Home</a></li>
+      <li class="menu__item"><a class="menu__link" href="ayuda">Acerca De </a></li>
+      <li class="menu__item"><a class="menu__link" href="#">Servicios</a></li>
+      <li class="menu__item"><a class="menu__link" href="terminos">Terminos de Uso</a></li>
 
     </ul>
     <p>&copy;2024 CryptoSignal | All Rights Reserved</p>

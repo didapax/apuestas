@@ -17,7 +17,7 @@
       <header class="header">
          <nav class="navbar navbar-container">
             <div class="nav__data">
-               <a href="#" class="nav__logo">
+               <a href="index" class="nav__logo">
                   <img class='logo' src='./Assets/logotype.png'> CryptoSignal
                </a>
                
