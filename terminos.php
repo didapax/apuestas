@@ -16,7 +16,7 @@ include "modulo.php";
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
         <link rel="stylesheet" type="text/css" href="css/newStyles.css">
     </head>
-    <header> 
+    <header>  
     <style>
         body {
             font-family: Arial, sans-serif;
