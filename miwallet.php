@@ -2,7 +2,7 @@
 include "modulo.php";
 if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
 ?>
-<html>
+<html lang="es">
     <head> 
         <title>Fortuna Royal</title>
         <meta charset="UTF-8">
@@ -48,7 +48,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <input type="hidden" id="recibe">
         <input type="hidden" id="comision_retiro">
 
-        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; overflow-x: hidden; padding:5rem; min-height: calc(100vh - 24rem);'>
+        <div id="cuerpo" class="wallet-body">
 
         <div id="modalOverlay" class="modal-overlay">
             <div class="modal">

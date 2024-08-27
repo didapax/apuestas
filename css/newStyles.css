@@ -481,9 +481,6 @@ marquee span{
 
 
 
-
-
-
 /***********************************Buttons*****************************************************/
 
 .add-button{
@@ -651,3 +648,37 @@ marquee span{
 }
 
 /***********************************End Binance Tab *****************************************************/
+.wallet-body{
+  margin-top: 8rem; 
+  overflow-x: hidden; 
+  padding:5rem; 
+  min-height: calc(100vh - 24rem);
+}
+
+
+@media screen and (max-width: 1150px) {
+  .dialog-wallet{
+    width: 100%;
+  }
+
+  .wallet-body{
+    padding: 0;
+  }
+
+  .tab-content{
+    overflow: auto;
+  }
+
+
+}
+
+
+@media screen and (max-width: 350px) {
+
+  .binance-input-container {
+    flex-wrap: wrap;
+  }
+
+}
+
+

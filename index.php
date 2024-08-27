@@ -4,7 +4,7 @@
     date_default_timezone_set('America/Caracas');    
 ?>
 
-<html style="overflow: scroll;">
+<html style="overflow: scroll;" lang="es">
     <head>
         <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">

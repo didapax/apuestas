@@ -161,6 +161,8 @@ a {
   .nav__list {
     background-color: var(--black-color);
     padding-top: 1rem;
+    z-index: 1000;
+    position: relative;
   }
 }
 
