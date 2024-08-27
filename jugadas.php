@@ -302,7 +302,7 @@ input[type="checkbox"] {
                         <h3>Periodo:</h3> 
 
                         <select id="tipoJuego" >
-                            <option value="">selecciona Duracion..</option>
+                            <option value="MENSUAL">selecciona Duracion..</option>
                             <option value="MENSUAL">Mensual</option>
                             <option value="TRIMESTRAL">Trimestral</option>
                             <option value="SEMESTRAL">Semestral</option>
@@ -313,7 +313,7 @@ input[type="checkbox"] {
                     <div >
                         <h3>Color de Fondo:</h3> 
                         <select id="imagen" >
-                            <option value="">background..</option>
+                            <option value="azul.png">background..</option>
                             <option value="amarillo.png">Dorado</option>
                             <option value="azul.png">Azul</option>
                             <option value="azul_oscuro.png">Azul Oscuro</option>
@@ -327,7 +327,7 @@ input[type="checkbox"] {
                     <div >
                         <h3>Color de Letra:</h3> 
                         <select id="foreground" >
-                            <option value="">foreground..</option>
+                            <option value="white">foreground..</option>
                             <option value="yellow">Amarillo</option>
                             <option value="blue">Azul</option>
                             <option value="red">Rojo</option>
