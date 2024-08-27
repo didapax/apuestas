@@ -1,9 +1,9 @@
 <?php
 
-/*$servidor = "bbetfootball.online";
+/*$servidor = "server121.web-hosting.com";
 $user = "bbetxfub_admin";
-$password = ",NN7QZ.03g+b";
-$database = "bbetxfub_data";*/
+$password = "A;]NPiCOgX2O";
+$database = "bbetxfub_apuestas";*/
 
 $servidor = "localhost";
 $user = "root";
@@ -175,7 +175,7 @@ if( isset($_GET['install']) ){
         ELIMINADO INT NOT NULL DEFAULT 0,
         ESTATUS VARCHAR(35) DEFAULT 'ACTIVO',
         IMAGEN VARCHAR(255) DEFAULT 'azul.png',
-        FOREGROUND VARCHAR(34) DEFAULT 'white'
+        FOREGROUND VARCHAR(34) DEFAULT 'white',
         MONEDA VARCHAR(20) DEFAULT 'USDC')");
 
     sqlconector("CREATE TABLE IF NOT EXISTS TRANSACCIONES (
@@ -287,7 +287,7 @@ if( isset($_GET['install']) ){
         ACTIVO INT NOT NULL DEFAULT 1,
         DEVUELVE_CAPITAL INT NOT NULL DEFAULT 0,
         IMAGEN VARCHAR(255) DEFAULT 'azul.png',
-        FOREGROUND VARCHAR(34) DEFAULT 'white'
+        FOREGROUND VARCHAR(34) DEFAULT 'white',
         MONEDA VARCHAR(20) DEFAULT 'USDC')");
 
   sqlconector("CREATE TABLE IF NOT EXISTS CHAT (

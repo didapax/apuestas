@@ -107,7 +107,7 @@
 .left-side{
   display: flex;
   flex-direction: column;
-  min-width: 22rem;
+  min-width: 24rem;
 }
 
 .header-container{
@@ -127,6 +127,7 @@
   font-family: impact;
   padding: 0 0 0 1rem;
   margin: 0;
+  width: 300px;
 }
 
  .title-container h1{

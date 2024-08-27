@@ -190,7 +190,7 @@ if(isset($_POST['sendmail'])){
   $vkey = $usuario['VKEY'];
   $para = $correo;
   $asunto = "Verificación de correo electrónico";
-  $mensaje = "<a href='http://criptosignalgroup.online/verificarEmail?vkey=$vkey'>Verificar cuenta</a>";
+  $mensaje = "<a href='http://criptosignalgroup.online/verificarEmail?vkey=$vkey'>Registrar cuenta</a>";
   $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
   $cabeceras .= "MIME-Version: 1.0" . "\r\n";
   $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
@@ -521,12 +521,12 @@ if(isset($_GET['readPromos'])) {
 
       $fecha = latinFecha($row['FECHA']);
      echo "<tr>
-      <td>".latinFecha($fecha)."</td>
+      <td>".$fecha."</td>
       <td>".$row['NOMBRE']."</td>
       <td>".$row['MENSAJE']."</td>
       <td>{$difu}{$flotante}</td>
       <td style='text-align: left;'>
-        <button title='Eliminar Promocion' type='button' class='retire-button' onclick=\"borrar('".$row['CODIGO']."')\">Borrar</button>        
+        <button title='Eliminar Promocion' type='button' style='background:#F0917F;' onclick=\"borrar('".$row['CODIGO']."')\">&#9746; Borrar</button>        
       </td>
       </tr>";
     }
@@ -558,10 +558,10 @@ if(isset($_GET['readJuegos'])) {
         <td>".price($row['MONTO'])."</td>
         <td>";
           if($row['PORCIENTO'] == 0){
-            echo "<button title='Analisis' type='button' class='add-button' onclick=\"analisis('".$row['ID']."')\">Analisis</button>";
+            echo "<button title='Analisis' type='button' onclick=\"analisis('".$row['ID']."')\">Analisis</button>";
           }
           
-          echo "<button title='Borrar' type='button' class='retire-button' onclick=\"borrar('".$row['ID']."')\">Borrar</button>
+          echo "<button title='Borrar' type='button' style='background:#F0917F;' onclick=\"borrar('".$row['ID']."')\">Borrar</button>
           <label for='cerrar{$row['ID']}'><input id='cerrar{$row['ID']}' type='checkbox' {$bloqueo} onclick=\"cerrar(".$row['ID'].")\">Bloquear</label>          
         </td>
         </tr>";

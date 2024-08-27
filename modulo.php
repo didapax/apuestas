@@ -525,14 +525,17 @@ function listAsset(){
 }
 
 function verPromo(){
-  if(recordCount("APUESTAS")>0 && isset($_SESSION['user'])){
-    $json =  readPrices("BTCUSDC")['DATOS'];
-    $data = json_decode($json, true);
-    echo $data['listasset']. " Tendencia del Mercado" .$data['totalTendencia']." Animo".$data['tendencia']." Hora UTC ".$data['utc'];
-  }else{
-    echo "Suscribete con una minima compra de nuestros productos y disfruta de los mejores análisis y señales del mercado de criptomonedas...";
+  if(isset($_SESSION['user'])){
+    $correo = readClienteId($_SESSION['user'])['CORREO'];
+    if(recordCountApuestas($correo)>0){
+      $json =  readPrices("BTCUSDC")['DATOS'];
+      $data = json_decode($json, true);
+      echo $data['listasset']. " Tendencia del Mercado" .$data['totalTendencia']." Animo".$data['tendencia']." Hora UTC ".$data['utc'];
+    }
+    else{
+      echo "Suscribete con una minima compra de nuestros productos y disfruta de los mejores análisis y señales del mercado de criptomonedas...";
+    }
   }
-
 }
 
 function refreshDatos($mon){
@@ -670,7 +673,7 @@ function returnReferente($referido){
   return row_sqlconector("select REFERENTE from REFERIDOS where REFERIDO='".$referido."'")['REFERENTE'];
 }
 
-function latinFecha($fecha){
+function latinFecha($fecha){ 
     $date=date_create($fecha);
     return date_format($date,"d/m/Y");
 }
@@ -722,6 +725,10 @@ function getRealIpAddr(){
 
 function recordCount($table){
     return row_sqlconector("SELECT Count(*) as SUMA FROM ".$table)['SUMA'];
+}
+
+function recordCountApuestas($cliente){
+  return row_sqlconector("SELECT Count(*) as SUMA FROM APUESTAS WHERE CLIENTE='$cliente'")['SUMA'];
 }
 
 function recordList(){
