@@ -79,7 +79,7 @@ function leerDatos(){
             person = datos;  
             document.getElementById("payid").value = datos.binance;
             document.getElementById("bep20").value = datos.bep20;  
-            $("#saldo").html("Saldo "+datos.saldo+" USDC"); 
+            $("#saldo").html(datos.saldo); 
             if(datos.binance != null && datos.binance.length > 0){
                 document.getElementById("payid").readOnly = true;
                 oneMetodo = 1

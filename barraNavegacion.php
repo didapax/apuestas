@@ -76,7 +76,7 @@
                        
                            <li>
                               <a href='miwallet' class='dropdown__link'>
-                                 <i class='ri-pie-chart-line'></i> Saldo: <p style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
+                                 <i class='ri-pie-chart-line'></i> Saldo: <p id='saldo' style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
                               </a>                          
                            </li>
 
@@ -150,7 +150,7 @@
 
                            <li>
                               <a href='miwallet' class='dropdown__link'>
-                                 <i class='ri-pie-chart-line'></i> Saldo: <p style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
+                                 <i class='ri-pie-chart-line'></i> Saldo: <p id='saldo' style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
                               </a>                          
                            </li>
 
@@ -181,7 +181,7 @@
 
                            <li>
                               <a href='miwallet' class='dropdown__link'>
-                                 <i class='ri-pie-chart-line'></i> Saldo: <p style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
+                                 <i class='ri-pie-chart-line'></i> Saldo: <p id='saldo' style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
                               </a>                          
                            </li>
 

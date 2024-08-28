@@ -199,7 +199,7 @@
                         var datos= JSON.parse(data);
                         $("#numTicket").html(datos.ticket);
                         $("#usuario").html(datos.cliente);
-                        document.getElementById('recibe').value=datos.cliente;
+                        document.getElementById('recibe').value=datos.idCliente;
                         $("#fecha").html(datos.fecha);
                         $("#metodoPago").html(datos.medio_pago);
                         $("#totalPagar").html(datos.monto+"<span style='font-size:10px;'>"+datos.moneda+"<span>");
@@ -295,7 +295,13 @@ function seltickect(){
   $notificaciones = "0";
   $ticket = "0";
   if(isset($_GET['notif'])) $notificaciones= $_GET['notif'];
-  if(isset($_GET['ticket'])) $ticket= $_GET['ticket'];
+
+  if(isset($_GET['ticket'])){
+    $idCliente= $_SESSION['user'];
+    $ticket= $_GET['ticket'];
+    $consulta = "UPDATE CHAT SET ACTIVO=1 WHERE IDPEDIDO='$ticket' AND AMO='$idCliente'";    
+    sqlconector($consulta);            
+  } 
 
   echo "
   <input type='hidden' id='ticked' value='".$ticket."'>
@@ -325,7 +331,6 @@ function seltickect(){
 
 </div>
 
- 
 <div>
   Estas Procesando un  <b><span id="tipo"></span></b><br>
   Datos Wallet: <div id="wallet"></div>  

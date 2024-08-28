@@ -21,8 +21,12 @@
 			'tipo' => $row['TIPO'],
 			'ticket' => $row['TICKET'],
 			'descripcion' => $row['DESCRIPCION'],
-			'cajero' => readCliente($row['CAJERO'])['ID'],
-			'cliente' => readCliente($row['CLIENTE'])['ID'],
+			'cajero' => readCliente($row['CAJERO'])['NOMBRE_USUARIO'],
+			'idCajero' => readCliente($row['CAJERO'])['ID'],
+			'estrellas' => readCliente($row['CAJERO'])['RATE'],
+			'cliente' => readCliente($row['CLIENTE'])['CORREO'],
+			'idCliente' => readCliente($row['CLIENTE'])['ID'],
+			'saldo' => readCliente($row['CLIENTE'])['SALDO'],
 			'medio_pago' => $row['MEDIO_PAGO'],
 			'wallet' => $row['WALLET'],
 			'origen' => $row['ORIGEN'],
@@ -90,7 +94,7 @@
   }
 
   function ifChatActivo($correo) {
-    $consulta = "SELECT ACTIVO FROM CHAT WHERE AMO = '".$correo."'";
+    $consulta = "SELECT ACTIVO FROM CHAT WHERE AMO = '".$correo."' LIMIT 1";
     $resultado = sqlconector($consulta);
     $row = mysqli_fetch_array($resultado);
     return isset($row['ACTIVO']) && $row['ACTIVO'] == 1;
@@ -189,27 +193,33 @@ function dibujaChatApp($ticket) {
 	  $resultado = sqlconector($consulta);
 	  $activo="";
 	  $recibe="";
-	  $amo="";
+	  $amo= $_SESSION['user'];	  
 	  while($row = mysqli_fetch_array($resultado)){
 	  		$icono="";
 			$recibe=$row['RECIBE'];
-			$amo=$row['AMO'];
+			$usuario="";
+			$fecha = latinFecha($row['FECHA']);
 			if($row['ENVIA']==$row['AMO']){
-				$activo=$row['ENVIA'];
-			}
-			else $activo=$row['RECIBE'];
-
-			if(ifChatActivo($activo)){
-				$icono= "<span style='font-weight: lighter; font-size:11px;' title='Conectado'>&#9742;</span>";
+				$activo=$row['RECIBE'];
 			}
 			else{
-				$icono= "<span style='font-weight: lighter; font-size:11px;' title='Desconectado'>&#9743;</span>";
+				$activo=$row['ENVIA'];				
+			} 
+
+			if(ifChatActivo($activo)){
+				$icono= "<span style='font-weight: lighter; font-size:11px;' title='Conectado'>✓✓</span>";
+			}
+			else{
+				$icono= "<span style='font-weight: lighter; font-size:11px;' title='Desconectado'>✓</span>";
 			}
 
 			echo "
 			<div style='width: fit-content; padding:10px; border-radius:8px;margin:13px; background-color:".$row['BG']."; color=".$row['FG'].";'>
-			<span style='margin-top:5px;font-size:12px;'><b>".latinFecha($row['FECHA'])."</b>  ".readClienteId($row['ENVIA'])['NOMBRE']." ".$icono."</span>
-			<br><span style='font-weight: bolder;font-size:1em;'>".$row['MENSAJE']."</div>
+			<span style='margin-top:3px;font-size:12px;'>".$usuario."</span>
+			<br><span style='font-weight: bolder;font-size:1em;'>".$row['MENSAJE']."
+			<br><div style='font-size:9px; float:right;'>$fecha <span style='margin-left:3px;color:blue;font-weight:bold;'>$icono</span></div>			
+			</div>
+			<br>
 			";
 	  }
 
