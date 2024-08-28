@@ -19,7 +19,21 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
     </head>
     <header>
         <style>
-        
+            dialog {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border: none;
+                padding: 20px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                background-color: white;
+            }
+
+            .dialog-content {
+                text-align: center;
+            }        
         </style>        
         <script>
             let tabla = [];
@@ -68,12 +82,22 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                         <td>${producto.suscripcion}</td>
                         <td>${producto.tipo}</td>
                         <td>${Math.round(producto.monto * 100) / 100}</td>
-                        <td>${producto.cliente}</td>
-                        <td style='background:${producto.color}'>${producto.estatus}</td>                        
+                        <td>${producto.cliente} <button onclick="mostrarInfo(${index})">Info</button></td>
+                        <td style='background:${producto.color};'>${producto.estatus}</td>                        
                     `;
                     tablaCuerpo.appendChild(fila);
                 });
-            }            
+            }
+            
+            function mostrarInfo(index) {
+                const producto = tabla[index];
+                const dialog = document.getElementById("info-dialog");
+                dialog.querySelector(".dialog-content").innerHTML = `
+                <p>Wallet Binance: <b>${producto.binance}</b></p>
+                <p>Wallet Bep20: <b>${producto.bep20}</b></p>
+                `;
+                dialog.showModal();
+            }
 
         </script>
     </header>
@@ -86,7 +110,11 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 
         <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
         <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'> 
-            <div class="vista" id="vista">
+            <dialog id="info-dialog">
+                <div class="dialog-content"></div>
+                <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>
+            </dialog>    
+            <div class="vista" id="vista">                
                 <table id='example' class='ui celled table' style='width:100%; '> 
                     <thead>
                         <tr>

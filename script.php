@@ -3,6 +3,6 @@
     include "modulo.php";
     date_default_timezone_set('UTC');    
 
-    refreshDataAuto();
+    //refreshDataAuto();
 
 ?>

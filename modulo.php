@@ -525,7 +525,7 @@ function listAsset(){
 }
 
 function verPromo(){
-  if(isset($_SESSION['user'])){
+  /*if(isset($_SESSION['user'])){
     $correo = readClienteId($_SESSION['user'])['CORREO'];
     if(recordCountApuestas($correo)>0){
       $json =  readPrices("BTCUSDC")['DATOS'];
@@ -535,7 +535,9 @@ function verPromo(){
     else{
       echo "Suscribete con una minima compra de nuestros productos y disfruta de los mejores análisis y señales del mercado de criptomonedas...";
     }
-  }
+  }*/
+
+  echo "Suscribete y Disfruta de Nuestros Productos, Tenemos una Gran Varidad de Tarjetas de Inversiones...";
 }
 
 function refreshDatos($mon){

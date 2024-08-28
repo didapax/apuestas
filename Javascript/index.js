@@ -158,7 +158,7 @@ function leerDatos(){
 		},function(data){
 			var datos= JSON.parse(data);
 			document.getElementById("actualsaldo").value = datos.saldo; 
-			$("#saldo").html("Saldo "+datos.saldo+" USDT"); 
+			$("#saldo").html(datos.saldo); 
 		});
 	}
 }

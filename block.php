@@ -30,6 +30,15 @@ if(isset($_POST['retirar'])){
     sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cliente'");
     $saldo_comision = readCliente($wallet_comisiones)['SALDO'] + $comision;
     sqlconector("UPDATE USUARIOS SET SALDO = $saldo_comision WHERE CORREO='$wallet_comisiones'");
+
+    $para = $cajero;
+    $asunto = "Tienes un Retiro Pendiente por ejecutar";
+    $mensaje = "Retiro Pendiente por ejecutar de $cliente por un monto de: $recibe por la plataforma $comopago";
+    $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
+    $cabeceras .= "MIME-Version: 1.0" . "\r\n";
+    $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+    mail($para, $asunto, $mensaje, $cabeceras);      
 }
 
 
@@ -53,6 +62,15 @@ if(isset($_POST['depositar'])){
         '$comopago',        
         $monto,
         $monto)");
+
+    $para = $cajero;
+    $asunto = "Tienes un deposito Pendiente";
+    $mensaje = "Deposito Pendiente por revisar de $cliente por un monto de: $monto por la plataforma $comopago";
+    $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
+    $cabeceras .= "MIME-Version: 1.0" . "\r\n";
+    $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+    mail($para, $asunto, $mensaje, $cabeceras);  
 }
 
 if(isset($_POST['addpar'])){
@@ -615,12 +633,14 @@ if(isset($_GET['readTrabajos'])) {
 
 if(isset($_GET['readHistorialAdmin'])) {
   $obj = array();
-  $consulta = "select * from APUESTAS WHERE ACTIVO=1 ORDER BY FECHA";
+  $consulta = "select * from APUESTAS ORDER BY FECHA";
   $resultado = sqlconector( $consulta );
 
     if($resultado){
       while($row = mysqli_fetch_assoc($resultado)){
         $color="transparent";
+        $binance = readCliente($row['CLIENTE'])['BINANCE'];
+        $bep20 = readCliente($row['CLIENTE'])['BEP20'];
         if($row['ACTIVO']==0){
           $color="#AED6F1";
         }
@@ -632,7 +652,9 @@ if(isset($_GET['readHistorialAdmin'])) {
         'tipo' =>$row['TIPO'],
         'monto' => price($row['MONTO']),
         'cliente' => $row['CLIENTE'],
-        'estatus'=>$row['ESTATUS']);
+        'estatus'=>$row['ESTATUS'],
+        'binance'=>$binance,
+        'bep20'=>$bep20);
       }
     }
     
@@ -783,24 +805,26 @@ if(isset($_POST['setEstatus'])){
       $saldo= readCliente($correo)['SALDO'] + $monto;
       sqlconector("UPDATE USUARIOS SET SALDO={$saldo} WHERE CORREO='{$correo}'");    
 
-      ini_set( 'display_errors', 1 );
-      error_reporting( E_ALL );
-      $from = "criptosignalgroup@criptosignalgroup.online";
-      $to = $correo;
-      $subject = "Transaccion de Deposito Cripto Signal Group";
-      $message = "Tu transaccion de deposito ha sido marcada con el estatus Exitoso, puedes consultar tu saldo ";
-      $headers = "From:" . $from;
-      mail($to,$subject,$message, $headers);           
+      $para = $correo;
+      $asunto = "Transaccion de Deposito CryptoSignal";
+      $mensaje = "Tu transaccion de deposito ha sido marcada con el estatus Exitoso, puedes consultar tu saldo ";
+      $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
+      $cabeceras .= "MIME-Version: 1.0" . "\r\n";
+      $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+  
+      mail($para, $asunto, $mensaje, $cabeceras);  
+
     }
     elseif (readTransaccionTicket($_POST['idapuesta'])['TIPO'] == "RETIRO"){
-      ini_set( 'display_errors', 1 );
-      error_reporting( E_ALL );
-      $from = "criptosignalgroup@criptosignalgroup.online";
-      $to = $correo;
-      $subject = "Transaccion de Retiro Cripto Signal Group";
-      $message = "Tu Retiro ha sido marcada con el estatus Exitoso, puedes consultar tu saldo en tu wallet de destino.! gracias por preferirnos ";
-      $headers = "From:" . $from;
-      mail($to,$subject,$message, $headers);                 
+      $para = $correo;
+      $asunto = "Transaccion de Retiro CryptoSignal";
+      $mensaje = "Tu Retiro ha sido marcada con el estatus Exitoso, puedes consultar tu saldo en tu wallet de destino.! gracias por preferirnos ";
+      $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
+      $cabeceras .= "MIME-Version: 1.0" . "\r\n";
+      $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+  
+      mail($para, $asunto, $mensaje, $cabeceras);  
+
     }
   }
 }

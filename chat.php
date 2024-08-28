@@ -185,6 +185,14 @@
   </style>
 
 <script>
+function dibujarEstrellas(n) {
+    var estrellas = '';
+    for (var i = 0; i < n; i++) {
+        estrellas += '⭐';
+    }
+    return estrellas;
+}
+  
   function inicio(){
   	myVar = setInterval(myTimer, 2000);
   }
@@ -201,7 +209,7 @@
                           monto = datos.recibe;
                           msj = "Recibes menos Comisiones: ";
                         }
-                        $("#usuario").html(datos.cliente);
+                        $("#usuario").html(`${datos.cajero} ${dibujarEstrellas(datos.estrellas)}`);
                         document.getElementById('recibe').value=datos.cliente;
                         $("#fecha").html(datos.fecha);
                         $("#metodoPago").html(datos.medio_pago);
@@ -283,7 +291,12 @@ function seltickect(){
   $notificaciones = "0";
   $ticket = "0";
   if(isset($_GET['notif'])) $notificaciones= $_GET['notif'];
-  if(isset($_GET['ticket'])) $ticket= $_GET['ticket'];
+  if(isset($_GET['ticket'])){
+    $idCliente= readClienteId($_SESSION['user'])['ID'];
+    $ticket= $_GET['ticket'];
+    $consulta = "UPDATE CHAT SET ACTIVO=1 WHERE IDPEDIDO='$ticket' AND AMO='$idCliente'";
+    sqlconector($consulta);    
+  } 
 
   echo "
   <input type='hidden' id='ticked' value='".$ticket."'>
@@ -303,7 +316,7 @@ function seltickect(){
 <div class='chatOuterContainer'> 
 <section class='dataSec'>
 <div class='data'>
-  <h3 >SOPORTE CRIPTO SIGNAL GROUP</h3>
+  <h3 >SOPORTE CRYPTOSIGNAL</h3>
     <div>
       Seleccione un Ticket Abierto: 
       <select id="selectTicket" onchange="seltickect()" style="color:black;">
@@ -325,7 +338,6 @@ function seltickect(){
 
 </div>
 
- 
 <div>
   <div id="wallet">Calificaciones</div>
   <b><span id="detalle"></span></b><br>
@@ -345,9 +357,7 @@ function seltickect(){
             <option id="">selecciona...</option>
             <option id="REVISION" value="REVISION">En Revision</option>
             <option id="ESPERA" value="ESPERA">En Proceso</option>
-            <option id="EXITOSO" value="EXITOSO">Exitoso</option>                    
-            <option id="APOSTADO" value="APOSTADO">Apostado</option>
-            <option id="GANADOR" value="GANADOR">Ganador</option>                    
+            <option id="EXITOSO" value="EXITOSO">Exitoso</option>
             <option id="FALLIDO" value="FALLIDO">Fallido</option> 
         </select>
           <?php
@@ -360,7 +370,7 @@ function seltickect(){
 
     <section class='chatSec'>
       <div class='chatData'>
-        <h3 ><?php if($_SESSION['nivel']==1) echo "Cliente: "; else echo "Usuario: ";?> <span id=usuario></span></h3>
+        <h3 ><?php if($_SESSION['nivel']==1) echo "Cliente: "; else echo "Cajero: ";?> <span id=usuario></span></h3>
       </div>
 
       <div class='chatBox'>
