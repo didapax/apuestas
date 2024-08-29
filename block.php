@@ -38,39 +38,47 @@ if(isset($_POST['retirar'])){
     $cabeceras .= "MIME-Version: 1.0" . "\r\n";
     $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
-    mail($para, $asunto, $mensaje, $cabeceras);      
+    if(mail($para, $asunto, $mensaje, $cabeceras)) {
+      echo "Correo enviado exitosamente.";
+    } else {
+        echo "Error al enviar el correo.";
+    }   
 }
 
 
 if(isset($_POST['depositar'])){ 
-    $ticket = generaTicket();
-    $monto = $_POST['cantidad'];
-    $cajero = $_POST['cajero'];
-    $cliente = $_POST['correo'];
-    $origen = $_POST['origen'];
-    $destino = $_POST['destino'];
-    $descripcion= $_POST['tipo'];
-    $comopago = $_POST['comopago'];
+  $ticket = generaTicket();
+  $monto = $_POST['cantidad'];
+  $cajero = $_POST['cajero'];
+  $cliente = $_POST['correo'];
+  $origen = $_POST['origen'];
+  $destino = $_POST['destino'];
+  $descripcion= $_POST['tipo'];
+  $comopago = $_POST['comopago'];
 
-    sqlconector("INSERT INTO TRANSACCIONES (TICKET,DESCRIPCION,CAJERO,CLIENTE,ORIGEN,DESTINO,MEDIO_PAGO,MONTO,RECIBE) VALUES(
-        '$ticket',
-        '$descripcion',
-        '$cajero',
-        '$cliente',
-        '$origen',
-        '$destino',
-        '$comopago',        
-        $monto,
-        $monto)");
+  sqlconector("INSERT INTO TRANSACCIONES (TICKET,DESCRIPCION,CAJERO,CLIENTE,ORIGEN,DESTINO,MEDIO_PAGO,MONTO,RECIBE) VALUES(
+      '$ticket',
+      '$descripcion',
+      '$cajero',
+      '$cliente',
+      '$origen',
+      '$destino',
+      '$comopago',        
+      $monto,
+      $monto)");
 
-    $para = $cajero;
-    $asunto = "Tienes un deposito Pendiente";
-    $mensaje = "Deposito Pendiente por revisar de $cliente por un monto de: $monto por la plataforma $comopago";
-    $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
-    $cabeceras .= "MIME-Version: 1.0" . "\r\n";
-    $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+  $para = $cajero;
+  $asunto = "Tienes un deposito Pendiente";
+  $mensaje = "Deposito Pendiente por revisar de $cliente por un monto de: $monto por la plataforma $comopago";
+  $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
+  $cabeceras .= "MIME-Version: 1.0" . "\r\n";
+  $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
-    mail($para, $asunto, $mensaje, $cabeceras);  
+  if(mail($para, $asunto, $mensaje, $cabeceras)) {
+      echo "Correo enviado exitosamente.";
+  } else {
+      echo "Error al enviar el correo.";
+  }
 }
 
 if(isset($_POST['addpar'])){
@@ -812,8 +820,11 @@ if(isset($_POST['setEstatus'])){
       $cabeceras .= "MIME-Version: 1.0" . "\r\n";
       $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
   
-      mail($para, $asunto, $mensaje, $cabeceras);  
-
+      if(mail($para, $asunto, $mensaje, $cabeceras)) {
+          echo "Correo enviado exitosamente.";
+      } else {
+          echo "Error al enviar el correo.";
+      }
     }
     elseif (readTransaccionTicket($_POST['idapuesta'])['TIPO'] == "RETIRO"){
       $para = $correo;
@@ -823,7 +834,11 @@ if(isset($_POST['setEstatus'])){
       $cabeceras .= "MIME-Version: 1.0" . "\r\n";
       $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
   
-      mail($para, $asunto, $mensaje, $cabeceras);  
+      if(mail($para, $asunto, $mensaje, $cabeceras)) {
+        echo "Correo enviado exitosamente.";
+      } else {
+          echo "Error al enviar el correo.";
+      }
 
     }
   }
