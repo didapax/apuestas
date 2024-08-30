@@ -8,6 +8,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Soporte</title>
+  <link rel="shortcut icon" href="Assets/favicon.png">
   <!--<link rel="stylesheet" href="./style2.css">-->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
@@ -198,7 +199,7 @@
                     function(data){                        
                         var datos= JSON.parse(data);
                         $("#numTicket").html(datos.ticket);
-                        $("#usuario").html(datos.cliente);
+                        $("#usuario").html(datos.cliente); 
                         document.getElementById('recibe').value=datos.idCliente;
                         $("#fecha").html(datos.fecha);
                         $("#metodoPago").html(datos.medio_pago);

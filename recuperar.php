@@ -68,7 +68,7 @@
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->  
 
-        <div id="cuerpo" class="cuerpo" style="background-image:none; background:white;">
+        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
         <div id="vista" class="grid-container app-grid">
 		<?php
 			if(isset($_GET['code'])) {

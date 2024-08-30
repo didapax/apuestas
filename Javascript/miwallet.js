@@ -267,7 +267,7 @@ function retirar(){
             recibe: document.getElementById("recibe").value,
             comision: document.getElementById("comision_retiro").value
         },function(data){
-            document.getElementById('modalOverlay2').style.display = "flex";
+            document.getElementById('modalOverlay2').style.display = "none";
             document.getElementById("retirar_btn").disabled = false;
             inicio();
         });  
