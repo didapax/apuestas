@@ -173,7 +173,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                                 </table>
                     </div>
                                         
-                </div>
+                </div> 
 
                 <div id="retiros" class="tab-pane fade">
                     <div class="tab-title">
@@ -266,24 +266,24 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
             modalOverlay.style.display = 'none';
         });
 
-        // Cerrar el modal al hacer clic fuera de él
+        /* Cerrar el modal al hacer clic fuera de él
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) {
                 modalOverlay.style.display = 'none';
             }
-        });
+        });*/
 
         // Función para cerrar el modal2
         closeModalBtn2.addEventListener('click', () => {
             modalOverlay2.style.display = 'none';
         });
 
-        // Cerrar el modal al hacer clic fuera de él
+        /* Cerrar el modal al hacer clic fuera de él
         modalOverlay2.addEventListener('click', (e) => {
             if (e.target === modalOverlay2) {
                 modalOverlay2.style.display = 'none';
             }
-        });        
+        });*/
 
     </script>
     </body>

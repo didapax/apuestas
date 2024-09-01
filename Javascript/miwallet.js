@@ -21,47 +21,72 @@ function myFunction() {
 }  */
 
 function guardar(){
-    $.post("block",{
-        guardarWallet:"",
-        correo: document.getElementById("correo").value,                    
-        payid: document.getElementById("payid").value
-    },function(data){
-        var datos= JSON.parse(data);
-        console.log("result:", data)
-        if(datos.result){
-            Swal.fire({
-                        title: 'Wallet',
-                        text: "Tu Wallet de PayId ha sigo Guardada con exito..!",
-                        icon: 'info',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Ok'
-                        });                                            
-            leerDatos();
-            //document.getElementById('agregar').close();    
-        }
-    });
+    let binance = document.getElementById("payid").value;
+
+    Swal.fire({
+        title: 'Cryptosignal',
+        text: `Se procedera a Guardar tu Wallet ID de Binance: ${binance} esta seguro confirme!`,
+        icon: 'warning',
+        confirmButtonColor: '#EC7063',
+        confirmButtonText: 'Si Seguro',
+        showCancelButton: true,
+        cancelButtonText: "No Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {    
+                $.post("block",{
+                    guardarWallet:"",
+                    correo: document.getElementById("correo").value,                    
+                    payid: binance
+                },function(data){
+                    var datos= JSON.parse(data);
+                    console.log("result:", data)
+                    if(datos.result){
+                        Swal.fire({
+                                    title: 'Wallet',
+                                    text: "Tu Wallet de PayId ha sigo Guardada con exito..!",
+                                    icon: 'info',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok'
+                                    });                                            
+                        leerDatos();                        
+                    }
+                });                
+            }
+        });
 }
 
 function savebep20(){
-    $.post("block",{
-        guardarWalletBep20:"",
-        correo: document.getElementById("correo").value,                    
-        bep20: document.getElementById("bep20").value
-    },function(data){
-        var datos= JSON.parse(data);
-        console.log("result:", data)
-        if(datos.result){
-            Swal.fire({
-                        title: 'Wallet',
-                        text: "Tu Wallet de BSC BEP-20 ha sigo Guardada con exito..!",
-                        icon: 'info',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Ok'
-                        });                                            
-            leerDatos();
-            //document.getElementById('agregar').close();    
-        }
-    });    
+    let bep20 = document.getElementById("bep20").value;
+    Swal.fire({
+        title: 'Cryptosignal',
+        text: `Se procedera a Guardar tu Wallet en la Red BSC BEP20: ${bep20} esta seguro confirme!`,
+        icon: 'warning',
+        confirmButtonColor: '#EC7063',
+        confirmButtonText: 'Si Seguro',
+        showCancelButton: true,
+        cancelButtonText: "No Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {    
+                $.post("block",{
+                    guardarWalletBep20:"",
+                    correo: document.getElementById("correo").value,                    
+                    bep20: bep20
+                },function(data){
+                    var datos= JSON.parse(data);
+                    console.log("result:", data)
+                    if(datos.result){
+                        Swal.fire({
+                                    title: 'Wallet',
+                                    text: "Tu Wallet de BSC BEP-20 ha sigo Guardada con exito..!",
+                                    icon: 'info',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok'
+                                    });                                            
+                        leerDatos();
+                    }
+                });                   
+            }
+        }); 
 }
 
 function leerDatos(){
@@ -395,7 +420,7 @@ function setCal(id){
                 });            
             }    
         });
-}
+} 
 
 function mostrarTablaRetiros() {
     const tablaCuerpo = document.getElementById("tabla-cuerpo-retiro");
