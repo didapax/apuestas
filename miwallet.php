@@ -131,13 +131,13 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                                     <div class='binance-input-container'> 
                                         <div> 
                                             <h4>Mi Pay ID:</h4> <input type="text" class='binance-input' id="payid">
-                                        </div>    
+                                        </div>
                                         <button id="guardar" class='binance-button' type="button" onclick="guardar()">Guardar</button>
                                     </div>
                                     <div class='binance-input-container'>
                                         <div>  
                                             <h4> Wallet BSC Bep-20:</h4> <input class='binance-input' type="text" id="bep20">
-                                        </div> 
+                                        </div>
                                         <button id="guardarbep20" class='binance-button' type="button" onclick="savebep20()">Guardar</button>                        
                                     </div>
                                 </div>

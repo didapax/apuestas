@@ -49,9 +49,9 @@
                         echo "<li><a href='index' class='nav__link'>Tienda</a></li>";
                      }
                      if($page=="chat"){
-                       echo "<li><a href='chat' class='nav__link active'>Soporte</a></li>";
+                       echo "<li><a href='chat' class='nav__link active' $style>Soporte</a></li>";
                      }else{
-                        echo "<li><a href='chat' class='nav__link'>Soporte</a></li>";
+                        echo "<li><a href='chat' class='nav__link' $style>Soporte</a></li>";
                      }
                      if($page=="wallet"){
                        echo "<li><a href='miwallet' class='nav__link active'>Cartera</a></li>";
@@ -110,10 +110,10 @@
                     echo "<li><a href='trabajos' class='nav__link active'>Trabajos</a></li>";
                   }                  
                   if($page=="trabajos"){
-                     echo "<li><a href='trabajos' class='nav__link active'>Trabajos</a></li>";
+                     echo "<li><a href='trabajos' class='nav__link active' $style>Trabajos</a></li>";
                   }
                   else{                  
-                     echo "<li><a href='trabajos' class='nav__link'>Trabajos</a></li>";
+                     echo "<li><a href='trabajos' class='nav__link' $style>Trabajos</a></li>";
                   }
                   if($page=="jugadas"){
                     echo "<a href='jugadas' class='nav__link active'>Productos</a>";

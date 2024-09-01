@@ -301,7 +301,8 @@ function seltickect(){
     $idCliente= $_SESSION['user'];
     $ticket= $_GET['ticket'];
     $consulta = "UPDATE CHAT SET ACTIVO=1 WHERE IDPEDIDO='$ticket' AND AMO='$idCliente'";    
-    sqlconector($consulta);            
+    sqlconector($consulta);    
+    notif($_SESSION['user']);        
   } 
 
   echo "

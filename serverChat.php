@@ -206,7 +206,11 @@ function dibujaChatApp($ticket) {
 
   if(isset($_POST['verChatApp'])) {
   	dibujaChatApp($_POST['verChatApp']);
+	//Marca el chat como leido
 	chatLeido($_POST['verChatApp'],$_POST['IDusuario']);
+	//Marca como vista las notificaciones relacionadas a este chat
+    $Q_consulta = "UPDATE NOTIFICACIONES SET VISTO=1 WHERE IDPEDIDO='".$_POST['verChatApp']."' AND IDUSUARIO='".$_POST['IDusuario']."'";
+    sqlconector($Q_consulta);	
   }
 
 ?>

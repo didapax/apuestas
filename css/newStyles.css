@@ -598,7 +598,7 @@ marquee span{
 }
 
 .binance-input-container{
-  display: flex;
+  display: inline-flex;
   align-items:flex-end;
   gap: .5rem;
 }

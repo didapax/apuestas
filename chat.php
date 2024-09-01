@@ -287,8 +287,7 @@ function seltickect(){
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->  
 
-  <?php
-
+  <?php  
   $notificaciones = "0";
   $ticket = "0";
   if(isset($_GET['notif'])) $notificaciones= $_GET['notif'];
@@ -297,6 +296,7 @@ function seltickect(){
     $ticket= $_GET['ticket'];
     $consulta = "UPDATE CHAT SET ACTIVO=1 WHERE IDPEDIDO='$ticket' AND AMO='$idCliente'";
     sqlconector($consulta);    
+    notif($_SESSION['user']);
   } 
 
   echo "

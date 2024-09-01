@@ -990,7 +990,7 @@ function promoFlotante(){
         
         <h2>".$row['NOMBRE']."</h2>
         
-        ".$row['MENSAJE']."
+        ".$row['MENSAJE']." <button class=\"binance-button\" type='button' onclick=\"$('#promoFlotante').fadeOut()\">Continuar</button>
         </div>
 
         <div class='dialog-image-container'>
@@ -1023,12 +1023,12 @@ function notif($IDusuario){
     if($resultado){
         $obj=array();
         while($row = mysqli_fetch_assoc($resultado)){
-            $obj[] = "<a href='{$row['ubicacion']}&notif={$row['ID']}'>".$row['noticia']."</a>";
+            $obj[] = array('ubicacion'=>$row['ubicacion'],'id'=>$row['ID'],'noticia'=>$row['noticia']);
         }
-       }
-   return $obj;
+    }
+   //return $obj;
  }
-
+/*
  if(isset($_POST['insertNotif'])){
     $Q_consulta = "INSERT INTO NOTIFICACIONES(IDUSUARIO,NOTICIA,UBICACION) VALUES(".$_POST['IDusuario'].",'".$_POST['noticia']."','{$_POST['ubicacion']}')";
     sqlconector($Q_consulta);
@@ -1043,7 +1043,7 @@ function notif($IDusuario){
     $obj = array('noticias' => notif($_GET['IDusuario']),'totalNotif' => countNotif($_GET['IDusuario']));
     $json = json_encode($obj);
     echo $json;
- }
+ }*/
 
    /****FIN NOTIFICACIONES**************************************************************************
    */
