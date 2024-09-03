@@ -130,7 +130,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                                 <div class='binance-form-container'>
                                     <div class='binance-input-container'> 
                                         <div> 
-                                            <h4>Mi Pay ID:</h4> <input type="text" class='binance-input' id="payid">
+                                            <h4>Pay ID / Correo Binance:</h4> <input type="text" class='binance-input' id="payid">
                                         </div>
                                         <button id="guardar" class='binance-button' type="button" onclick="guardar()">Guardar</button>
                                     </div>
@@ -141,7 +141,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                                         <button id="guardarbep20" class='binance-button' type="button" onclick="savebep20()">Guardar</button>                        
                                     </div>
                                 </div>
-                                
+                                <a class="social-icon__link" style="font-size:14px;text-decoration:none;color:white;" href="mailto:crptsgnlgrpspprt@gmail.com">
+                                    Soporte Técnico
+                                <ion-icon name="mail-open-outline"></ion-icon>
+                                </a>                                
                                 <div class='binance-image-container'>
                                     <image src="Assets/minibina.png">
                                 </div>
