@@ -116,33 +116,39 @@ function recalcularSuscripciones($correo){
       $cliente = $row['CLIENTE'];
       $suscripcion = readApuestaTicket($ticket);
       $n_pagos = $suscripcion['N_PAGOS'];
+      $id_ticket = 0;
 
-      if($inversion==1){        
+      if($inversion==1){
         if($interes_adelantado == 1){
           //la logica si tiene interes adelantado
           if($vencimiento <= $dia_actual){
+            //calcula el id actual a menejar
+            $id_ticket = $row["ID"];
+
             if($n_pagos > 1){
               $valor = $n_pagos - 1;
               sqlconector("UPDATE APUESTAS SET N_PAGOS=$valor WHERE TICKET='$ticket'");
-              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND CLIENTE='$cliente'");
+              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE ID=$id_ticket AND CLIENTE='$cliente'");
             }
             else{
               $saldo = readCliente($cliente)['SALDO'] + $capital;
               sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cliente'");
               sqlconector("UPDATE APUESTAS SET PAGADOS=1, ACTIVO=0, ELIMINADO=1,ESTATUS='CERRADO' WHERE TICKET='$ticket'");
-              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND CLIENTE='$cliente'");              
+              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE ID=$id_ticket AND CLIENTE='$cliente'");
             }
           }
         }
         else{
           //la logica si es solo una inversion
           if($vencimiento <= $dia_actual){
+            //calcula el id actual a menejar
+            $id_ticket = $row["ID"];
             if($n_pagos > 1){
               $saldo = readCliente($cliente)['SALDO'] + $interes;
               sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cliente'");              
               $valor = $n_pagos - 1;
               sqlconector("UPDATE APUESTAS SET N_PAGOS=$valor WHERE TICKET='$ticket'");
-              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND CLIENTE='$cliente'");
+              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE ID=$id_ticket AND CLIENTE='$cliente'");
             }
             else{
               if($devuelveCapital == 0){
@@ -153,20 +159,23 @@ function recalcularSuscripciones($correo){
               }              
               sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cliente'");
               sqlconector("UPDATE APUESTAS SET PAGADOS=1, ACTIVO=0, ELIMINADO=1,ESTATUS='CERRADO' WHERE TICKET='$ticket'");
-              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND CLIENTE='$cliente'");              
+              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE ID=$id_ticket AND CLIENTE='$cliente'");              
             }
           }
         }
-      }else{
+      }
+      else{
         //La logica si es una suscripcion
         if($vencimiento <= $dia_actual){
+          //calcula el id actual a menejar
+          $id_ticket = $row["ID"];
           if(readCliente($cliente)['SALDO'] >= $capital){
             $idJuego = $row['IDJUEGO'];
             $juego = $row['JUEGO'];
             $cajero =$row['CAJERO'];
             $saldo = readCliente($cliente)['SALDO'] - $capital;
             sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cliente'");
-            sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND CLIENTE='$cliente'");
+            sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE ID=$id_ticket AND CLIENTE='$cliente'");
             $fechaFinal = calcularFechaDespuesDeUnMes($dia_actual,$n_pagos);
             sqlconector("UPDATE APUESTAS SET FIN='$fechaFinal',ESTATUS='RENOVADO'  WHERE TICKET='$ticket' ");
             sqlconector("INSERT INTO LIBROCONTABLE(FECHA,TICKET,TIPO,IDJUEGO,INVERSION,JUEGO,CAJERO,CLIENTE,INTERES_ADELANTADO,MONTO,INTERES_MENSUAL,CUOTA_MENSUAL,TOTAL_PAGAR) VALUES(
@@ -537,7 +546,7 @@ function verPromo(){
     }
   }*/
 
-  echo "Suscribete y Disfruta de Nuestros Productos, Tenemos una Gran Varidad de Tarjetas de Inversiones...";
+  echo "Suscríbete y disfruta de las ganancias como socio participativo sin riesgos. Ofrecemos una gran variedad de tarjetas de inversión con retornos mensuales de intereses y capital.";
 }
 
 function refreshDatos($mon){
@@ -850,7 +859,7 @@ function sumApostadores($id){
   }
  }
 
-function setPromo($correo){
+function setPromo($correo){ 
   if(recordCount("PROMO")>0){
     sqlconector("UPDATE USERPROMO SET RATE=0 WHERE CORREO='{$correo}'");
   }

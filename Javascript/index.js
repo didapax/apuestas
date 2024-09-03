@@ -60,14 +60,11 @@ function mostrarTarjetas() {
         let mensaje = "Suscripcion Abierta";
         let costo = tarjeta.costo;
         let estrellas = dibujarEstrellas(tarjeta.estrellas);
-        let favorito = "&#169;";
         if (tarjeta.bloqueo === '1') {
             acciones = `onclick="bloque()"`;
             mensaje = "<span style='color:red;'>Suscripcion Bloqueda</span>";
         }
-        if (tarjeta.favorito === '1') {
-            favorito = "&#169; Recomendado";
-        }        
+
         if (tarjeta.sesion === false) {
             acciones = `onclick="initsession()"`;
             caja.innerHTML += dibujaTarjeta(tarjeta.id,acciones,tarjeta.imagen,tarjeta.titulo,texto,mensaje,costo,estrellas);

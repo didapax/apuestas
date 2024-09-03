@@ -61,7 +61,6 @@ function mostrarTarjetas() {
         let mensaje = "Suscripcion Abierta";
         let costo = tarjeta.costo;
         let estrellas = dibujarEstrellas(tarjeta.estrellas);
-        let favorito = "&#169;";
         if (tarjeta.activo) {
             acciones = "";
             mensaje = "Suscripcion Activa";

@@ -7,6 +7,17 @@ header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
 include "modulo.php";
 
 if(isset($_SESSION['user'])){
+
+  if(isset($_POST['verifiUser'])){
+    $correo = $_POST['correo'];
+    $obj = array('exist' => false, 'saldo' => 0.00);
+    if(ifUsuarioExist($correo)){
+      $cliente = readCliente($correo);
+      $obj = array('exist' => true, 'saldo' => $cliente['SALDO']);
+    }
+    echo json_encode($obj);
+  }
+  
   if(isset($_POST['retirar'])){
     $wallet_comisiones = $_POST['cajero'];
     $ticket = generaTicket();
@@ -50,8 +61,7 @@ if(isset($_SESSION['user'])){
           echo "Error al enviar el correo.";
       }   
   }
-  
-  
+    
   if(isset($_POST['depositar'])){ 
     $ticket = generaTicket();
     $monto = $_POST['cantidad'];
@@ -348,7 +358,7 @@ if(isset($_SESSION['user'])){
         $foreground = $row['FOREGROUND'];
         $titulo = strip_tags($row['JUEGO']);
         $estrellas = readJuegoId($row['IDJUEGO'])['RATE'];
-        $costo = $row['MONTO'];
+        $costo = price($row['MONTO']);
         $interes = price($row['INTERES_MENSUAL']);
         $pagaIntereses = false;
   
@@ -398,7 +408,7 @@ if(isset($_SESSION['user'])){
     }
   
     $obj = array();
-    $consulta = "select * from JUEGOS WHERE ELIMINADO=0 ORDER BY FECHA";
+    $consulta = "select * from JUEGOS WHERE ELIMINADO=0 AND FAVORITO=0 ORDER BY FECHA";
      
     $resultado = sqlconector($consulta );
     
@@ -515,6 +525,10 @@ if(isset($_SESSION['user'])){
           <td>";
             if($row['PORCIENTO'] == 0){
               echo "<button title='Analisis' type='button' class='add-button' onclick=\"analisis('".$row['ID']."')\">Analisis</button>";
+            }
+
+            if($row['FAVORITO']==1){
+              echo "<button title='Tarjeta de Regalo' type='button' class='binance-button' onclick=\"enviar_regalo('".$row['ID']."')\">Enviar Regalo</button>";
             }
             
             echo "<button title='Borrar' type='button' class='retire-button' onclick=\"borrar('".$row['ID']."')\">Borrar</button>
@@ -955,7 +969,7 @@ else{
     }
   
     $obj = array();
-    $consulta = "select * from JUEGOS WHERE ELIMINADO=0 ORDER BY FECHA";
+    $consulta = "select * from JUEGOS WHERE ELIMINADO=0 AND FAVORITO=0 ORDER BY FECHA";
      
     $resultado = sqlconector($consulta );
     

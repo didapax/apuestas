@@ -75,6 +75,23 @@ input[type="checkbox"] {
             z-index: 99;
         }   
 
+        dialog {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border: none;
+                padding: 20px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                background-color: white;
+                z-index: 1000000;
+                border:solid 1px gray;
+            }
+
+            .dialog-content {
+                text-align: center;
+            } 
         </style>        
         <script>
 
@@ -259,6 +276,74 @@ input[type="checkbox"] {
                 }
             }
 
+            function enviar_regalo(id){
+                const dialog = document.getElementById("info-dialog");
+                dialog.querySelector(".dialog-content").innerHTML = `
+                <p>Correo Cliente: <input type="email" id="enviar_correo" ></p>
+                <p><button type="button" onclick="regalar(${id})" class="binance-button">Regalar</button></p>
+                `;
+                dialog.show();
+            }
+
+            function regalar(id){
+                const correo = document.getElementById("enviar_correo");
+                const dialog = document.getElementById("info-dialog");
+                if(correo.value){
+                    Swal.fire({
+                        title: 'Cryptosignal',
+                        text: `Estas Seguro de Enviar una Tarjeta de Regalo a  ${correo.value}`,
+                        icon: 'warning',
+                        confirmButtonColor: '#EC7063',
+                        confirmButtonText: 'Si Enviar',
+                        showCancelButton: true,
+                        cancelButtonText: "No Espera"
+                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                $.post("block",{
+                                                    verifiUser: true,
+                                                    correo: correo.value
+                                                },function(data){
+                                                    var datos= JSON.parse(data);
+                                                    if(datos.exist){
+                                                        $.post("block",{
+                                                        jugar:"",
+                                                        idjuego: id,
+                                                        correo: correo.value
+                                                        },function(data){
+                                                        dialog.close();
+                                                        Swal.fire({
+                                                            title: 'Crytosignal',
+                                                            text: `Tarjeta de regalo enviada al destinatario ${correo.value}`,
+                                                            icon: 'info',
+                                                            confirmButtonColor: '#EC7063',
+                                                            confirmButtonText: 'Ok',
+                                                            });
+                                                        });
+                                                    }else{
+                                                        Swal.fire({
+                                                            title: 'Crytosignal',
+                                                            text: `El correo ${correo.value} no existe en el sistema`,
+                                                            icon: 'warning',
+                                                            confirmButtonColor: '#EC7063',
+                                                            confirmButtonText: 'Ok',
+                                                        });
+                                                    }
+                                                    
+                                                });  
+                                            }
+                                        });
+                }
+                else{
+                    Swal.fire({
+                        title: 'Crytosignal',
+                        text: "Alerta! Correo No Valido o esta vacio..",
+                        icon: 'warning',
+                        confirmButtonColor: '#EC7063',
+                        confirmButtonText: 'Ok',
+                    });
+                }
+            }
+
         </script>
     </header>
     <body onload="inicio()">
@@ -268,6 +353,10 @@ input[type="checkbox"] {
         <!--FIN Barra de Navegación @media 1200px-->             
 
         <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; overflow-x: hidden; padding:5rem; min-height: calc(100vh - 24rem);'>
+        <dialog id="info-dialog">
+            <div class="dialog-content"></div>
+            <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>            
+        </dialog>        
         <input type="hidden" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" id="correo">
         <input type="hidden"  id="idAnalisis">
         <div class="button-menu" id="menu">
@@ -292,7 +381,7 @@ input[type="checkbox"] {
                                 <input title="Solo Insertar la Tarjeta" type="radio" id="ninguno" name="selectx">
                             </div>
                             <div style='display: flex;align-items: flex-start;gap: .2rem;'>
-                                Favorito: 
+                                De Regalo: 
                                 <input title="Poner la tarjeta como Favorita" type="radio" value="1" id="favorito" name="selectx"><br>                
                             </div>
                         </div>
