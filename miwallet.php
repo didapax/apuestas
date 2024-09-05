@@ -121,7 +121,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                     </div>
                     <div class="vista" id="vista">
                     <div class="dialog-wallet" id="agregar">                                   
-                        Esta Direccion de Binance Pay Id y Bep-20 seran Utlizadas para los Depositos y Retiros, 
+                        Esta Direccion de Correo Binance / Pay Id y la wallet Bep-20 seran Utlizadas para los Depositos y Retiros, 
                         asegurate que sea correcta, CryptoSignal Group no se hace responsable por la informacion 
                         erronea que suministres.<br><br>
                         

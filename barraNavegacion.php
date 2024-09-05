@@ -203,7 +203,7 @@
                </div>
             </div>
          </nav>
-         <marquee><?php verPromo(); ?></marquee>
+         <!--<marquee><?php verPromo(); ?></marquee>-->
 
       </header>
 

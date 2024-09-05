@@ -318,6 +318,7 @@ function seltickect(){
 <section class='dataSec'>
 <div class='data'>
   <h3 >SOPORTE CRYPTOSIGNAL</h3>
+  <span style="font-size:10px">Los Ticket se abren automaticamente al tener un deposito o un retiro activo</span>
     <div>
       Seleccione un Ticket Abierto: 
       <select id="selectTicket" onchange="seltickect()" style="color:black;">
