@@ -30,8 +30,9 @@ if(isset($_SESSION['user'])){
     $destino = $_POST['destino'];
     $descripcion= $_POST['tipo'];
     $comopago = $_POST['comopago'];
+    $moneda = $_POST['moneda'];
   
-    sqlconector("INSERT INTO TRANSACCIONES (TICKET,TIPO,DESCRIPCION,CAJERO,CLIENTE,ORIGEN,DESTINO,MEDIO_PAGO,MONTO,RECIBE) VALUES(
+    sqlconector("INSERT INTO TRANSACCIONES (TICKET,TIPO,DESCRIPCION,CAJERO,CLIENTE,ORIGEN,DESTINO,MEDIO_PAGO,MONTO,RECIBE,MONEDA) VALUES(
         '$ticket',
         'RETIRO',
         '$descripcion',
@@ -41,7 +42,8 @@ if(isset($_SESSION['user'])){
         '$destino',      
         '$comopago',      
         $monto,
-        $recibe)");
+        $recibe,
+        '$moneda')");
   
       $saldo= readCliente($cliente)['SALDO'] - $monto;
       sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cliente'");
@@ -71,8 +73,9 @@ if(isset($_SESSION['user'])){
     $destino = $_POST['destino'];
     $descripcion= $_POST['tipo'];
     $comopago = $_POST['comopago'];
+    $moneda = $_POST['moneda'];
   
-    sqlconector("INSERT INTO TRANSACCIONES (TICKET,DESCRIPCION,CAJERO,CLIENTE,ORIGEN,DESTINO,MEDIO_PAGO,MONTO,RECIBE) VALUES(
+    sqlconector("INSERT INTO TRANSACCIONES (TICKET,DESCRIPCION,CAJERO,CLIENTE,ORIGEN,DESTINO,MEDIO_PAGO,MONTO,RECIBE,MONEDA) VALUES(
         '$ticket',
         '$descripcion',
         '$cajero',
@@ -81,7 +84,8 @@ if(isset($_SESSION['user'])){
         '$destino',
         '$comopago',        
         $monto,
-        $monto)");
+        $monto,
+        '$moneda')");
   
     $para = $cajero;
     $asunto = "Tienes un deposito Pendiente";
@@ -369,12 +373,18 @@ if(isset($_SESSION['user'])){
         $activo = false;
        }
        else{
-        if( isset(readJuegoId($row['IDJUEGO'])['ANALISIS']) ){
-          $analisis = strip_tags(readJuegoId($row['IDJUEGO'])['ANALISIS']);
-        }else{
-          $analisis = strip_tags(readJuegoId($row['IDJUEGO'])['DESCRIPCION']);
+          if( isset(readJuegoId($row['IDJUEGO'])['ANALISIS']) ){
+            $analisis = readJuegoId($row['IDJUEGO'])['ANALISIS'];
+          }
+          else{
+            $analisis = readJuegoId($row['IDJUEGO'])['DESCRIPCION'];
+          }
+          foreach ($GLOBALS as $clave => $valor) {
+            if (strpos($analisis, $clave) !== false) {
+                $analisis = str_replace($clave, $valor, $analisis);
+            }
+          }          
         }
-        } 
         
         $obj[]= array(
         'id' => $row['ID'],
@@ -635,6 +645,7 @@ if(isset($_SESSION['user'])){
       'pagado' => $row['PAGADO'],
       'rate' => $row['RATE'],
       'calificado' => $row['CALIFICADO'],    
+      'moneda' => $row['MONEDA'],
       'estatus' => $row['ESTATUS']);
     }
     mysqli_close($conexion);
@@ -657,6 +668,7 @@ if(isset($_SESSION['user'])){
       'cajero' => $row['CAJERO'],
       'pagado' => $row['PAGADO'],
       'rate' => $row['RATE'],
+      'moneda' => $row['MONEDA'],
       'calificado' => $row['CALIFICADO'],
       'estatus' => $row['ESTATUS']);
     }

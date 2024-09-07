@@ -57,9 +57,13 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 Selecciona un Cajero: 
                 <select onchange="selcajero()" id="micajero" style="color:black;">
                 </select>
-                <br>                
-                Como Vas a Pagar: 
-                <select required onchange="selpago()" id="comopago" style="color:black;">            
+                <br>                 
+                Como Vas a Depositar: 
+                <select onchange="selpago()" id="comopago" style="color:black;"></select>
+                Establecoin:
+                <select id="establecoin" style="color:black;">
+                    <option selected value="USDC">USDC</option>
+                    <option value= "USDT">USDT</option>
                 </select>
                 <div id="detalles" style="display:none;width:100%;">
                     Cantidad a Depositar: 
@@ -89,6 +93,11 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 Retirar con: 
                 <select required onchange="selretiro()" id="como_retiro" style="color:black;">
                 </select>
+                Establecoin:
+                <select id="establecoin_retiro" style="color:black;">
+                    <option selected value="USDC">USDC</option>
+                    <option value= "USDT">USDT</option>
+                </select>                
                 <div id="detalles_retiro" style="display:none;width:100%;">
                     Cantidad a Retirar: 
                     <input style="border:none;outline: none;" type="number" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0" style="color:black;"  step="1"><br>
@@ -157,7 +166,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                 
                 <div id="depositos" class="tab-pane fade">
                     <div class="tab-title">
-                        <h3>Depositar Usdc de Forma Facil y Segura</h3>
+                        <h3>Depositar Establecoin de Forma Facil y Segura</h3>
                     </div>
                     <div class="container mt-5 mb-5">
                         <button id="buttonDeposito" class='deposit-button' onclick="initDeposito()"><img style='width:1.2rem' src='Assets/icons/cash_icon.png'>Depositar</button>
@@ -180,7 +189,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
 
                 <div id="retiros" class="tab-pane fade">
                     <div class="tab-title">
-                        <h3>Retirar Tus Usdc de la Plataforma</h3>
+                        <h3>Retirar Tus Establecoin de la Plataforma</h3>
                     </div>
                     <div class="container mt-5 mb-5">
                         <button id="buttonRetiro" class='retire-button' onclick="document.getElementById('modalOverlay2').style.display = 'flex';"><img style='width:1.2rem' src='Assets/icons/withdrawal_icon.png'> Retirar</button>

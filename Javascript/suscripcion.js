@@ -75,7 +75,7 @@ function mostrarTarjetas() {
 }
 
 
-function recuperarTarjetas(){ 
+function recuperarTarjetas(){
 	fetch("block?getSuscripciones=&correo="+document.getElementById('correo').value)
 		.then(response => {
 			if (!response.ok) {

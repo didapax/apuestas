@@ -3,6 +3,11 @@ require "init.php";
 require "php-binance-api.php";
 session_start();
 
+// Variables clave para las estadisticas
+$GLOBALS['__TOTALUSUARIOS__'] = row_sqlconector("SELECT COUNT(*) AS TOTAL FROM USUARIOS")['TOTAL'];
+$GLOBALS['__DEPOSITOS__'] = row_sqlconector("SELECT COUNT(*) AS TOTAL FROM TRANSACCIONES WHERE TIPO='DEPOSITO'")['TOTAL'];
+$GLOBALS['__RETIROS__'] = row_sqlconector("SELECT COUNT(*) AS TOTAL FROM TRANSACCIONES WHERE TIPO='RETIRO'")['TOTAL'];
+
 function generaTicket(){
     $bytes = random_bytes(8);
 	  $referencia = bin2hex($bytes);

@@ -18,7 +18,7 @@ function sqlconector($consulta) {
   if (!$conexion) {
     die("Failed to connect to Data: " . mysqli_connect_error());
   }
-  
+  mysqli_set_charset($conexion, "utf8mb4");
   $resultado = mysqli_query($conexion, $consulta);
   
   if (!$resultado) {
@@ -36,6 +36,7 @@ function row_sqlconector($consulta) {
     echo "Refresh page, Failed to connect to Data: " . mysqli_connect_error();
     exit();
   }else{
+    mysqli_set_charset($conexion, "utf8mb4");
     $resultado = mysqli_query($conexion, $consulta);
     if($resultado){
   		$row = mysqli_fetch_assoc($resultado);

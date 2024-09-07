@@ -290,7 +290,8 @@ function retirar(){
             cajero: document.getElementById("cajero").value,
             monto: document.getElementById("cantidad_retiro").value,                        
             recibe: document.getElementById("recibe").value,
-            comision: document.getElementById("comision_retiro").value
+            comision: document.getElementById("comision_retiro").value,
+            moneda: document.getElementById("establecoin_retiro").value
         },function(data){
             document.getElementById('modalOverlay2').style.display = "none";
             document.getElementById("retirar_btn").disabled = false;
@@ -326,7 +327,8 @@ function lanzar(){
             tipo: document.getElementById("tipo").value,
             comopago: document.getElementById("comopago").value,
             cajero: document.getElementById("cajero").value,
-            correo: document.getElementById("correo").value
+            correo: document.getElementById("correo").value,
+            moneda: document.getElementById("establecoin").value
         },function(data){
             document.getElementById('modalOverlay').style.display = "none";
             document.getElementById("jugar").disabled = false;
@@ -344,6 +346,7 @@ function lanzar(){
 }
 
 function calculo_retiro(){
+    let establecoin = document.getElementById("establecoin_retiro").value;
     let cantidad = document.getElementById("cantidad_retiro").value *1;
     let comision = 0;
     let porcentaje = 3; 
@@ -353,19 +356,20 @@ function calculo_retiro(){
     total = cantidad - comision;
     document.getElementById("recibe").value = Math.round(total * 100) / 100;
     document.getElementById("comision_retiro").value = Math.round(comision * 100) / 100;
-    $("#calculo_retiro").html("<li>Retiro por =  "+ cantidad + " USDC</li>"+"<li>Comision de Red "+porcentaje+"% =  "+ Math.round(comision * 100) / 100 + " USDC</li>"+"<li>Usted Recibe =  <b>"+ Math.round(total * 100) / 100 + "</b> USDC</li>");
+    $("#calculo_retiro").html(`<li>Deposito =  ${cantidad} " ${establecoin}</li><li>Comision de Red ${porcentaje}% =  ${Math.round(comision * 100) / 100} ${establecoin}</li><li>Usted Recibe =  <b>${Math.round(total * 100) / 100}</b> ${establecoin}</li>`);
 
 }
 
 function calculo(){
+    let establecoin = document.getElementById("establecoin").value;
     let cantidad = document.getElementById("cantidad").value *1;
     let comision = 0;
     let porcentaje = 0; 
     let total = 0;
 
     comision = (cantidad * porcentaje) / 100;
-    total = cantidad - comision;
-    $("#calculo").html("<li>Deposito =  "+ cantidad + " USDC</li>"+"<li>Comision de Red "+porcentaje+"% =  "+ Math.round(comision * 100) / 100 + " USDC</li>"+"<li>Usted Recibe =  <b>"+ Math.round(total * 100) / 100 + "</b> USDC</li>");
+    total = cantidad - comision;    
+    $("#calculo").html(`<li>Deposito =  ${cantidad} " ${establecoin}</li><li>Comision de Red ${porcentaje}% =  ${Math.round(comision * 100) / 100} ${establecoin}</li><li>Usted Recibe =  <b>${Math.round(total * 100) / 100}</b> ${establecoin}</li>`);
 }
  
 function calificacion(n,cal,id){
@@ -447,7 +451,7 @@ function mostrarTablaRetiros() {
         fila.innerHTML = `
             <td>${producto.ticket}</td>
             <td>${producto.descripcion}</td>
-            <td>${Math.round(producto.monto * 100) / 100} Usdc</td>
+            <td>${Math.round(producto.monto * 100) / 100} ${producto.moneda}</td>
             <td style='color: #fff;font-weight: 600;text-align: center;background:${color_estatus}'>${producto.estatus}</td>
             <td>${calificacion(producto.rate,producto.calificado,producto.id)}</td>
         `;
@@ -481,7 +485,7 @@ function mostrarTablaDepositos() {
         fila.innerHTML = `
             <td>${producto.ticket}</td>
             <td>${producto.descripcion}</td>
-            <td>${Math.round(producto.monto * 100) / 100} Usdc</td>
+            <td>${Math.round(producto.monto * 100) / 100} ${producto.moneda}</td>
             <td style='color: #fff;font-weight: 600;text-align: center;background:${color_estatus}'>${producto.estatus}</td>
             <td>${calificacion(producto.rate,producto.calificado,producto.id)}</td>
         `;
@@ -522,7 +526,7 @@ function selcajero_retiro(){
         if(person.binance != null && person.binance.length > 0){
             let option = document.createElement("option");
             option.value = 'BINANCE';
-            option.textContent = 'Binance Pay';
+            option.textContent = 'Binance';
             selPerson.appendChild(option);
         }
         if(person.bep20 != null && person.bep20.length > 0){
@@ -550,7 +554,7 @@ function selcajero(){
         if(usuarioEncontrado.BINANCE != null && usuarioEncontrado.BINANCE.length > 0 && usuarioEncontrado.ACTIVE_BINANCE *1 === 1){
             let option = document.createElement("option");
             option.value = 'BINANCE';
-            option.textContent = 'Binance Pay';
+            option.textContent = 'Binance';
             selCajeros.appendChild(option);
         }
         if(usuarioEncontrado.BEP20 != null && usuarioEncontrado.BEP20.length > 0 && usuarioEncontrado.ACTIVE_BEP20 *1 === 1){

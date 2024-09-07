@@ -3,9 +3,9 @@ include "modulo.php";
 date_default_timezone_set('America/Caracas');    
 if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
 ?>
-<html lang="es">
+<html lang="es"> 
     <head>
-    <title>CriptoSignalGroup</title>
+        <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
         <link rel="shortcut icon" href="Assets/favicon.png">        
