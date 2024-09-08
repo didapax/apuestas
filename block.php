@@ -205,25 +205,50 @@ if(isset($_SESSION['user'])){
           $inversion = 1;
           $tipo = "CREDITO";
         }
-  
-        $fechas = obtenerIntervalosMensuales($fechaInicial, $fechaFinal);
-        foreach ($fechas as $fecha) {
-          sqlconector("INSERT INTO LIBROCONTABLE(FECHA,TICKET,TIPO,IDJUEGO,INVERSION,JUEGO,CAJERO,CLIENTE,INTERES_ADELANTADO,MONTO,INTERES_MENSUAL,CUOTA_MENSUAL,TOTAL_PAGAR,DEVUELVE_CAPITAL) VALUES(
-          '$fecha',
-          '$ticket',
-          '$tipo',
-           $idJuego,
-           $inversion,
-          '$juego',
-          '$cajero',
-          '$correo',
-           $porAdelantado,
-           $monto,
-           $interesMensual,
-           $cuotaMensual,
-           $totalCuotas,
-           $devuelveCapital
-          )");
+
+        if($inversion == 1){
+          //LA LOGICA SI ES UNA INVERSION QUE PAGA INTERESES MENSUALES
+          $fechas = obtenerIntervalosMensuales($fechaInicial, $fechaFinal);
+          foreach ($fechas as $fecha) {
+            sqlconector("INSERT INTO LIBROCONTABLE(FECHA,TICKET,TIPO,IDJUEGO,INVERSION,JUEGO,CAJERO,CLIENTE,INTERES_ADELANTADO,MONTO,INTERES_MENSUAL,CUOTA_MENSUAL,TOTAL_PAGAR,DEVUELVE_CAPITAL) VALUES(
+            '$fecha',
+            '$ticket',
+            '$tipo',
+             $idJuego,
+             $inversion,
+            '$juego',
+            '$cajero',
+            '$correo',
+             $porAdelantado,
+             $monto,
+             $interesMensual,
+             $cuotaMensual,
+             $totalCuotas,
+             $devuelveCapital
+            )");
+          }
+        }
+        else{
+          //LA LOGICA SI ES UNA SUSCRIPCION QUE COBRA INTERESES DE ACUERDO A LA FECHA
+          $fechas = array($fechaInicial, $fechaFinal);
+          foreach ($fechas as $fecha) {
+              sqlconector("INSERT INTO LIBROCONTABLE(FECHA,TICKET,TIPO,IDJUEGO,INVERSION,JUEGO,CAJERO,CLIENTE,INTERES_ADELANTADO,MONTO,INTERES_MENSUAL,CUOTA_MENSUAL,TOTAL_PAGAR,DEVUELVE_CAPITAL) VALUES(
+                  '$fecha',
+                  '$ticket',
+                  '$tipo',
+                  $idJuego,
+                  $inversion,
+                  '$juego',
+                  '$cajero',
+                  '$correo',
+                  $porAdelantado,
+                  $monto,
+                  $interesMensual,
+                  $cuotaMensual,
+                  $totalCuotas,
+                  $devuelveCapital
+              )");
+          }
         }
   
         sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND FECHA='$fechaInicial'");
