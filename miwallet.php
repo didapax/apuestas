@@ -222,7 +222,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                                             <th>Finaliza</th>
                                             <th>Dias</th>
                                             <th>Suscripcion</th>
-                                            <th>Capital + Interes</th>
+                                            <th>Monto</th>
                                             <th>Estatus</th>
                                         </tr>
                                     </thead>

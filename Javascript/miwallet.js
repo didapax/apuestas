@@ -666,7 +666,7 @@ function recuperarRetiros() {
                     <td>${producto.fin}</td>
                     <td>${producto.faltan_dias}</td>
                     <td>${producto.juego}</td>
-                    <td>${Math.round(producto.total_pagar * 100) / 100} Usdc</td>
+                    <td>${Math.round(producto.monto * 100) / 100} Usdc</td>
                     <td style='color: #fff;font-weight: 600;text-align: center;background:${color_estatus}'>${producto.estatus}</td>
                 `;
                 tablaCuerpo.appendChild(fila);
