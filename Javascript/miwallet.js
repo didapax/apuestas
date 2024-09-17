@@ -22,37 +22,50 @@ function myFunction() {
 
 function guardar(){
     let binance = document.getElementById("payid").value;
+    let userBinance = document.getElementById("userBinance").value;
 
-    Swal.fire({
-        title: 'Cryptosignal',
-        text: `Se procedera a Guardar tu Wallet ID de Binance: ${binance} esta seguro confirme!`,
-        icon: 'warning',
-        confirmButtonColor: '#EC7063',
-        confirmButtonText: 'Si Seguro',
-        showCancelButton: true,
-        cancelButtonText: "No Cancelar"
-        }).then((result) => {
-            if (result.isConfirmed) {    
-                $.post("block",{
-                    guardarWallet:"",
-                    correo: document.getElementById("correo").value,                    
-                    payid: binance
-                },function(data){
-                    var datos= JSON.parse(data);
-                    console.log("result:", data)
-                    if(datos.result){
-                        Swal.fire({
-                                    title: 'Wallet',
-                                    text: "Tu Wallet de PayId ha sigo Guardada con exito..!",
-                                    icon: 'info',
-                                    confirmButtonColor: '#3085d6',
-                                    confirmButtonText: 'Ok'
-                                    });                                            
-                        leerDatos();                        
-                    }
-                });                
-            }
-        });
+    if(binance && userBinance){
+        Swal.fire({
+            title: 'Cryptosignal',
+            text: `Se procedera a Guardar tu Usuario y Wallet de Binance: ${binance} esta seguro confirme!`,
+            icon: 'warning',
+            confirmButtonColor: '#EC7063',
+            confirmButtonText: 'Si Seguro',
+            showCancelButton: true,
+            cancelButtonText: "No Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {    
+                    $.post("block",{
+                        guardarWallet:"",
+                        correo: document.getElementById("correo").value,                    
+                        payid: binance,
+                        userBinance: userBinance
+                    },function(data){
+                        var datos= JSON.parse(data);
+                        console.log("result:", data)
+                        if(datos.result){
+                            Swal.fire({
+                                        title: 'Wallet',
+                                        text: "Tu Wallet de PayId ha sigo Guardada con exito..!",
+                                        icon: 'info',
+                                        confirmButtonColor: '#3085d6',
+                                        confirmButtonText: 'Ok'
+                                        });                                            
+                            leerDatos();                        
+                        }
+                    });                
+                }
+            });
+    }
+    else{
+        Swal.fire({
+            title: 'Wallet',
+            text: "Faltan datos para poder Guardar",
+            icon: 'error',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Ok'
+            });            
+    }
 }
 
 function savebep20(){
@@ -102,11 +115,13 @@ function leerDatos(){
             var botonRetiro = document.getElementById('buttonRetiro');
             var oneMetodo = 0;          
             person = datos;  
+            document.getElementById("userBinance").value = datos.nombreUsuario;
             document.getElementById("payid").value = datos.binance;
             document.getElementById("bep20").value = datos.bep20;  
             $("#saldo").html(datos.saldo); 
-            if(datos.binance != null && datos.binance.length > 0){
+            if(datos.binance != null && datos.binance.length > 0 && datos.nombreUsuario != null && datos.nombreUsuario.length > 0){
                 document.getElementById("payid").readOnly = true;
+                document.getElementById("userBinance").readOnly = true;
                 oneMetodo = 1
             }
 
@@ -147,7 +162,9 @@ function initDeposito(){
 }
 
 function selpago(){
-
+    let userBinance = document.getElementById("userBinance").value;
+    let walletBinance = document.getElementById("payid").value;
+    let walletBep20 = document.getElementById("bep20").value;
     let valor = document.getElementById("comopago").value;
     let correo = document.getElementById("cajero").value;
     const usuarioEncontrado = cajeros.find(usuario => usuario.CORREO === correo);
@@ -156,37 +173,83 @@ function selpago(){
         var imagen = document.getElementById('QRdeposito');
         document.getElementById("cantidad").value = 0;
         if(valor === "BINANCE"){
-            $("#descripcionMetodo").html("Binance Pay");
-            document.getElementById("paycajero").value = usuarioEncontrado.BINANCE;
-            imagen.src= "Assets/Perfiles/"+usuarioEncontrado.QR_BINANCE;
-            $("#detalles").css("display","inline-block")
-            document.getElementById('tipo').value = "Deposito Binance Pay";            
+            if(userBinance && walletBinance){
+                $("#descripcionMetodo").html("Binance Pay");
+                document.getElementById("paycajero").value = usuarioEncontrado.BINANCE;
+                imagen.src= "Assets/Perfiles/"+usuarioEncontrado.QR_BINANCE;
+                $("#detalles").css("display","inline-block")
+                document.getElementById('tipo').value = "Deposito Binance Pay";
+            }
+            else{
+                Swal.fire({
+                    title: 'Wallet',
+                    text: "No Tienes Disponible este metodo elige otro.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok'
+                    }); 
+                    $("#detalles").css("display","none")
+                    document.getElementById('tipo').value = "";
+            }
         }
         if(valor === "BEP20"){
-            $("#descripcionMetodo").html("Wallet BSC BEP-20");
-            document.getElementById("paycajero").value = usuarioEncontrado.BEP20;
-            imagen.src= "Assets/Perfiles/"+usuarioEncontrado.QR_BEP20;
-            $("#detalles").css("display","inline-block")
-            document.getElementById('tipo').value = "Deposito BSC BEP-20";            
+            if(walletBep20){
+                $("#descripcionMetodo").html("Wallet BSC BEP-20");
+                document.getElementById("paycajero").value = usuarioEncontrado.BEP20;
+                imagen.src= "Assets/Perfiles/"+usuarioEncontrado.QR_BEP20;
+                $("#detalles").css("display","inline-block")
+                document.getElementById('tipo').value = "Deposito BSC BEP-20";            
+            }
+            else{
+                Swal.fire({
+                    title: 'Wallet',
+                    text: "No Tienes Disponible este metodo elige otro.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok'
+                    });
+                    $("#detalles").css("display","none")
+                    document.getElementById('tipo').value = "";                    
+            }
         }     
     } else {
         console.log("Usuario no encontrado");
     }
 }
 
-function selretiro(){    
+function selretiro(){
+    let userBinance = document.getElementById("userBinance").value;
+    let walletBinance = document.getElementById("payid").value;
+    let walletBep20 = document.getElementById("bep20").value;
+
     if($("#como_retiro").val() == "BINANCE"){     
+        if(userBinance && walletBinance){
             $("#descripcionMetodoRetiro").html("Mi Binance Pay");            
             document.getElementById('tipo_retiro').value = "Retiro Binance Pay";
             document.getElementById("paycliente").value = person.binance;
             $("#detalles_retiro").css("display","inline-block");
-     
+        }
+        else{
+            Swal.fire({
+                title: 'Wallet',
+                text: "No Tienes Disponible este metodo elige otro.",
+                icon: 'info',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Ok'
+                });
+                $("#detalles_retiro").css("display","none");
+        }
     }
-    if($("#como_retiro").val() == "BEP20"){     
+    if($("#como_retiro").val() == "BEP20"){
+        if(walletBep20){
             $("#descripcionMetodoRetiro").html("Mi Wallet BSC BEP-20");            
             document.getElementById('tipo_retiro').value = "Retiro BSC BEP-20";
             document.getElementById("paycliente").value = person.bep20;
             $("#detalles_retiro").css("display","inline-block");
+        }
+        else{
+            $("#detalles_retiro").css("display","none");
+        }
     }
 }
 
@@ -692,7 +755,12 @@ function recuperarRetiros() {
                     console.error("Error en la solicitud:", error);
                 });
             
-        }        
+        }    
+        
+        function mostrarAyudaBinance() {
+            const dialog = document.getElementById("info-dialog");
+            dialog.showModal();
+        }
     
         function inicio(){
             leerDatos();                

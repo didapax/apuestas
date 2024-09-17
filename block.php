@@ -265,7 +265,7 @@ if(isset($_SESSION['user'])){
   
     if(isset($_POST['sesion'])){
       $usuario = readCliente($correo);
-      $obj = array('nombre' => $usuario['NOMBRE'],'correo' => $usuario['CORREO'], 
+      $obj = array('nombreUsuario' => $usuario['NOMBRE_USUARIO'], 'nombre' => $usuario['NOMBRE'], 'correo' => $usuario['CORREO'], 
       'binance' => $usuario['BINANCE'], 'bep20' => $usuario['BEP20'],'bloqueado' => $usuario['BLOQUEADO'],
       'nivel' => $usuario['NIVEL'],'activo' => $usuario['ACTIVO'],'rate' => $usuario['RATE'],
       'saldo' => price($usuario['SALDO']),'verificado' => $usuario['VERIFICADO']);
@@ -848,7 +848,7 @@ if(isset($_SESSION['user'])){
   
   if(isset($_POST['guardarWallet'])){
     $result = false;
-    if (sqlconector("UPDATE USUARIOS SET BINANCE='{$_POST['payid']}' WHERE CORREO='{$_POST['correo']}'")){
+    if (sqlconector("UPDATE USUARIOS SET NOMBRE_USUARIO='{$_POST['userBinance']}', BINANCE='{$_POST['payid']}' WHERE CORREO='{$_POST['correo']}'")){
       $result = true; 
     }
   
@@ -956,7 +956,7 @@ else{
             $_SESSION['nivel'] =readCliente($correo)['NIVEL'];
             $tiempo_maximo = time() + (24 * 60 * 60);      
             setcookie("verificado", $usuario['VERIFICADO'],$tiempo_maximo); 
-            $obj = array('nombre' => $usuario['NOMBRE'],'correo' => $usuario['CORREO'], 'password' => $usuario['PASSWORD'],
+            $obj = array('nombreUsuario' => $usuario['NOMBRE_USUARIO'], 'nombre' => $usuario['NOMBRE'],'correo' => $usuario['CORREO'], 'password' => $usuario['PASSWORD'],
             'binance' => $usuario['BINANCE'], 'bloqueado' => $usuario['BLOQUEADO'],
             'nivel' => $usuario['NIVEL'],'activo' => $usuario['ACTIVO'],'rate' => $usuario['RATE'],'result' => true, 'paso' => $paso,
             'saldo' => price($usuario['SALDO']), 'capcha' => $respuestaClave,'verificado' => $usuario['VERIFICADO']);          

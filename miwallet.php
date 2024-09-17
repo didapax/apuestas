@@ -30,6 +30,26 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
          select{
             color:black;
          }
+
+         dialog {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border: none;
+                padding: 20px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                background-color: white;
+            }
+
+            .dialog-content {
+                text-align: center;
+                background: url('Assets/ayudabinance.jpg') no-repeat center/cover;
+                height: 200px;
+                width: 400px;
+            }  
+
         </style>             
         <script>
         </script>
@@ -129,17 +149,27 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                         <h3>Editar mi perfil</h3>
                     </div>
                     <div class="vista" id="vista">
+                    <dialog id="info-dialog">
+                        <div class="dialog-content"></div>
+                        <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>
+                    </dialog>    
                     <div class="dialog-wallet" id="agregar">                                   
-                        Esta Direccion de Correo Binance / Pay Id y la wallet Bep-20 seran Utlizadas para los Depositos y Retiros, 
+                        Este Usuario y  Direccion de Correo Binance y la wallet Bep-20 seran Utlizadas para los Depositos y Retiros, 
                         asegurate que sea correcta, CryptoSignal Group no se hace responsable por la informacion 
                         erronea que suministres.<br><br>
                         
                         <section class='dialog-wallet-content'> 
                             <div class='binance-form-outer-container'>
                                 <div class='binance-form-container'>
+                                <div class='binance-input-container'> 
+                                        <div> 
+                                            <h4>Nombre de Usuario Binance:</h4> <input type="text" class='binance-input' id="userBinance"><span title="Donde Buscar" style="color:white;margin-left:5px;cursor:pointer;" onclick="mostrarAyudaBinance()"> &#10068;</span>
+                                        </div>
+                                        <button id="guardar" class='binance-button' type="button" onclick="guardar()">Guardar</button>                                        
+                                    </div>                                    
                                     <div class='binance-input-container'> 
                                         <div> 
-                                            <h4>Pay ID / Correo Binance:</h4> <input type="text" class='binance-input' id="payid">
+                                            <h4>Correo Binance:</h4> <input type="text" class='binance-input' id="payid">
                                         </div>
                                         <button id="guardar" class='binance-button' type="button" onclick="guardar()">Guardar</button>
                                     </div>
@@ -150,7 +180,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                                         <button id="guardarbep20" class='binance-button' type="button" onclick="savebep20()">Guardar</button>                        
                                     </div>
                                 </div>
-                                <a class="social-icon__link" style="font-size:14px;text-decoration:none;color:white;" href="mailto:crptsgnlgrpspprt@gmail.com">
+                                <a  style="margin-top:5px;font-size:14px;text-decoration:none;color:white;" href="mailto:crptsgnlgrpspprt@gmail.com">
                                     Soporte Técnico
                                 <ion-icon name="mail-open-outline"></ion-icon>
                                 </a>                                
