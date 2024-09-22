@@ -48,7 +48,7 @@ include "modulo.php";
     <div style='display: flex;gap: 10%;align-items: center;justify-content: center;margin-top:6vh;'> 
         <div>
             <h2>Nuestra Historia</h2>
-            <p>Fundada por expertos inversores con 10 años de experiencia conjunta en el sector financiero, CriptoSignalGroup surgió con una visión clara y determinada, gracias a su enfoque inquebrantable en la satisfacción y prosperidad de sus clientes financieros, proporcionando a inversores, traders especializados e instituciones las herramientas esenciales para operar con confianza.</p>
+            <p>Fundada por expertos inversores con 10 años de experiencia conjunta en el sector financiero, CriptoSignalGroup surgió con una visión clara y determinada, gracias a su enfoque inquebrantable en la satisfacción y prosperidad de sus clientes financieros, proporcionando a inversores, traders especializados e instituciones las herramientas esenciales para operar con confianza. Mas informacion acerca de nosotros <a href="https://es.datocapital.uk/empresas/Crypto-Signal-Technology-Ltd.html">https://es.datocapital.uk/empresas/Crypto-Signal-Technology-Ltd.html</a></p>
 
         </div>
     </div>

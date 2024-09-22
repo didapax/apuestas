@@ -180,8 +180,8 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                                         <button id="guardarbep20" class='binance-button' type="button" onclick="savebep20()">Guardar</button>                        
                                     </div>
                                 </div>
-                                <a  style="margin-top:5px;font-size:14px;text-decoration:none;color:white;" href="mailto:crptsgnlgrpspprt@gmail.com">
-                                    Soporte Técnico
+                                <a  style="margin-top:25px;font-size:14px;text-decoration:none;color:white;" href="mailto:crptsgnlgrpspprt@gmail.com">
+                                    Soporte Técnico / Asistencia en Linea
                                 <ion-icon name="mail-open-outline"></ion-icon>
                                 </a>                                
                                 <div class='binance-image-container'>
