@@ -174,7 +174,7 @@ function selpago(){
         document.getElementById("cantidad").value = 0;
         if(valor === "BINANCE"){
             if(userBinance && walletBinance){
-                $("#descripcionMetodo").html("Binance Pay");
+                $("#descripcionMetodo").html("<b>Transfiere a este Binance Pay antes de hacer el Deposito.</b>");
                 document.getElementById("paycajero").value = usuarioEncontrado.BINANCE;
                 imagen.src= "Assets/Perfiles/"+usuarioEncontrado.QR_BINANCE;
                 $("#detalles").css("display","inline-block")
@@ -194,7 +194,7 @@ function selpago(){
         }
         if(valor === "BEP20"){
             if(walletBep20){
-                $("#descripcionMetodo").html("Wallet BSC BEP-20");
+                $("#descripcionMetodo").html("<b>Transfiere a esta Wallet BSC BEP-20 antes de hacer el Deposito.</b>");
                 document.getElementById("paycajero").value = usuarioEncontrado.BEP20;
                 imagen.src= "Assets/Perfiles/"+usuarioEncontrado.QR_BEP20;
                 $("#detalles").css("display","inline-block")
@@ -299,8 +299,8 @@ function retirar_back(){
 
 function jugar_back(){
     Swal.fire({
-                title: 'Depositos',
-                text: "Bienvenido Deposito a tu cuenta CriptoSignalGroup, los depositos tardan entre 24 a 48 horas en realizarse dependiendo de la congestion de la red. ",
+                title: 'Alerta!',
+                text: "Estas Seguro que ya hiciste la Tranferencia a la wallet de Binance del Cajero..?, los depositos tardan entre 24 a 48 horas en realizarse dependiendo de la congestion de la red. ",
                 icon: 'info',
                 confirmButtonColor: '#117A65',
                 confirmButtonText: 'Depositar',
