@@ -41,7 +41,7 @@ function calcularPromedio($calificaciones) {
   return round($promedio);
 }
 
-/* example
+/* example 
 $calificaciones = [5, 2, 4, 3, 5,5,5,5,5,3,4,5,5,4,5,5,5,5,5]; // Puedes agregar más calificaciones aquí
 $promedio = calcularPromedio($calificaciones);
 echo "El promedio de las calificaciones es: " . $promedio;
@@ -739,16 +739,36 @@ function getRealIpAddr(){
     return $ipaddress;
 }
 
+function insertLista($correo){
+  sqlconector("INSERT INTO LISTA(CORREO) VALUES('{$correo}')");
+}
+
+function setEnviado($correo,$valor){
+  sqlconector("UPDATE LISTA SET ENVIADO={$valor} WHERE CORREO='{$correo}'");
+}
+
+function recordList(){
+  return row_sqlconector("SELECT Count(*) as SUMA FROM LISTA WHERE ENVIADO = 0")['SUMA'];
+}
+
+function returnListaCorreos() {
+  $lista = [];
+  $consulta = "SELECT * FROM LISTA WHERE ENVIADO=0";
+  $resultado = sqlconector($consulta);
+  
+  while ($row = mysqli_fetch_assoc($resultado)) {
+      $lista[] = $row['CORREO'];
+  }
+  
+  return $lista;
+}
+
 function recordCount($table){
     return row_sqlconector("SELECT Count(*) as SUMA FROM ".$table)['SUMA'];
 }
 
 function recordCountApuestas($cliente){
   return row_sqlconector("SELECT Count(*) as SUMA FROM APUESTAS WHERE CLIENTE='$cliente'")['SUMA'];
-}
-
-function recordList(){
-  return row_sqlconector("SELECT Count(*) as SUMA FROM LISTA WHERE ENVIADO = 1")['SUMA'];
 }
 
 function readCliente($correo){
@@ -971,10 +991,6 @@ function statusPromocion($correo){
   }   
 }
 
-function insertLista($correo){
-  sqlconector("INSERT INTO LISTA(CORREO) VALUES('{$correo}')");
-}
-
 function sendMail($correo,$asunto,$mensaje){
   ini_set( 'display_errors', 1 );
   error_reporting( E_ALL );
@@ -984,10 +1000,6 @@ function sendMail($correo,$asunto,$mensaje){
   $message = $mensaje;
   $headers = "From:" . $from;
   mail($to,$subject,$message, $headers);       
-}
-
-function setEnviado($correo,$valor){
-  sqlconector("UPDATE LISTA SET ENVIADO={$valor} WHERE CORREO='{$correo}'");
 }
 
 function readMailPromo(){

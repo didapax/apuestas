@@ -745,6 +745,17 @@ if(isset($_SESSION['user'])){
   }
   
   if(isset($_POST['setAnalis'])){
+    //leemos la informacion de la tarjeta
+    $tarjeta = readJuegoId($_POST['setAnalis']);
+    // borramos el contenido de la lista de correos a enviar
+    sqlconector("DELETE FROM LISTA");
+    //generamos una lista de correos con esa suscripcion
+    $consulta = "select * from APUESTAS WHERE IDJUEGO={$_POST['setAnalis']}";
+    $resultado = sqlconector($consulta );
+    while($row = mysqli_fetch_assoc($resultado)){
+      sqlconector("INSERT INTO LISTA(CORREO, SUBJET,BODY) VALUES('{$row['CLIENTE']}','Analisis {$tarjeta['JUEGO']}','{$_POST['analisis']}')");
+    }
+    //actualizamos la tarjeta con el nuevo analisis
     $consulta = "UPDATE JUEGOS SET ANALISIS='".$_POST['analisis']."' WHERE ID=".$_POST['setAnalis'];
     sqlconector($consulta);
   }
@@ -896,17 +907,17 @@ if(isset($_SESSION['user'])){
   }
   
   if( isset($_POST['resetlista']) ){  
-    sqlconector("DELETE FROM LISTA");  
+    /*sqlconector("DELETE FROM LISTA");  
     $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
     $consulta = "select * from USUARIOS";
     $resultado = mysqli_query( $conexion, $consulta );
     while($row = mysqli_fetch_assoc($resultado)){
       insertLista($row['CORREO']);
-    }
+    }*/
   }
   
   if( isset($_POST['sendlista']) ){
-    if(ifNotDayExists("ENVIOLISTA")){
+  /*  if(ifNotDayExists("ENVIOLISTA")){
       sqlconector("INSERT INTO ENVIOLISTA(ENVIADO) VALUES(1)");
     }  
     $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
@@ -918,7 +929,7 @@ if(isset($_SESSION['user'])){
       setEnviado($row['CORREO'],1);
       if($i == 4) break;
       $i++;
-    }
+    }*/
   }
 }
 else{

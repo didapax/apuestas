@@ -221,7 +221,7 @@ input[type="checkbox"] {
                     });
             }      
             
-            function setAnalis(){
+            function setAnalis(){ 
                 $.post("block",{
                         setAnalis: document.getElementById('idAnalisis').value,
                         analisis: document.getElementById('summerNoteAnalisis').value
