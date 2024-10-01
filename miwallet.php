@@ -136,7 +136,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
       <!-- Inicio de la pestaña -->
       <div class="container">
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="pill" style="color:black;" href="#home" onclick="inicio()">Mi Perfil</a></li>
+                <li class="active"><a data-toggle="pill" style="color:black;" href="#home" onclick="inicio()">Mis Wallet</a></li>
                 <li><a data-toggle="pill" style="color:black;" href="#depositos" onclick="recuperarDepositos()">Depositos</a></li>
                 <li><a data-toggle="pill" style="color:black;" href="#retiros" onclick="recuperarRetiros()">Retiros</a></li>
                 <li><a data-toggle="pill" style="color:black;" href="#historial" onclick="recuperarHistorial()">Mis Compras</a></li>
@@ -146,7 +146,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
 
                 <div id="home" class="tab-pane fade in active">
                     <div class="tab-title">
-                        <h3>Editar mi perfil</h3>
+                        <h3>Gestionar mis Wallet</h3>
                     </div>
                     <div class="vista" id="vista">
                     <dialog id="info-dialog">
@@ -154,7 +154,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                         <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>
                     </dialog>    
                     <div class="dialog-wallet" id="agregar">                                   
-                        Este Usuario y  Direccion de Correo Binance y la wallet Bep-20 seran Utlizadas para los Depositos y Retiros, 
+                        Este Usuario con su Direccion de Correo Binance y la wallet BSC Bep-20 (Puede ser Metamask, Trust o cualquier otra que maneje BSC Bep-20)seran Utlizadas para los Depositos y Retiros, 
                         asegurate que sea correcta, CryptoSignal Group no se hace responsable por la informacion 
                         erronea que suministres.<br><br>
                         
@@ -164,22 +164,20 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                                 <div class='binance-input-container'> 
                                         <div> 
                                             <h4>Nombre de Usuario Binance:</h4> <input type="text" class='binance-input' id="userBinance"><span title="Donde Buscar" style="color:white;margin-left:5px;cursor:pointer;" onclick="mostrarAyudaBinance()"> &#10068;</span>
-                                        </div>
-                                        <button id="guardar" class='binance-button' type="button" onclick="guardar()">Guardar</button>                                        
+                                        </div>                                        
                                     </div>                                    
                                     <div class='binance-input-container'> 
                                         <div> 
                                             <h4>Correo Binance:</h4> <input type="text" class='binance-input' id="payid">
                                         </div>
-                                        <button id="guardar" class='binance-button' type="button" onclick="guardar()">Guardar</button>
                                     </div>
-                                    <div class='binance-input-container'>
-                                        <div>  
-                                            <h4> Wallet BSC Bep-20:</h4> <input class='binance-input' type="text" id="bep20">
-                                        </div>
-                                        <button id="guardarbep20" class='binance-button' type="button" onclick="savebep20()">Guardar</button>                        
+                                    <div class='binance-input-container' style="width: 100%;">
+                                        <div style="width: 80%;">  
+                                            <h4> Wallet BSC Bep-20 (Metamask, Trust)</h4> <input class='binance-input' style="width: 100%;" type="text" id="bep20">
+                                        </div>                                        
                                     </div>
                                 </div>
+                                <button id="guardar" class='binance-button' style="width: 50%;margin-top:25px;" type="button" onclick="guardar()">Guardar</button>
                                 <a class="deposit-button"  style=" width: 50%; margin-top:25px;font-size:14px;text-decoration:none;color:white;" href="mailto:crptsgnlgrpspprt@gmail.com">
                                     Soporte Técnico - Asistencia en Linea (click)
                                 </a>                                

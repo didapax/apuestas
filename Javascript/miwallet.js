@@ -23,11 +23,12 @@ function myFunction() {
 function guardar(){
     let binance = document.getElementById("payid").value;
     let userBinance = document.getElementById("userBinance").value;
+    let bep20 = document.getElementById("bep20").value;
 
     if(binance && userBinance){
         Swal.fire({
             title: 'Cryptosignal',
-            text: `Se procedera a Guardar tu Usuario y Wallet de Binance: ${binance} esta seguro confirme!`,
+            text: `Se procedera a Guardar tus Wallet Recuerda que una vez Guardada no se Pueden Modificar sino Contactando al Soporte Técnico. Esta seguro confirme!`,
             icon: 'warning',
             confirmButtonColor: '#EC7063',
             confirmButtonText: 'Si Seguro',
@@ -39,7 +40,8 @@ function guardar(){
                         guardarWallet:"",
                         correo: document.getElementById("correo").value,                    
                         payid: binance,
-                        userBinance: userBinance
+                        userBinance: userBinance,
+                        bep20: bep20
                     },function(data){
                         var datos= JSON.parse(data);
                         console.log("result:", data)

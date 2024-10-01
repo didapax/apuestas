@@ -857,9 +857,9 @@ if(isset($_SESSION['user'])){
     )");
   }
   
-  if(isset($_POST['guardarWallet'])){
+  if(isset($_POST['guardarWallet'])){ 
     $result = false;
-    if (sqlconector("UPDATE USUARIOS SET NOMBRE_USUARIO='{$_POST['userBinance']}', BINANCE='{$_POST['payid']}' WHERE CORREO='{$_POST['correo']}'")){
+    if (sqlconector("UPDATE USUARIOS SET BEP20='{$_POST['bep20']}', NOMBRE_USUARIO='{$_POST['userBinance']}', BINANCE='{$_POST['payid']}' WHERE CORREO='{$_POST['correo']}'")){
       $result = true; 
     }
   

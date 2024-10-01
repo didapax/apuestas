@@ -36,7 +36,8 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
         <!--FIN Barra de Navegación @media 1200px-->  
 
         <input type="hidden" id="correo" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" >
-        <div id="cuerpo" class="cuerpo" style='margin-top: 7rem;'> 
+        <div id="cuerpo" class="cuerpo" style='margin-top: 7rem; background:black;'> 
+            <h2 style="text-align: center;color:white;">Suscripciones</h2>
         <div id="vista" class='outerCard-container'></div>
         </div>
               <!--Iniciar footer-->

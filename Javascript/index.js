@@ -130,7 +130,7 @@ function trade(id){
 								idjuego: datos.id,
 								correo: document.getElementById("correo").value
 							},function(data){
-								window.location.href="index";
+								window.location.href="historialcliente";
 							});  
 						}
 					});                                    
