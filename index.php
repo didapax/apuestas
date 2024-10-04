@@ -49,7 +49,7 @@
                 $correo = "";
                 $saldo = "0.00";
 
-                if(isset($_SESSION['user'])){
+                if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
                     $correo = readClienteId($_SESSION['user'])['CORREO'];
                     $saldo = readClienteId($_SESSION['user'])['SALDO'];
                     recalcularSuscripciones($correo);

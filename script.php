@@ -1,16 +1,10 @@
 <?php
-//script de actualizacion de precios api-binance
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
+include "servermail.php";
 
-include "modulo.php";
 date_default_timezone_set('UTC');    
 
-$emails = returnListaCorreos();
+$emails = returnListaCorreos(); 
 $subject = $body = "";
 
 function sendBulkEmails($emails, $subject, $body) {
@@ -30,36 +24,6 @@ function sendBulkEmails($emails, $subject, $body) {
   }
 }
 
-function sendEmail($to, $subject, $body) {
-  // Configuración de PHPMailer
-  $mail = new PHPMailer(true);
-  try {
-    $mail->isSMTP();
-    $mail->Host = 'criptosignalgroup.online';
-    $mail->SMTPAuth = true;
-    $mail->Username = 'criptosignalgroup@criptosignalgroup.online';
-    $mail->Password = 'T3JWeS($p([7';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 465;
-
-    $mail->setFrom('criptosignalgroup@criptosignalgroup.online', 'Mailer');
-    $mail->addAddress($to);
-
-    $mail->isHTML(true);
-    $mail->Subject = $subject;
-    $mail->Body    = $body;
-
-    $mail->send();
-  } catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-  }
-}
-
-/* Ejemplo de uso
-$subject = "Análisis Semanal";
-$body = "<p>Este es el análisis semanal...</p>";*/
 sendBulkEmails($emails, $subject, $body);
-
-//refreshDataAuto();
 
 ?>

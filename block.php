@@ -6,7 +6,7 @@ header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
 
 include "modulo.php";
 
-if(isset($_SESSION['user'])){
+if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
 
   if(isset($_POST['verifiUser'])){
     $correo = $_POST['correo'];
@@ -907,36 +907,22 @@ if(isset($_SESSION['user'])){
   }
   
   if( isset($_POST['resetlista']) ){  
-    /*sqlconector("DELETE FROM LISTA");  
-    $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
-    $consulta = "select * from USUARIOS";
-    $resultado = mysqli_query( $conexion, $consulta );
-    while($row = mysqli_fetch_assoc($resultado)){
-      insertLista($row['CORREO']);
-    }*/
+    //resetea la lista
   }
   
   if( isset($_POST['sendlista']) ){
-  /*  if(ifNotDayExists("ENVIOLISTA")){
-      sqlconector("INSERT INTO ENVIOLISTA(ENVIADO) VALUES(1)");
-    }  
-    $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
-    $consulta = "select * from LISTA WHERE ENVIADO=0";
-    $resultado = mysqli_query( $conexion, $consulta );
-    $i=0;
-    while($row = mysqli_fetch_assoc($resultado)){
-      sendMail($row['CORREO'],readMailPromo()['NOMBRE'],readMailPromo()['MENSAJE']);
-      setEnviado($row['CORREO'],1);
-      if($i == 4) break;
-      $i++;
-    }*/
+    //envia la lista
   }
+
+  //FINAL DEL SERVER SI HAY SESON INICIADA
 }
 else{
-  if(isset($_POST['getUsuario'])){ 
+  //INIO DEL SERVER SI NO HAY SESION
+
+  if(isset($_POST['getUsuario'])){
     $correo = $_POST['correo'];
     $respuestaClave = array('success' => false);
-    $obj = array('result' => false, 'capcha' => $respuestaClave,'paso'=>false,'verificado' => 0);
+    $obj = array('correo' => $correo, 'result' => false, 'capcha' => $respuestaClave,'paso'=>false,'verificado' => 0);
   
     if(isset($_POST['grecaptcharesponse'])){
       $captcha = $_POST["grecaptcharesponse"];
@@ -950,6 +936,8 @@ else{
       $url = 'https://www.google.com/recaptcha/api/siteverify?secret='.urldecode($claveSecreta).'&response='.urldecode($captcha).'';
       $respuesta = file_get_contents($url);
       $respuestaClave = json_decode($respuesta, TRUE);
+    }
+
       $obj['capcha'] = $respuestaClave;
   
       if(ifUsuarioExist($correo)){
@@ -974,7 +962,7 @@ else{
           }
         }
       }
-    }
+
     echo json_encode($obj);
   }
 
@@ -1064,7 +1052,7 @@ else{
     echo json_encode($obj);
   }
 
-  if(isset($_POST['sendmail'])){
+  if(isset($_POST['sendmail'])){ 
     $usuario = readCliente($_POST['correo']);
   
     $correo = $usuario['CORREO'];
@@ -1078,6 +1066,24 @@ else{
   
     mail($para, $asunto, $mensaje, $cabeceras);  
   }  
+
+  if(isset($_POST['recivecodemail'])){
+    $obj = array('good' => false);
+    $email = $_POST['email'];
+    $code = $_POST['code'];
+    $consulta = "SELECT COALESCE(COUNT(*), 0) AS TOTAL FROM LINKS WHERE LINK = '$code'";
+    $data = row_sqlconector($consulta); 
+    
+    if($data['TOTAL'] >0){
+      $_SESSION['secured'] = 1;
+      sqlconector("DELETE FROM LINKS WHERE LINK='$code'");
+      $obj = array('good' => true);
+    }
+
+    echo json_encode($obj);
+  }
+    
+  //FIN DEL SERVER SI NO HAY SESION
 
 }
 

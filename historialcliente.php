@@ -1,7 +1,7 @@
 <?php 
 include "modulo.php";
 date_default_timezone_set('America/Caracas');    
-if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
+if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secured'])){
 ?>
 <html lang="es"> 
     <head>
@@ -37,7 +37,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
 
         <input type="hidden" id="correo" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" >
         <div id="cuerpo" class="cuerpo" style='margin-top: 7rem; background:black;'> 
-            <h2 style="text-align: center;color:white;">Suscripciones</h2>
+            <h3 style="font-weight: bold;text-align: center;color:white;">Participaciones en el Fondo de Inversion</h3>
         <div id="vista" class='outerCard-container'></div>
         </div>
               <!--Iniciar footer-->

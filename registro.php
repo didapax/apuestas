@@ -2,6 +2,12 @@
 <?php
     include "modulo.php";
     date_default_timezone_set('America/Caracas');
+
+    $correo = "";
+    if(isset($_GET['correo'])){
+        $correo = $_GET['correo'];
+    }
+
 ?>
 <html>
     <head>
@@ -146,7 +152,7 @@
         <script>            
             function registro(){
                 if(document.getElementById('correo').value.includes("@")){
-                    if(document.getElementById('password').value.length > 7){                        
+                    if(document.getElementById('password').value.length > 7){
                         $.post("block.php",{
                         getUsuario: "",
                         correo: document.getElementById('correo').value,
@@ -155,54 +161,11 @@
                     },function(data){
                         console.log("session data: ", data);
                         var datos= JSON.parse(data);
-                        if(datos.result == true ){
-                            if(datos.verificado == '0'){
-                                Swal.fire({
-                                title: 'Falta Verificacion',
-                                text: "Correo no Verificado revisa tu bandeja de entrada...! o deseas reenviar el codigo de verificacion a tu correo..?",
-                                icon: 'warning',
-                                confirmButtonColor: '#3085d6',
-                                confirmButtonText: 'Si Verificar',
-                                confirmButtonColor: '#3085d6',
-                                showCancelButton: true,
-                                cancelButtonText: "No ya lo Tengo"
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        $.post("block.php",{
-                                        sendmail: "",
-                                        correo: document.getElementById('correo').value
-                                    },function(data){ });                                 
-                                    }else{
-                                        window.location.href="sesion";
-                                    }
-                                });
-                            }
-                            else{
-                                if(datos.paso){
-                                    document.getElementById("btn_registro").disabled = true;
-                                    window.location.href="secured";
-                                }
-                                else{
-                                    Swal.fire({
-                                    title: 'Iniciar Sesion',
-                                    text: "Usuario o Password Incorrectos...! Intente de Nuevo",
-                                    icon: 'warning',
-                                    confirmButtonColor: '#3085d6',
-                                    confirmButtonText: 'Ok'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            window.location.href="sesion";
-                                        }
-                                    });
-
-                                }
-                            }
-                        }
-                        else{
+                        if (datos.result == false && datos.capcha.success){
                             document.getElementById("btn_registro").disabled = true;
                             Swal.fire({
                             title: 'Registrarse',
-                            text: `Email ${datos.correo} No Registrado.! Deseas Unirte a Cryptosignal?`,
+                            text: "Se Procedera al Registro en Crytosignal, Recuerda debe ser Un Email de Usuario en Binance Valido. Aceptas Nuestros Terminos y Condiciones,  Deseas Unirte.? ",
                             icon: 'info',
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'Si Unirme',
@@ -211,11 +174,33 @@
                             cancelButtonText: "Cancelar"
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    window.location.href="registro?correo="+datos.correo+"&vkey="+datos.vkey;
-                                }else{
+                                    $.post("block.php",{
+                                    regUsuario: "",
+                                    correo: document.getElementById('correo').value,
+                                    password: document.getElementById('password').value,
+                                    referente: document.getElementById('referente').value
+                                },function(data){
+                                    var datos= JSON.parse(data);
+                                    window.location.href="graciasRegistro?correo="+datos.correo+"&vkey="+datos.vkey;
+                                    });                                    
+                                }
+                                else{
                                     window.location.href="sesion";
                                 }
                             });                        
+                        }
+                        else{
+                            Swal.fire({
+                            title: 'Vuelva a Intentar',
+                            text: `El Correo ${datos.correo} ya esta Registrado o la Capcha no es valida. Vuelva a intentalo`,
+                            icon: 'error',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href="registro";
+                                }
+                            });
                         }
                     });
                     }
@@ -239,38 +224,7 @@
                         });
                 }
             }
-
-            function recuperar(){
-                if(document.getElementById('correo').value.includes("@")){
-                    $.post("recuperar",
-                    {
-                        recuperar: "",
-                        correo: document.getElementById('correo').value
-                    },
-                    function(data){
-                        Swal.fire({
-                        title: 'Recuperar o Cambiar',
-                        text: "Revisa tu Correo y Ejecuta el Link que se te envio, Cambia tu clave Nuevamente..!",
-                        icon: 'info',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Ok'
-                        }); 
-                    });         
-                }else{
-                    Swal.fire({
-                        title: 'Error',
-                        text: "Coloque un correo Valido para Recuperar o cambiar tu Contraseña",
-                        icon: 'error',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Ok'
-                        });
-                } 
-	        }
-
-            function unirse() {
-                window.location.href="registro";
-            }
-        </script>
+        </script> 
     </head>
     <body>
 
@@ -285,24 +239,26 @@
 		        ?>               
                 <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="window.location.href='index'">X</a>
                 <img style='width:3.5rem;' src='Assets/logotype.png'>
-                <h2>CryptoSignal</h2>
+                <h2>Registro CryptoSignal</h2>
                 <br><br>
                 <div class='outer-input-container'> 
-                    <div class='input-container'>Email:<input id="correo" required type="email" ></div><br>
+                    <div class='input-container'>Email:<input id="correo" required type="email" value="<?php echo $correo; ?>" ></div><br>
                     <div class='input-container'>Password:<input id="password" required type="password" ></div>
                 </div>
                 <br>
-                <div name="g-recaptcha-response" id="g-recaptcha-response" class="g-recaptcha" data-sitekey="6Ld1nA0aAAAAAA7F7eJOY7CMwg7aaQAfg3WZy6P0" style='display: none;align-items: center;justify-content: center;'></div>
-                <button type="button" onclick="registro()" id="btn_registro"> Inicio </button>
+                <div name="g-recaptcha-response" id="g-recaptcha-response" class="g-recaptcha" data-sitekey="6Ld1nA0aAAAAAA7F7eJOY7CMwg7aaQAfg3WZy6P0" style='display: flex;align-items: center;justify-content: center;'></div>
+                <button type="button" onclick="registro()" id="btn_registro">Unirse</button> 
 
-                <div class="terms" id="terminos" ><u>Terminos y Condiciones</u><br>
-                    <p>Al hacer Click en Inicio Usted esta Aceptando estos Terminos y Condiciones, <b>Derechos de los Inversores:</b>
-Los inversores en Cryptosignal tienen sus participaciones expresadas en una tarjeta única, la cual indica el monto a ganar por su participación. Esta tarjeta es un reflejo directo de su inversión y los beneficios asociados.
-<b>Propiedad Exclusiva:</b> Los inversores son poseedores única y exclusivamente de la tarjeta en la que participen. Esta tarjeta representa su participación en el fondo y los derechos a los beneficios generados por dicha participación.
-<b>Intransferibilidad:</b> Las tarjetas son intransferibles y no se pueden vender o revender a otros usuarios. Esto asegura que la propiedad y los beneficios de la inversión permanezcan con el inversor original, manteniendo la integridad y la seguridad del fondo.</p>
+                <div class="terms" id="terminos" ><u>Terminos y Condiciones para Registrarse</u><br>
+                    <p>Al hacer Click en Unirse Usted esta Aceptando estos Terminos y Condiciones, Nuestra Pagina
+                    No se hace responsable por el manejo de la Informacion suministrada, usted debe  
+                    Registrarse con un correo Valido para BINANCE, su correo de Binance sera su Identificacion   
+                    el Operador de la Pagina, no se hace responsable por extravios de Dinero, 
+                    para depositos y retiros se utiliza <u>Binance Pay</u>
+                    usted certifica que es Mayor de Edad y Unico Responsable de los Fondos Licitos y Libres aqui suministrados. 
+                    Los Depositos y Retiros se realizan en un plazo de 24 a 48 Horas.</p>
                 </div>
             </form>
-            <div class='forgot-password-container'> <a onclick="recuperar()">Olvide Mi Contraseña</a> <a style="margin-left:34px;" onclick="unirse()">Unirse / Registrarse</a></div>
         </div>
 
     </body>

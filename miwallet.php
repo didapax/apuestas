@@ -1,6 +1,6 @@
 <?php 
 include "modulo.php";
-if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
+if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secured'])){
 ?>
 <html lang="es">
     <head> 
@@ -153,35 +153,37 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){
                         <div class="dialog-content"></div>
                         <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>
                     </dialog>    
-                    <div class="dialog-wallet" id="agregar">                                   
-                        Este Usuario con su Direccion de Correo Binance y la wallet BSC Bep-20 (Puede ser Metamask, Trust o cualquier otra que maneje BSC Bep-20)seran Utlizadas para los Depositos y Retiros, 
-                        asegurate que sea correcta, CryptoSignal Group no se hace responsable por la informacion 
+                    <div id="agregar">
+                    <a class='binance-button'  style="background: antiquewhite; margin-top:25px;font-size:13px;text-decoration:none;color:black;" href="mailto:crptsgnlgrpspprt@gmail.com">
+                    Soporte Técnico Asistencia en Linea (click)
+                    </a>                                
+                    <br>
+                        <p style="margin: 21 0 1em;">
+                        Con tu Direccion de Correo Binance y la wallet BSC Bep-20 (Puede ser Metamask, Trust o cualquier otra que maneje BSC Bep-20)seran Utlizadas para los Depositos y Retiros, 
+                        asegurate que sea correcta, CryptoSignal no se hace responsable por la informacion 
                         erronea que suministres.<br><br>
-                        
-                        <section class='dialog-wallet-content'> 
-                            <div class='binance-form-outer-container'>
-                                <div class='binance-form-container'>
-                                <div class='binance-input-container'> 
+                        </p>
+                        <section > 
+                            <div >
+                                <div >
+                                <div > 
                                         <div> 
                                             <h4>Nombre de Usuario Binance:</h4> <input type="text" class='binance-input' id="userBinance"><span title="Donde Buscar" style="color:white;margin-left:5px;cursor:pointer;" onclick="mostrarAyudaBinance()"> &#10068;</span>
                                         </div>                                        
                                     </div>                                    
-                                    <div class='binance-input-container'> 
-                                        <div> 
-                                            <h4>Correo Binance:</h4> <input type="text" class='binance-input' id="payid">
+                                    <div > 
+                                        <div style="width: 100%;"> 
+                                            <h4>Correo Binance:</h4> <input type="text" class='binance-input' style="width: 50%;" id="payid">
                                         </div>
                                     </div>
-                                    <div class='binance-input-container' style="width: 100%;">
+                                    <div  style="width: 100%;">
                                         <div style="width: 80%;">  
                                             <h4> Wallet BSC Bep-20 (Metamask, Trust)</h4> <input class='binance-input' style="width: 100%;" type="text" id="bep20">
                                         </div>                                        
                                     </div>
                                 </div>
-                                <button id="guardar" class='binance-button' style="width: 50%;margin-top:25px;" type="button" onclick="guardar()">Guardar</button>
-                                <a class="deposit-button"  style=" width: 50%; margin-top:25px;font-size:14px;text-decoration:none;color:white;" href="mailto:crptsgnlgrpspprt@gmail.com">
-                                    Soporte Técnico - Asistencia en Linea (click)
-                                </a>                                
-                                <div class='binance-image-container'>
+                                <button id="guardar" class='binance-button' style="margin-top:25px;" type="button" onclick="guardar()">Guardar</button><br>
+                                <div class='binance-image-container' style="margin-right: 15px;">
                                     <image src="Assets/minibina.png">
                                 </div>
                             </div>

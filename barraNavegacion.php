@@ -31,7 +31,7 @@
             <div class="nav__menu" id="nav-menu">
                <ul class="nav__list">
                   <?php 
-                   if(!isset($_SESSION['user'])){
+                   if(!isset($_SESSION['secured'])){
                      echo "<li><a href='sesion' class='nav__link'>Iniciar Sesión</a></li>";
                  }else{
                      $notificaciones = countNotif($_SESSION['user']);
@@ -41,7 +41,7 @@
                      }
                   }
 
-                  if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0){                                   
+                  if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secured'])){                                   
                    
                      if($page=="home"){
                        echo "<li><a href='index' class='nav__link active'>Tienda</a></li>";
@@ -94,7 +94,7 @@
 
 
 /////////////////////////////////////INICIO MENU ADMINISTRADOR//////////////////////////////////////////////////////
-                 else if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
+                 else if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1 && isset($_SESSION['secured'])){
                   if($page=="home"){
                      echo "<li><a href='index' class='nav__link active'>Tienda</a></li>";
                   }else{
