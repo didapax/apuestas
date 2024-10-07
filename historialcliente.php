@@ -45,7 +45,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
         <!--FIN footer-->     
         <script>
 
-function myFunctionMenu() {    
+function myFunctionMenu() {
     var x = document.getElementById("myTopnav");
     if (x.className === "topnav") {
         x.className += " responsive";

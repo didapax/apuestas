@@ -184,20 +184,39 @@
 
             function getCodeClick(){
                 const mail = document.getElementById('correo').value;
+                const button = document.getElementById('buttonGetCode');
+                let timeLeft = 20; // Tiempo en segundos
+
+                button.disabled = true; // Deshabilitar el botón
+                button.value = `Esperar ${timeLeft} segundos`;
+
+                // Iniciar el temporizador inmediatamente
+                const timer = setInterval(() => {
+                    timeLeft--;
+                    button.value = `Esperar ${timeLeft} segundos`;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        button.disabled = false; // Habilitar el botón
+                        button.value = 'Solicitar Código';
+                    }
+                }, 1000); // Intervalo de 1 segundo
+
                 $.post("servermail",
                     {
                         getcodemail: "",
                         email: mail
                     },
-                    function(data){
+                    function(data){                        
                         Swal.fire({
-                        title: 'CryptoSinal',
-                        text: "Revisa tu Correo y Copia el Codigo que se te envio, Luego dale Enviar Codigo para acceder",
-                        icon: 'info',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Ok'
+                            title: 'CryptoSinal',
+                            text: "Revisa tu Correo y Copia el Codigo que se te envio, Luego dale Enviar Codigo para acceder",
+                            icon: 'info',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
                         }); 
-                    });
+                    }
+                );
             }
 
             function closesession() {                

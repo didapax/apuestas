@@ -21,7 +21,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
         <link rel="stylesheet" type="text/css" href="css/newStyles.css">    
     </head>
     <header>
-        <style>
+        <style> 
             .textAreaContainer{
             background:white;
             color: black;
@@ -49,6 +49,21 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                 height: 200px;
                 width: 400px;
             }  
+
+            .contenido {
+                background: antiquewhite;
+                height: 250px;
+                width: 400px;
+            } 
+
+            .contenido textarea{
+                height: 150px;
+                width: 350px;                
+            }
+
+            .contenido h3{
+                text-align: center;
+            }
 
         </style>             
         <script>
@@ -149,12 +164,28 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                         <h3>Gestionar mis Wallet</h3>
                     </div>
                     <div class="vista" id="vista">
+                    <!-- Dialogo de informacion del usuario binance -->
                     <dialog id="info-dialog">
                         <div class="dialog-content"></div>
+                        <br>
                         <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>
-                    </dialog>    
+                    </dialog>  
+                    <!-- Dialogo de Asistencia Tecnica -->
+                    <dialog id="tecno-dialog">
+                        <div class="contenido">
+                        <h3>Asistencia Tecnica</h3>
+                        <label>Asunto Requerido:</label><input type"text" id="asuntoTecno">
+                        <br>
+                        <label>Mensaje:</label>
+                        <br><textarea id="mensajeTecno"></textarea>
+                        </div>
+                        <br>
+                        <button class="add-button" style="background: red;" onclick="document.getElementById('tecno-dialog').close()">Cancelar</button>
+                        <button class="add-button" onclick="enviarAsistencia()">Enviar</button>
+                    </dialog>  
+
                     <div id="agregar">
-                    <a class='binance-button'  style="background: antiquewhite; margin-top:25px;font-size:13px;text-decoration:none;color:black;" href="mailto:crptsgnlgrpspprt@gmail.com">
+                    <a class='binance-button'  style=" cursor:pointer;background: antiquewhite; margin-top:25px;font-size:13px;text-decoration:none;color:black;" onclick="mostrarTecnoDialog()">
                     Soporte Técnico Asistencia en Linea (click)
                     </a>                                
                     <br>
@@ -168,17 +199,17 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                                 <div >
                                 <div > 
                                         <div> 
-                                            <h4>Nombre de Usuario Binance:</h4> <input type="text" class='binance-input' id="userBinance"><span title="Donde Buscar" style="color:white;margin-left:5px;cursor:pointer;" onclick="mostrarAyudaBinance()"> &#10068;</span>
+                                            <h4>Nombre de Usuario Binance:</h4> <input type="text" class='binance-input' style="color:black;" id="userBinance"><span title="Donde Buscar" style="color:black;margin-left:5px;cursor:pointer;" onclick="mostrarAyudaBinance()"> &#10068;</span>
                                         </div>                                        
                                     </div>                                    
                                     <div > 
                                         <div style="width: 100%;"> 
-                                            <h4>Correo Binance:</h4> <input type="text" class='binance-input' style="width: 50%;" id="payid">
+                                            <h4>Correo Binance:</h4> <input type="text" class='binance-input' style="width: 50%;color:black;" id="payid">
                                         </div>
                                     </div>
                                     <div  style="width: 100%;">
                                         <div style="width: 80%;">  
-                                            <h4> Wallet BSC Bep-20 (Metamask, Trust)</h4> <input class='binance-input' style="width: 100%;" type="text" id="bep20">
+                                            <h4> Wallet BSC Bep-20 (Metamask, Trust)</h4> <input class='binance-input' style="width: 100%;color:black;" type="text" id="bep20">
                                         </div>                                        
                                     </div>
                                 </div>
@@ -221,7 +252,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                         <h3>Retirar Tus Establecoin de la Plataforma</h3>
                     </div>
                     <div class="container mt-5 mb-5">
-                        <button id="buttonRetiro" class='retire-button' onclick="document.getElementById('modalOverlay2').style.display = 'flex';"><img style='width:1.2rem' src='Assets/icons/withdrawal_icon.png'> Retirar</button>
+                        <button id="buttonRetiro" class='retire-button' onclick="document.getElementById('modalOverlay2').style.display = 'flex';"><img style='width:1.2rem' src='Assets/icons/withdrawal_icon.png'>Retirar</button>
 
                                 <table id='example1' class='ui celled table' style='width:100%; '> 
                                     <thead>
@@ -307,25 +338,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
             modalOverlay.style.display = 'none';
         });
 
-        /* Cerrar el modal al hacer clic fuera de él
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                modalOverlay.style.display = 'none';
-            }
-        });*/
-
         // Función para cerrar el modal2
         closeModalBtn2.addEventListener('click', () => {
             modalOverlay2.style.display = 'none';
         });
-
-        /* Cerrar el modal al hacer clic fuera de él
-        modalOverlay2.addEventListener('click', (e) => {
-            if (e.target === modalOverlay2) {
-                modalOverlay2.style.display = 'none';
-            }
-        });*/
-
     </script>
     </body>
 </html>

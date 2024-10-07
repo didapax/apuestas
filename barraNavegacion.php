@@ -41,7 +41,7 @@
                      }
                   }
 
-                  if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secured'])){                                   
+                  if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secured'])){
                    
                      if($page=="home"){
                        echo "<li><a href='index' class='nav__link active'>Tienda</a></li>";

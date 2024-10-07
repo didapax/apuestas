@@ -398,12 +398,14 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         $activo = false;
        }
        else{
+        
           if( isset(readJuegoId($row['IDJUEGO'])['ANALISIS']) ){
-            $analisis = readJuegoId($row['IDJUEGO'])['ANALISIS'];
+            $analisis = strip_tags(readJuegoId($row['IDJUEGO'])['ANALISIS']);
           }
           else{
             $analisis = readJuegoId($row['IDJUEGO'])['DESCRIPCION'];
           }
+
           foreach ($GLOBALS as $clave => $valor) {
             if (strpos($analisis, $clave) !== false) {
                 $analisis = str_replace($clave, $valor, $analisis);

@@ -91,8 +91,8 @@
         </li>
 
         <li class="social-icon__item">
-            <a class="social-icon__link" href="mailto:crptsgnlgrpspprt@gmail.com">
-                <ion-icon name="mail-open-outline"></ion-icon>
+            <a  class="social-icon__link" href="mailto:crptsgnlgrpspprt@gmail.com">
+                <ion-icon  name="mail-open-outline"></ion-icon>
             </a>
         </li>
     </ul>

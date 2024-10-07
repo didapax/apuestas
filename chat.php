@@ -18,7 +18,8 @@
         <link rel="stylesheet" type="text/css" href="css/Account.css">
         <link rel="stylesheet" type="text/css" href="css/newStyles.css">
         <!-- Font Awesome -->
-
+        <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />
         <!--BOXICONS-->
         <link rel="stylesheet" type="text/css" href="css/icons.css">
         <!-- Animate CSS -->
@@ -183,6 +184,39 @@
     margin-top: 1rem;
     padding-top: 1rem;
 }
+dialog {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border: none;
+                padding: 20px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                background-color: white;
+            }
+
+            .dialog-content {
+                text-align: center;
+                background: url('Assets/ayudabinance.jpg') no-repeat center/cover;
+                height: 200px;
+                width: 400px;
+            }  
+
+            .contenido {
+                background: antiquewhite;
+                height: 250px;
+                width: 300px;
+            } 
+
+            .contenido textarea{
+                height: 150px;
+                width: 300px;                
+            }
+
+            .contenido h3{
+                text-align: center;
+            }
   </style>
 
 <script>
@@ -279,6 +313,57 @@ function seltickect(){
   $("#input-chat").css("display","flex");
 }
 
+function mostrarTecnoDialog() {
+            const tecnoDialog = document.getElementById("tecno-dialog");
+            tecnoDialog.showModal();
+}
+
+function enviarAsistencia(){
+            const tecnoDialog = document.getElementById("tecno-dialog");
+            const cliente = document.getElementById("correo").value;
+            const asunto = document.getElementById("asuntoTecno").value;
+            const mensaje = document.getElementById("mensajeTecno").value;
+            if(asunto && mensaje){
+                tecnoDialog.close();
+                Swal.fire({
+                    title: 'Cryptosignal',
+                    text: `Se procedera a Abrir un Ticket de Soporte con su Caso ${asunto}`,
+                    icon: 'warning',
+                    confirmButtonColor: '#EC7063',
+                    confirmButtonText: 'Si Gracias',
+                    showCancelButton: true,
+                    cancelButtonText: "No Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {    
+                            $.post("servermail",{
+                                sendmailtecno: "",
+                                cliente: cliente,
+                                asunto: asunto,
+                                mensaje: mensaje
+                            },function(data){
+                                    Swal.fire({
+                                                title: 'Soporte Tecnico Asistencia',
+                                                text: "Tu Ticket de Asistencia esta en proceso en un plazo de 24 a 48 horas seras atendido en tu correo registrado en la plataforma,  esta atento Gracias y disculpe los inconvenientes",
+                                                icon: 'info',
+                                                confirmButtonColor: '#3085d6',
+                                                confirmButtonText: 'Ok'
+                                                });
+                            });     
+                        }
+                    });             
+            }
+            else{
+                tecnoDialog.close();
+                Swal.fire({
+                    title: 'Cryptosignal',
+                    text: "Faltan datos no se puede crear un ticket vacio.!",
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok'
+                });
+            }
+        }
+
   </script>
 <body >
 
@@ -306,7 +391,23 @@ function seltickect(){
   <input type='hidden' id='notif' value='{$notificaciones}'>";
    ?>
 <!-- partial:index.partial.html -->
+<input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" id="correo">
 <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
+
+                    <!-- Dialogo de Asistencia Tecnica -->
+                    <dialog id="tecno-dialog">
+                        <div class="contenido">
+                        <h3>Asistencia en Linea</h3>
+                        <label>Asunto Requerido:</label><input type"text" id="asuntoTecno">
+                        <br>
+                        <label>Mensaje:</label>
+                        <br><textarea id="mensajeTecno"></textarea>
+                        </div>
+                        <br>
+                        <button class="add-button" style="background: red;" onclick="document.getElementById('tecno-dialog').close()">Cancelar</button>
+                        <button class="add-button" onclick="enviarAsistencia()">Enviar</button>
+                    </dialog> 
+
 <div class="progress-container">
     <div class="progress-label" id="label1"></div>
     <div class="progress-label" id="label2"></div>
@@ -318,9 +419,12 @@ function seltickect(){
 <section class='dataSec'>
 <div class='data'>
   <h3 >SOPORTE CRYPTOSIGNAL</h3>
-  <span style="font-size:10px">Los Ticket se abren automaticamente al tener un deposito o un retiro activo</span>
-    <div>
-      Seleccione un Ticket Abierto: 
+  <a class='binance-button'  style=" cursor:pointer;background: antiquewhite; margin-top:25px;font-size:13px;text-decoration:none;color:black;" onclick="mostrarTecnoDialog()">
+  Ayuda Asistencia en Linea
+  </a><br>  
+    <div style="margin-top:21px;">
+      <h5>Chat directo con el Cajero</h5>
+      <span style="font-size:11px; font-weight:bold;">Seleccione un Deposito/Retiro Activo: </span>
       <select id="selectTicket" onchange="seltickect()" style="color:black;">
       <option value="">seleccione</option>
       <?php 
@@ -372,7 +476,7 @@ function seltickect(){
 
     <section class='chatSec'>
       <div class='chatData'>
-        <h3 ><?php if($_SESSION['nivel']==1) echo "Cliente: "; else echo "Cajero: ";?> <span id=usuario></span></h3>
+        <h5 ><?php if($_SESSION['nivel']==1) echo "Cliente: "; else echo "Cajero: ";?> <span id=usuario></span></h5>
       </div>
 
       <div class='chatBox'>

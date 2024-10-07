@@ -25,7 +25,6 @@ function guardar(){
     let userBinance = document.getElementById("userBinance").value;
     let bep20 = document.getElementById("bep20").value;
 
-    if(binance && userBinance){
         Swal.fire({
             title: 'Cryptosignal',
             text: `Se procedera a Guardar tus Wallet Recuerda que una vez Guardada no se Pueden Modificar sino Contactando al Soporte Técnico. Esta seguro confirme!`,
@@ -58,16 +57,6 @@ function guardar(){
                     });                
                 }
             });
-    }
-    else{
-        Swal.fire({
-            title: 'Wallet',
-            text: "Faltan datos para poder Guardar",
-            icon: 'error',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Ok'
-            });            
-    }
 }
 
 function savebep20(){
@@ -137,6 +126,12 @@ function leerDatos(){
                 botonRetiro.disabled = true;                
                 botonDeposito.innerHTML = "Debes Tener un Metodo de Pago Agregado";
                 botonRetiro.innerHTML = "Debes Tener un Metodo de Pago Agregado";
+            }
+            else{
+                botonDeposito.disabled = false;
+                botonRetiro.disabled = false;                
+                botonDeposito.innerHTML = "Depositar";
+                botonRetiro.innerHTML = "Retirar";
             }
 
         });
@@ -762,6 +757,57 @@ function recuperarRetiros() {
         function mostrarAyudaBinance() {
             const dialog = document.getElementById("info-dialog");
             dialog.showModal();
+        }
+
+        function mostrarTecnoDialog() {
+            const tecnoDialog = document.getElementById("tecno-dialog");
+            tecnoDialog.showModal();
+        }
+
+        function enviarAsistencia(){
+            const tecnoDialog = document.getElementById("tecno-dialog");
+            const cliente = document.getElementById("correo").value;
+            const asunto = document.getElementById("asuntoTecno").value;
+            const mensaje = document.getElementById("mensajeTecno").value;
+            if(asunto && mensaje){
+                tecnoDialog.close();
+                Swal.fire({
+                    title: 'Cryptosignal',
+                    text: `Se procedera a Abrir un Ticket de Soporte con su Caso ${asunto}`,
+                    icon: 'warning',
+                    confirmButtonColor: '#EC7063',
+                    confirmButtonText: 'Si Gracias',
+                    showCancelButton: true,
+                    cancelButtonText: "No Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {    
+                            $.post("servermail",{
+                                sendmailtecno: "",
+                                cliente: cliente,
+                                asunto: asunto,
+                                mensaje: mensaje
+                            },function(data){
+                                    Swal.fire({
+                                                title: 'Soporte Tecnico Asistencia',
+                                                text: "Tu Ticket de Asistencia esta en proceso en un plazo de 24 a 48 horas seras atendido en tu correo registrado en la plataforma,  esta atento Gracias y disculpe los inconvenientes",
+                                                icon: 'info',
+                                                confirmButtonColor: '#3085d6',
+                                                confirmButtonText: 'Ok'
+                                                });
+                            });     
+                        }
+                    });             
+            }
+            else{
+                tecnoDialog.close();
+                Swal.fire({
+                    title: 'Cryptosignal',
+                    text: "Faltan datos no se puede crear un ticket vacio.!",
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok'
+                });
+            }
         }
     
         function inicio(){

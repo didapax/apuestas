@@ -10,21 +10,17 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <link rel="shortcut icon" href="Assets/favicon.png">        
         <link rel="stylesheet" href="css/animate.min.css" />
         <link rel="stylesheet" type="text/css" href="css/Common.css">
-        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
         <link href='css/boxicons.min.css' rel='stylesheet'>     
         <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
         <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />                 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
-        <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.0.js"></script>        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
-       <!-- include summernote css/js -->
-       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
-       <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>       
-       <link rel="stylesheet" type="text/css" href="css/newStyles.css">
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">    
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css">    
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css"> 
+       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trumbowyg@2.25.1/dist/ui/trumbowyg.min.css">       
 
     </head>
     <header>
@@ -41,7 +37,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
          }
          input[type=number]{
             color:black;
-         }       
+         }
          
          select{
             color:black;
@@ -92,6 +88,10 @@ input[type="checkbox"] {
             .dialog-content {
                 text-align: center;
             } 
+
+            .trumbowyg-modal {
+                z-index: 100050 !important; /* Ajusta este valor según sea necesario */
+            }            
         </style>        
         <script>
 
@@ -252,7 +252,7 @@ input[type="checkbox"] {
                     var datos= JSON.parse(data);                    
                     $("#nameAnalisis").html(datos.juego);
                     $("#analisisDescripcion").html(datos.descripcion);
-                    $("#summerNoteAnalisis").html(datos.analisis);
+                    $('#summerNoteAnalisis').trumbowyg('html', datos.analisis);
                 });
                 document.getElementById('modalOverlay2').style.display = "flex";
             }
@@ -478,7 +478,9 @@ input[type="checkbox"] {
                 <h2>Analisis Tecnico</h2>
                 <div id="nameAnalisis"></div>
                 <div id="analisisDescripcion"></div>
-                    <textarea   id="summerNoteAnalisis"></textarea>
+                
+                <textarea  id="summerNoteAnalisis"></textarea>
+
                 <button class='add-button' style="float:right;" type="button" id="btncrear" onclick="setAnalis()">Enviar Analisis</button>
             </div>
         </div>
@@ -502,14 +504,12 @@ input[type="checkbox"] {
       <!--Iniciar footer-->
       <?php include 'footer.php';?>
         <!--FIN footer-->     
-
-
-    <script src='https://code.jquery.com/jquery-3.7.1.js'></script> 
+    <script src='https://code.jquery.com/jquery-3.7.1.js'></script>   
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
     <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
     <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
-
+    <script src="https://cdn.jsdelivr.net/npm/trumbowyg@2.25.1/dist/trumbowyg.min.js"></script>
 <script>
         const modalOverlay = document.getElementById('modalOverlay');
         const closeModalBtn = document.getElementById('closeModalBtn');
@@ -542,32 +542,9 @@ input[type="checkbox"] {
 
     </script>
         <script>
-       /* $(document).ready(function() {
-            $('#summernote').summernote({
-                placeholder: 'Escribe aquí...',
-                height: 150,
-                toolbar: [
-                    ['basic', ['fontname', 'fontsize']],
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['font', ['strikethrough', 'superscript', 'subscript']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['height', ['height', 'codeview', 'undo', 'redo']]
-                ]
-            });
-
-            $('#summerNoteAnalisis').summernote({
-                placeholder: 'Escribe aquí...',
-                height: 150,
-                toolbar: [
-                    ['basic', ['fontname', 'fontsize']],
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['font', ['strikethrough', 'superscript', 'subscript']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['height', ['height', 'codeview', 'undo', 'redo']]
-                ]
-            });
-
-        });*/
+        $(document).ready(function() {
+            $('#summerNoteAnalisis').trumbowyg();
+        });
     </script>   
 
     </body>
