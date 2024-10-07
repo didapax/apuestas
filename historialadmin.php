@@ -78,11 +78,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 tabla.forEach((producto, index) => {
                     const fila = document.createElement("tr");
                     fila.innerHTML = `
-                        <td>${producto.fin}</td>
-                        <td>${producto.dias}</td>
                         <td>${producto.suscripcion}</td>
-                        <td>${producto.tipo}</td>
-                        <td>${Math.round(producto.monto * 100) / 100}</td>
+                        <td>${Math.round(producto.monto * 100) / 100} USDC</td>
+                        <td>${Math.round(producto.intereses * 100) / 100} USDC</td>
                         <td>${producto.cliente} <button onclick="mostrarInfo(${index})">Info</button></td>
                         <td style='background:${producto.color};'>${producto.estatus}</td>                        
                     `;
@@ -94,6 +92,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 const producto = tabla[index];
                 const dialog = document.getElementById("info-dialog");
                 dialog.querySelector(".dialog-content").innerHTML = `
+                <p>Tarjeta <b>${producto.tipo}</b></p>
+                <p>Finaliza el <b>${producto.fin}</b> le quedan ${producto.dias} días</p>
+                <p>Usuario Binance: <b>${producto.usuariobinance}</b></p>
                 <p>Wallet Binance: <b>${producto.binance}</b></p>
                 <p>Wallet Bep20: <b>${producto.bep20}</b></p>
                 `;
@@ -212,7 +213,7 @@ function dibujarEstrellas(n) {
         <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
         <div id="cuerpo" class="cuerpo" style='margin-top: 7rem;'> 
             <dialog id="info-dialog">
-                <div class="dialog-content"></div>
+                <div class="dialog-content"></div><br>
                 <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>
             </dialog>    
             <div id="outerCard" class='outerCard-container' style="background:none;"></div>
@@ -221,11 +222,9 @@ function dibujarEstrellas(n) {
                 <table id='example' class='ui celled table' style='width:100%; '> 
                     <thead>
                         <tr>
-                            <th>Finaliza</th>
-                            <th>Dias Restantes</th>
                             <th>Suscripcion</th>
-                            <th>Tipo</th>
                             <th>Monto</th>
+                            <th>Paga Mensual</th>
                             <th>Cliente</th>
                             <th>Estatus</th>
                         </tr>

@@ -185,7 +185,7 @@
             function getCodeClick(){
                 const mail = document.getElementById('correo').value;
                 const button = document.getElementById('buttonGetCode');
-                let timeLeft = 20; // Tiempo en segundos
+                let timeLeft = 55; // Tiempo en segundos
 
                 button.disabled = true; // Deshabilitar el botón
                 button.value = `Esperar ${timeLeft} segundos`;
@@ -210,7 +210,7 @@
                     function(data){                        
                         Swal.fire({
                             title: 'CryptoSinal',
-                            text: "Revisa tu Correo y Copia el Codigo que se te envio, Luego dale Enviar Codigo para acceder",
+                            text: "Revisa tu Email y Copia el Código que se te envió, Luego pega y Enviar Código para acceder.",
                             icon: 'info',
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'Ok'
@@ -246,13 +246,10 @@
                     <input class='binance-input' style="background:white; color:black;" type="text" id="code" >
                     <input class='binance-button' type="button" id="buttonGetCode" value="Solicitar Codigo" onclick="getCodeClick()">
                 </div>
-                <button type="button" onclick="enviarcode()" id="btn_envio">Eviar Codigo</button> 
+                <button type="button" onclick="enviarcode()" id="btn_envio">Eviar Código</button> 
 
-                <div class="terms" id="terminos" ><u>Codigo de Seguridad</u><br>
-                    <p>Por su seguridad al solicitar un codigo se enviará  a tu correo, busquelo y ingreselo
-                    sino lo consigue en la bandeja de entraja intente buscar en labandeja de no deseados, de lo contrario solicite uno nuevo,
-                    tenga en cuenta que si la red esta congestionada puede tardar un poco.
-                    .</p>
+                <div class="terms" id="terminos" ><u>Código de Seguridad</u><br>
+                    <p>Por su seguridad al solicitar un código se enviará a tu correo, búsquelo e ingréselo sino lo consigue en la bandeja de entrada intente buscar en la bandeja de no deseados, de lo contrario solicite uno nuevo, tenga en cuenta que si la red esta congestionada puede tardar un poco.</p>
                 </div>
             </form>
         </div>

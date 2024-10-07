@@ -617,13 +617,14 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
   if(isset($_GET['readHistorialAdmin'])) {
     $obj = array();
     $consulta = "select * from APUESTAS ORDER BY FECHA";
-    $resultado = sqlconector( $consulta );
+    $resultado = sqlconector( $consulta ); 
   
       if($resultado){
         while($row = mysqli_fetch_assoc($resultado)){
           $color="transparent";
           $binance = readCliente($row['CLIENTE'])['BINANCE'];
           $bep20 = readCliente($row['CLIENTE'])['BEP20'];
+          $usuariobinance = readCliente($row['CLIENTE'])['NOMBRE_USUARIO'];
           if($row['ACTIVO']==0){
             $color="#AED6F1";
           }
@@ -637,7 +638,9 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
           'cliente' => $row['CLIENTE'],
           'estatus'=>$row['ESTATUS'],
           'binance'=>$binance,
-          'bep20'=>$bep20);
+          'bep20'=>$bep20,
+          'usuariobinance' => $usuariobinance,
+          'intereses' => $row['INTERES_MENSUAL']);
         }
       }
       
