@@ -503,7 +503,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
     }  
   }
   
-  if(isset($_GET['readPromos'])) { 
+  if(isset($_GET['readPromos'])) {
     $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
     if (!$conexion) {
       echo "Refresh page, Failed to connect to Data...";
@@ -526,8 +526,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
        echo "<tr>
         <td>".$fecha."</td>
         <td>".$row['NOMBRE']."</td>
-        <td>".$row['MENSAJE']."</td>
-        <td>{$difu}{$flotante}</td>
+        <td>".strip_tags($row['MENSAJE'])."</td>
         <td style='text-align: left;'>
           <button title='Eliminar Promocion' type='button' class='retire-button' onclick=\"borrar('".$row['CODIGO']."')\">Borrar</button>        
         </td>
@@ -554,9 +553,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
           }
           $fecha = latinFecha($row['FECHA']); 
          echo "<tr>
-          <td>{$fecha}</td>
-          <td>".$row['JUEGO']."</td>
-          <td title='".strip_tags($row['DESCRIPCION'])."'>".$row['DESCRIPCION']."</td>
+          <td>".$row['JUEGO']."</td>          
           <td>".$row['TIPO']."</td>
           <td>".price($row['MONTO'])."</td>
           <td>";
@@ -593,6 +590,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
       $resultado = sqlconector($consulta);
       if($resultado){
         while($row = mysqli_fetch_assoc($resultado)){
+          $usuarioBinance = readCliente($row['CLIENTE'])['NOMBRE_USUARIO'];
           $obj[]= array('id' => $row['ID'],
         'fecha' => latinFecha($row['FECHA']),
         'ticket' => $row['TICKET'],
@@ -602,6 +600,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         'tipo' => $row['TIPO'],
         'medio_pago' => $row['MEDIO_PAGO'],      
         'wallet' => $row['WALLET'],
+        'usuariobinance' => $usuarioBinance,
         'origen' => $row['ORIGEN'],      
         'destino' => $row['DESTINO'],      
         'monto' => $row['MONTO'],

@@ -17,14 +17,21 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
-       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">    
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css"> 
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">       
+       
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css"> 
+
        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trumbowyg@2.25.1/dist/ui/trumbowyg.min.css">       
 
     </head>
     <header>
         <style>
+
+.dataTables_wrapper .dataTables_sort_icon {
+    display: none;
+}
+
           .textAreaContainer{
             background:white;
             color: black;
@@ -233,8 +240,14 @@ input[type="checkbox"] {
             
             function leerVista(){
                 $.get("block?readJuegos=", function(data){
-                $("#tabla-cuerpo").html(data);
-                new DataTable('#example');
+                    $("#tabla-cuerpo").html(data);
+                    //new DataTable('#example');
+                    $('#example').DataTable({
+                        responsive: true,
+                        paging: true,
+                        searching: true
+                    });
+
                 });
             }
 
@@ -352,7 +365,7 @@ input[type="checkbox"] {
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->             
 
-        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; overflow-x: hidden; padding:5rem; min-height: calc(100vh - 24rem);'>
+        <div id="cuerpo" class="cuerpo" style='margin-top: 7rem; overflow-x: hidden; padding:1rem; min-height: calc(100vh - 24rem);'>
         <dialog id="info-dialog">
             <div class="dialog-content"></div>
             <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>            
@@ -486,14 +499,12 @@ input[type="checkbox"] {
         </div>
 
         <div class="vista" id="vista"></div>
-        <table id='example' class='ui celled table' style='width:100%; '> 
+        <table id='example' class="ui celled table" style='width:100%; '> 
                         <thead>
                             <tr>
-                            <th>Fecha</th>
                             <th>Producto</th>
-                            <th>Descripcion</th>
                             <th>Tipo</th>
-                            <th>Usdc</th>
+                            <th>Monto</th>
                             <th>Opciones</th>
                             </tr>
                         </thead>
@@ -504,13 +515,11 @@ input[type="checkbox"] {
       <!--Iniciar footer-->
       <?php include 'footer.php';?>
         <!--FIN footer-->     
-    <script src='https://code.jquery.com/jquery-3.7.1.js'></script>   
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
-    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
-    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
-    <script src="https://cdn.jsdelivr.net/npm/trumbowyg@2.25.1/dist/trumbowyg.min.js"></script>
-<script>
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/trumbowyg@2.25.1/dist/trumbowyg.min.js"></script>
+    <script>
         const modalOverlay = document.getElementById('modalOverlay');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const modalOverlay2 = document.getElementById('modalOverlay2');
@@ -544,6 +553,7 @@ input[type="checkbox"] {
         <script>
         $(document).ready(function() {
             $('#summerNoteAnalisis').trumbowyg();
+            //$('#example').addClass('ui celled table');
         });
     </script>   
 

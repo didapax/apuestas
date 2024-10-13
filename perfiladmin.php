@@ -60,6 +60,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>               
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">         
     </head>
     <header>
         <style>
@@ -151,23 +154,72 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <div id="cuerpo" class="cuerpo" style='margin-top: 8rem;padding:1rem;'> 
         <div class="vista" id="vista">
         <form action="perfiladmin" method="POST">
-            <table>
-                <tr><td>Imagen de Perfil</td><td><iframe style='border:none; height: 250px;' src='subirperfil'><br></iframe></td></tr>
-                <tr><td>Activo en el Trabajo</td><td><label class="switch"><input onchange="setLaborando()" type="checkbox" id="laborando" <?php echo $laborando ?> ><span class="slider"></span></label></td></tr>
-                <tr><td>Nombre de Usuario</td><td><input type="text" name="username" id="username" value="<?php echo $nombreUsuario; ?>"></td><td>Imagen QR</td><td>Activar</td></tr>
-                <tr><td>Binance Pay</td><td><input type="text" name="binance" id="binance" value="<?php echo $binance; ?>"></td><td><iframe style="border:none;"  src='subirqrbinance'></iframe></td><td><label class="switch"><input onchange="setBinanceActive()" type="checkbox" id="binanceactivo" <?php echo $binanceActivo ?>><span class="slider"></span></label></td></tr>
-                <tr><td>Wallet Bep20</td><td><input type="text" name="bep20" id="bep20" value="<?php echo $bep20; ?>"></td><td><iframe style="border:none;"  src='subirqrbep20'></iframe></td><td><label class="switch"><input onchange="setBep20Active()" type="checkbox" id="bep20activo" <?php echo $bep20Activo ?>><span class="slider"></span></label></td></tr>
-
-            </table>
+        <table id='example' class="ui celled table" style='width:100%; '> 
+                        <thead>
+                            <tr>
+                            <th>Datos</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-cuerpo">
+                            <tr>
+                                <td>Imagen de Perfil</td>
+                                <td><iframe style='border:none; height: 250px;' src='subirperfil'><br></iframe></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Activo en el Trabajo</td>
+                                <td><label class="switch"><input onchange="setLaborando()" type="checkbox" id="laborando" <?php echo $laborando ?> ><span class="slider"></span></label></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Nombre de Usuario</td>
+                                <td><input type="text" name="username" id="username" value="<?php echo $nombreUsuario; ?>"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Binance Pay</td>
+                                <td><input type="text" name="binance" id="binance" value="<?php echo $binance; ?>"></td>
+                                <td><iframe style="border:none;"  src='subirqrbinance'></iframe></td>
+                                <td><label class="switch"><input onchange="setBinanceActive()" type="checkbox" id="binanceactivo" <?php echo $binanceActivo ?>><span class="slider"></span> Activar Wallet</label></td>
+                            </tr>
+                            <tr>
+                                <td>Wallet Bep20</td><td><input type="text" name="bep20" id="bep20" value="<?php echo $bep20; ?>"></td>
+                                <td><iframe style="border:none;"  src='subirqrbep20'></iframe></td>
+                                <td><label class="switch"><input onchange="setBep20Active()" type="checkbox" id="bep20activo" <?php echo $bep20Activo ?>><span class="slider"></span> Activar Wallet</label></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>                    
+        
             <br><br>
-            <button id="guardar" onclick="save()" type="button" style="border:solid 2px black; border-radius:5px;padding:5px;">Guardar Cambios</button>
+            <button id="guardar" onclick="save()" type="button" style="background:coral;border:solid 2px black; border-radius:5px;padding:5px;">Guardar Cambios</button>
         </form>
 
         </div>
         </div>
               <!--Iniciar footer-->
       <?php include 'footer.php';?>
-        <!--FIN footer-->     
+        <!--FIN footer-->    
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>         
+
+        <script>
+        $(document).ready(function() {
+            $('#example').DataTable({
+                        responsive: true,
+                        paging: false,
+                        searching: false
+                    });
+        });
+        </script>   
+
     </body>
 </html>
 

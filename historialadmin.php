@@ -6,8 +6,8 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
     <head>
         <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">    
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css">    
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css"> 
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
         <link rel="shortcut icon" href="Assets/favicon.png">
         <link rel="stylesheet" type="text/css" href="css/Common.css">        
@@ -61,7 +61,13 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                         tabla = data;  
                         
                         mostrarTabla();
-                        new DataTable('#example');
+                        //new DataTable('#example');
+                        $('#example').DataTable({
+                            responsive: true,
+                            paging: true,
+                            searching: true
+
+                        });                        
                         // Aquí puedes procesar los datos recibidos (data)
                         console.log("Datos retiros:", data);
                     })
@@ -218,7 +224,7 @@ function dibujarEstrellas(n) {
             </dialog>    
             <div id="outerCard" class='outerCard-container' style="background:none;"></div>
             <div class="vista" id="vista">             
-            Suscripciones de Clientes en el Sistema:
+            <hr>
                 <table id='example' class='ui celled table' style='width:100%; '> 
                     <thead>
                         <tr>
@@ -239,12 +245,9 @@ function dibujarEstrellas(n) {
         <!--FIN footer-->  
         
 
-    <script src='https://code.jquery.com/jquery-3.7.1.js'></script> 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
-    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
-    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
-
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     </body>
 </html>
 

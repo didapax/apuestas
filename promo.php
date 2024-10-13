@@ -12,8 +12,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
         <link rel="stylesheet" type="text/css" href="css/Common.css">        
         <link href='css/boxicons.min.css' rel='stylesheet'>
         <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />               
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
@@ -21,9 +20,12 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
        <!-- include summernote css/js -->
        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>           
-       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">    
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css">    
-        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
+
+       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css"> 
+
+
+       <link rel="stylesheet" type="text/css" href="css/newStyles.css">
     </head>
     <header>
         <style>      
@@ -77,12 +79,18 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 
             function leerVista(){
                 
-                $.get("block?readPromos=", function(data){
-                $("#tabla-cuerpo").html(data);
-                new DataTable('#example');
+                $.get("block?readPromos=", 
+                function(data){
+                    $("#tabla-cuerpo").html(data);
+                    //new DataTable('#example');
+                    $('#example').DataTable({
+                        responsive: true,
+                        paging: true,
+                        searching: true
+                    });
                 });
 
-                $.get("block?estatuslista=", function(data){
+              /*  $.get("block?estatuslista=", function(data){
                     var datos= JSON.parse(data);
                     if(datos.reset == true){
                         $("#btn_reset").css("display","inline-block");
@@ -91,7 +99,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                         document.getElementById("btn_difundir").disabled = datos.status;
                     }
                     
-                });                
+                });  */              
             }
 
             function reset(){
@@ -133,11 +141,11 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
       <?php include 'barraNavegacion.php';?>
         <!--FIN Barra de Navegación @media 1200px-->  
 
-        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
+        <div id="cuerpo" class="cuerpo" style='margin-top: 7rem; padding:1rem; min-height: calc(100vh - 24rem);'>
         <div class="menu" id="menu">
             <button class='add-button' type="button" onclick="showDialog()">Crear Promocion +</button>
-            <button style="margin-left:21px;" id="btn_difundir" type="button" onclick="difundir()">Difundir Promocion</button>
-            <button style="margin-left:21px; background:#E9B2B2; display:none;" id="btn_reset" type="button" onclick="reset()">Reset Promocion</button>
+            <button style="display:none;margin-left:21px;" id="btn_difundir" type="button" onclick="difundir()">Difundir Promocion</button>
+            <button style="display:none;margin-left:21px; background:#E9B2B2; display:none;" id="btn_reset" type="button" onclick="reset()">Reset Promocion</button>
         </div>
         <div id="modalOverlay" class="modal-overlay">
             <div class="modal">
@@ -157,8 +165,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                             <tr>
                                 <th>Fecha</th>
                                 <th>Nombre</th>
-                                <th>Mensaje</th>
-                                <th>Tipo</th>
+                                <th>Texto</th>
                                 <th>Opciones</th>
                             </tr>
                         </thead>
@@ -170,12 +177,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
       <?php include 'footer.php';?>
         <!--FIN footer-->     
 
-
-    <script src='https://code.jquery.com/jquery-3.7.1.js'></script> 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
-    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
-    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 
     <script>
         const modalOverlay = document.getElementById('modalOverlay');
