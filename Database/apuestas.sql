@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-09-2024 a las 22:35:01
+-- Tiempo de generación: 11-10-2024 a las 22:09:17
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -53,7 +53,7 @@ CREATE TABLE `apuestas` (
   `IMAGEN` varchar(255) NOT NULL DEFAULT 'azul.png',
   `FOREGROUND` varchar(34) NOT NULL DEFAULT 'white',
   `MONEDA` varchar(20) DEFAULT 'USDC'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `apuestas`
@@ -62,7 +62,11 @@ CREATE TABLE `apuestas` (
 INSERT INTO `apuestas` (`ID`, `IDJUEGO`, `TICKET`, `FECHA`, `INICIO`, `FIN`, `TIPO`, `JUEGO`, `CAJERO`, `CLIENTE`, `PORCIENTO`, `MONTO`, `INTERES_MENSUAL`, `CUOTA_MENSUAL`, `TOTAL_PAGAR`, `COMISION`, `N_PAGOS`, `PAGADOS`, `ACTIVO`, `DEVUELVE_CAPITAL`, `ELIMINADO`, `ESTATUS`, `IMAGEN`, `FOREGROUND`, `MONEDA`) VALUES
 (31, 2, '00e4fc5cb609ec01', '2024-09-08 21:15:13', '2024-09-08', '2024-12-08', 'TRIMESTRAL', 'Suscripción Por 4 Señales', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 0, 5.000000, 0.000000, 1.666667, 5.000000, 0.000000, 3, 0, 1, 0, 0, 'ACTIVO', 'azul.png', 'white', 'USDC'),
 (32, 8, '9595bc21231d4d74', '2024-09-08 21:16:53', '2024-09-08', '2024-12-08', 'TRIMESTRAL', 'ESTADISTICAS CRIPTOSIGNAL', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 0, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 3, 0, 1, 0, 0, 'ACTIVO', 'amarillo.png', 'white', 'USDC'),
-(33, 8, 'c3d6115044a4b757', '2024-09-24 20:00:07', '2024-09-24', '2024-12-24', 'TRIMESTRAL', 'ESTADISTICAS CRIPTOSIGNAL', 'alfonsi.acosta@gmail.com', 'alfonsi.acosta@gmail.com', 0, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 3, 0, 1, 0, 0, 'ACTIVO', 'amarillo.png', 'white', 'USDC');
+(33, 8, 'c3d6115044a4b757', '2024-09-24 20:00:07', '2024-09-24', '2024-12-24', 'TRIMESTRAL', 'ESTADISTICAS CRIPTOSIGNAL', 'alfonsi.acosta@gmail.com', 'alfonsi.acosta@gmail.com', 0, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 3, 0, 1, 0, 0, 'ACTIVO', 'amarillo.png', 'white', 'USDC'),
+(34, 6, 'f70227efea4cd7ce', '2024-10-01 14:08:15', '2024-10-01', '2025-10-01', 'ANUAL', '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 190, 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 12, 0, 1, 0, 0, 'ACTIVO', 'azul.png', 'white', 'USDC'),
+(35, 9, '09e28c77f917071a', '2024-10-01 15:01:06', '2024-10-01', '2025-01-01', 'TRIMESTRAL', 'SUSCRIPCION NEFLIX', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 0, 15.000000, 0.000000, 5.000000, 15.000000, 0.000000, 3, 0, 1, 0, 0, 'ACTIVO', 'azul_oscuro.png', 'red', 'USDC'),
+(36, 6, '4f28ca92ae5bd850', '2024-10-04 01:58:26', '2024-10-04', '2025-10-04', 'ANUAL', '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 190, 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 12, 0, 1, 0, 0, 'ACTIVO', 'azul.png', 'white', 'USDC'),
+(37, 9, 'd89e6fdc628f3e9d', '2024-10-05 15:56:37', '2024-10-05', '2025-01-05', 'TRIMESTRAL', 'SUSCRIPCION NEFLIX', 'alfonsi.acosta@gmail.com', 'alfonsi.acosta@gmail.com', 0, 15.000000, 0.000000, 5.000000, 15.000000, 0.000000, 3, 0, 1, 0, 0, 'ACTIVO', 'azul_oscuro.png', 'red', 'USDC');
 
 -- --------------------------------------------------------
 
@@ -83,7 +87,7 @@ CREATE TABLE `chat` (
   `CERRADO` int(11) DEFAULT 0,
   `BG` varchar(34) DEFAULT '#DEEEF3',
   `FG` varchar(34) DEFAULT '#4D4D4D'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `chat`
@@ -187,7 +191,7 @@ CREATE TABLE `juegos` (
   `IMAGEN` varchar(255) DEFAULT 'azul.png',
   `FOREGROUND` varchar(34) NOT NULL DEFAULT 'white',
   `MONEDA` varchar(20) DEFAULT 'USDC'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `juegos`
@@ -199,8 +203,8 @@ INSERT INTO `juegos` (`ID`, `FECHA`, `JUEGO`, `DESCRIPCION`, `ANALISIS`, `CAJERO
 (5, '2024-07-28 02:13:00', 'Intereses por adelantado', 'Interes oor adelantado', NULL, 'alfonsi.acosta@gmail.com', 'MENSUAL', NULL, NULL, 25, 100.000000, 0.000000, 10, 10, 5, 0, 0, 'ACTIVO', 0, 1, 0, 1, 0, 'azul.png', 'white', 'USDC'),
 (6, '2024-08-10 01:37:45', '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'OBTIENES EN&nbsp; EL AÑO UN TOTAL DE 38$ UTILIDAD Y UN PORCENTAJE DEL CAPITAL INVERTIDO DISPONIBLE MENSUAL 3.16$', NULL, 'alfonsi.acosta@gmail.com', 'ANUAL', NULL, NULL, 190, 20.000000, 0.000000, 10, 10, 2, 0, 0, 'ACTIVO', 0, 0, 0, 1, 0, 'azul.png', 'white', 'USDC'),
 (7, '2024-08-12 02:13:30', 'Prueba', 'fssdgdfgdfg', NULL, 'alfonsi.acosta@gmail.com', 'MENSUAL', NULL, NULL, 0, 5.000000, 0.000000, 10, 10, 1, 0, 0, 'ACTIVO', 0, 0, 0, 1, 0, 'amarillo.png', 'black', 'USDC'),
-(8, '2024-09-03 02:13:28', 'ESTADISTICAS CRIPTOSIGNAL', 'Total de Usuarios: __TOTALUSUARIOS__<br>\r\nCantidad Depositos: __DEPOSITOS__<br>\r\ncantidad Retiros: __RETIROS__\r\n', 'dfddghg', 'alfonsi.acosta@gmail.com', 'TRIMESTRAL', NULL, NULL, 0, 0.000000, 0.000000, 2, 10, 1, 0, 0, 'ACTIVO', 0, 1, 0, 1, 0, 'amarillo.png', 'white', 'USDC'),
-(9, '2024-09-08 21:18:02', 'SUSCRIPCION NEFLIX', 'OBTEN POR LA COMPRA DE ESTA TARJETA UNA CUENTA DE NEFLIX', 'LJSADNAFSDJN LJDHCJLDH LJKDNCJLD ', 'alfonsi.acosta@gmail.com', 'TRIMESTRAL', NULL, NULL, 0, 15.000000, 0.000000, 10, 10, 1, 0, 0, 'ACTIVO', 0, 0, 0, 1, 0, 'azul_oscuro.png', 'red', 'USDC');
+(8, '2024-09-03 02:13:28', 'ESTADISTICAS CRIPTOSIGNAL', 'Total de Usuarios: __TOTALUSUARIOS__ <br>\nCantidad Depositos: __DEPOSITOS__ <br>\ncantidad Retiros: __RETIROS__\n', NULL, 'alfonsi.acosta@gmail.com', 'TRIMESTRAL', NULL, NULL, 1, 0.000000, 0.000000, 2, 10, 1, 0, 0, 'ACTIVO', 0, 1, 0, 1, 0, 'amarillo.png', 'white', 'USDC'),
+(9, '2024-09-08 21:18:02', 'SUSCRIPCION NEFLIX', 'OBTEN POR LA COMPRA DE ESTA TARJETA UNA CUENTA DE NEFLIX', '<p><img src=\"https://th.bing.com/th/id/OIP.61r7LfZ1RPqc_oneg8KMZAHaE8?w=260&amp;h=180&amp;c=7&amp;r=0&amp;o=5&amp;pid=1.7\" alt=\"\"></p><p>con esta prueba&nbsp;</p><p><br></p>', 'alfonsi.acosta@gmail.com', 'TRIMESTRAL', NULL, NULL, 0, 15.000000, 0.000000, 10, 10, 1, 0, 0, 'ACTIVO', 0, 0, 0, 1, 0, 'azul_oscuro.png', 'red', 'USDC');
 
 -- --------------------------------------------------------
 
@@ -242,7 +246,37 @@ INSERT INTO `librocontable` (`ID`, `FECHA`, `TICKET`, `TIPO`, `IDJUEGO`, `JUEGO`
 (74, '2024-09-08', '9595bc21231d4d74', 'DEBITO', 8, 'ESTADISTICAS CRIPTOSIGNAL', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0, 0, 1, 0, 0, 0, 'CERRADO', 'USDC'),
 (75, '2024-12-08', '9595bc21231d4d74', 'DEBITO', 8, 'ESTADISTICAS CRIPTOSIGNAL', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
 (76, '2024-09-24', 'c3d6115044a4b757', 'DEBITO', 8, 'ESTADISTICAS CRIPTOSIGNAL', 'alfonsi.acosta@gmail.com', 'alfonsi.acosta@gmail.com', 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0, 0, 1, 0, 0, 0, 'CERRADO', 'USDC'),
-(77, '2024-12-24', 'c3d6115044a4b757', 'DEBITO', 8, 'ESTADISTICAS CRIPTOSIGNAL', 'alfonsi.acosta@gmail.com', 'alfonsi.acosta@gmail.com', 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC');
+(77, '2024-12-24', 'c3d6115044a4b757', 'DEBITO', 8, 'ESTADISTICAS CRIPTOSIGNAL', 'alfonsi.acosta@gmail.com', 'alfonsi.acosta@gmail.com', 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(78, '2024-10-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 1, 0, 0, 0, 'CERRADO', 'USDC'),
+(79, '2024-11-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(80, '2024-12-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(81, '2025-01-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(82, '2025-02-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(83, '2025-03-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(84, '2025-04-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(85, '2025-05-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(86, '2025-06-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(87, '2025-07-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(88, '2025-08-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(89, '2025-09-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(90, '2025-10-01', 'f70227efea4cd7ce', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(91, '2024-10-01', '09e28c77f917071a', 'DEBITO', 9, 'SUSCRIPCION NEFLIX', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 15.000000, 0.000000, 5.000000, 15.000000, 0.000000, 0, 0, 1, 0, 0, 0, 'CERRADO', 'USDC'),
+(92, '2025-01-01', '09e28c77f917071a', 'DEBITO', 9, 'SUSCRIPCION NEFLIX', 'alfonsi.acosta@gmail.com', 'pepe@gmail.com', 15.000000, 0.000000, 5.000000, 15.000000, 0.000000, 0, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(93, '2024-10-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 1, 0, 0, 0, 'CERRADO', 'USDC'),
+(94, '2024-11-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(95, '2024-12-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(96, '2025-01-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(97, '2025-02-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(98, '2025-03-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(99, '2025-04-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(100, '2025-05-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(101, '2025-06-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(102, '2025-07-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(103, '2025-08-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(104, '2025-09-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(105, '2025-10-04', '4f28ca92ae5bd850', 'CREDITO', 6, '190% RENTABILIDAD ANUAL INVERSIÓN 20$', 'alfonsi.acosta@gmail.com', 'daniel.alfonsi2011@gmail.com', 20.000000, 3.166667, 3.821683, 45.860193, 0.000000, 1, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC'),
+(106, '2024-10-05', 'd89e6fdc628f3e9d', 'DEBITO', 9, 'SUSCRIPCION NEFLIX', 'alfonsi.acosta@gmail.com', 'alfonsi.acosta@gmail.com', 15.000000, 0.000000, 5.000000, 15.000000, 0.000000, 0, 0, 1, 0, 0, 0, 'CERRADO', 'USDC'),
+(107, '2025-01-05', 'd89e6fdc628f3e9d', 'DEBITO', 9, 'SUSCRIPCION NEFLIX', 'alfonsi.acosta@gmail.com', 'alfonsi.acosta@gmail.com', 15.000000, 0.000000, 5.000000, 15.000000, 0.000000, 0, 0, 0, 1, 0, 0, 'ACTIVO', 'USDC');
 
 -- --------------------------------------------------------
 
@@ -258,13 +292,6 @@ CREATE TABLE `links` (
   `BLOQUEADO` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `links`
---
-
-INSERT INTO `links` (`ID`, `FECHA`, `LINK`, `CORREO`, `BLOQUEADO`) VALUES
-(3, '2024-08-05 17:21:01', 'ec5c77d717f9e39a', 'alfonsi.acosta@gmail.com', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -277,15 +304,14 @@ CREATE TABLE `lista` (
   `SUBJET` varchar(250) NOT NULL,
   `BODY` text NOT NULL,
   `ENVIADO` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `lista`
 --
 
 INSERT INTO `lista` (`ID`, `CORREO`, `SUBJET`, `BODY`, `ENVIADO`) VALUES
-(12, 'pepe@gmail.com', 'Analisis ESTADISTICAS CRIPTOSIGNAL', 'dfddghg', 0),
-(13, 'alfonsi.acosta@gmail.com', 'Analisis ESTADISTICAS CRIPTOSIGNAL', 'dfddghg', 0);
+(15, 'pepe@gmail.com', 'Analisis SUSCRIPCION NEFLIX', '<p><img src=\"https://th.bing.com/th/id/OIP.61r7LfZ1RPqc_oneg8KMZAHaE8?w=260&amp;h=180&amp;c=7&amp;r=0&amp;o=5&amp;pid=1.7\" alt=\"\"></p><p>con esta prueba&nbsp;</p><p><br></p>', 0);
 
 -- --------------------------------------------------------
 
@@ -416,7 +442,7 @@ CREATE TABLE `promo` (
   `GANADOR` int(11) NOT NULL DEFAULT 0,
   `DIFUSION` int(11) NOT NULL DEFAULT 0,
   `FLOTANTE` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `promo`
@@ -538,17 +564,18 @@ CREATE TABLE `usuarios` (
   `QR_BEP20` varchar(255) NOT NULL DEFAULT 'perfil.jpg',
   `QR_BINANCE` varchar(255) NOT NULL DEFAULT 'perfil.jpg',
   `PERFIL` varchar(255) DEFAULT 'perfil.jpg'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
 INSERT INTO `usuarios` (`ID`, `FECHA`, `IP`, `NOMBRE_USUARIO`, `PASSWORD`, `VKEY`, `CORREO`, `TELEFONO`, `NOMBRE`, `NACIONALIDAD`, `LINKREFERIDO`, `CODIGOREFERIDO`, `BEP20`, `BINANCE`, `RATE`, `SALDO`, `USDT`, `P2P`, `SALDOREFERIDO`, `VERIFICADO`, `ACTIVO`, `LABORANDO`, `BLOQUEADO`, `NIVEL`, `ACTIVE_BEP20`, `ACTIVE_BINANCE`, `QR_BEP20`, `QR_BINANCE`, `PERFIL`) VALUES
-(3, '2024-07-18 15:12:20', '::1', 'cajero Didapax', '$2y$10$iz6Cyr2pj9.g0gz9Yh5N6Oit2MXAT8PMYnM5hksLMPDkItBSWRLei', '88c99461e5d51625', 'alfonsi.acosta@gmail.com', NULL, 'alfonsi.acosta@gmail.com', NULL, NULL, '1092e38b3bfe123b', '0x9Ad41AAeaDcc2A9A3285dC82DbF95C0CEaD09718', '834916814', 3, 1.6300, 0.0000, 0.0000, 0.0000, 1, 1, 1, 0, 1, 1, 1, '0e51ba406d.png', 'fbe1223b2f.png', '2812b740cd.png'),
+(3, '2024-07-18 15:12:20', '::1', 'cajero Didapax', '$2y$10$iz6Cyr2pj9.g0gz9Yh5N6Oit2MXAT8PMYnM5hksLMPDkItBSWRLei', '88c99461e5d51625', 'alfonsi.acosta@gmail.com', NULL, 'alfonsi.acosta@gmail.com', NULL, NULL, '1092e38b3bfe123b', '0x9Ad41AAeaDcc2A9A3285dC82DbF95C0CEaD09718', '834916814', 3, 5.0000, 0.0000, 0.0000, 0.0000, 1, 1, 1, 0, 1, 1, 1, '0e51ba406d.png', 'fbe1223b2f.png', '2812b740cd.png'),
 (4, '2024-07-18 23:01:27', '::1', NULL, '$2y$10$nlwRdUti0f6KfGHlFxxPxO5Wss8ekUOpUYLBCMCfQVmcqx7e2vH1q', '9776e14db528aa0d', 'alfonsi@gmail.com', NULL, 'alfonsi@gmail.com', NULL, NULL, 'f57dc7a0254af0bc', NULL, NULL, 0, 0.0000, 0.0000, 0.0000, 0.0000, 0, 0, 0, 0, 0, 0, 0, 'perfil.jpg', 'perfil.jpg', 'perfil.jpg'),
-(5, '2024-07-18 23:12:17', '::1', 'didapax', '$2y$10$qqzuKPChM4NXdlsWJ.eFb.pjKYD/UwPKAi.XkY6f63znTdPC/2m.S', '504c0d2e6db8a604', 'pepe@gmail.com', NULL, 'pepe@gmail.com', NULL, NULL, '6d0433aef2547f52', '0x9Ad41AAeaDcc2A9A3285dC82DbF95C0CEaD09718', 'alfonsi.acosta@gmail.com', 0, 90.0000, 0.0000, 0.0000, 0.0000, 1, 1, 0, 0, 0, 0, 0, 'perfil.jpg', 'perfil.jpg', 'perfil.jpg'),
-(6, '2024-09-01 02:51:37', '::1', NULL, '$2y$10$uBr4lJDfDHIU8ZOFiwxtjuTMbI66qrVhWL7b19YidAcNL5tNd3fqO', '71a7d4185733d080', 'juan@gmail.com', NULL, 'juan@gmail.com', NULL, NULL, 'd8b11defda24f8ea', NULL, 'juan@gmail.com', 0, 0.0000, 0.0000, 0.0000, 0.0000, 1, 0, 0, 0, 0, 0, 0, 'perfil.jpg', 'perfil.jpg', 'perfil.jpg');
+(5, '2024-07-18 23:12:17', '::1', 'didapax', '$2y$10$qqzuKPChM4NXdlsWJ.eFb.pjKYD/UwPKAi.XkY6f63znTdPC/2m.S', '504c0d2e6db8a604', 'pepe@gmail.com', NULL, 'pepe@gmail.com', NULL, NULL, '6d0433aef2547f52', '0x9Ad41AAeaDcc2A9A3285dC82DbF95C0CEaD09718', 'alfonsi.acosta@gmail.com', 0, 55.0000, 0.0000, 0.0000, 0.0000, 1, 1, 0, 0, 0, 0, 0, 'perfil.jpg', 'perfil.jpg', 'perfil.jpg'),
+(6, '2024-09-01 02:51:37', '::1', NULL, '$2y$10$uBr4lJDfDHIU8ZOFiwxtjuTMbI66qrVhWL7b19YidAcNL5tNd3fqO', '71a7d4185733d080', 'juan@gmail.com', NULL, 'juan@gmail.com', NULL, NULL, 'd8b11defda24f8ea', NULL, 'juan@gmail.com', 0, 0.0000, 0.0000, 0.0000, 0.0000, 1, 0, 0, 0, 0, 0, 0, 'perfil.jpg', 'perfil.jpg', 'perfil.jpg'),
+(7, '2024-10-04 00:45:33', '::1', '', '$2y$10$GCd8ig6utGe7wIZj9/0hMuwAjRi8PbjSDGSyO5oLJ4z/K/TMstKKi', '8e5b206d440a061c', 'daniel.alfonsi2011@gmail.com', NULL, 'daniel.alfonsi2011@gmail.com', NULL, NULL, '589b088b1d6b3ec7', '0x9Ad41AAeaDcc2A9A3285dC82DbF95C0CEaD09718', '', 0, 0.0000, 0.0000, 0.0000, 0.0000, 1, 0, 0, 0, 0, 0, 0, 'perfil.jpg', 'perfil.jpg', 'perfil.jpg');
 
 --
 -- Índices para tablas volcadas
@@ -658,7 +685,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `apuestas`
 --
 ALTER TABLE `apuestas`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `chat`
@@ -688,19 +715,19 @@ ALTER TABLE `juegos`
 -- AUTO_INCREMENT de la tabla `librocontable`
 --
 ALTER TABLE `librocontable`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT de la tabla `links`
 --
 ALTER TABLE `links`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `lista`
 --
 ALTER TABLE `lista`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `notificaciones`
@@ -748,7 +775,7 @@ ALTER TABLE `userpromo`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
