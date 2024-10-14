@@ -1,5 +1,4 @@
 <?php
-include "modulo.php";
 $page = "home";
 $style = "";
 ?>
@@ -222,7 +221,5 @@ $style = "";
                 </div>
 
 
-      <!--=============== MAIN JS ===============-->
-      <script src="Javascript/navBar.js"></script>
    </body>
 </html>
