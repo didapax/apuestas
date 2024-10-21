@@ -27,6 +27,7 @@ include "modulo.php";
     <link rel="stylesheet" href="index-assets/bower_components/animate.css/animate.min.css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <script src="index-assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <link rel="shortcut icon" href="Assets/favicon.png">
     <style>
             @font-face {
                 font-family: impact;
@@ -57,14 +58,13 @@ include "modulo.php";
                     <div class="hero-content text-center">
                         <h1>Invest, empower, win!</h1>
                         <p class="intro">Introducing CryptoSignal. A Crypto-based safe investment fund</p>
-                        <a href="#" class="btn btn-fill btn-large btn-margin-right">Go to Store</a> <a href="#" class="btn btn-accent btn-large">Learn more</a>
+                        <a href="tienda" class="btn btn-fill btn-large btn-margin-right">Go to Store</a> <a href="ayuda" class="btn btn-accent btn-large">Learn more</a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="down-arrow floating-arrow"><a href="#"><i class="fa fa-angle-down"></i></a></div>
     </section>
-
 
     <section class="features-extra section-padding" id="assets">
         <div class="container">

@@ -114,7 +114,7 @@
 
   function bgChatColor(){
 	$bgAdmin =  "#ff7380";
-	$bgUser = "#DADFE8";
+	$bgUser = "#2586f3";
 
 	 if($_SESSION['nivel']==1) return $bgAdmin;
 	 else return $bgUser;
@@ -190,7 +190,7 @@ function dibujaChatApp($ticket) {
 			}
 
 			echo "
-			<div style='width: fit-content; padding:10px; border-radius:8px;margin:13px; background-color:".$row['BG']."; color=".$row['FG'].";'>
+			<div style='display:flex;max-width:inherit;width: fit-content; padding:1rem; border-radius:8px;margin:13px; background-color:".$row['BG']."; color=".$row['FG'].";'>
 			<span style='margin-top:3px;font-size:12px;'>".$usuario."</span>
 			<br><span style='font-weight: bolder;font-size:1em;'>".$row['MENSAJE']."
 			<br><div style='font-size:9px; float:right;'>$fecha <span style='margin-left:3px;color:blue;font-weight:bold;'>$icono</span></div>			

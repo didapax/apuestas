@@ -1,9 +1,113 @@
 <?php 
 include "modulo.php";
 date_default_timezone_set('America/Caracas');    
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if(isset($_POST['guardar'])){
+        $correo = $_POST['correo'];
+        $nombre = $_POST['nombre'];
+        $telefono = $_POST['telefono'];
+        $nacionalidad = $_POST['nacionalidad'];
+        $result = sqlconector("UPDATE USUARIOS SET NOMBRE='$nombre', TELEFONO='$telefono', NACIONALIDAD='$nacionalidad' WHERE CORREO='$correo'");
+        
+        if($result){
+            $mensaje = "true";
+        }
+        else{
+            $mensaje = "false";
+        }
+    }
+}
+
+$correo = $nombre = $telefono = $nacionalidad = $mensaje = "";
+$saldo = "0.00";
+
 if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secured'])){
-?>
-<html lang="es">
+
+
+$row = readClienteId($_SESSION['user']);
+$correo = $row['CORREO'];
+$nombre = $row['NOMBRE'];
+$telefono = $row['TELEFONO'];
+$saldo = $row['SALDO'];
+$nacionalidad = $row['NACIONALIDAD'];
+
+$paises = [
+    "CA" => "Canadá",
+    "MX" => "México",
+    "US" => "Estados Unidos",    
+    "AR" => "Argentina",
+    "BO" => "Bolivia",
+    "BR" => "Brasil",
+    "CL" => "Chile",
+    "CO" => "Colombia",
+    "CR" => "Costa Rica",
+    "CU" => "Cuba",
+    "DO" => "República Dominicana",
+    "EC" => "Ecuador",
+    "SV" => "El Salvador",
+    "GT" => "Guatemala",
+    "HN" => "Honduras",
+    "MX" => "México",
+    "NI" => "Nicaragua",
+    "PA" => "Panamá",
+    "PY" => "Paraguay",
+    "PE" => "Perú",
+    "PR" => "Puerto Rico",
+    "UY" => "Uruguay",
+    "VE" => "Venezuela",
+    "BZ" => "Belice",
+    "CR" => "Costa Rica",
+    "SV" => "El Salvador",
+    "GT" => "Guatemala",
+    "HN" => "Honduras",
+    "NI" => "Nicaragua",
+    "PA" => "Panamá",
+    "NO" => "Noruega",
+    "SE" => "Suecia",
+    "DK" => "Dinamarca",
+    "FI" => "Finlandia",
+    "IS" => "Islandia",
+    "EE" => "Estonia",
+    "LV" => "Letonia",
+    "LT" => "Lituania",
+    "GB" => "Reino Unido",
+    "IE" => "Irlanda",
+    "FR" => "Francia",
+    "BE" => "Bélgica",
+    "NL" => "Países Bajos",
+    "LU" => "Luxemburgo",
+    "MC" => "Mónaco",
+    "DE" => "Alemania",
+    "CH" => "Suiza",
+    "AT" => "Austria",
+    "PL" => "Polonia",
+    "CZ" => "República Checa",
+    "SK" => "Eslovaquia",
+    "HU" => "Hungría",
+    "LI" => "Liechtenstein",
+    "RU" => "Rusia",
+    "UA" => "Ucrania",
+    "BY" => "Bielorrusia",
+    "MD" => "Moldavia",
+    "RO" => "Rumania",
+    "BG" => "Bulgaria",
+    "ES" => "España",
+    "PT" => "Portugal",
+    "IT" => "Italia",
+    "GR" => "Grecia",
+    "HR" => "Croacia",
+    "SI" => "Eslovenia",
+    "BA" => "Bosnia y Herzegovina",
+    "RS" => "Serbia",
+    "ME" => "Montenegro",
+    "AL" => "Albania",
+    "MK" => "Macedonia del Norte"                    
+    // Agrega todos los países que necesites
+];
+
+?> 
+<html lang="es"> 
     <head>
         <meta charset="UTF-8">        
         <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />        
@@ -23,8 +127,6 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
         <link rel="stylesheet" href="index-assets/bower_components/animate.css/animate.min.css">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         
-        <!-- suscripciones-->
-        <script src="Javascript/suscripcion.js"></script>
     </head>
         <style>
         </style>        
@@ -41,8 +143,32 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
         <section class="hero hero-inside" >
         <input type="hidden" id="correo" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" >
         <div id="cuerpo" class="cuerpo" > 
-            <h3 style="font-weight: bold;text-align: center;color:white;">Participaciones en el Fondo de Inversion</h3>
-        <div id="vista" class='outerCard-container'></div>
+        <h3 style="font-weight: bold;text-align: center;color:white;">Perfil</h3>
+        <div class="common-background" style="background:black; padding:2rem;background: #00000078;padding: 2rem;border-radius: 17px;">
+        <div id="vista" class='outerCard-container'>
+        <form method="post" action="perfilcliente.php">
+        <div style="display:grid;">
+        <div class="">Saldo <span style="color:green;font-weight: bold;"><?php echo $saldo; ?></span> USDC</div><br>
+        Correo: <input type="text" style="color:black;width:300px;" readonly id="correo" name="correo" value="<?php echo $correo; ?>"><br>
+        Nombre Completo: <input type="text" style="color:black;width:300px;" id="nombre" name="nombre" value="<?php echo $nombre; ?>"><br>
+        Telefono: <input type="text" style="color:black;width:300px;" id="telefono" name="telefono" value="<?php echo $telefono; ?>"><br>
+        Nacionalidad
+        <select name="nacionalidad" id="nacionalidad" style="color:black;width:300px;">
+            <option value="">Selecciona tu país</option>
+            <?php
+                foreach($paises as $codigo => $nombre) {
+                    $selected = ($codigo == $nacionalidad) ? "selected" : "";
+                    echo "<option $selected value=\"$codigo\">$nombre</option>";
+                }
+            ?>
+        </select>
+    </div>
+    <br>
+    <button class='deposit-button' type="submit" name="guardar">Guardar</button>
+</form>
+
+        </div>
+        </div>
         </div>
         </section> 
               <!--Iniciar footer-->

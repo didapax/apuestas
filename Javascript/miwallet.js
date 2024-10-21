@@ -7,6 +7,10 @@ let depositos = [];
 let historial = [];
 let cajeros = [];
 let person = [];
+let retiroTabla = null;
+let cajeroTabla = null;
+let depositosTabla = null;
+let historialTabla = null;
 
 function myFunction() {
     var copyText = document.getElementById("cajero");
@@ -153,7 +157,7 @@ function initDeposito(){
         cancelButtonText: "Cancelar"
         }).then((result) => {
             if (result.isConfirmed) {    
-                document.getElementById('modalOverlay').style.display = "flex";
+                document.getElementById('modalOverlay').show();
             }
         });
 }
@@ -353,9 +357,9 @@ function retirar(){
             comision: document.getElementById("comision_retiro").value,
             moneda: document.getElementById("establecoin_retiro").value
         },function(data){
-            document.getElementById('modalOverlay2').style.display = "none";
-            document.getElementById("retirar_btn").disabled = false;
-            inicio();
+            document.getElementById('modalOverlay2').close();
+            //document.getElementById("retirar_btn").disabled = false;
+            window.location.href="miwallet";
         });  
     }else{
         Swal.fire({
@@ -390,9 +394,9 @@ function lanzar(){
             correo: document.getElementById("correo").value,
             moneda: document.getElementById("establecoin").value
         },function(data){
-            document.getElementById('modalOverlay').style.display = "none";
-            document.getElementById("jugar").disabled = false;
-            inicio();
+            document.getElementById('modalOverlay').close();            
+            //document.getElementById("jugar").disabled = false;
+            window.location.href="miwallet";
         });  
     }else{
         Swal.fire({ 
@@ -480,7 +484,7 @@ function setCal(id){
                     cajero: cajero,
                     rate: rate
                 },function(data){
-                        inicio();        
+                    window.location.href="miwallet";        
                 });            
             }    
         });
@@ -667,8 +671,15 @@ function recuperarRetiros() {
             retiros = data;  
             
             mostrarTablaRetiros();
-            new DataTable('#example1');
-            // Aquí puedes procesar los datos recibidos (data)
+            
+             retiroTabla = $('#example1').DataTable({
+                responsive: true,
+                paging: true,
+                searching: true
+            });
+            
+            //new DataTable('#example1');
+            // Aquí puedes procesar los datos recibidos (data
             console.log("Datos retiros:", data);
         })
         .catch(error => {
@@ -677,6 +688,27 @@ function recuperarRetiros() {
     
     }
     
+    function recalcRetiros() {
+        function recalcResponsive() {
+            return new Promise(resolve => {
+                retiroTabla.responsive.recalc();
+                setTimeout(resolve, 500); // Espera a que termine la recalculación
+            });
+        }
+    
+        recalcResponsive().then(recalcResponsive);
+    }    
+
+    function recalcCajeros() {
+        function recalcResponsive() {
+            return new Promise(resolve => {
+                cajeroTabla.responsive.recalc();
+                setTimeout(resolve, 500); // Espera a que termine la recalculación
+            });
+        }
+    
+        recalcResponsive().then(recalcResponsive);
+    }  
 
     function recuperarDepositos() {
         fetch("block?readDepositos=1&correo="+document.getElementById('correo').value)
@@ -690,7 +722,14 @@ function recuperarRetiros() {
                 depositos = data;  
                 
                 mostrarTablaDepositos();
-                new DataTable('#example');
+                
+                depositosTabla = $('#example').DataTable({                    
+                    responsive: true,
+                    paging: true,
+                    searching: true
+                });
+                
+                //new DataTable('#example');
                 // Aquí puedes procesar los datos recibidos (data)
                 console.log("Datos Depositos:", data);
             })
@@ -699,6 +738,17 @@ function recuperarRetiros() {
             });
         
         }
+
+        function recalcDepositos() {
+            function recalcResponsive() {
+                return new Promise(resolve => {
+                    depositosTabla.responsive.recalc();
+                    setTimeout(resolve, 500); // Espera a que termine la recalculación
+                });
+            }
+        
+            recalcResponsive().then(recalcResponsive);
+        }  
 
         function mostrarTablaHistorial() {
             const tablaCuerpo = document.getElementById("tabla-cuerpo-historial");
@@ -715,7 +765,7 @@ function recuperarRetiros() {
                             break;        
         
                         case 'ACTIVO':
-                            color_estatus="#f78c3d";
+                            color_estatus="#25d596";
                             break;        
                     default:
                         color_estatus="#ff7b7b";
@@ -744,7 +794,14 @@ function recuperarRetiros() {
                 .then(data => {
                     historial = data;                    
                     mostrarTablaHistorial();
-                    new DataTable('#example2'); 
+                    
+                    historialTabla = $('#example2').DataTable({
+                        responsive: true,
+                        paging: true,
+                        searching: true
+                    });
+                    
+                    //new DataTable('#example2'); 
                     // Aquí puedes procesar los datos recibidos (data)
                     console.log("Datos Historial:", data);
                 })
@@ -752,7 +809,19 @@ function recuperarRetiros() {
                     console.error("Error en la solicitud:", error);
                 });
             
-        }    
+        }   
+        
+        
+        function recalcHistorial() {
+            function recalcResponsive() {
+                return new Promise(resolve => {
+                    historialTabla.responsive.recalc();
+                    setTimeout(resolve, 500); // Espera a que termine la recalculación
+                });
+            }
+        
+            recalcResponsive().then(recalcResponsive);
+        }  
         
         function mostrarAyudaBinance() {
             const dialog = document.getElementById("info-dialog");
@@ -761,7 +830,15 @@ function recuperarRetiros() {
 
         function mostrarTecnoDialog() {
             const tecnoDialog = document.getElementById("tecno-dialog");
-            tecnoDialog.showModal();
+            
+            document.getElementById("overlay-common-dialog-1").style.display = 'flex';
+            tecnoDialog.style.display = 'block';
+
+        }
+
+        function closeTecnoDialog() {
+            document.getElementById('tecno-dialog').style.display = 'none';
+            document.getElementById("overlay-common-dialog-1").style.display = 'none';
         }
 
         function enviarAsistencia(){
@@ -770,7 +847,9 @@ function recuperarRetiros() {
             const asunto = document.getElementById("asuntoTecno").value;
             const mensaje = document.getElementById("mensajeTecno").value;
             if(asunto && mensaje){
-                tecnoDialog.close();
+                tecnoDialog.style.display ='none';
+                document.getElementById('overlay-common-dialog-1').style.display ='none';
+
                 Swal.fire({
                     title: 'Cryptosignal',
                     text: `Se procedera a Abrir un Ticket de Soporte con su Caso ${asunto}`,
@@ -799,7 +878,6 @@ function recuperarRetiros() {
                     });             
             }
             else{
-                tecnoDialog.close();
                 Swal.fire({
                     title: 'Cryptosignal',
                     text: "Faltan datos no se puede crear un ticket vacio.!",
@@ -815,7 +893,9 @@ function recuperarRetiros() {
             recuperarRetiros();  
             recuperarDepositos();  
             recuperarHistorial();  
-            recuperarCajeros();                               
+            recuperarCajeros();                       
             //myVar = setInterval(refrescar, 2000);
-        }           
+        }
+        
+        
 

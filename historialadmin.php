@@ -23,7 +23,7 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1) {
         <link rel="stylesheet" href="index-assets/css/etline-font.css">
         <link rel="stylesheet" href="index-assets/bower_components/animate.css/animate.min.css">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    </head>
+    </head> 
         <style>
 
             @media screen and (min-width: 385px) {
@@ -41,11 +41,15 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1) {
                 padding: 20px;
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
                 border-radius: 8px;
-                background-color: white;
+                background-color: white;                
             }
 
             .dialog-content {
                 text-align: center;
+            }
+
+            .dialog-content p{
+                color: black;
             }
         </style>
         <script>
@@ -330,8 +334,6 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1) {
                         }
                     });
                 }
-            </script>
-
             </script>
     </body>
 

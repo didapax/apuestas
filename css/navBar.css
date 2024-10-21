@@ -84,7 +84,9 @@ a {
 .logo{
   width: 4rem;
   margin-right: 0.5rem;
+  cursor: pointer;
 }
+
 
 .nav__logo, 
 .nav__burger, 

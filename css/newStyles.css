@@ -38,7 +38,6 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: 2rem;
-  background: url(../Assets/cancha.jpeg);
   background-repeat: no-repeat;
   background-size: cover;
   padding: 2rem;
@@ -46,6 +45,8 @@
   align-items: center;
   justify-content: center;
   align-content: center;
+  background: transparent;
+  border-radius: 2rem;
 }
 
 .cover {
@@ -148,6 +149,7 @@
   font-family: impact;
   color: #fff;
   font-weight: 100;
+  line-height: initial;
 }
 
 .yellow-button{
@@ -159,6 +161,7 @@
   padding: 0.6rem;
   border-radius: 0.9rem;
   border: none;
+  color: black;
 }
 
 .yellow-button:hover{
@@ -183,6 +186,7 @@
   color: #72d39d;
   text-shadow: 3px 1px 5px #0fad0f;
   font-size: 1.6rem;
+  padding-bottom: 0;
 }
 
 .cost{
@@ -206,6 +210,29 @@
   letter-spacing: 0;
   color: white;
 }
+
+
+@media screen and (max-width: 500px) {
+
+  .text-container p {
+    font-size: 1.6rem;
+  }
+
+  .cover {
+    height: 24rem;
+    width: 35rem;
+  }
+
+  .text-container {
+    padding: 0.5rem 0.5rem 0 0;
+  }
+
+  .left-side {
+    min-width: 21rem;
+}
+
+}
+
 
 @-webkit-keyframes glow {
   from {
@@ -299,40 +326,37 @@ marquee span{
 
 /*********************************End Index-Dialog*****************************************************/
 
-/** PRUEBA COPILOX MODAL**/
-    /* Estilos para el fondo opaco */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-  }
+/***********************************START SPECIFIC DIALOG REQUIREMENTS***********************************/
 
-  /* Estilos para el botón de cerrar */
+.tecno-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+} 
 
-  .modal {
-    background: #ededed;
-    padding: 20px;
-    border-radius: 10px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px; /* Espacio entre los elementos */
-    width: 80%; /* Ancho del modal */
-    max-width: 600px; /* Ancho máximo del modal */
-    max-height: 80%; /* Alto máximo del modal */
-    overflow-y: auto; /* Scroll en el eje Y */
-    box-shadow: 5px 13px 14px rgb(148, 148, 148);
+.tecno-content textarea{
+  height: 150px;
+  width: 60%; 
+  background: #00000025;
+  border-radius: 1rem;
+  border: 1px solid rgba(128, 128, 128, 0.479);
+  padding: 1rem;
+
 }
 
-/* Estilos para el botón de cerrar */
+.tecno-content input[type='text']{
+  background: #00000025;
+  border:none;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(128, 128, 128, 0.479);
+}
+
+.dialog-title{
+  margin-bottom: 2rem !important;
+  text-decoration: underline;
+}
+
 .close-btn {
     position: absolute;
     top: 10px;
@@ -350,36 +374,8 @@ marquee span{
   transform: scale(1.1);
 }
 
-/* Estilos específicos para los elementos dentro del modal */
-.modal h2 {
-    margin-bottom: 0;
-}
 
-.modal input[type="text"], .modal select {
-    margin: 0;
-    width: 100%;
-    font-size: 1rem;
-    padding: 0.6rem;
-    border: 1px solid black;
-}
-
-.modal input[type="number"] {
-    margin: 0;
-    width: 85%;
-    font-size: 1rem;
-    padding: 0.6rem;
-    border: 1px solid black;
-}
-
-.modal textarea {
-    width: 100%;
-    height: 200px;
-
-}
-
-  /** END PRUEBA COPILOX MODAL**/
-
-/***********************************End Common-Dialog***************************************************
+/***********************************End Common-Dialog****************************************************/
 
 .overlay-common-dialog{
   position: fixed;
@@ -398,19 +394,19 @@ marquee span{
 
 .common-dialog{
   position: relative;
-  width: 30rem;
-  background: #ededed;
+  width: 60%;
+  background: #1b1c22;
   display: flex;
   align-items: center;
   border: none;
-  box-shadow: 5px 13px 14px rgb(148, 148, 148);
-  color: #0f0f14;
+  box-shadow: 0px 6px 14px 1px rgb(26 28 40);
+  color: #fafafa;
   height: 60vh;
   overflow: auto;
   justify-content: center;
   flex-direction: column;
   padding: 2rem;
-  z-index:10000;
+  z-index: 10000;
 }
 
 .close-common-dialog{
@@ -467,17 +463,32 @@ marquee span{
 }
 
 
+@media screen and (max-width: 950px) {
+
+  .common-dialog {
+    width: 100%;
+    height: 90vh;
+  }
+
+  .overlay-common-dialog{
+    padding: 0;
+  }
+
+  .tecno-content textarea{
+    width: 90%;
+  }
+  
+  .tecno-content input[type='text']{
+    width: 90%;
+  }
+  
 
 
-********************************End Common-Dialog*****************************************************/
+}
 
 
 
-
-
-
-
-
+/********************************End Common-Dialog*****************************************************/
 
 
 
@@ -486,7 +497,7 @@ marquee span{
 .add-button{
   padding: 1rem;
   border: none;
-  background: #4fbfd9;
+  background: #58b5c3;
   color: white;
   font-family: 'Poppins';
   font-weight: 600;
@@ -498,6 +509,22 @@ marquee span{
   transform: scale(1.1);
   background: #457bad;
 }
+
+.closeDialog-btn{
+  background: none;
+  border: solid 1px #913b3b;
+  color: #b35555;
+  font-family: 'Poppins';
+  font-weight: 600;
+  border-radius: 8px;
+  transition: ease 0.4s;
+  padding: 1rem;
+}
+
+.closeDialog-btn:hover{
+  transform: scale(1.1);
+}
+
 
 .retire-button{
   padding: 1rem;
@@ -666,9 +693,31 @@ marquee span{
   }
 
   .tab-content{
-    overflow: auto;
+    overflow: hidden;
   }
 
+  .nav .nav-tabs{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+
+}
+
+.button-container{
+  margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 650px) {
+
+  .button-container{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+  }
+  
 
 }
 
@@ -680,5 +729,6 @@ marquee span{
   }
 
 }
+
 
 

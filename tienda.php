@@ -1,12 +1,13 @@
-<?php 
-include "modulo.php";
-date_default_timezone_set('America/Caracas');    
-if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secured'])){
+<!DOCTYPE html>
+<?php
+    include "modulo.php";
+    date_default_timezone_set('America/Caracas');    
 ?>
-<html lang="es">
-    <head>
+
+<html style="overflow: scroll;" lang="es"> 
+<head>
+        <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">        
-        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />        
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
         <link rel="shortcut icon" href="Assets/favicon.png">
         <link rel="stylesheet" type="text/css" href="css/Common.css">
@@ -22,33 +23,58 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
         <link rel="stylesheet" href="index-assets/css/etline-font.css">
         <link rel="stylesheet" href="index-assets/bower_components/animate.css/animate.min.css">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-        
-        <!-- suscripciones-->
-        <script src="Javascript/suscripcion.js"></script>
-    </head>
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />        
+        <link rel="shortcut icon" href="Assets/favicon.png">
+    </head> 
         <style>
-        </style>        
-        <script> 
+            @font-face {
+                font-family: impact;
+                src: url(./css/impact.ttf);
+            }
 
-        </script>
-    <body onload="inicio()" id="top">
-    <?php $page = "histcliente"; ?>
-    <section class="navigation">
+            @font-face {
+                font-family: futurist;
+                src: url(./css/fonts/futurist.otf);
+            }
+
+            body{
+                background:black;
+            }
+
+        </style>        
+
+        <body onload='inicio()'>   
+
+        <?php $page = "home"; ?>
+        <section class="navigation">
                 <header style='padding:40px 0;'>
                     <?php include 'barraNavegacion.php'; ?>
                 </header>
-        </section> 
-        <section class="hero hero-inside" >
-        <input type="hidden" id="correo" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" >
-        <div id="cuerpo" class="cuerpo" > 
-            <h3 style="font-weight: bold;text-align: center;color:white;">Participaciones en el Fondo de Inversion</h3>
-        <div id="vista" class='outerCard-container'></div>
-        </div>
-        </section> 
-              <!--Iniciar footer-->
-      <?php include 'footer.php';?>
-        <!--FIN footer-->     
-        <script>
+        </section>
+            <?php
+                $correo = "";
+                $saldo = "0.00";
+
+                if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
+                    $correo = readClienteId($_SESSION['user'])['CORREO'];
+                    $saldo = readClienteId($_SESSION['user'])['SALDO'];
+                    recalcularSuscripciones($correo);
+                    //refreshDataAuto();
+                    promoFlotante();
+                }
+            ?>
+            <section class="hero hero-inside" >
+            <div id="cuerpo" class="cuerpo" >
+                    <input type="hidden" id="actualsaldo" value="<?php echo $saldo;?>">
+                    <input type="hidden" id="correo" value="<?php echo $correo;?>" > 
+                    <div id="vista" class='outerCard-container'></div>
+            </div>
+            </section>
+        <!--Iniciar footer-->
+        <?php include 'footer.php';?>
+            <!--FIN footer-->     
+            <script src="Javascript/index.js"></script>
+            <script>
                 var acc = document.getElementsByClassName("accordion");
                 var i;
 
@@ -84,8 +110,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
             <script src="index-assets/js/jquery.flexslider-min.js"></script>
             <script src="index-assets/bower_components/classie/classie.js"></script>
             <script src="index-assets/bower_components/jquery-waypoints/lib/jquery.waypoints.min.js"></script>
+            
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/ui/trumbowyg.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/trumbowyg.min.js"></script>
             <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
-
             <script>
                     (function (b, o, i, l, e, r) {
                         b.GoogleAnalyticsObject = l; b[l] || (b[l] =
@@ -114,14 +142,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                         }
                     });
                 }
-            </script>  
-
-    </body>
+            </script>
+      
+        </body>
 </html>
-
-<?php
-}
-else{
-    header("Location: index.php");
-}
-?>

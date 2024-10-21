@@ -115,7 +115,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
     sqlconector("UPDATE DATOS SET ACTIVO=0");
   }
   
-  if(isset($_GET{'listMonedas'})){
+  if(isset($_GET['listMonedas'])){
     echo json_encode (array_sqlconector("SELECT * FROM DATOS"));
   }
   
@@ -254,7 +254,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND FECHA='$fechaInicial'");
   }
     
-  if(isset($_GET{'listCajeros'})){
+  if(isset($_GET['listCajeros'])){
     echo json_encode (array_sqlconector("SELECT * FROM USUARIOS WHERE NIVEL=1"));
   }
   
@@ -418,17 +418,17 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         'idJuego' => $row['IDJUEGO'],
         'correo'=>$correo, 
         'fecha'=>$fecha,
-        'bloqueo'=>$bloqueo,
-        'imagen'=>$imagen,
-        'foreground'=>$foreground,
-        'pagaIntereses'=>$pagaIntereses,
-        'titulo'=>$titulo,
-        'analisis'=>$analisis,
-        'estrellas'=>$estrellas,
-        'interes'=>$interes,
-        'pagaIntereses'=>$pagaIntereses,
+        'bloqueo' =>$bloqueo,
+        'imagen' =>$imagen,
+        'foreground' =>$foreground,
+        'pagaIntereses' =>$pagaIntereses,
+        'titulo' =>$titulo,
+        'analisis' =>$analisis,
+        'estrellas' =>$estrellas,
+        'interes' =>$interes,
         'activo'=>$activo,
-        'costo'=>$costo);
+        'costo'=>$costo
+      );
       }	
     }
     echo json_encode($obj);
@@ -891,23 +891,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
   }
   
   if(isset($_GET['estatuslista'])){
-    $status= "";
-    $reset = "";
-  
-    if(recordCount("LISTA") == recordList()){
-      $reset = true;
-    }else{
-      $reset = false;
-    }
-  
-    if(ifNotDayExists("ENVIOLISTA")){
-      $status= false;
-    }else{
-      $status= true;
-    }
-  
-    $obj = array('status' => $status,'reset' => $reset,'create' => $reset);
-    echo json_encode($obj);      
+    //estatus de la lista     
   }
   
   if( isset($_POST['resetlista']) ){  
@@ -1090,5 +1074,3 @@ else{
   //FIN DEL SERVER SI NO HAY SESION
 
 }
-
-?>
