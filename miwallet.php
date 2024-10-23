@@ -54,6 +54,11 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
             display: flex;
             justify-content: space-between;
         }
+
+        #modalOverlay2{
+            display: flex;
+            justify-content: space-between;
+        }
             
 
 
@@ -146,9 +151,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                 </select>                
                 <div id="detalles_retiro" style="display:none;width:100%;">
                     Cantidad a Retirar: 
-                    <input style="border: 1px solid #7aa891eb;outline: none;background: #42f87863;border-radius: 5px;padding: 3px;" type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" type="number" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0"  step="1"><br>
+                    <input style="border: 1px solid #905353eb;outline: none;background: #f8425357;border-radius: 5px;padding: 3px;" type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" type="number" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0"  step="1"><br>
                     <div id="calculo_retiro"  style="width: 100%;float: right;background: #24262f;border: none border-radius:5px;margin: 1rem 0;padding: 1rem;border: double 1px #337ab77d;color: white;"></div><br><br>
-                    <br><br><div id='descripcionMetodoRetiro'></div>
+                    <br><br><div style='text-align:center;' id='descripcionMetodoRetiro'></div>
                     <input readonly class="datcajero" style="width: 100%;border: none;outline: none;background: #00000000;text-align: center;text-decoration: underline;margin-bottom: 1rem;font-size: 1.8rem;" id="paycliente">                    
                     <br>
                 </div><br><br>
