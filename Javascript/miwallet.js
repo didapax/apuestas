@@ -157,10 +157,17 @@ function initDeposito(){
         cancelButtonText: "Cancelar"
         }).then((result) => {
             if (result.isConfirmed) {    
-                document.getElementById('modalOverlay').show();
+                document.getElementById('modalOverlay').style.display = 'flex';
+                document.getElementById("overlay-common-dialog-2").style.display = 'flex';
             }
         });
 }
+
+function closeOverlayModal() {
+    document.getElementById('modalOverlay').style.display = 'none';
+    document.getElementById("overlay-common-dialog-2").style.display = 'none';
+}
+
 
 function selpago(){
     let userBinance = document.getElementById("userBinance").value;
@@ -371,6 +378,15 @@ function retirar(){
                         });
     }         
 }
+function showModalOverlay2() {
+    document.getElementById('modalOverlay2').style.display = 'flex';
+    document.getElementById("overlay-common-dialog-3").style.display = 'flex';
+}
+
+function closeModalOverlay2() {
+    document.getElementById('modalOverlay2').style.display = 'none';
+    document.getElementById("overlay-common-dialog-3").style.display = 'none';
+}
 
 function lanzar(){
     if(document.getElementById("cantidad").value.length*1 > 0 && document.getElementById("comopago").value.length>0){
@@ -420,7 +436,7 @@ function calculo_retiro(){
     total = cantidad - comision;
     document.getElementById("recibe").value = Math.round(total * 100) / 100;
     document.getElementById("comision_retiro").value = Math.round(comision * 100) / 100;
-    $("#calculo_retiro").html(`<li>Deposito =  ${cantidad} " ${establecoin}</li><li>Comision de Red ${porcentaje}% =  ${Math.round(comision * 100) / 100} ${establecoin}</li><li>Usted Recibe =  <b>${Math.round(total * 100) / 100}</b> ${establecoin}</li>`);
+    $("#calculo_retiro").html(`<li>Deposito =  ${cantidad} " ${establecoin}</li><li>Comision de Red <b style='color:red;'> ${porcentaje}% =  ${Math.round(comision * 100) / 100}</b> ${establecoin}</li><li>Usted Recibe =  <b class='b-green;'>${Math.round(total * 100) / 100}</b> ${establecoin}</li>`);
 
 }
 
@@ -433,7 +449,7 @@ function calculo(){
 
     comision = (cantidad * porcentaje) / 100;
     total = cantidad - comision;    
-    $("#calculo").html(`<li>Deposito =  ${cantidad} " ${establecoin}</li><li>Comision de Red ${porcentaje}% =  ${Math.round(comision * 100) / 100} ${establecoin}</li><li>Usted Recibe =  <b>${Math.round(total * 100) / 100}</b> ${establecoin}</li>`);
+    $("#calculo").html(`<li>Deposito =  ${cantidad} " ${establecoin}</li><li>Comision de Red <b style='color:red;'> ${porcentaje}% =  ${Math.round(comision * 100) / 100}</b> ${establecoin}</li><li>Usted Recibe =  <b class='b-green'>${Math.round(total * 100) / 100} ${establecoin}</b></li>`);
 }
  
 function calificacion(n,cal,id){

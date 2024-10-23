@@ -48,8 +48,13 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
         .dialog-content {
                 text-align: center;
                 background: url('Assets/ayudabinance.jpg') no-repeat center/cover;
-
         }  
+
+        #modalOverlay{
+            display: flex;
+            justify-content: space-between;
+        }
+            
 
 
             .contenido h3{
@@ -92,62 +97,64 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
         <div class="common-background" style="background:black; padding:2rem;background: #00000078;padding: 2rem;border-radius: 17px;">
         <div class="vista" id="vista" >
 
-        
-        <dialog id="modalOverlay" >
-            <span id="closeModalBtn" class="close-btn" onclick="document.getElementById('modalOverlay').close();">X</span>
-                <h2>Depositar</h2>
+    <section class='overlay-common-dialog' id='overlay-common-dialog-2'>
+        <div class='common-dialog' id='modalOverlay'>
+            <span id="closeModalBtn" class="close-btn" onclick="closeOverlayModal();">X</span>
+                <h2 class='dialog-title'>Depositar</h2>
                 Selecciona un Cajero: 
-                <select onchange="selcajero()" id="micajero" style="color:black;">
+                <select onchange="selcajero()" id="micajero" class='select'>
                 </select>
                 <br>                 
                 Como Vas a Depositar: 
-                <select onchange="selpago()" id="comopago" style="color:black;"></select>
+                <select onchange="selpago()" id="comopago" style="margin-bottom: 2rem;" class='select'></select>
                 Establecoin:
-                <select id="establecoin" style="color:black;">
+                <select id="establecoin" style="margin-bottom: 2rem;" class='select'>
                     <option selected value="USDC">USDC</option>
                     <option value= "USDT">USDT</option>
                 </select>
                 <div id="detalles" style="display:none;width:100%;">
                     Cantidad a Depositar: 
-                    <input style="border:1px solid yellow;outline: none;background:olive;border-radius:5px; padding:3px;" type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" style="color:black;"><br>
-                    <div id="calculo" style="width:100%;color:black;float:right; background:white;padding:3px;border:none border-radius:5px;"></div><br>                    
+                    <input style="border: 1px solid #7aa891eb;outline: none;background: #42f87863;border-radius: 5px;padding: 3px;" type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" style="color:black;"><br>
+                    <div id="calculo" style="width: 100%;float: right;background: #24262f;border: none border-radius:5px;margin: 1rem 0;padding: 1rem;border: double 1px #337ab77d;color: white;"></div><br>                    
                     <br><br> <div id='descripcionMetodo'></div>
-                    <input readonly class="datcajero" style="width:100%;border:none;outline: none;" id="paycajero"><br>
+                    <input readonly class="datcajero" style="width: 100%;border: none;outline: none;background: #00000000;text-align: center;text-decoration: underline;margin-bottom: 1rem;font-size: 1.8rem;" id="paycajero"><br>
                     <div style="width:100%;text-align: center;">
                         <img style="" id='QRdeposito' src="">
                     </div>
                     <br>                    
                 </div><br><br>
-                <button onclick="jugar_back()" class='deposit-button' style="float:right;color:black;padding:8px;" type="button" id="jugar" name="jugar"><img style='width:1.2rem' src='./index-assets/img/in.png'>Depositar</button>
-        </dialog>
-
-        <dialog id="modalOverlay2">
-        <span id="closeModalBtn2" class="close-btn" onclick="document.getElementById('modalOverlay2').close();">X</span>
-                <h2>Retiros</h2>
+                <button onclick="jugar_back()" class='deposit-button' style="float:right;width:auto;" type="button" id="jugar" name="jugar"><img style='width:1.2rem' src='./index-assets/img/in.png'>Depositar</button>
+        </div>
+    </section>    
+    <section class='overlay-common-dialog' id='overlay-common-dialog-3'>
+        <div class='common-dialog' id='modalOverlay2'>    
+        <span id="closeModalBtn2" class="close-btn" onclick="closeModalOverlay2();">X</span>
+                <h2 class='dialog-title'>Retiros</h2>
                 <input type="hidden" id="tipo_retiro" name="tipo_retiro">
                 <br>
                 Selecciona un Cajero: 
-                <select onchange="selcajero_retiro()" id="micajero_retiro" style="color:black;">
+                <select onchange="selcajero_retiro()" id="micajero_retiro" style="margin-bottom:2rem;" class='select'>
                 </select>
                 <br>
                 Retirar con: 
-                <select required onchange="selretiro()" id="como_retiro" style="color:black;">
+                <select required onchange="selretiro()" id="como_retiro" style="margin-bottom:2rem;" class='select'>
                 </select>
                 Establecoin:
-                <select id="establecoin_retiro" style="color:black;">
+                <select id="establecoin_retiro" style="margin-bottom:2rem;" class='select'>
                     <option selected value="USDC">USDC</option>
                     <option value= "USDT">USDT</option>
                 </select>                
                 <div id="detalles_retiro" style="display:none;width:100%;">
                     Cantidad a Retirar: 
-                    <input style="border:1px solid yellow;outline: none;background:olive;border-radius:5px; padding:3px;" type="number" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0" style="color:black;"  step="1"><br>
-                    <div id="calculo_retiro" style="width:100%;color:black;float:right; background:white;padding:3px;border:none border-radius:5px;"></div><br><br>
+                    <input style="border: 1px solid #7aa891eb;outline: none;background: #42f87863;border-radius: 5px;padding: 3px;" type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" type="number" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0"  step="1"><br>
+                    <div id="calculo_retiro"  style="width: 100%;float: right;background: #24262f;border: none border-radius:5px;margin: 1rem 0;padding: 1rem;border: double 1px #337ab77d;color: white;"></div><br><br>
                     <br><br><div id='descripcionMetodoRetiro'></div>
-                    <input readonly class="datcajero" style="width:100%;border:none;outline: none;" id="paycliente">                    
+                    <input readonly class="datcajero" style="width: 100%;border: none;outline: none;background: #00000000;text-align: center;text-decoration: underline;margin-bottom: 1rem;font-size: 1.8rem;" id="paycliente">                    
                     <br>
                 </div><br><br>
-                <button onclick="retirar_back()" class='retire-button' style="float:right;color:black;padding:8px;" type="button" id="retirar_btn" name="retirar_btn"><img style='width:1.2rem' src='./index-assets/img/out.png'> Retirar</button>
-        </dialog>
+                <button onclick="retirar_back()" class='retire-button' style="float:right;width:auto;" type="button" id="retirar_btn" name="retirar_btn"><img style='width:1.2rem' src='./index-assets/img/out.png'> Retirar</button>
+            </div>
+        </section>
 
             <br>
            <!-- <div id="saldo"></div>        -->
@@ -170,6 +177,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                     </div>                    
 
                     <!-- Dialogo de informacion del usuario binance -->
+                     
                     <dialog id="info-dialog">
                         <div class="dialog-content"></div>
                         <br>
@@ -263,7 +271,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                         <h3>Retirar Tus Establecoin de la Plataforma</h3>
                     </div>
                     <div class="container mt-5 mb-5">
-                    <div class='button-container'>   <button id="buttonRetiro" class='retire-button' onclick="document.getElementById('modalOverlay2').show()">Retirar</button> </div>
+                    <div class='button-container'>   <button id="buttonRetiro" class='retire-button' onclick="showModalOverlay2();">Retirar</button> </div>
 
                                 <table id='example1' class='ui celled table' style='width:100%; '> 
                                     <thead>

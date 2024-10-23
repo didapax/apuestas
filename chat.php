@@ -248,6 +248,13 @@ dialog {
   </style>
 
 <script>
+
+function closeTecnoDialog() {
+            document.getElementById('tecno-dialog').style.display = 'none';
+            document.getElementById("overlay-common-dialog-1").style.display = 'none';
+        }
+        
+        
 function dibujarEstrellas(n) {
     var estrellas = '';
     for (var i = 0; i < n; i++) {
@@ -425,19 +432,23 @@ function enviarAsistencia(){
 <section class="hero hero-inside" >
 <div id="cuerpo" class="cuerpo" >
 
-                    <!-- Dialogo de Asistencia Tecnica -->
-                    <dialog id="tecno-dialog">
-                        <div class="contenido">
-                        <h3>Asistencia en Linea</h3>
-                        <label>Asunto Requerido:</label><input type"text" id="asuntoTecno">
+<section class='overlay-common-dialog' id='overlay-common-dialog-1'>
+                    <div class='common-dialog' id='tecno-dialog'>
+                        <div class="tecno-content">
+                        <h3 class='dialog-title'>Asistencia Tecnica</h3>
+                        <label>Asunto Requerido:</label><input type="text" id="asuntoTecno">
                         <br>
                         <label>Mensaje:</label>
                         <br><textarea id="mensajeTecno"></textarea>
+                        <div style='margin-top:1rem'>
+                            <button class="closeDialog-btn" onclick="closeTecnoDialog()">Cancelar</button>
+                            <button class="add-button" onclick="enviarAsistencia()">Enviar</button>
+                        </div>
+
                         </div>
                         <br>
-                        <button class="add-button" style="background: red;" onclick="document.getElementById('tecno-dialog').close()">Cancelar</button>
-                        <button class="add-button" onclick="enviarAsistencia()">Enviar</button>
-                    </dialog> 
+                    </div>  
+                  </section>
 
 <div class="progress-container">
     <h5 style='position:absolute;text-align:center;left:48%;opacity: 0.5;'>Progress</h5>

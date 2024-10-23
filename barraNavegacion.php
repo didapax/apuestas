@@ -141,7 +141,7 @@ $style = "";
                                                    </li>
 
                                                                                                       <li>
-                                                      <a href='perfiladmin'>
+                                                      <a href='perfilcliente'>
                                                          <i class='ri-account-circle-line'></i> Profile
                                                       </a>
                                                    </li>
