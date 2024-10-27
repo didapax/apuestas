@@ -3,28 +3,33 @@ include "modulo.php";
 if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 ?>
 <html>
-    <head>
-    <title>CriptoSignalGroup</title>
-        <meta charset="UTF-8">
+
+<head>
+        <title>CriptoSignalGroup</title>
+        <meta charset="UTF-8">        
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
-        <link rel="shortcut icon" href="Assets/favicon.png">        
-        <link rel="stylesheet" href="css/animate.min.css" />
+        <link rel="shortcut icon" href="Assets/favicon.png">
         <link rel="stylesheet" type="text/css" href="css/Common.css">
-        <link href='css/boxicons.min.css' rel='stylesheet'>     
-        <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />                 
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">        
-        <script src="https://code.jquery.com/jquery-3.5.0.js"></script>        
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>       
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="css/newStyles.css">
-       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">    
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.4/css/dataTables.semanticui.css"> 
-       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trumbowyg@2.25.1/dist/ui/trumbowyg.min.css">       
-
-    </head>
-    <header>
+        <link rel="stylesheet" type="text/css" href="index-assets/css/datatables.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+        <link rel="stylesheet" href="index-assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="index-assets/css/jquery.fancybox.css">
+        <link rel="stylesheet" href="index-assets/css/flexslider.css">
+        <link rel="stylesheet" href="index-assets/css/styles.css">
+        <link rel="stylesheet" href="index-assets/css/queries.css">
+        <link rel="stylesheet" href="index-assets/css/etline-font.css">
+        <link rel="stylesheet" href="index-assets/bower_components/animate.css/animate.min.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />        
+    </head> 
         <style>
+
+.dataTables_wrapper .dataTables_sort_icon {
+    display: none;
+}
+
           .textAreaContainer{
             background:white;
             color: black;
@@ -62,36 +67,54 @@ input[type="checkbox"] {
   text-transform: uppercase;
 }
 
-         .dialog_retiro{
-            top: 150px;
-            border: solid 1px black;
-            box-shadow: 4px 3px 8px 1px #969696;
-            background: #c1cae0;
-            border-radius: 5px;
-            z-index: 99;
+         .dialog_crear{
+            position: fixed;
+                top: 49%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 20px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                background-color: white;   
+                width: 80%;   
+                height: 88%;
+                overflow-y: auto;                             
+                z-index: 1000;
+                border: solid 1px gray;            
         }   
 
         dialog {
                 position: fixed;
-                top: 50%;
+                top: 49%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                border: none;
                 padding: 20px;
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
                 border-radius: 8px;
-                background-color: white;
+                background-color: white;   
+                width: 80%; 
+                height: 88%;
+                overflow-y: auto;                   
                 z-index: 1000000;
-                border:solid 1px gray;
+                border: solid 1px gray;            
+            }
+
+            dialog h2,h3{
+                font-size: 1rem;
+                color:black;
             }
 
             .dialog-content {
                 text-align: center;
-            } 
+            }
+
+            .dialog-content p{
+                color: black;
+            }
 
             .trumbowyg-modal {
-                z-index: 100050 !important; /* Ajusta este valor según sea necesario */
-            }            
+                z-index: 1000050 !important; /* Ajusta este valor según sea necesario */
+            }
         </style>        
         <script>
 
@@ -157,7 +180,10 @@ input[type="checkbox"] {
                 let orderFavorito = 0;
                 let orderAdelantado = 0;
                 let devuelveCapital = 0;
+                let titulo = document.getElementById("nombre").value;
 
+                document.getElementById('modalOverlay').close();
+                
                 if(document.getElementById('favorito').checked === true){
                     orderFavorito = 1;
                 }                
@@ -171,31 +197,55 @@ input[type="checkbox"] {
                 }                
 
                 document.getElementById("btncrear").disabled = true;
-                $.post("block",{
-                    crear: "",
-                    cajero: document.getElementById("correo").value,
-                    nombre: document.getElementById("nombre").value,
-                    descripcion: document.getElementById("summernote").value,
-                    min: document.getElementById("min").value,
-                    rate: document.getElementById("rate").value,
-                    favorito: orderFavorito,
-                    tipo: document.getElementById("tipoJuego").value,
-                    monto: document.getElementById("monto").value,
-                    porciento: document.getElementById("porciento").value,
-                    poradelantado: orderAdelantado,
-                    devuelveCapital: devuelveCapital,
-                    imagen: document.getElementById("imagen").value,
-                    foreground: document.getElementById("foreground").value
-                },function(data){
-                    leerVista();
-                    document.getElementById("btncrear").disabled = false;
-                    document.getElementById('modalOverlay').style.display = "none";
-                });
+                if(titulo){
+
+                    Swal.fire({
+                                        title: 'Suscripciones',
+                                        text: `Estas Seguro de Crear esta Tarjeta en el Sistema`,
+                                        icon: 'warning',
+                                        confirmButtonColor: '#EC7063',
+                                        confirmButtonText: 'Si Crear',
+                                        showCancelButton: true,
+                                        cancelButtonText: "Cancelar"
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                $.post("block",{
+                                                crear: "",
+                                                cajero: document.getElementById("correo").value,
+                                                nombre: document.getElementById("nombre").value,
+                                                descripcion: document.getElementById("summernote").value,
+                                                min: document.getElementById("min").value,
+                                                rate: document.getElementById("rate").value,
+                                                favorito: orderFavorito,
+                                                tipo: document.getElementById("tipoJuego").value,
+                                                monto: document.getElementById("monto").value,
+                                                porciento: document.getElementById("porciento").value,
+                                                poradelantado: orderAdelantado,
+                                                devuelveCapital: devuelveCapital,
+                                                imagen: document.getElementById("imagen").value,
+                                                foreground: document.getElementById("foreground").value
+                                            },function(data){
+                                                //leerVista();
+                                                document.getElementById("btncrear").disabled = false;                                                
+                                                window.location.href="jugadas";
+                                            });
+                                            }
+                                        });                  
+                }
+                else{
+                    Swal.fire({
+                                        title: 'Producto',
+                                        text: `No se pudo crear la  Tarjeta en el Sistema`,
+                                        icon: 'error',
+                                        confirmButtonColor: '#EC7063',
+                                        confirmButtonText: 'ok',
+                                        });
+                }
             }
 
             function borrar(id){
                 Swal.fire({
-                                        title: 'Suscripciones',
+                                        title: 'Productos',
                                         text: `Estas Seguro de Eliminar la Suscripcion del Sistema`,
                                         icon: 'warning',
                                         confirmButtonColor: '#EC7063',
@@ -207,7 +257,8 @@ input[type="checkbox"] {
                                                 $.post("block",{
                                                     borrar: id
                                                 },function(data){
-                                                    leerVista();
+                                                    //leerVista();
+                                                    window.location.href="jugadas";
                                                 });  
                                             }
                                         });  
@@ -217,7 +268,8 @@ input[type="checkbox"] {
                     $.post("block",{
                         cerrar: id
                     },function(data){
-                        leerVista();
+                        //leerVista();
+                        window.location.href="jugadas";
                     });
             }      
             
@@ -226,15 +278,22 @@ input[type="checkbox"] {
                         setAnalis: document.getElementById('idAnalisis').value,
                         analisis: document.getElementById('summerNoteAnalisis').value
                     },function(data){
-                        document.getElementById('modalOverlay2').style.display = "none";
-                        leerVista();
+                        document.getElementById('modalOverlay2').close();
+                        //leerVista();
+                        window.location.href="jugadas";
                     });
             }
             
             function leerVista(){
                 $.get("block?readJuegos=", function(data){
-                $("#tabla-cuerpo").html(data);
-                new DataTable('#example');
+                    $("#tabla-cuerpo").html(data);
+                    //new DataTable('#example');
+                    $('#example').DataTable({
+                        responsive: true,
+                        paging: true,
+                        searching: true
+                    });
+
                 });
             }
 
@@ -243,7 +302,7 @@ input[type="checkbox"] {
             }
 
             function showDialog(){
-                document.getElementById('modalOverlay').style.display = "flex";
+                document.getElementById('modalOverlay').show();
             }
 
             function analisis(id){    
@@ -254,7 +313,7 @@ input[type="checkbox"] {
                     $("#analisisDescripcion").html(datos.descripcion);
                     $('#summerNoteAnalisis').trumbowyg('html', datos.analisis);
                 });
-                document.getElementById('modalOverlay2').style.display = "flex";
+                document.getElementById('modalOverlay2').show();
             }
 
             function pagaIntereses(){                
@@ -345,14 +404,15 @@ input[type="checkbox"] {
             }
 
         </script>
-    </header>
-    <body onload="inicio()">
+    <body onload="inicio()" id="top">
     <?php $page = "jugadas"; ?>
-      <!--Iniciar Barra de Navegación @media 1200px-->
-      <?php include 'barraNavegacion.php';?>
-        <!--FIN Barra de Navegación @media 1200px-->             
-
-        <div id="cuerpo" class="cuerpo" style='margin-top: 8rem; overflow-x: hidden; padding:5rem; min-height: calc(100vh - 24rem);'>
+    <section class="navigation">
+                <header style='padding:40px 0;'>
+                    <?php include 'barraNavegacion.php'; ?>
+                </header>
+        </section>
+        <section class="hero hero-inside" >
+        <div id="cuerpo" class="cuerpo">
         <dialog id="info-dialog">
             <div class="dialog-content"></div>
             <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>            
@@ -363,11 +423,9 @@ input[type="checkbox"] {
             <button class='add-button' type="button" onclick="showDialog()">Agregar +</button>
         </div>
 
-
-        <div id="modalOverlay" class="modal-overlay">
-            <div class="modal">
-                <span id="closeModalBtn" class="close-btn">X</span>
-                <h2>Agregar Tarjeta</h2>
+        <dialog id="modalOverlay" class="dialog-crear">
+        <span id="closeModalBtn" class="close-btn" onclick="document.getElementById('modalOverlay').close();">X</span>
+                <h2 style="font-size:2rem;">Agregar Tarjeta</h2>
                     <div>
                         <h3>Titulo:</h3> 
                         <input type="text" id="nombre">
@@ -375,7 +433,7 @@ input[type="checkbox"] {
                                            
                     <div >
                         <h3>Tipo: </h3>
-                        <div style='display: flex;gap: 1rem;justify-content: center;'>
+                        <div style='display: flex;gap: 1rem;'>
                             <div style='display: flex;align-items: flex-start;gap: .2rem;'>
                             Normal: 
                                 <input title="Solo Insertar la Tarjeta" type="radio" id="ninguno" name="selectx">
@@ -433,7 +491,7 @@ input[type="checkbox"] {
 
                     <div >
                             <h3>Paga Intereses: </h3>
-                        <div style='display: flex;align-items: flex-start;justify-content: center;'>   
+                        <div >   
                             Si:   <input title="Paga Intereses.." type="checkbox" value="1" id="paga_intereses" onchange="pagaIntereses()">              
                         </div>
 
@@ -469,12 +527,10 @@ input[type="checkbox"] {
                     <div style='display: flex;align-self: end;align-items: center;justify-content: center;'>
                         <button style='margin-bottom:2rem;' class='add-button' type="button" id="btncrear" onclick="crear()">Agregar</button>
                     </div>
-            </div>
-        </div>
+        </dialog>
 
-        <div id="modalOverlay2" class="modal-overlay">
-            <div class="modal">
-                <span id="closeModalBtn2" class="close-btn">X</span>
+        <dialog id="modalOverlay2">
+            <span id="closeModalBtn" class="close-btn" onclick="document.getElementById('modalOverlay2').close();">X</span>
                 <h2>Analisis Tecnico</h2>
                 <div id="nameAnalisis"></div>
                 <div id="analisisDescripcion"></div>
@@ -482,18 +538,15 @@ input[type="checkbox"] {
                 <textarea  id="summerNoteAnalisis"></textarea>
 
                 <button class='add-button' style="float:right;" type="button" id="btncrear" onclick="setAnalis()">Enviar Analisis</button>
-            </div>
-        </div>
-
-        <div class="vista" id="vista"></div>
-        <table id='example' class='ui celled table' style='width:100%; '> 
+        </dialog>
+        <div class="common-background" style="background:black; padding:2rem;background: #00000078;padding: 2rem;border-radius: 17px;">
+        <div class="vista" id="vista">
+        <table id='example' class="ui celled table" style='width:100%; '> 
                         <thead>
                             <tr>
-                            <th>Fecha</th>
                             <th>Producto</th>
-                            <th>Descripcion</th>
                             <th>Tipo</th>
-                            <th>Usdc</th>
+                            <th>Monto</th>
                             <th>Opciones</th>
                             </tr>
                         </thead>
@@ -501,49 +554,86 @@ input[type="checkbox"] {
                         </tbody>
                     </table>        
         </div>
+        </div>
+        </div>
+        </section>
       <!--Iniciar footer-->
       <?php include 'footer.php';?>
         <!--FIN footer-->     
-    <script src='https://code.jquery.com/jquery-3.7.1.js'></script>   
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
-    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.js'></script> 
-    <script src='https://cdn.datatables.net/2.1.4/js/dataTables.semanticui.js'></script> 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js'></script> 
-    <script src="https://cdn.jsdelivr.net/npm/trumbowyg@2.25.1/dist/trumbowyg.min.js"></script>
-<script>
-        const modalOverlay = document.getElementById('modalOverlay');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const modalOverlay2 = document.getElementById('modalOverlay2');
-        const closeModalBtn2 = document.getElementById('closeModalBtn2');        
+        <script>
+                var acc = document.getElementsByClassName("accordion");
+                var i;
 
-        // Función para cerrar el modal
-        closeModalBtn.addEventListener('click', () => {
-            modalOverlay.style.display = 'none';
-        });
+                for (i = 0; i < acc.length; i++) {
+                    acc[i].addEventListener("click", function () {
+                        this.classList.toggle("active");
+                        this.parentElement.classList.toggle("active");
 
-        // Cerrar el modal al hacer clic fuera de él
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                modalOverlay.style.display = 'none';
-            }
-        });
+                        var pannel = this.nextElementSibling;
 
-        // Función para cerrar el modal2
-        closeModalBtn2.addEventListener('click', () => {
-            modalOverlay2.style.display = 'none';
-        });
+                        if (pannel.style.display === "block") {
+                            pannel.style.display = "none";
+                        } else {
+                            pannel.style.display = "block";
+                        }
+                    });
+                }
+            </script>
 
-        // Cerrar el modal al hacer clic fuera de él
-        modalOverlay2.addEventListener('click', (e) => {
-            if (e.target === modalOverlay2) {
-                modalOverlay2.style.display = 'none';
-            }
-        });        
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+            <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+            <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+            <script type="text/javascript" charset="utf8"src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+            
+            <script src="bower_components/retina.js/dist/retina.js"></script>
+            <script src="index-assets/js/jquery.fancybox.pack.js"></script>
+            <script src="index-assets/js/vendor/bootstrap.min.js"></script>
+            <script src="index-assets/js/scripts.js"></script>
+            <script src="index-assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+            <script src="index-assets/js/jquery.flexslider-min.js"></script>
+            <script src="index-assets/bower_components/classie/classie.js"></script>
+            <script src="index-assets/bower_components/jquery-waypoints/lib/jquery.waypoints.min.js"></script>
+            
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/ui/trumbowyg.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/trumbowyg.min.js"></script>
+            <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
+            <script>
+                    (function (b, o, i, l, e, r) {
+                        b.GoogleAnalyticsObject = l; b[l] || (b[l] =
+                            function () { (b[l].q = b[l].q || []).push(arguments) }); b[l].l = +new Date;
+                        e = o.createElement(i); r = o.getElementsByTagName(i)[0];
+                        e.src = '//www.google-analytics.com/analytics.js';
+                        r.parentNode.insertBefore(e, r)
+                    }(window, document, 'script', 'ga'));
+                ga('create', 'UA-XXXXX-X', 'auto'); ga('send', 'pageview');
+            </script>
+            <script>
+                var acc = document.getElementsByClassName("accordion");
+                var i;
 
-    </script>
+                for (i = 0; i < acc.length; i++) {
+                    acc[i].addEventListener("click", function () {
+                        this.classList.toggle("active");
+                        this.parentElement.classList.toggle("active");
+
+                        var pannel = this.nextElementSibling;
+
+                        if (pannel.style.display === "block") {
+                            pannel.style.display = "none";
+                        } else {
+                            pannel.style.display = "block";
+                        }
+                    });
+                }
+            </script>
+      
         <script>
         $(document).ready(function() {
             $('#summerNoteAnalisis').trumbowyg();
+            //$('#example').addClass('ui celled table');
         });
     </script>   
 

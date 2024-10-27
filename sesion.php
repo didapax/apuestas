@@ -21,7 +21,8 @@
             }
 
             body{
-                background: lightblue;
+                height: 100vh;
+                background: linear-gradient(45deg, black, #3575d691);
             }            
 
             .content{
@@ -141,6 +142,7 @@
                 text-decoration: underline;
             }
 
+            
 
         </style>        
         <script>            
@@ -158,14 +160,14 @@
                         if(datos.result == true ){
                             if(datos.verificado == '0'){
                                 Swal.fire({
-                                title: 'Falta Verificacion',
-                                text: "Correo no Verificado revisa tu bandeja de entrada...! o deseas reenviar el codigo de verificacion a tu correo..?",
+                                title: 'Verification pending:',
+                                text: "Your email address is not verified yet. Please check your inbox for the verification code or request a new one to be sent.",
                                 icon: 'warning',
                                 confirmButtonColor: '#3085d6',
-                                confirmButtonText: 'Si Verificar',
+                                confirmButtonText: 'Yes, verify',
                                 confirmButtonColor: '#3085d6',
                                 showCancelButton: true,
-                                cancelButtonText: "No ya lo Tengo"
+                                cancelButtonText: "No, I already have it"
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         $.post("block.php",{
@@ -184,8 +186,8 @@
                                 }
                                 else{
                                     Swal.fire({
-                                    title: 'Iniciar Sesion',
-                                    text: "Usuario o Password Incorrectos...! Intente de Nuevo",
+                                    title: 'Log In',
+                                    text: "Either the username or the password don't match. Please try again",
                                     icon: 'warning',
                                     confirmButtonColor: '#3085d6',
                                     confirmButtonText: 'Ok'
@@ -201,8 +203,8 @@
                         else{
                             document.getElementById("btn_registro").disabled = true;
                             Swal.fire({
-                            title: 'Registrarse',
-                            text: `Email ${datos.correo} No Registrado.! Deseas Unirte a Cryptosignal?`,
+                            title: 'Sign in',
+                            text: `Email ${datos.correo} is not signed.! Would you like to join the signal!?`,
                             icon: 'info',
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'Si Unirme',
@@ -222,7 +224,7 @@
                     else{
                         Swal.fire({
                         title: 'Error',
-                        text: "El Pasword debe contener al menos 8 caracteres",
+                        text: "Password must have at least 8 characters",
                         icon: 'error',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok'
@@ -232,7 +234,7 @@
                 else{
                     Swal.fire({
                         title: 'Error',
-                        text: "Coloque un correo Valido",
+                        text: "Choose a valid Email",
                         icon: 'error',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok'
@@ -249,8 +251,8 @@
                     },
                     function(data){
                         Swal.fire({
-                        title: 'Recuperar o Cambiar',
-                        text: "Revisa tu Correo y Ejecuta el Link que se te envio, Cambia tu clave Nuevamente..!",
+                        title: 'Recover or change',
+                        text: "Check your email and follow the link that was sent to you. Change your password again.",
                         icon: 'info',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok'
@@ -259,7 +261,7 @@
                 }else{
                     Swal.fire({
                         title: 'Error',
-                        text: "Coloque un correo Valido para Recuperar o cambiar tu Contraseña",
+                        text: "Enter a valid email address to recover or change your password.",
                         icon: 'error',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok'
@@ -302,14 +304,14 @@
                 <div name="g-recaptcha-response" id="g-recaptcha-response" class="g-recaptcha" data-sitekey="6Ld1nA0aAAAAAA7F7eJOY7CMwg7aaQAfg3WZy6P0" style='display: none;align-items: center;justify-content: center;'></div>
                 <button type="button" onclick="registro()" id="btn_registro"> Inicio </button>
 
-                <div class="terms" id="terminos" ><u>Terminos y Condiciones</u><br>
-                    <p>Al hacer Click en Inicio Usted esta Aceptando estos Terminos y Condiciones, <b>Derechos de los Inversores:</b>
-Los inversores en Cryptosignal tienen sus participaciones expresadas en una tarjeta única, la cual indica el monto a ganar por su participación. Esta tarjeta es un reflejo directo de su inversión y los beneficios asociados.
-<b>Propiedad Exclusiva:</b> Los inversores son poseedores única y exclusivamente de la tarjeta en la que participen. Esta tarjeta representa su participación en el fondo y los derechos a los beneficios generados por dicha participación.
-<b>Intransferibilidad:</b> Las tarjetas son intransferibles y no se pueden vender o revender a otros usuarios. Esto asegura que la propiedad y los beneficios de la inversión permanezcan con el inversor original, manteniendo la integridad y la seguridad del fondo.</p>
+                <div class="terms" id="terminos" ><u>Terms of use</u><br>
+                <p>By clicking "Start", you are accepting these Terms and Conditions, <b>Investors' Rights:</b>
+Investors in Cryptosignal have their holdings represented by a unique card, which indicates the amount to be earned for their participation. This card is a direct reflection of their investment and the associated benefits.
+<b>Exclusive Ownership:</b> Investors are the sole and exclusive owners of the card in which they participate. This card represents their participation in the fund and the rights to the benefits generated by such participation.
+<b>Non-Transferability:</b> Cards are non-transferable and cannot be sold or resold to other users. This ensures that ownership and benefits of the investment remain with the original investor, maintaining the integrity and security of the fund.</p>
                 </div>
             </form>
-            <div class='forgot-password-container'> <a onclick="recuperar()">Olvide Mi Contraseña</a> <a style="margin-left:34px;" onclick="unirse()">Unirse / Registrarse</a></div>
+            <div class='forgot-password-container'> <a onclick="recuperar()">Forgot my password?</a> <a style="margin-left:34px;" onclick="unirse()">Sign In</a></div>
         </div>
 
     </body>

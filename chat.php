@@ -5,38 +5,37 @@
 
 <!DOCTYPE html>
 <html lang="es" >
-<head>
-  <meta charset="UTF-8">
-  <title>Soporte</title>
-  <link rel="shortcut icon" href="Assets/favicon.png">
-  <!--<link rel="stylesheet" href="./style2.css">-->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--CSS File-->
+<head> 
+    <title>CriptoSignalGroup</title>
+        <meta charset="UTF-8">        
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />        
+        <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
+        <link rel="shortcut icon" href="Assets/favicon.png">
         <link rel="stylesheet" type="text/css" href="css/Common.css">
-        <link rel="stylesheet" type="text/css" href="css/Account.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="css/newStyles.css">
-        <!-- Font Awesome -->
-        <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />
-        <!--BOXICONS-->
-        <link rel="stylesheet" type="text/css" href="css/icons.css">
-        <!-- Animate CSS -->
-        <link rel="stylesheet" type="text/css" href="css/animate.min.css">
-        <script src="https://code.jquery.com/jquery-3.5.0.js"></script> 
-    <!-- Incluir Bootstrap CSS -->
-     <!-- Incluir Bootstrap CSS -->
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> 
-</head>
+        <link rel="stylesheet" type="text/css" href="index-assets/css/datatables.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+        <link rel="stylesheet" href="index-assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="index-assets/css/jquery.fancybox.css">
+        <link rel="stylesheet" href="index-assets/css/flexslider.css">
+        <link rel="stylesheet" href="index-assets/css/styles.css">
+        <link rel="stylesheet" href="index-assets/css/queries.css">
+        <link rel="stylesheet" href="index-assets/css/etline-font.css">
+        <link rel="stylesheet" href="index-assets/bower_components/animate.css/animate.min.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    </head>
   <style>
 .progress-container {
     width: 100%;
-    background-color: #f1f1f1;
+    background: url(./index-assets/img/charge.png);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-size: cover;
+    border-radius: 3rem;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
   }
 
   .progress-bar {
@@ -54,9 +53,9 @@
     color: white;
   }
 
-  #label1 { background-color: #4caf50; }
+  #label1 { background-color: #4caf50; border-radius: 51px 0px 0px 51px; }
   #label2 { background-color: #2196f3; }
-  #label3 { background-color: #ff9800; }
+  #label3 { background-color: #ff9800; border-radius: 0 51px 51px 0px; }
   #label4 { background-color: #f44336; }
 
   /* width */
@@ -86,22 +85,22 @@
     color: black;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    background: linear-gradient(45deg, #f1f1f1, transparent);
-    width: 100%;
+    background:linear-gradient(45deg, #000000, #292c37c2);
     height: 25rem; 
 }
 
 
 .chatOuterContainer{
-  display: inline-block;
   width:100%;
-  flex-direction: row;
   justify-content: space-between;
+  background: #254b6a;
+  display: flex;
+  flex-direction: row;
 }
 
 .chatData{
-  border: solid 1px #e1e1e1;
-  box-shadow: 0px 2px 5px 0px #c3c3c3;
+  border: solid 1px black;
+  box-shadow: 0px 2px 5px 0px black;
   padding: .7rem;
   font-size: 1.4rem;
 }
@@ -111,8 +110,9 @@
 }
 
 .chatBox{
-  border: 1px solid #c9c9c9;
-  box-shadow: -2px 6px 11px 4px #f3f3f3;
+  border: 1px solid black;
+  box-shadow: 0px 1px 5px 1px black;
+  height: 34.5rem;
 }
 
 .inputChatContainer{
@@ -128,12 +128,12 @@
 }
 
 .inputChat{
-    font-size: 16px;
-    color: #414141;
+  font-size: 16px;
+    color: #ffffff;
     display: inline-block;
     border: none;
     padding: 21px;
-    background: #efefef;
+    background: linear-gradient(45deg, #000000, #292c37c2);
     padding: 0.2rem;
     border-radius: 2rem;
 }
@@ -158,6 +158,7 @@
 
 .chatSec{
   display: inline;
+  width: 50%;
 }
 
 .data{
@@ -167,11 +168,12 @@
 }
 
 .dataSec{
-  border-right: 1px solid #e7e7e7;
-    border-bottom: 1px solid #dddddd;
-    border-left: 1px solid #f1f1f1;
+    width: 50%;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
     padding: 1rem;
-    background: linear-gradient(45deg, whitesmoke, transparent);
+    background: linear-gradient(45deg, #000000, #292c37c2);
 }
 
 .pay{
@@ -217,9 +219,42 @@ dialog {
             .contenido h3{
                 text-align: center;
             }
+
+            .tab-section{
+              display: flex;
+              justify-content: center;
+              display:none;
+            }
+
+            @media screen and (max-width: 950px) {
+
+              .dataSec {
+                width: 100%;
+              }
+
+              .chatSec {
+                width: 100%;
+                display: none;
+              }
+
+              .tab-section{
+              display:block;
+              justify-content: center;
+              display: flex;
+            }
+
+          }
+
   </style>
 
 <script>
+
+function closeTecnoDialog() {
+            document.getElementById('tecno-dialog').style.display = 'none';
+            document.getElementById("overlay-common-dialog-1").style.display = 'none';
+        }
+        
+        
 function dibujarEstrellas(n) {
     var estrellas = '';
     for (var i = 0; i < n; i++) {
@@ -310,13 +345,14 @@ function seltickect(){
   document.getElementById('ticked').value = document.getElementById('selectTicket').value;
   readTicket();
   inicio();
-  $("#input-chat").css("display","flex");
+  /*$("#input-chat").css("display","flex");*/
 }
 
 function mostrarTecnoDialog() {
             const tecnoDialog = document.getElementById("tecno-dialog");
-            tecnoDialog.showModal();
-}
+            document.getElementById("overlay-common-dialog-1").style.display = 'flex';
+            tecnoDialog.style.display = 'block';            
+} 
 
 function enviarAsistencia(){
             const tecnoDialog = document.getElementById("tecno-dialog");
@@ -324,15 +360,15 @@ function enviarAsistencia(){
             const asunto = document.getElementById("asuntoTecno").value;
             const mensaje = document.getElementById("mensajeTecno").value;
             if(asunto && mensaje){
-                tecnoDialog.close();
+              closeTecnoDialog();
                 Swal.fire({
                     title: 'Cryptosignal',
-                    text: `Se procedera a Abrir un Ticket de Soporte con su Caso ${asunto}`,
+                    text: `A support ticket will be opened for your case. ${asunto}`,
                     icon: 'warning',
                     confirmButtonColor: '#EC7063',
-                    confirmButtonText: 'Si Gracias',
+                    confirmButtonText: 'Yes, Thanks',
                     showCancelButton: true,
-                    cancelButtonText: "No Cancelar"
+                    cancelButtonText: "No, Cancel"
                     }).then((result) => {
                         if (result.isConfirmed) {    
                             $.post("servermail",{
@@ -342,8 +378,8 @@ function enviarAsistencia(){
                                 mensaje: mensaje
                             },function(data){
                                     Swal.fire({
-                                                title: 'Soporte Tecnico Asistencia',
-                                                text: "Tu Ticket de Asistencia esta en proceso en un plazo de 24 a 48 horas seras atendido en tu correo registrado en la plataforma,  esta atento Gracias y disculpe los inconvenientes",
+                                                title: 'Technical Support Assistance',
+                                                text: "Your support ticket is currently being processed. Please allow 24-48 hours for a response to your registered email address. Thank you for your patience.",
                                                 icon: 'info',
                                                 confirmButtonColor: '#3085d6',
                                                 confirmButtonText: 'Ok'
@@ -356,7 +392,7 @@ function enviarAsistencia(){
                 tecnoDialog.close();
                 Swal.fire({
                     title: 'Cryptosignal',
-                    text: "Faltan datos no se puede crear un ticket vacio.!",
+                    text: "Insufficient data provided. Please complete all required fields to create a ticket.",
                     icon: 'error',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Ok'
@@ -365,12 +401,14 @@ function enviarAsistencia(){
         }
 
   </script>
-<body >
+<body id="top">
 
 <?php $page = "chat"; ?>
-      <!--Iniciar Barra de Navegación @media 1200px-->
-      <?php include 'barraNavegacion.php';?>
-        <!--FIN Barra de Navegación @media 1200px-->  
+<section class="navigation">
+                <header style='padding:40px 0;'>
+                    <?php include 'barraNavegacion.php'; ?>
+                </header>
+</section> 
 
   <?php  
   $notificaciones = "0";
@@ -392,41 +430,60 @@ function enviarAsistencia(){
    ?>
 <!-- partial:index.partial.html -->
 <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" id="correo">
-<div id="cuerpo" class="cuerpo" style='margin-top: 8rem; padding:5rem; min-height: calc(100vh - 24rem);'>
+<section class="hero hero-inside" >
+<div id="cuerpo" class="cuerpo" >
 
-                    <!-- Dialogo de Asistencia Tecnica -->
-                    <dialog id="tecno-dialog">
-                        <div class="contenido">
-                        <h3>Asistencia en Linea</h3>
-                        <label>Asunto Requerido:</label><input type"text" id="asuntoTecno">
+<section class='overlay-common-dialog' id='overlay-common-dialog-1'>
+                    <div class='common-dialog' id='tecno-dialog'>
+                        <div class="tecno-content">
+                        <h3 class='dialog-title'>Technical Assistance</h3>
+                        <label>Required Subject:</label><input type="text" id="asuntoTecno">
                         <br>
-                        <label>Mensaje:</label>
+                        <label>Message:</label>
                         <br><textarea id="mensajeTecno"></textarea>
+                        <div style='margin-top:1rem'>
+                            <button class="closeDialog-btn" onclick="closeTecnoDialog()">Cancel</button>
+                            <button class="add-button" onclick="enviarAsistencia()">Send</button>
+                        </div>
+
                         </div>
                         <br>
-                        <button class="add-button" style="background: red;" onclick="document.getElementById('tecno-dialog').close()">Cancelar</button>
-                        <button class="add-button" onclick="enviarAsistencia()">Enviar</button>
-                    </dialog> 
+                    </div>  
+                  </section>
 
 <div class="progress-container">
+    <h5 style='position:absolute;text-align:center;left:48%;opacity: 0.5;'>Progress</h5>
     <div class="progress-label" id="label1"></div>
     <div class="progress-label" id="label2"></div>
     <div class="progress-label" id="label3"></div>
     <div class="progress-bar" id="my-progress"></div>
 </div>
+<section class='tab-section'>
+  <ul class='nav nav-tabs'>
+  <li onclick="swapZIndex(document.getElementById('dataSec'), document.getElementById('chatSec'))">
+  <a>Datos</a> </li>
 
+  <li onclick="swapZIndex(document.getElementById('chatSec'), document.getElementById('dataSec'))">
+  <a>Chat</a>
+</li>
+
+  </ul>
+</section> 
 <div class='chatOuterContainer'> 
-<section class='dataSec'>
+<section class='dataSec' id='dataSec'>
 <div class='data'>
-  <h3 >SOPORTE CRYPTOSIGNAL</h3>
-  <a class='binance-button'  style=" cursor:pointer;background: antiquewhite; margin-top:25px;font-size:13px;text-decoration:none;color:black;" onclick="mostrarTecnoDialog()">
-  Ayuda Asistencia en Linea
+  <h3 >SUPPORT CHAT</h3>
+  <a class='binance-button'  style=" cursor:pointer;background: antiquewhite; margin-top:25px;font-size:1rem;text-decoration:none;color:black;" onclick="mostrarTecnoDialog()">
+    Help yourself with online assistance!
   </a><br>  
     <div style="margin-top:21px;">
-      <h5>Chat directo con el Cajero</h5>
-      <span style="font-size:11px; font-weight:bold;">Seleccione un Deposito/Retiro Activo: </span>
-      <select id="selectTicket" onchange="seltickect()" style="color:black;">
-      <option value="">seleccione</option>
+      <h5 style='margin: 0;'>Chat directly with a customer service representative</h5>
+      <span style='font-size: 1.2rem;font-weight: bold;'>DATE:</span> <span id=fecha style='font-size: 1.2rem;font-weight: bold;'></span><br>
+
+      <div style='border-bottom: 1px solid gray;margin-top: 1rem;'>
+      <span style="font-size:1.4rem; font-weight:bold;">Select a Current Deposit or Withdrawal:</span>
+      <select id="selectTicket" onchange="seltickect()" style="width:60%;color:black;">
+      <option value="">Select</option>
       <?php 
         $correo= readClienteId($_SESSION['user'])['CORREO'];
         $resultado = sqlconector("SELECT * FROM TRANSACCIONES WHERE PAGADO=0 AND CLIENTE='$correo'");
@@ -437,34 +494,33 @@ function enviarAsistencia(){
           echo "<option value='{$ticket}'>".$row['DESCRIPCION']." por {$monto}{$moneda}</option>";
         }        
       ?>
-      </select>     
+      </select> 
+      <div>    
       <br>
-      Fecha: <span id=fecha></span><br>
     </div>
 
 </div>
 
-<div>
-  <div id="wallet">Calificaciones</div>
+<div style='padding-top: 1rem;'>
   <b><span id="detalle"></span></b><br>
   <span id="msj"></span> <b><span class='pay' id=totalPagar></span></b> <span style='font-size:1rem;'></span><br>
-  Metodo de Pago: <b><span id=metodoPago></span></b><br>
+  Payment Method: <b><span id=metodoPago></span></b><br>
 
 </div>
 
 <div class='estadoContainer'>
     <p>
 
-      Estatus en : <span id=estado></span>
+      Status: <span id=estado ></span>
       <?php 
         if($_SESSION['nivel']==1){
           ?>
         <select id="cambioEstado" name="estado" onchange="cambiarEstado()">
-            <option id="">selecciona...</option>
-            <option id="REVISION" value="REVISION">En Revision</option>
-            <option id="ESPERA" value="ESPERA">En Proceso</option>
-            <option id="EXITOSO" value="EXITOSO">Exitoso</option>
-            <option id="FALLIDO" value="FALLIDO">Fallido</option> 
+            <option id="">Select!</option>
+            <option id="REVISION" value="REVISION">Under Review</option>
+            <option id="ESPERA" value="ESPERA">In Process</option>
+            <option id="EXITOSO" value="EXITOSO">Successful</option>
+            <option id="FALLIDO" value="FALLIDO">Failed</option>
         </select>
           <?php
         }
@@ -474,19 +530,28 @@ function enviarAsistencia(){
 </div>
 </section>
 
-    <section class='chatSec'>
+    <section class='chatSec' id='chatSec'>
       <div class='chatData'>
-        <h5 ><?php if($_SESSION['nivel']==1) echo "Cliente: "; else echo "Cajero: ";?> <span id=usuario></span></h5>
+        <h5 ><?php if($_SESSION['nivel']==1) echo "Cliente: "; else echo "operator: ";?> <span id=usuario></span></h5>
       </div>
 
-      <div class='chatBox'>
+      <div class="chatBox" style='height: 37rem;'>
 
-        <div class="mi-div-con-scroll" id='chat'></div>
+        <div class="mi-div-con-scroll" id="chat"></div>
 
-        <div class='inputChatContainer' id="input-chat">
-        <input class='inputChat' style='width: 100%;' autocomplete='off' id="mensaje"  onkeyup='myFunction(event)'>
+        <div class="inputChatContainer" id="input-chat">
+          <input class='inputChat' style='width: 100%;' autocomplete='off' id="mensaje"  onkeyup='myFunction(event)'>
         
-        <button class='sendButton' onclick="chat()"><i class='bx--send'></i></button>
+          <button type="button" class="sendButton" onclick="chat()" style='padding: 0;
+    background: linear-gradient(45deg, #5f9ea1, transparent);
+    color: white;
+    border: 1px solid;
+    width: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    transform: rotate(180deg);'><i class="bx--send"></i>⫷</button>
       </div>
    </section>
 
@@ -502,38 +567,39 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel']==0){
 }
 ?>
 </div>
+</section> 
         <!--Iniciar footer-->
               <?php include 'footer.php';?>
         <!--FIN footer-->    
 <script>
-$("#input-chat").css("display","none");
+/*$("#input-chat").css("display","none");*/
 const progressBar = document.getElementById("my-progress");
 
 let progressValue = 0; // Cambia este valor según el progreso real
 
 function updateProgressBar(label) {
   switch (label) {
-    case "REVISION":
+    case "Under Review":
       document.getElementById("label1").innerText =  "";
       document.getElementById("label2").innerText =  "";
-      document.getElementById("label1").innerText =  "EN REVISION";
+      document.getElementById("label1").innerText =  "Under Review";
       progressValue += 20;
     break;
-    case "ESPERA":
-      document.getElementById("label1").innerText =  "EN REVISION";
-      document.getElementById("label2").innerText =  "EN ESPERA";
+    case "In Process":
+      document.getElementById("label1").innerText =  "Under Review";
+      document.getElementById("label2").innerText =  "In Process";
       progressValue += 40;
     break;
-    case "EXITOSO":
-      document.getElementById("label1").innerText =  "EN REVISION";
-      document.getElementById("label2").innerText =  "EN ESPERA";
-      document.getElementById("label3").innerText =  "EXITOSO";
+    case "Successful":
+      document.getElementById("label1").innerText =  "Under Review";
+      document.getElementById("label2").innerText =  "In Process";
+      document.getElementById("label3").innerText =  "Successful";
       progressValue += 80;
     break;     
-    case "FALLIDO":
+    case "Failed":
       document.getElementById("label1").innerText =  "";
       document.getElementById("label2").innerText =  "";
-      document.getElementById("label3").innerText =  "FALLIDO";
+      document.getElementById("label3").innerText =  "Failed";
       progressValue += 100;
     break;       
   }
@@ -545,12 +611,89 @@ function updateProgressBar(label) {
 setInterval(() => {
   let id = document.getElementById('ticked').value;
     $.get("serverChat.php?tiketPedido=&idpedido="+id,
-                    function(data){                        
+                    function(data){
                         var datos= JSON.parse(data);
                         updateProgressBar(datos.estatus);
                     });  
   
 }, 3000);
 </script>
+
+<script>
+                var acc = document.getElementsByClassName("accordion");
+                var i;
+
+                for (i = 0; i < acc.length; i++) {
+                    acc[i].addEventListener("click", function () {
+                        this.classList.toggle("active");
+                        this.parentElement.classList.toggle("active");
+
+                        var pannel = this.nextElementSibling;
+
+                        if (pannel.style.display === "block") {
+                            pannel.style.display = "none";
+                        } else {
+                            pannel.style.display = "block";
+                        }
+                    });
+                }
+                
+            </script>
+
+            <script>
+            function swapZIndex(element,element2) {
+              // Obtener los valores actuales de z-index de los elementos
+              element.style.display = 'block';
+              element2.style.display = 'none';
+            }
+            </script>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+            <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+            <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+            <script type="text/javascript" charset="utf8"src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+            
+            <script src="bower_components/retina.js/dist/retina.js"></script>
+            <script src="index-assets/js/jquery.fancybox.pack.js"></script>
+            <script src="index-assets/js/vendor/bootstrap.min.js"></script>
+            <script src="index-assets/js/scripts.js"></script>
+            <script src="index-assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+            <script src="index-assets/js/jquery.flexslider-min.js"></script>
+            <script src="index-assets/bower_components/classie/classie.js"></script>
+            <script src="index-assets/bower_components/jquery-waypoints/lib/jquery.waypoints.min.js"></script>
+            <script src="Javascript/SweetAlert/sweetalert2.all.min.js"></script>
+
+            <script>
+                    (function (b, o, i, l, e, r) {
+                        b.GoogleAnalyticsObject = l; b[l] || (b[l] =
+                            function () { (b[l].q = b[l].q || []).push(arguments) }); b[l].l = +new Date;
+                        e = o.createElement(i); r = o.getElementsByTagName(i)[0];
+                        e.src = '//www.google-analytics.com/analytics.js';
+                        r.parentNode.insertBefore(e, r)
+                    }(window, document, 'script', 'ga'));
+                ga('create', 'UA-XXXXX-X', 'auto'); ga('send', 'pageview');
+            </script>
+            <script>
+                var acc = document.getElementsByClassName("accordion");
+                var i;
+
+                for (i = 0; i < acc.length; i++) {
+                    acc[i].addEventListener("click", function () {
+                        this.classList.toggle("active");
+                        this.parentElement.classList.toggle("active");
+
+                        var pannel = this.nextElementSibling;
+
+                        if (pannel.style.display === "block") {
+                            pannel.style.display = "none";
+                        } else {
+                            pannel.style.display = "block";
+                        }
+                    });
+                }
+            </script>  
 </body>
 </html>

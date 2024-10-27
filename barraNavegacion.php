@@ -1,6 +1,8 @@
-<!DOCTYPE html>
-   <html lang="en">
-   <head>
+<?php
+$page = "home";
+$style = "";
+?>
+
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,205 +11,215 @@
 
       <!--=============== CSS ===============-->
       <link rel="stylesheet" href="css/navBar.css">
-
-      <title>Responsive dropdown menu </title>
-   </head>
-   <body>
-      <!--=============== HEADER ===============-->
-      <header class="header">
-         <nav class="navbar navbar-container">
-            <div class="nav__data">
-               <a href="index" class="nav__logo">
-                  <img class='logo' src='./Assets/logotype.png'> CryptoSignal
-               </a>
-               
-               <div class="nav__toggle" id="nav-toggle">
-                  <i class="ri-menu-line nav__burger"></i>
-                  <i class="ri-close-line nav__close"></i>
-               </div>
       
 
-            <!--=============== NAV MENU ===============-->
-            <div class="nav__menu" id="nav-menu">
-               <ul class="nav__list">
-                  <?php 
-                   if(!isset($_SESSION['secured'])){
-                     echo "<li><a href='sesion' class='nav__link'>Iniciar Sesión</a></li>";
-                 }else{
-                     $notificaciones = countNotif($_SESSION['user']);
-                     $style = "";
-                     if($notificaciones>0){
-                       $style = "style='border-top: solid 1px red;'";
-                     }
-                  }
+   <div class="header-content" style='display: flex;align-items: center;'>
+                     <div style='display: flex;align-items: center;'>
+                     <img src="./assets/logotype.png" alt="" style='width:4rem;'> 
+                    <div class="logo" onclick="window.location.href='index'">
+                       CryptoSignal
+                    </div>
+                    </div>
+                    <div class="header-nav">
+                        <nav>
+                            <ul class="primary-nav">
+                               <?php
+                                    if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secured'])){
+                                    
+                                       if($page=="home"){
+                                       echo "<li><a href='tienda'>Store</a></li>";
+                                       }else{
+                                          echo "<li><a href='tienda'>Store</a></li>";
+                                       }
+                                       if($page=="chat"){
+                                       echo "<li><a href='chat'  $style>Support</a></li>";
+                                       }else{
+                                          echo "<li><a href='chat' $style>Support</a></li>";
+                                       }
+                                       if($page=="wallet"){
+                                       echo "<li><a href='miwallet'>Wallet</a></li>";
+                                       }
+                                       else{
+                                          echo "<li><a href='miwallet'>Wallet</a></li>";
+                                       }
+                                       if($page=="histcliente"){
+                                       echo "<li><a href='historialcliente'>Subscriptions</a></li>";
+                                       }
+                                       else{
+                                          echo "<li><a href='historialcliente' >Subscriptions</a></li>";
+                                       }        
+                                    }
 
-                  if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secured'])){
-                   
-                     if($page=="home"){
-                       echo "<li><a href='index' class='nav__link active'>Tienda</a></li>";
-                     }else{
-                        echo "<li><a href='index' class='nav__link'>Tienda</a></li>";
-                     }
-                     if($page=="chat"){
-                       echo "<li><a href='chat' class='nav__link active' $style>Soporte</a></li>";
-                     }else{
-                        echo "<li><a href='chat' class='nav__link' $style>Soporte</a></li>";
-                     }
-                     if($page=="wallet"){
-                       echo "<li><a href='miwallet' class='nav__link active'>Cartera</a></li>";
-                     }
-                     else{
-                        echo "<li><a href='miwallet' class='nav__link'>Cartera</a></li>";
-                     }
-                     if($page=="histcliente"){
-                       echo "<li><a href='historialcliente' class='nav__link active'>Suscripciones</a></li>";
-                     }
-                     else{
-                        echo "<li><a href='historialcliente' class='nav__link'>Suscripciones</a></li>";
-                     }                    
+                                    else if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1 && isset($_SESSION['secured'])){
+                                       if($page=="home"){
+                                          echo "<li><a href='tienda' >Store</a></li>";
+                                       }else{
+                                          echo "<li><a href='tienda' >Store</a></li>";
+                                       }                  
+                                       if($page=="histadmin"){
+                                         echo "<li><a href='historialadmin' >Subscriptions</a></li>";
+                                       }
+                                       else{
+                                         echo "<li><a href='historialadmin'>Subscriptions</a></li>";
+                                       }
+                                       if($page=="chat"){
+                                         echo "<li><a href='trabajos' >Tasks</a></li>";
+                                       }                  
+                                       if($page=="trabajos"){
+                                          echo "<li><a href='trabajos'>Tasks</a></li>";
+                                       }
+                                       else{                  
+                                          echo "<li><a href='trabajos'>Tasks</a></li>";
+                                       }
+                                       if($page=="jugadas"){
+                                         echo "<li><a href='jugadas' >Products</a></li>";
+                                       }
+                                       else{                  
+                                         echo "<li><a href='jugadas' >Products</a></li>";
+                                       }
+                                       if($page=="promo"){
+                                         echo "<li><a href='promo' >Promotion</a></li>";
+                                       }
+                                       else{                        
+                                         echo "<li><a href='promo' >Promotion</a></li>";
+                                       }
+                                       /*if($page=="criptos"){
+                                         echo "<a href='criptos' class='nav__link active'>Criptos</a>";
+                                       }
+                                       else{                        
+                                         echo "<a href='criptos' class='nav__link'>Criptos</a>";
+                                       }    */   
+                                    }
+                                ?>
+                            </ul>
+                            <ul class="member-actions" >
+
+                                                   <li id='show-on-small'>
+                                                       <a  href='perfilcliente'>
+                                                          <i class='ri-profile-line'></i> Profile
+                                                       </a>                          
+                                                    </li>
+                                                      <li id='show-on-small'>
+                                                       <a href='block?cerrarSesion'>
+                                                          <i class='ri-expand-left-fill'></i> Log Out
+                                                       </a>
+                                                    </li> 
+                                                    <li id='show-on-small'>
+                                                       <a href='miwallet'>
+                                                          <i></i><?php if(isset($_SESSION['user'])){echo "Balance <p id='saldo' style='color:green;margin:0;font-weight: 700;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p>";}?></a>
+                                                    </li> 
+                                                    
+
+                                                    
+                                                    
+                                 <?php 
+                                       if(!isset($_SESSION['secured'])){
+                                          echo "    
+                                             <li><a href='sesion' class='login'>Log in</a></li>
+                                             <li><a href='registro' class='btn-white btn-small'>Sign up</a></li>
+                                          ";
+                                       }
+                                       else{
+                                          $notificaciones = countNotif($_SESSION['user']);
+                                          $style = "";
+
+                                          if($notificaciones>0){
+                                             $style = "style='border-top: solid 1px red;'";
+                                          }
+                                       }
+
+                                       if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secured'])) {
+                                          echo "
+                                             <li class='dropdown' id='close-on-small'>
+                                                <a>".readClienteId($_SESSION['user'])['CORREO']." <i class='ri-arrow-down-s-line dropdown__arrow'></i> </a>
+                                                <ul class='dropdown-content' style='width:14rem;'>
+                                            
+                                                   <li>
+                                                      <a href='miwallet'>
+                                                         <i class='ri-pie-chart-line'></i> Balance: <div> <span id='saldo' style='font-weight: 700;color:green;margin:0;padding-bottom: 0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</span> <span>USDC</span> <div>
+                                                      </a>                          
+                                                   </li>
+
+                                                                                                      <li>
+                                                      <a href='perfilcliente'>
+                                                         <i class='ri-account-circle-line'></i> Profile
+                                                      </a>
+                                                   </li>
                      
-                     echo "
-                     <li class='dropdown__item'>
-                        <div class='nav__link'>
-                           ".readClienteId($_SESSION['user'])['CORREO']." <i class='ri-arrow-down-s-line dropdown__arrow'></i>
-                        </div>
-                     
-                        <ul class='dropdown__menu'>
-                       
-                           <li>
-                              <a href='miwallet' class='dropdown__link'>
-                                 <i class='ri-pie-chart-line'></i> Saldo: <p id='saldo' style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
-                              </a>                          
-                           </li>
-
-                           <li>
-                              <a href='block?cerrarSesion' class='dropdown__link'>
-                                 <i class='ri-arrow-up-down-line'></i> Cerrar Sesion
-                              </a>
-                           </li>
-                     </ul>
-                  </li>                 
-                     "; 
-                 }
-///////////////////////////////////FIN NAV MENU///////////////////////////////////////////////
+                                                   <li>
+                                                      <a href='block?cerrarSesion'>
+                                                         <i class='ri-expand-left-fill'></i> Log Out
+                                                      </a>
+                                                   </li>
+                                                </ul>
+                                             </li>                 
+                                          "; 
+                                       }
 
 
+                                       else if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1 && isset($_SESSION['secured'])) {
+                                          if($page=="perfiladmin"){
+                                             echo "
+                                              <li class='dropdown' id='close-on-small'>
+                                                 <a>".readClienteId($_SESSION['user'])['CORREO']." <i class='ri-arrow-down-s-line dropdown__arrow'></i> </a>
+                                                 <ul class='dropdown-content'>
+                                                                                              
+                                                   <li>
+                                                       <a  href='perfiladmin'>
+                                                          <i class='ri-profile-line'></i> Profile
+                                                       </a>                          
+                                                    </li>
+                         
+                                                    <li>
+                                                       <a href='miwallet'>
+                                                          <i class='ri-pie-chart-line'></i> Balance: <p id='saldo' style='font-weight: 700;color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
+                                                       </a>                          
+                                                    </li>
+                         
+                                                    <li>
+                                                       <a href='block?cerrarSesion'>
+                                                          <i class='ri-expand-left-fill'></i> Log Out
+                                                       </a>
+                                                    </li>                                               
+                                              </ul>
+                                           </li>                 
+                                             ";
+                                           }
+                                           else{                        
+                                             echo "
+                                                <li class='dropdown' id='close-on-small'>
+                                                   <a>".readClienteId($_SESSION['user'])['CORREO']." <i class='ri-arrow-down-s-line dropdown__arrow'></i> </a>
+                                                   <ul class='dropdown-content'>
+                                                                                              
+                                                   <li>
+                                                       <a  href='perfiladmin'>
+                                                          <i class='ri-profile-line'></i> Profile
+                                                       </a>                          
+                                                    </li>
+                         
+                                                    <li>
+                                                       <a href='miwallet'>
+                                                          <i class='ri-pie-chart-line'></i> Balance: <p id='saldo' style='font-weight: 700;color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
+                                                       </a>                          
+                                                    </li>
+                         
+                                                    <li>
+                                                       <a href='block?cerrarSesion'>
+                                                          <i class='ri-expand-left-fill'></i> Log Out
+                                                       </a>
+                                                    </li>                                               
+                                              </ul>
+                                           </li>                 
+                                             ";
+                                           }
+                                       }                               
+                                 ?> 
 
-/////////////////////////////////////INICIO MENU ADMINISTRADOR//////////////////////////////////////////////////////
-                 else if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1 && isset($_SESSION['secured'])){
-                  if($page=="home"){
-                     echo "<li><a href='index' class='nav__link active'>Tienda</a></li>";
-                  }else{
-                     echo "<li><a href='index' class='nav__link'>Tienda</a></li>";
-                  }                  
-                  if($page=="histadmin"){
-                    echo "<a href='historialadmin' class='nav__link active' >Suscripciones</a>";
-                  }
-                  else{
-                    echo "<a href='historialadmin' class='nav__link'>Suscripciones</a>";
-                  }
-                  if($page=="chat"){
-                    echo "<li><a href='trabajos' class='nav__link active'>Trabajos</a></li>";
-                  }                  
-                  if($page=="trabajos"){
-                     echo "<li><a href='trabajos' class='nav__link active' $style>Trabajos</a></li>";
-                  }
-                  else{                  
-                     echo "<li><a href='trabajos' class='nav__link' $style>Trabajos</a></li>";
-                  }
-                  if($page=="jugadas"){
-                    echo "<a href='jugadas' class='nav__link active'>Productos</a>";
-                  }
-                  else{                  
-                    echo "<a href='jugadas' class='nav__link'>Productos</a>";
-                  }
-                  if($page=="promo"){
-                    echo "<a href='promo' class='nav__link active'>Promos</a>";
-                  }
-                  else{                        
-                    echo "<a href='promo' class='nav__link'>Promos</a>";
-                  }
-                  if($page=="criptos"){
-                    echo "<a href='criptos' class='nav__link active'>Criptos</a>";
-                  }
-                  else{                        
-                    echo "<a href='criptos' class='nav__link'>Criptos</a>";
-                  }                  
-                  if($page=="perfiladmin"){
-                    echo "
-                     <li class='dropdown__item'>
-                        <div class='nav__link'>
-                           ".readClienteId($_SESSION['user'])['CORREO']." <i class='ri-arrow-down-s-line dropdown__arrow'></i>
-                        </div>
-                     
-                        <ul class='dropdown__menu'>
-                       
-                          <li>
-                              <a  href='perfiladmin' class='dropdown__link'>
-                                 <i class='ri-pie-chart-line'></i> Perfil
-                              </a>                          
-                           </li>
+                            </ul>
+                        </nav>
+                    </div>
 
-                           <li>
-                              <a href='miwallet' class='dropdown__link'>
-                                 <i class='ri-pie-chart-line'></i> Saldo: <p id='saldo' style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
-                              </a>                          
-                           </li>
-
-                           <li>
-                              <a href='block?cerrarSesion' class='dropdown__link'>
-                                 <i class='ri-arrow-up-down-line'></i> Cerrar Sesion
-                              </a>
-                           </li>
-                      
-                     </ul>
-                  </li>                 
-                    ";
-                  }
-                  else{                        
-                    echo "
-                       <li class='dropdown__item'>
-                        <div class='nav__link'>
-                           ".readClienteId($_SESSION['user'])['CORREO']." <i class='ri-arrow-down-s-line dropdown__arrow'></i>
-                        </div>
-                     
-                        <ul class='dropdown__menu'>
-                       
-                          <li>
-                              <a  href='perfiladmin' class='dropdown__link'>
-                                 <i class='ri-pie-chart-line'></i> Perfil
-                              </a>                          
-                           </li>
-
-                           <li>
-                              <a href='miwallet' class='dropdown__link'>
-                                 <i class='ri-pie-chart-line'></i> Saldo: <p id='saldo' style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
-                              </a>                          
-                           </li>
-
-                           <li>
-                              <a href='block?cerrarSesion' class='dropdown__link'>
-                                 <i class='ri-arrow-up-down-line'></i> Cerrar Sesion
-                              </a>
-                           </li>
-                      
-                     </ul>
-                  </li>                 
-                    ";
-                  }                  
-                }                            
-                  ?>
-
-                  <!--=============== DROPDOWN 2 ===============-->
-               </ul>
-               </div>
-            </div>
-         </nav>
-         <!--<marquee><?php verPromo(); ?></marquee>-->
-
-      </header>
-
-      <!--=============== MAIN JS ===============-->
-      <script src="Javascript/navBar.js"></script>
-   </body>
-</html>
+                    <div class="navicon">
+                        <a class="nav-toggle" href="#"><span></span></a>
+                    </div>
+                </div>

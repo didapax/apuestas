@@ -4,7 +4,7 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
 
-include "modulo.php";
+include "servermail.php";
 
 if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
 
@@ -53,15 +53,16 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
       $para = $cajero;
       $asunto = "Tienes un Retiro Pendiente por ejecutar";
       $mensaje = "Retiro Pendiente por ejecutar de $cliente por un monto de: $recibe por la plataforma $comopago";
-      $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
-      $cabeceras .= "MIME-Version: 1.0" . "\r\n";
-      $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+      //$cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
+      //$cabeceras .= "MIME-Version: 1.0" . "\r\n";
+      //$cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
   
-      if(mail($para, $asunto, $mensaje, $cabeceras)) {
+      sendEmail($para, $asunto, $mensaje);
+      /*if(mail($para, $asunto, $mensaje, $cabeceras)) {
         echo "Correo enviado exitosamente.";
       } else {
           echo "Error al enviar el correo.";
-      }   
+      } */  
   }
     
   if(isset($_POST['depositar'])){ 
@@ -90,15 +91,15 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
     $para = $cajero;
     $asunto = "Tienes un deposito Pendiente";
     $mensaje = "Deposito Pendiente por revisar de $cliente por un monto de: $monto por la plataforma $comopago";
-    $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
-    $cabeceras .= "MIME-Version: 1.0" . "\r\n";
-    $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-  
-    if(mail($para, $asunto, $mensaje, $cabeceras)) {
+    //$cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
+    //$cabeceras .= "MIME-Version: 1.0" . "\r\n";
+    //$cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    sendEmail($para, $asunto, $mensaje);
+    /*if(mail($para, $asunto, $mensaje, $cabeceras)) {
         echo "Correo enviado exitosamente.";
     } else {
         echo "Error al enviar el correo.";
-    }
+    }*/
   }
   
   if(isset($_POST['addpar'])){
@@ -115,7 +116,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
     sqlconector("UPDATE DATOS SET ACTIVO=0");
   }
   
-  if(isset($_GET{'listMonedas'})){
+  if(isset($_GET['listMonedas'])){
     echo json_encode (array_sqlconector("SELECT * FROM DATOS"));
   }
   
@@ -254,7 +255,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND FECHA='$fechaInicial'");
   }
     
-  if(isset($_GET{'listCajeros'})){
+  if(isset($_GET['listCajeros'])){
     echo json_encode (array_sqlconector("SELECT * FROM USUARIOS WHERE NIVEL=1"));
   }
   
@@ -418,17 +419,17 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         'idJuego' => $row['IDJUEGO'],
         'correo'=>$correo, 
         'fecha'=>$fecha,
-        'bloqueo'=>$bloqueo,
-        'imagen'=>$imagen,
-        'foreground'=>$foreground,
-        'pagaIntereses'=>$pagaIntereses,
-        'titulo'=>$titulo,
-        'analisis'=>$analisis,
-        'estrellas'=>$estrellas,
-        'interes'=>$interes,
-        'pagaIntereses'=>$pagaIntereses,
+        'bloqueo' =>$bloqueo,
+        'imagen' =>$imagen,
+        'foreground' =>$foreground,
+        'pagaIntereses' =>$pagaIntereses,
+        'titulo' =>$titulo,
+        'analisis' =>$analisis,
+        'estrellas' =>$estrellas,
+        'interes' =>$interes,
         'activo'=>$activo,
-        'costo'=>$costo);
+        'costo'=>$costo
+      );
       }	
     }
     echo json_encode($obj);
@@ -445,7 +446,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
     }
   
     $obj = array();
-    $consulta = "select * from JUEGOS WHERE ELIMINADO=0 AND FAVORITO=0 ORDER BY FECHA";
+    $consulta = "select * from JUEGOS WHERE ELIMINADO=0 AND FAVORITO=0 ORDER BY MONTO ASC";
      
     $resultado = sqlconector($consulta );
     
@@ -503,7 +504,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
     }  
   }
   
-  if(isset($_GET['readPromos'])) { 
+  if(isset($_GET['readPromos'])) {
     $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
     if (!$conexion) {
       echo "Refresh page, Failed to connect to Data...";
@@ -526,8 +527,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
        echo "<tr>
         <td>".$fecha."</td>
         <td>".$row['NOMBRE']."</td>
-        <td>".$row['MENSAJE']."</td>
-        <td>{$difu}{$flotante}</td>
+        <td>".strip_tags($row['MENSAJE'])."</td>
         <td style='text-align: left;'>
           <button title='Eliminar Promocion' type='button' class='retire-button' onclick=\"borrar('".$row['CODIGO']."')\">Borrar</button>        
         </td>
@@ -554,9 +554,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
           }
           $fecha = latinFecha($row['FECHA']); 
          echo "<tr>
-          <td>{$fecha}</td>
-          <td>".$row['JUEGO']."</td>
-          <td title='".strip_tags($row['DESCRIPCION'])."'>".$row['DESCRIPCION']."</td>
+          <td>".$row['JUEGO']."</td>          
           <td>".$row['TIPO']."</td>
           <td>".price($row['MONTO'])."</td>
           <td>";
@@ -593,6 +591,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
       $resultado = sqlconector($consulta);
       if($resultado){
         while($row = mysqli_fetch_assoc($resultado)){
+          $usuarioBinance = readCliente($row['CLIENTE'])['NOMBRE_USUARIO'];
           $obj[]= array('id' => $row['ID'],
         'fecha' => latinFecha($row['FECHA']),
         'ticket' => $row['TICKET'],
@@ -602,6 +601,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         'tipo' => $row['TIPO'],
         'medio_pago' => $row['MEDIO_PAGO'],      
         'wallet' => $row['WALLET'],
+        'usuariobinance' => $usuarioBinance,
         'origen' => $row['ORIGEN'],      
         'destino' => $row['DESTINO'],      
         'monto' => $row['MONTO'],
@@ -772,14 +772,15 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
   
   if(isset($_POST['cancelar'])){
     sqlconector("UPDATE APUESTAS SET ELIMINADO=1, ESTATUS='CANCELADO' WHERE ID={$_POST['cancelar']}");
-    ini_set( 'display_errors', 1 );
-    error_reporting( E_ALL );
-    $from = "soporte@fortunaroyal.com";
+    //ini_set( 'display_errors', 1 );
+    //error_reporting( E_ALL );
+    //$from = "soporte@fortunaroyal.com";
     $to = readApuestaId($_POST['cancelar'])['CLIENTE'];
-    $subject = "Su Apuesta ha Sido Cancelada";
-    $message = "Fue Cancelada, no se consiguio el Id de la transaccion (".readApuestaId($_POST['cancelar'])['NOTAID']." ) le Recordamos que Fortuna Royal no se hace responsable por perdidas debe de revisar y colocar la Nota Id de su Transferencia al momento de Jugar.. ";
-    $headers = "From:" . $from;
-    mail($to,$subject,$message, $headers);   
+    $subject = "Su Compra ha Sido Cancelada";
+    $message = "Fue Cancelada, no se consiguio el Id de la transaccion (".readApuestaId($_POST['cancelar'])['NOTAID']." ) le Recordamos que Criptosignal no se hace responsable por perdidas debe de revisar y colocar la Nota Id de su Transferencia al momento de Tranferir.. ";
+    //$headers = "From:" . $from;
+    //mail($to,$subject,$message, $headers);  
+    sendEmail($to, $subject, $message);
   }
   
   if(isset($_POST['tomar'])){
@@ -807,29 +808,30 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         $para = $correo;
         $asunto = "Transaccion de Deposito CryptoSignal";
         $mensaje = "Tu transaccion de deposito ha sido marcada con el estatus Exitoso, puedes consultar tu saldo ";
-        $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
-        $cabeceras .= "MIME-Version: 1.0" . "\r\n";
-        $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    
-        if(mail($para, $asunto, $mensaje, $cabeceras)) {
+        //$cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
+        //$cabeceras .= "MIME-Version: 1.0" . "\r\n";
+        //$cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+        sendEmail($para, $asunto, $mensaje);
+        /*if(mail($para, $asunto, $mensaje, $cabeceras)) {
             echo "Correo enviado exitosamente.";
         } else {
             echo "Error al enviar el correo.";
-        }
+        }*/
       }
       elseif (readTransaccionTicket($_POST['idapuesta'])['TIPO'] == "RETIRO"){
         $para = $correo;
         $asunto = "Transaccion de Retiro CryptoSignal";
         $mensaje = "Tu Retiro ha sido marcada con el estatus Exitoso, puedes consultar tu saldo en tu wallet de destino.! gracias por preferirnos ";
-        $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
-        $cabeceras .= "MIME-Version: 1.0" . "\r\n";
-        $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    
-        if(mail($para, $asunto, $mensaje, $cabeceras)) {
+        //$cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
+        //$cabeceras .= "MIME-Version: 1.0" . "\r\n";
+        //$cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        sendEmail($para, $asunto, $mensaje);
+        /*if(mail($para, $asunto, $mensaje, $cabeceras)) {
           echo "Correo enviado exitosamente.";
         } else {
             echo "Error al enviar el correo.";
-        }
+        }*/
   
       }
     }
@@ -892,23 +894,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
   }
   
   if(isset($_GET['estatuslista'])){
-    $status= "";
-    $reset = "";
-  
-    if(recordCount("LISTA") == recordList()){
-      $reset = true;
-    }else{
-      $reset = false;
-    }
-  
-    if(ifNotDayExists("ENVIOLISTA")){
-      $status= false;
-    }else{
-      $status= true;
-    }
-  
-    $obj = array('status' => $status,'reset' => $reset,'create' => $reset);
-    echo json_encode($obj);      
+    //estatus de la lista     
   }
   
   if( isset($_POST['resetlista']) ){  
@@ -1010,7 +996,7 @@ else{
     }
   
     $obj = array();
-    $consulta = "select * from JUEGOS WHERE ELIMINADO=0 AND FAVORITO=0 ORDER BY FECHA";
+    $consulta = "select * from JUEGOS WHERE ELIMINADO=0 AND FAVORITO=0 ORDER BY MONTO ASC";
      
     $resultado = sqlconector($consulta );
     
@@ -1065,11 +1051,11 @@ else{
     $para = $correo;
     $asunto = "Verificación de correo electrónico";
     $mensaje = "<a href='http://criptosignalgroup.online/verificarEmail?vkey=$vkey'>Verificar Cuenta</a>";
-    $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
-    $cabeceras .= "MIME-Version: 1.0" . "\r\n";
-    $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-  
-    mail($para, $asunto, $mensaje, $cabeceras);  
+    //$cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
+    //$cabeceras .= "MIME-Version: 1.0" . "\r\n";
+    //$cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    sendEmail($para, $asunto, $mensaje);
+    //mail($para, $asunto, $mensaje, $cabeceras);  
   }  
 
   if(isset($_POST['recivecodemail'])){
@@ -1091,5 +1077,3 @@ else{
   //FIN DEL SERVER SI NO HAY SESION
 
 }
-
-?>

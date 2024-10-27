@@ -7,6 +7,10 @@ let depositos = [];
 let historial = [];
 let cajeros = [];
 let person = [];
+let retiroTabla = null;
+let cajeroTabla = null;
+let depositosTabla = null;
+let historialTabla = null;
 
 function myFunction() {
     var copyText = document.getElementById("cajero");
@@ -27,12 +31,12 @@ function guardar(){
 
         Swal.fire({
             title: 'Cryptosignal',
-            text: `Se procedera a Guardar tus Wallet Recuerda que una vez Guardada no se Pueden Modificar sino Contactando al Soporte Técnico. Esta seguro confirme!`,
+            text: `Your wallet will be saved. Please note that once saved, it cannot be modified without contacting support.`,
             icon: 'warning',
             confirmButtonColor: '#EC7063',
-            confirmButtonText: 'Si Seguro',
+            confirmButtonText: 'Yes, i\'m sure',
             showCancelButton: true,
-            cancelButtonText: "No Cancelar"
+            cancelButtonText: "No, go back"
             }).then((result) => {
                 if (result.isConfirmed) {    
                     $.post("block",{
@@ -47,7 +51,7 @@ function guardar(){
                         if(datos.result){
                             Swal.fire({
                                         title: 'Wallet',
-                                        text: "Tu Wallet de PayId ha sigo Guardada con exito..!",
+                                        text: "Your PayId Wallet has been successfully filed!",
                                         icon: 'info',
                                         confirmButtonColor: '#3085d6',
                                         confirmButtonText: 'Ok'
@@ -63,12 +67,12 @@ function savebep20(){
     let bep20 = document.getElementById("bep20").value;
     Swal.fire({
         title: 'Cryptosignal',
-        text: `Se procedera a Guardar tu Wallet en la Red BSC BEP20: ${bep20} esta seguro confirme!`,
+        text: `Your wallet will be saved to the BSC BEP20 network: ${bep20}. Please confirm!`,
         icon: 'warning',
         confirmButtonColor: '#EC7063',
-        confirmButtonText: 'Si Seguro',
+        confirmButtonText: 'Yes, sure',
         showCancelButton: true,
-        cancelButtonText: "No Cancelar"
+        cancelButtonText: "No"
         }).then((result) => {
             if (result.isConfirmed) {    
                 $.post("block",{
@@ -124,14 +128,14 @@ function leerDatos(){
             if(oneMetodo === 0){
                 botonDeposito.disabled = true;
                 botonRetiro.disabled = true;                
-                botonDeposito.innerHTML = "Debes Tener un Metodo de Pago Agregado";
-                botonRetiro.innerHTML = "Debes Tener un Metodo de Pago Agregado";
+                botonDeposito.innerHTML = "You must have a payment method added";
+                botonRetiro.innerHTML = "You must have a payment method added";
             }
             else{
                 botonDeposito.disabled = false;
                 botonRetiro.disabled = false;                
-                botonDeposito.innerHTML = "Depositar";
-                botonRetiro.innerHTML = "Retirar";
+                botonDeposito.innerHTML = "Deposit";
+                botonRetiro.innerHTML = "Withdraw";
             }
 
         });
@@ -144,19 +148,31 @@ function initsession(){
 
 function initDeposito(){
     Swal.fire({
-        title: 'Depositar',
-        text: "Debes estar seguro de Depositar desde tu misma Wallet de origen que declaraste, al hacer click en Aceptar estas firmando un contrato inteligente que declaras estar depositando desde tu wallet configurada en nuestra plataforma, los depositos tardan entre 24 a 48 horas en realizarse dependiendo de la congestion de la red. ",
+        title: 'Deposit',
+        text: "Deposit must originate from the same wallet you provided. Clicking 'Accept' confirms this and signs a smart contract. Please note that deposits can take up to 48 hours to complete.",
         icon: 'info',
         confirmButtonColor: '#EC7063',
-        confirmButtonText: 'Si Acepto',
+        confirmButtonText: 'Yes, I accept',
         showCancelButton: true,
-        cancelButtonText: "Cancelar"
+        cancelButtonText: "Cancel"
         }).then((result) => {
             if (result.isConfirmed) {    
-                document.getElementById('modalOverlay').style.display = "flex";
+                document.getElementById('modalOverlay').style.display = 'flex';
+                document.getElementById("overlay-common-dialog-2").style.display = 'flex';
             }
         });
 }
+
+function closeOverlayModal() {
+    document.getElementById('modalOverlay').style.display = 'none';
+    document.getElementById("overlay-common-dialog-2").style.display = 'none';
+}
+
+function closeOverlayModal2() {
+    document.getElementById('modalOverlay').style.display = 'none';
+    document.getElementById("overlay-common-dialog-3").style.display = 'none';
+}
+
 
 function selpago(){
     let userBinance = document.getElementById("userBinance").value;
@@ -171,16 +187,16 @@ function selpago(){
         document.getElementById("cantidad").value = 0;
         if(valor === "BINANCE"){
             if(userBinance && walletBinance){
-                $("#descripcionMetodo").html("<b>Transfiere a este Binance Pay antes de hacer el Deposito.</b>");
+                $("#descripcionMetodo").html("<b>Please send the funds to this Binance Pay address prior to depositing</b>");
                 document.getElementById("paycajero").value = usuarioEncontrado.BINANCE;
                 imagen.src= "Assets/Perfiles/"+usuarioEncontrado.QR_BINANCE;
                 $("#detalles").css("display","inline-block")
-                document.getElementById('tipo').value = "Deposito Binance Pay";
+                document.getElementById('tipo').value = "Binance Pay Deposit";
             }
             else{
                 Swal.fire({
                     title: 'Wallet',
-                    text: "No Tienes Disponible este metodo elige otro.",
+                    text: "You don't have this payment method added. Choose another one",
                     icon: 'info',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Ok'
@@ -191,7 +207,7 @@ function selpago(){
         }
         if(valor === "BEP20"){
             if(walletBep20){
-                $("#descripcionMetodo").html("<b>Transfiere a esta Wallet BSC BEP-20 antes de hacer el Deposito.</b>");
+                $("#descripcionMetodo").html("<b>To complete the deposit, please transfer the funds to the following BSC BEP-20 wallet beforehand.</b>");
                 document.getElementById("paycajero").value = usuarioEncontrado.BEP20;
                 imagen.src= "Assets/Perfiles/"+usuarioEncontrado.QR_BEP20;
                 $("#detalles").css("display","inline-block")
@@ -200,7 +216,7 @@ function selpago(){
             else{
                 Swal.fire({
                     title: 'Wallet',
-                    text: "No Tienes Disponible este metodo elige otro.",
+                    text: "You don't have this payment method added. Choose another one",
                     icon: 'info',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Ok'
@@ -210,7 +226,7 @@ function selpago(){
             }
         }     
     } else {
-        console.log("Usuario no encontrado");
+        console.log("User not found");
     }
 }
 
@@ -221,15 +237,15 @@ function selretiro(){
 
     if($("#como_retiro").val() == "BINANCE"){     
         if(userBinance && walletBinance){
-            $("#descripcionMetodoRetiro").html("Mi Binance Pay");            
-            document.getElementById('tipo_retiro').value = "Retiro Binance Pay";
+            $("#descripcionMetodoRetiro").html("My Binance Pay");            
+            document.getElementById('tipo_retiro').value = "Withdrawal from Binance Pay";
             document.getElementById("paycliente").value = person.binance;
             $("#detalles_retiro").css("display","inline-block");
         }
         else{
             Swal.fire({
                 title: 'Wallet',
-                text: "No Tienes Disponible este metodo elige otro.",
+                text: "You don't have this payment method added. Choose another one.",
                 icon: 'info',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Ok'
@@ -253,13 +269,13 @@ function selretiro(){
 function retirar_back(){
 
     Swal.fire({
-                title: 'Retirar',
-                text: "Estas Seguro de realizar el Retiro de tu cuenta, los retiros tardan entre 24 a 48 horas en realizarse dependiendo de la congestion de la red. ",
+                title: 'Withdrawal',
+                text: "Are you sure you want to proceed with the withdrawal? Please note that withdrawals may take between 24 and 48 hours to process due to network congestion.",
                 icon: 'info',
                 confirmButtonColor: '#EC7063',
-                confirmButtonText: 'Si Retirar',
+                confirmButtonText: 'Yes, withdraw',
                 showCancelButton: true,
-                cancelButtonText: "Cancelar"
+                cancelButtonText: "Cancel"
                 }).then((result) => {
                     if (result.isConfirmed) {
                         if(document.getElementById("cantidad_retiro").value*1 > 0){
@@ -268,8 +284,8 @@ function retirar_back(){
                             }
                             else{
                                 Swal.fire({
-                                            title: 'Retiros',
-                                            text: "Saldo USDC Insuficiente",
+                                            title: 'Withdrawal',
+                                            text: "Insufficient USDC balance",
                                             icon: 'warning',
                                             confirmButtonColor: '#3085d6',
                                             confirmButtonText: 'Ok'
@@ -279,7 +295,7 @@ function retirar_back(){
                         else{
                             Swal.fire({
                                             title: 'Retiros',
-                                            text: "Los retiros debe ser minimo 1 USDC",
+                                            text: "Withdrawals must be at least 1 USDC",
                                             icon: 'warning',
                                             confirmButtonColor: '#3085d6',
                                             confirmButtonText: 'Ok'
@@ -296,14 +312,14 @@ function retirar_back(){
 
 function jugar_back(){
     Swal.fire({
-                title: 'Alerta!',
-                text: "Estas Seguro que ya hiciste la Tranferencia a la wallet de Binance del Cajero..?, los depositos tardan entre 24 a 48 horas en realizarse dependiendo de la congestion de la red. ",
+                title: 'Alert!',
+                text: "Are you sure you've already transferred the funds to your Binance wallet from the ATM? Please note that deposits can take between 24 and 48 hours to process, depending on network congestion.",
                 icon: 'info',
                 confirmButtonColor: '#117A65',
-                confirmButtonText: 'Depositar',
+                confirmButtonText: 'Deposit',
                 cancelButtonColor: '#AEB6BF',
                 showCancelButton: true,
-                cancelButtonText: "Cancelar"
+                cancelButtonText: "Cancel"
                 }).then((result) => {
                     if (result.isConfirmed) {
                         if(document.getElementById("cantidad").value > 0){
@@ -311,8 +327,8 @@ function jugar_back(){
                         }                
                         else{
                             Swal.fire({
-                                            title: 'Depositos',
-                                            text: "Los depositos debe ser al menos 1 USDC, o otro monto",
+                                            title: 'Deposits',
+                                            text: "Deposits must be at least 1 USDC",
                                             icon: 'warning',
                                             confirmButtonColor: '#3085d6',
                                             confirmButtonText: 'Ok'
@@ -353,19 +369,28 @@ function retirar(){
             comision: document.getElementById("comision_retiro").value,
             moneda: document.getElementById("establecoin_retiro").value
         },function(data){
-            document.getElementById('modalOverlay2').style.display = "none";
-            document.getElementById("retirar_btn").disabled = false;
-            inicio();
+            closeOverlayModal2();
+            //document.getElementById("retirar_btn").disabled = false;
+            window.location.href="miwallet";
         });  
     }else{
         Swal.fire({
-                        title: 'Retirar',
-                        text: "No se puede realizar el retiro o faltan datos",
+                        title: 'Withdraw',
+                        text: "Withdrawal cannot be processed or data is missing.",
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok'
                         });
     }         
+}
+function showModalOverlay2() {
+    document.getElementById('modalOverlay2').style.display = 'flex';
+    document.getElementById("overlay-common-dialog-3").style.display = 'flex';
+}
+
+function closeModalOverlay2() {
+    document.getElementById('modalOverlay2').style.display = 'none';
+    document.getElementById("overlay-common-dialog-3").style.display = 'none';
 }
 
 function lanzar(){
@@ -390,14 +415,14 @@ function lanzar(){
             correo: document.getElementById("correo").value,
             moneda: document.getElementById("establecoin").value
         },function(data){
-            document.getElementById('modalOverlay').style.display = "none";
-            document.getElementById("jugar").disabled = false;
-            inicio();
+            closeOverlayModal();
+            //document.getElementById("jugar").disabled = false;
+            window.location.href="miwallet";
         });  
     }else{
         Swal.fire({ 
-                        title: 'Depositos',
-                        text: "No se puede realizar el deposito o faltan datos",
+                        title: 'Deposit',
+                        text: "Cannot complete the deposit. Missing Data",
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok'
@@ -416,7 +441,7 @@ function calculo_retiro(){
     total = cantidad - comision;
     document.getElementById("recibe").value = Math.round(total * 100) / 100;
     document.getElementById("comision_retiro").value = Math.round(comision * 100) / 100;
-    $("#calculo_retiro").html(`<li>Deposito =  ${cantidad} " ${establecoin}</li><li>Comision de Red ${porcentaje}% =  ${Math.round(comision * 100) / 100} ${establecoin}</li><li>Usted Recibe =  <b>${Math.round(total * 100) / 100}</b> ${establecoin}</li>`);
+    $("#calculo_retiro").html(`<li>Deposit =  ${cantidad} " ${establecoin}</li><li>Chain commission <b style='color:red;'> ${porcentaje}% =  ${Math.round(comision * 100) / 100}</b> ${establecoin}</li><li>You Get =  <b class='b-green;'>${Math.round(total * 100) / 100}</b> ${establecoin}</li>`);
 
 }
 
@@ -429,13 +454,13 @@ function calculo(){
 
     comision = (cantidad * porcentaje) / 100;
     total = cantidad - comision;    
-    $("#calculo").html(`<li>Deposito =  ${cantidad} " ${establecoin}</li><li>Comision de Red ${porcentaje}% =  ${Math.round(comision * 100) / 100} ${establecoin}</li><li>Usted Recibe =  <b>${Math.round(total * 100) / 100}</b> ${establecoin}</li>`);
+    $("#calculo").html(`<li>Deposit =  ${cantidad} " ${establecoin}</li><li>Chain commission <b style='color:red;'> ${porcentaje}% =  ${Math.round(comision * 100) / 100}</b> ${establecoin}</li><li>You Get =  <b class='b-green'>${Math.round(total * 100) / 100} ${establecoin}</b></li>`);
 }
  
 function calificacion(n,cal,id){
     if(cal == 0){
         let control=`<select style="width:100px;border:none;" id="cal${id}" onchange="setCal(${id})" >
-        <option value="0">califica...</option>
+        <option value="0">Rate...</option>
         <option value="1">⭐</option>
         <option value="2">⭐⭐</option>
         <option value="3">⭐⭐⭐</option>
@@ -464,14 +489,14 @@ function setCal(id){
     }
 
     Swal.fire({
-        title: 'Calificaciones',
-        text: "Revise antes de Calificar que la transaccion sea exitosa. Esta seguro de enviar esta calificacion.?",
+        title: 'Ratings',
+        text: "Please verify that the transaction was successful before submitting your rating. Are you sure you want to send this rating?",
         icon: 'info',
         confirmButtonColor: '#117A65',
-        confirmButtonText: 'Calificar',
+        confirmButtonText: 'Rate',
         cancelButtonColor: '#AEB6BF',
         showCancelButton: true,
-        cancelButtonText: "Cancelar"
+        cancelButtonText: "Go Back"
         }).then((result) => {
             if (result.isConfirmed) {
                 $.post("block",{
@@ -480,7 +505,7 @@ function setCal(id){
                     cajero: cajero,
                     rate: rate
                 },function(data){
-                        inicio();        
+                    window.location.href="miwallet";        
                 });            
             }    
         });
@@ -493,14 +518,14 @@ function mostrarTablaRetiros() {
     retiros.forEach((producto, index) => {
         let color_estatus="#ff7b7b";
         switch (producto.estatus) {
-            case 'REVISION':
+            case 'Under Review':
                 color_estatus="#25d596";
                 break;
-                case 'ESPERA':
+                case 'In Process':
                     color_estatus="#478cf7";
                     break;        
 
-                case 'EXITOSO':
+                case 'Successful':
                     color_estatus="#f78c3d";
                     break;        
             default:
@@ -527,14 +552,14 @@ function mostrarTablaDepositos() {
     depositos.forEach((producto, index) => {
         let color_estatus="#ff7b7b";
         switch (producto.estatus) {
-            case 'REVISION':
+            case 'Under Review':
                 color_estatus="#25d596";
                 break;
-                case 'ESPERA':
+                case 'In Process':
                     color_estatus="#478cf7";
                     break;        
 
-                case 'EXITOSO':
+                case 'Successful':
                     color_estatus="#f78c3d";
                     break;        
             default:
@@ -554,7 +579,7 @@ function mostrarTablaDepositos() {
 }  
 
 function mostrarCajeros() {
-    let fila = "<option value=''>selecciona uno...</option>";
+    let fila = "<option value=''>Select.</option>";
     const selCajeros = document.getElementById("micajero");
     const selCajeros_Retiro = document.getElementById("micajero_retiro");
     selCajeros.innerHTML = fila;
@@ -577,7 +602,7 @@ function selcajero_retiro(){
     let valor = document.getElementById("micajero_retiro").value;
     const usuarioEncontrado = cajeros.find(usuario => usuario.ID === valor);
     const selPerson = document.getElementById("como_retiro");
-    let fila = "<option value=''>selecciona uno...</option>";
+    let fila = "<option value=''>Select...</option>";
     selPerson.innerHTML = fila; // Agrega la opción inicial directamente
 
     if (usuarioEncontrado) {
@@ -592,18 +617,18 @@ function selcajero_retiro(){
         if(person.bep20 != null && person.bep20.length > 0){
             let option = document.createElement("option");
             option.value = 'BEP20';
-            option.textContent = 'Red BSC BEP-20';
+            option.textContent = 'BSC BEP-20 Smart Chain';
             selPerson.appendChild(option);
         }     
     }else {
-        console.log("Usuario no encontrado");
+        console.log("User not found");
     } 
 }
 
 function selcajero(){
     let valor = document.getElementById("micajero").value;
 
-    let fila = "<option value=''>selecciona uno...</option>";
+    let fila = "<option value=''>Select...</option>";
     const selCajeros = document.getElementById("comopago");
     selCajeros.innerHTML = fila; // Agrega la opción inicial directamente
 
@@ -624,7 +649,7 @@ function selcajero(){
             selCajeros.appendChild(option);
         }     
     } else {
-        console.log("Usuario no encontrado");
+        console.log("User not Found");
     }
 }
 
@@ -667,8 +692,15 @@ function recuperarRetiros() {
             retiros = data;  
             
             mostrarTablaRetiros();
-            new DataTable('#example1');
-            // Aquí puedes procesar los datos recibidos (data)
+            
+             retiroTabla = $('#example1').DataTable({
+                responsive: true,
+                paging: true,
+                searching: true
+            });
+            
+            //new DataTable('#example1');
+            // Aquí puedes procesar los datos recibidos (data
             console.log("Datos retiros:", data);
         })
         .catch(error => {
@@ -677,6 +709,27 @@ function recuperarRetiros() {
     
     }
     
+    function recalcRetiros() {
+        function recalcResponsive() {
+            return new Promise(resolve => {
+                retiroTabla.responsive.recalc();
+                setTimeout(resolve, 500); // Espera a que termine la recalculación
+            });
+        }
+    
+        recalcResponsive().then(recalcResponsive);
+    }    
+
+    function recalcCajeros() {
+        function recalcResponsive() {
+            return new Promise(resolve => {
+                cajeroTabla.responsive.recalc();
+                setTimeout(resolve, 500); // Espera a que termine la recalculación
+            });
+        }
+    
+        recalcResponsive().then(recalcResponsive);
+    }  
 
     function recuperarDepositos() {
         fetch("block?readDepositos=1&correo="+document.getElementById('correo').value)
@@ -690,7 +743,14 @@ function recuperarRetiros() {
                 depositos = data;  
                 
                 mostrarTablaDepositos();
-                new DataTable('#example');
+                
+                depositosTabla = $('#example').DataTable({                    
+                    responsive: true,
+                    paging: true,
+                    searching: true
+                });
+                
+                //new DataTable('#example');
                 // Aquí puedes procesar los datos recibidos (data)
                 console.log("Datos Depositos:", data);
             })
@@ -700,6 +760,17 @@ function recuperarRetiros() {
         
         }
 
+        function recalcDepositos() {
+            function recalcResponsive() {
+                return new Promise(resolve => {
+                    depositosTabla.responsive.recalc();
+                    setTimeout(resolve, 500); // Espera a que termine la recalculación
+                });
+            }
+        
+            recalcResponsive().then(recalcResponsive);
+        }  
+
         function mostrarTablaHistorial() {
             const tablaCuerpo = document.getElementById("tabla-cuerpo-historial");
             tablaCuerpo.innerHTML = "";
@@ -707,15 +778,15 @@ function recuperarRetiros() {
             historial.forEach((producto, index) => {
                 let color_estatus="#ff7b7b";
                 switch (producto.estatus) {
-                    case 'PAGADO':
+                    case 'COMPLETED':
                         color_estatus="#25d596";
                         break;
-                        case 'VENCIDO':
+                        case 'EXPIRED':
                             color_estatus="#478cf7";
                             break;        
         
-                        case 'ACTIVO':
-                            color_estatus="#f78c3d";
+                        case 'ACTIVE':
+                            color_estatus="#25d596";
                             break;        
                     default:
                         color_estatus="#ff7b7b";
@@ -744,7 +815,14 @@ function recuperarRetiros() {
                 .then(data => {
                     historial = data;                    
                     mostrarTablaHistorial();
-                    new DataTable('#example2'); 
+                    
+                    historialTabla = $('#example2').DataTable({
+                        responsive: true,
+                        paging: true,
+                        searching: true
+                    });
+                    
+                    //new DataTable('#example2'); 
                     // Aquí puedes procesar los datos recibidos (data)
                     console.log("Datos Historial:", data);
                 })
@@ -752,7 +830,19 @@ function recuperarRetiros() {
                     console.error("Error en la solicitud:", error);
                 });
             
-        }    
+        }   
+        
+        
+        function recalcHistorial() {
+            function recalcResponsive() {
+                return new Promise(resolve => {
+                    historialTabla.responsive.recalc();
+                    setTimeout(resolve, 500); // Espera a que termine la recalculación
+                });
+            }
+        
+            recalcResponsive().then(recalcResponsive);
+        }  
         
         function mostrarAyudaBinance() {
             const dialog = document.getElementById("info-dialog");
@@ -761,7 +851,15 @@ function recuperarRetiros() {
 
         function mostrarTecnoDialog() {
             const tecnoDialog = document.getElementById("tecno-dialog");
-            tecnoDialog.showModal();
+            
+            document.getElementById("overlay-common-dialog-1").style.display = 'flex';
+            tecnoDialog.style.display = 'block';
+
+        }
+
+        function closeTecnoDialog() {
+            document.getElementById('tecno-dialog').style.display = 'none';
+            document.getElementById("overlay-common-dialog-1").style.display = 'none';
         }
 
         function enviarAsistencia(){
@@ -770,15 +868,17 @@ function recuperarRetiros() {
             const asunto = document.getElementById("asuntoTecno").value;
             const mensaje = document.getElementById("mensajeTecno").value;
             if(asunto && mensaje){
-                tecnoDialog.close();
+                tecnoDialog.style.display ='none';
+                document.getElementById('overlay-common-dialog-1').style.display ='none';
+
                 Swal.fire({
                     title: 'Cryptosignal',
-                    text: `Se procedera a Abrir un Ticket de Soporte con su Caso ${asunto}`,
+                    text: `We will proceed to open a support ticket with your case. ${asunto}`,
                     icon: 'warning',
                     confirmButtonColor: '#EC7063',
-                    confirmButtonText: 'Si Gracias',
+                    confirmButtonText: 'Yes, thanks',
                     showCancelButton: true,
-                    cancelButtonText: "No Cancelar"
+                    cancelButtonText: "No"
                     }).then((result) => {
                         if (result.isConfirmed) {    
                             $.post("servermail",{
@@ -788,8 +888,8 @@ function recuperarRetiros() {
                                 mensaje: mensaje
                             },function(data){
                                     Swal.fire({
-                                                title: 'Soporte Tecnico Asistencia',
-                                                text: "Tu Ticket de Asistencia esta en proceso en un plazo de 24 a 48 horas seras atendido en tu correo registrado en la plataforma,  esta atento Gracias y disculpe los inconvenientes",
+                                                title: 'Technical Assistance Support',
+                                                text: "Your support ticket is being processed. You will be contacted at the email address registered on the platform within 24 to 48 hours. Please stay tuned. Thank you and we apologize for any inconvenience.",
                                                 icon: 'info',
                                                 confirmButtonColor: '#3085d6',
                                                 confirmButtonText: 'Ok'
@@ -799,10 +899,9 @@ function recuperarRetiros() {
                     });             
             }
             else{
-                tecnoDialog.close();
                 Swal.fire({
                     title: 'Cryptosignal',
-                    text: "Faltan datos no se puede crear un ticket vacio.!",
+                    text: "Lack of Data. You can't create an empty ticket!",
                     icon: 'error',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Ok'
@@ -815,7 +914,9 @@ function recuperarRetiros() {
             recuperarRetiros();  
             recuperarDepositos();  
             recuperarHistorial();  
-            recuperarCajeros();                               
+            recuperarCajeros();                       
             //myVar = setInterval(refrescar, 2000);
-        }           
+        }
+        
+        
 

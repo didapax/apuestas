@@ -220,7 +220,7 @@ function recalcularSuscripciones($correo){
 
 function detalleInversion($tipo='MENSUAL',$monto=1,$porciento=1){
   $obj = array();
-  $numMes;
+  $numMes=1;
   switch ($tipo) {
     case 'MENSUAL':
       $numMes= 1;          
@@ -315,29 +315,22 @@ function formatPrice($valor,$moneda){
     case "ADAUSDC":
     case "MATICUSDC":
         return number_format($valor,4,".","");
-        break;    
     case "TRXUSDC":
     case "DOGEUSDC":        
         return number_format($valor,5,".","");
-        break;      
-    case "RUNEUSDC":
     case "RUNEUSDC":
     case "ATOMUSDC":
     case "NEARUSDC":
     case "INJUSDC":
           return number_format($valor,3,".","");
-          break;          
     case "BTCUSDC":
     case "ETHUSDC":
     case "LTCUSDC":
           return number_format($valor,2,".","");
-          break;
     case "BNBUSDC":
         return number_format($valor,1,".","");
-        break;
     case "PAXGUSDC":
         return number_format($valor,0,".","");
-        break;        
     default:
       return $valor;
   }
@@ -649,8 +642,8 @@ function refreshDataAuto() {
           $available_mon = $row['MONEDA'];
           $available = $price[$available_mon];
           $axie = readPrices($available_mon);
-          $priceArriba = formatPrice($axie['ARRIBA'], $row['ASSET'], $row['PAR']);
-          $priceAbajo = formatPrice($axie['ABAJO'], $row['ASSET'], $row['PAR']);
+          $priceArriba = formatPrice($axie['ARRIBA'], $row['MONEDA']);
+          $priceAbajo = formatPrice($axie['ABAJO'], $row['MONEDA']);
           updatePrices($available_mon, "ACTUAL={$available}");
 
           if ($priceArriba == 0) {
@@ -905,7 +898,7 @@ function deletePromo($codigo){
   sqlconector("DELETE FROM USERPROMO WHERE CODIGO='{$codigo}'");
 }
 
-function revisaGanadorPromo($correo,$idApuesta){
+/*function revisaGanadorPromo($correo,$idApuesta){
   //Asigna premios de promos
   //Revisa si es referido y paga comisiones
   $referido = readCliente($correo)['CODIGOREFERIDO'];
@@ -978,6 +971,7 @@ function revisaGanadorPromo($correo,$idApuesta){
     }
   } 
 }
+*/
 
 function statusPromocion($correo){
   if(recordCount("PROMO")>0){
@@ -1001,7 +995,7 @@ function statusPromocion($correo){
   }   
 }
 
-function sendMail($correo,$asunto,$mensaje){
+/*function sendMail($correo,$asunto,$mensaje){
   ini_set( 'display_errors', 1 );
   error_reporting( E_ALL );
   $from = "criptosignalgroup@criptosignalgroup.online";
@@ -1014,7 +1008,7 @@ function sendMail($correo,$asunto,$mensaje){
 
 function readMailPromo(){
   return row_sqlconector("SELECT * FROM PROMO WHERE DIFUSION=1 LIMIT 1");
-}
+}*/
 
 function promoFlotante(){
   if(ifReadPromo()){
@@ -1022,16 +1016,15 @@ function promoFlotante(){
     echo 	"
     <div class='overlay-dialog' id='promoFlotante'> 
       <dialog open id='promoFlotante' class='index-dialog'>      
-        <div style='padding:21px;'>
+        <div class='dialog-text'>
         
         <h2>".$row['NOMBRE']."</h2>
         
-        ".$row['MENSAJE']." <button class=\"binance-button\" type='button' onclick=\"$('#promoFlotante').fadeOut()\">Continuar</button>
+        ".$row['MENSAJE']." <button class=\"binance-button\" type='button' onclick=\"$('#promoFlotante').fadeOut()\">Go to Store!</button>
         </div>
-
         <div class='dialog-image-container'>
           <img src='Assets/dialog-image.png'>
-          <a href='javascript:void(0);' class='close-icon' onclick=\"$('#promoFlotante').fadeOut()\">X</a><br>
+          <a href='javascript:void(0);' class='close-icon' id='dialog-dissapear' onclick=\"$('#promoFlotante').fadeOut()\">X</a><br>
         </div>
         </dialog>
     </div> 
@@ -1059,10 +1052,10 @@ function notif($IDusuario){
     if($resultado){
         $obj=array();
         while($row = mysqli_fetch_assoc($resultado)){
-            $obj[] = array('ubicacion'=>$row['ubicacion'],'id'=>$row['ID'],'noticia'=>$row['noticia']);
+            $obj[] = array('ubicacion'=>$row['UBICACION'],'id'=>$row['ID'],'noticia'=>$row['NOTICIA']);
         }
     }
-   //return $obj;
+   return $obj;
  }
 /*
  if(isset($_POST['insertNotif'])){
@@ -1083,5 +1076,3 @@ function notif($IDusuario){
 
    /****FIN NOTIFICACIONES**************************************************************************
    */
-
-?>
