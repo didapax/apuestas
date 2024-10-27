@@ -17,11 +17,11 @@ function sendEmailSoporte($to, $subject, $body) {
     $mail->Host = 'server121.web-hosting.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'soporteadministrativo@criptosignalgroup.online';
-    $mail->Password = 'F_M4Cth#YNEw';
+    $mail->Password = '';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
     
-     // Caracteres y codificaci¨®n
+     // Caracteres y codificaciï¿½ï¿½n
     $mail->CharSet = 'UTF-8';
 
     $mail->setFrom('soporteadministrativo@criptosignalgroup.online', 'Soporte Cryptosignal');
@@ -45,11 +45,11 @@ function sendEmail($to, $subject, $body) {
     $mail->Host = 'server121.web-hosting.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'criptosignalgroup@criptosignalgroup.online';
-    $mail->Password = 'JRnc^YaDj@la';
+    $mail->Password = '';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
     
-    // Caracteres y codificaci¨®n
+    // Caracteres y codificaciï¿½ï¿½n
     $mail->CharSet = 'UTF-8';    
 
     $mail->setFrom('criptosignalgroup@criptosignalgroup.online', 'Cryptosignal');
