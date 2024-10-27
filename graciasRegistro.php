@@ -1,16 +1,16 @@
 <?php
-    include "modulo.php";
+    include "servermail.php";
 
     $correo = $_GET['correo'];
     $vkey = $_GET['vkey'];
     $para = $correo;
-    $asunto = "Verificación de correo electrónico";
-    $mensaje = "<a href='http://criptosignalgroup.online/verificarEmail?vkey=$vkey'>Verificar Cuenta</a>";
-    $cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
-    $cabeceras .= "MIME-Version: 1.0" . "\r\n";
-    $cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-
-    mail($para, $asunto, $mensaje, $cabeceras);
+    $asunto = "Verificacion de correo electronico";
+    $mensaje = "Has Click en el siguiente enlace <a href='http://criptosignalgroup.online/verificarEmail?vkey=$vkey'>Verificar Cuenta</a>";
+    //$cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
+    //$cabeceras .= "MIME-Version: 1.0" . "\r\n";
+    //$cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    sendEmail($para, $asunto, $mensaje);
+    //mail($para, $asunto, $mensaje, $cabeceras);
 ?>
 
 <!DOCTYPE html>

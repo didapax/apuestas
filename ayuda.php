@@ -1,7 +1,7 @@
 <?php
 include "modulo.php";
 ?>
-<html>
+<html lang="en">
 <head>
         <meta charset="UTF-8">        
         <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />        
@@ -38,25 +38,25 @@ include "modulo.php";
                 </header>
         </section>   
         <section class="hero hero-inside" >
-<div id="cuerpo" class="cuerpo" >
+<div id="cuerpo" class="cuerpo" style="padding: 15px;" > 
  
     <div style='border-bottom: solid #d5d5d5  3px;'> 
-        <h1>Acerca de Nosotros</h1>
+        <h2>About Us</h2>
     </div>
     
     <div style='display: flex;gap: 10%;align-items: center;justify-content: center;margin-top:6vh;'> 
         <div>
-            <h2>¡Bienvenido a la Señal!</h2>
-            <p>En Cryptogroup, nos especializamos en ofrecer soluciones innovadoras de inversión a plazo fijo utilizando criptomonedas. Nuestro objetivo es proporcionar a nuestros clientes una forma segura y rentable de hacer crecer su patrimonio en el dinámico mundo de las criptomonedas. Con un equipo de expertos en finanzas y tecnología blockchain, garantizamos transparencia, seguridad y un rendimiento óptimo en cada inversión. Únete a nosotros y descubre cómo puedes maximizar tus ganancias con nuestras estrategias de inversión a plazo fijo.</p>
+            <h2>Welcome to the Signal!</h2>
+            <p>At Cryptogroup, we specialize in providing innovative fixed-term investment solutions using cryptocurrencies. Our goal is to offer our clients a secure and profitable way to grow their wealth in the dynamic world of cryptocurrencies. With a team of experts in finance and blockchain technology, we guarantee transparency, security, and optimal performance on every investment. Join us and discover how you can maximize your returns with our fixed-term investment strategies.</p>
 
         </div>
-        <div><img style='width:40rem;' src='Assets/aboutUs-1.png'></div>
+        <div><img  class="abouts-us" style='width:40rem;' src='Assets/aboutUs-1.png'></div>
     </div>
 
     <div style='display: flex;gap: 10%;align-items: center;justify-content: center;margin-top:6vh;'> 
         <div>
-            <h2>Nuestra Historia</h2>
-            <p>Fundada por expertos inversores con 10 años de experiencia conjunta en el sector financiero, CriptoSignalGroup surgió con una visión clara y determinada, gracias a su enfoque inquebrantable en la satisfacción y prosperidad de sus clientes financieros, proporcionando a inversores, traders especializados e instituciones las herramientas esenciales para operar con confianza. Mas informacion acerca de nosotros <a href="https://es.datocapital.uk/empresas/Crypto-Signal-Technology-Ltd.html">https://es.datocapital.uk/empresas/Crypto-Signal-Technology-Ltd.html</a></p>
+            <h2>How we Become</h2>
+            <p>With a decade of combined financial experience, our expert founders established CriptoSignalGroup to provide investors with the tools they need to succeed. Our mission is clear: to equip traders, specialists, and institutions with the confidence to navigate the crypto markets. Learn more about us at: <a href="https://es.datocapital.uk/empresas/Crypto-Signal-Technology-Ltd.html">https://es.datocapital.uk/empresas/Crypto-Signal-Technology-Ltd.html</a></p>
 
         </div>
     </div>
@@ -69,8 +69,8 @@ include "modulo.php";
     margin-bottom: 8rem;'> 
         <div style='display: flex;flex-direction: row-reverse;align-items: center;gap: 5rem;' >
             <div>
-                <h4>Fácil de Usar</h4>
-                <p>En Cryptogroup, participar es muy fácil. Solo debes recargar tu saldo, que se guarda estrictamente en la stablecoin USDC en tu wallet personal. Luego, solo debes ingresar a la tienda de la aplicación y escoger la tarjeta que más se adapte a tus aspiraciones. La compras y listo, ya estás participando y disfrutando de los beneficios de ser un socio por participación y recibir los beneficios ofrecidos.</p>
+                <h4>Easy to Use</h4>
+                <p>Joining Cryptogroup is a breeze. Simply top up your balance using USDC in your personal wallet. Then, head to the in-app store and select the plan that best suits your goals. Once you've purchased it, you're all set to start earning and enjoying the benefits of being a participating member.</p>
             </div>
 
             <div>
@@ -81,8 +81,8 @@ include "modulo.php";
 
         <div style='display: flex;flex-direction: row-reverse;align-items: center;gap: 5rem;' >
             <div>
-                <h4>Ganancias Garantizadas</h4>
-                <p>Nos especializamos en ofrecer soluciones innovadoras de inversión a plazo fijo, completamente descentralizadas. Nuestro sistema automatizado se encarga de gestionar el pago de los intereses, lo que garantiza que recibirás tus fondos y ganancias. Puedes descansar tranquilo y disfrutar de poner a trabajar y multiplicar tu dinero sin riesgo. Además, cuentas con diferentes modalidades y suscripciones, incluyendo señales en ciertos activos digitales que garantizamos y estudiamos como proyectos serios en el mundo cripto. Si quieres tener el control de tus inversiones, nosotros te ayudamos a minimizar los riesgos en este campo.</p>
+                <h4>Guaranteed Profits</h4>
+                <p>We specialize in offering innovative, fully decentralized fixed-term investment solutions. Our automated system handles interest payments, ensuring you receive your funds and earnings. Relax and enjoy watching your money grow risk-free. Additionally, we offer various plans and subscriptions, including signals on select digital assets that we carefully vet and consider to be serious projects in the crypto world. If you want to take control of your investments, we'll help you minimize risks in this space.</p>
             </div>
 
             <div>
@@ -94,11 +94,10 @@ include "modulo.php";
 
         <div style='display: flex;flex-direction: row-reverse;align-items: center;gap: 5rem;' >
             <div>
-                <h4>Plazos Flexibles</h4>
-                <p>En Cryptogroup, ofrecemos múltiples opciones y nos esforzamos constantemente por innovar y lanzar nuevos productos basados en decisiones estudiadas y planificadas. Esto te asegura recibir y obtener tu dinero a tiempo. Contamos con una amplia gama de productos que se adaptan a tu bolsillo; tú pones el límite y nuestro sistema descentralizado de pago hace el resto. Todo es automatizado, avanzando hacia la innovación en la web3, donde podrás utilizar y gestionar tus activos digitales de la manera que más te convenga.
-
-Además, nuestro equipo de expertos trabaja incansablemente para identificar y analizar las mejores oportunidades en el mercado de criptomonedas, garantizando que cada producto que ofrecemos esté respaldado por un análisis riguroso y una planificación estratégica. Nos comprometemos a proporcionar un entorno seguro y transparente, donde puedas invertir con confianza y tranquilidad.
-</p>
+                <h4>Flexible terms</h4>
+                <p>
+                Cryptogroup is committed to providing a secure and transparent investment environment. Our team of experts carefully selects and analyzes the best opportunities in the cryptocurrency market, ensuring that every product we offer is backed by thorough research. With our automated, decentralized payment system, you can rest assured that your investments are safe and your returns are timely. We offer a variety of products to suit your needs and budgets, all designed to help you grow your wealth.
+                </p>
             </div>
 
             <div>
@@ -117,11 +116,11 @@ Además, nuestro equipo de expertos trabaja incansablemente para identificar y a
     margin-top:10rem;
     margin-bottom:10rem;'> 
         <div>
-            <h2>Normativas</h2>
-            <p> CryptoSignal se rige por normativas rigurosas, asegurando transparencia, seguridad y profesionalismo en todos sus servicios. Además, el compromiso de CriptoSignalGroup en el dinámico escenario financiero actual se adapta y renueva constantemente, motivado por su pasión por innovar, optimizar sus plataformas y realzar la experiencia del cliente. Su compromiso con ofrecer herramientas vitales, empoderando a los inversores para que tomen decisiones fundamentadas y cumplan sus objetivos financieros.</p>
+            <h2>Norms</h2>
+            <p>CryptoSignal is subject to strict regulations, ensuring transparency, security, and professionalism in all its services. Moreover, CriptoSignalGroup's commitment to the dynamic financial landscape is constantly evolving, driven by its passion for innovation, platform optimization, and enhancing the customer experience. Their dedication to providing essential tools empowers investors to make informed decisions and achieve their financial goals.</p>
 
         </div>
-        <div><img style='width:25rem;' src='Assets/norms.png'></div>
+        <div><img class="abouts-us" style='width:25rem;' src='Assets/norms.png'></div>
     </div>
 
            
@@ -130,13 +129,11 @@ Además, nuestro equipo de expertos trabaja incansablemente para identificar y a
     gap: 10rem;
     align-items: center;'> 
         <div>
-            <h2>Atención al Usuario</h2>
-            <p> Tienes la opcion de abrir un ticket en el chat, para ponerte en contacto directo con el staff en caso de algún problema.
-            En Cryptogroup, no solo te ofrecemos herramientas para invertir, sino también educación y soporte continuo para que puedas tomar decisiones informadas. Nuestro objetivo es empoderarte para que maximices tus ganancias y minimices los riesgos, todo mientras disfrutas de la comodidad y eficiencia de nuestras plataformas automatizadas.
-            </p>
+            <h2>Customer Service</h2>
+            <p>You have the option to open a chat ticket to directly contact our staff in case of any issues. At Cryptogroup, we not only provide you with investment tools but also offer education and ongoing support to help you make informed decisions. Our goal is to empower you to maximize your profits and minimize risks, all while enjoying the convenience and efficiency of our automated platforms.</p>
 
         </div>
-        <div><img style='width:25rem;' src='Assets/attendance.png'></div>
+        <div><img class="abouts-us" style='width:25rem;' src='Assets/attendance.png'></div>
     </div>
 </div>
 </section>

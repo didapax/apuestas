@@ -109,6 +109,7 @@ $paises = [
 ?> 
 <html lang="es"> 
     <head>
+    <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">        
         <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />        
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
@@ -143,17 +144,17 @@ $paises = [
         <section class="hero hero-inside" >
         <input type="hidden" id="correo" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" >
         <div id="cuerpo" class="cuerpo" > 
-        <h3 style="font-weight: bold;text-align: center;color:white;">Perfil</h3>
+        <h3 style="font-weight: bold;text-align: center;color:white;text-decoration:underline:">Profile</h3>
         <div class="common-background" style="background:black; padding:2rem;background: #00000078;padding: 2rem;border-radius: 17px;">
         <div id="vista" class='outerCard-container'>
-        <form method="post" action="perfilcliente.php">
+        <form method="post" action="perfilcliente.php" style='display: flex;flex-direction: column;align-items: center;'>
         <div style="display:grid;">
-        <div class="">Saldo <span style="color:green;font-weight: bold;"><?php echo $saldo; ?></span> USDC</div><br>
-        Correo: <input type="text" style="color:black;width:300px;" readonly id="correo" name="correo" value="<?php echo $correo; ?>"><br>
-        Nombre Completo: <input type="text" style="color:black;width:300px;" id="nombre" name="nombre" value="<?php echo $nombre; ?>"><br>
-        Telefono: <input type="text" style="color:black;width:300px;" id="telefono" name="telefono" value="<?php echo $telefono; ?>"><br>
-        Nacionalidad
-        <select name="nacionalidad" id="nacionalidad" style="color:black;width:300px;">
+        <div style="text-align: center;background: linear-gradient(45deg, #204916, #46514b8c);border-radius: 5px;padding: 1rem;">Balance: <span style="font-weight: 700;"><?php echo price($saldo); ?></span> USDC</div><br>
+        Email: <input type="text" class='binance-input' readonly id="correo" name="correo" value="<?php echo $correo; ?>"><br>
+        Full Name: <input type="text" class='binance-input' id="nombre" name="nombre" value="<?php echo $nombre; ?>"><br>
+        Phone: <input type="text" class='binance-input' id="telefono" name="telefono" value="<?php echo $telefono; ?>"><br>
+        Nationality:
+        <select name="nacionalidad" id="nacionalidad" class='binance-input' style='background: #2829298c;'>
             <option value="">Selecciona tu país</option>
             <?php
                 foreach($paises as $codigo => $nombre) {
@@ -164,7 +165,7 @@ $paises = [
         </select>
     </div>
     <br>
-    <button class='deposit-button' type="submit" name="guardar">Guardar</button>
+    <button class='deposit-button' type="submit" name="guardar" style='background: #58b5c3;display: flex;justify-content: center;'>Save</button>
 </form>
 
         </div>

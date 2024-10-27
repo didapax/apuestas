@@ -28,29 +28,36 @@
 
             body{
                 background: lightblue;
+                margin:0;
             }            
 
             .content{
                 text-align: center;
                 display: flex;
-                justify-content: center;
+            }
+            
+            .outer-input-container{
+                display: flex;
                 flex-direction: column;
-                align-items: center;
-            }   
+            align-items: center;
+            }
 
-            form{
+
+
+            form {
                 color: white;
                 font-weight: bold;
-                width: 25rem;
-                height: auto;
-                border-radius: 13px;
+                width: 60%;
                 text-align: center;
-                padding: 40px;
                 background: #181a20;
                 background-repeat: no-repeat;
                 background-size: cover;
                 border: 1px solid #67676778;
-                margin-top: 5vh;
+                border-left: 2rem solid gainsboro;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
             form h2{
@@ -118,9 +125,10 @@
                 transition: ease(0.5s);
             }
 
+
             .terms p{
                 font-family: "Poppins", sans-serif;
-                text-align: justify;
+                text-align: center;
                 font-weight: 200;
                 font-size:10px;
                 margin-top: 0px;
@@ -148,6 +156,68 @@
             }
 
 
+
+            .blue-div {
+                width: 40%; /* Cambia de 40% a 100% */
+                background: linear-gradient(45deg, #8996d3, transparent);
+                min-height: 50vh; /* Cambia height a min-height */
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .termsR{
+                display:none;
+            }
+
+            .go-back{
+                font-weight: bold;float: right;cursor: pointer;position: absolute;top: 10%;right: 10%;font-size: 1rem;font-family: sans-serif;
+            }
+
+            .go-back:hover{
+                color: #4a6ee9;
+            }
+
+
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 768px) {
+    .blue-div {
+        width: 100%;
+        min-height: 30vh;
+        display:none;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column-reverse
+    }
+
+    form {
+        max-width: 100%;
+        width: 100% !important;
+        padding: 20px;
+        border-left: 1rem solid gainsboro;
+        border:none;
+
+    }
+
+    .input-container {
+        padding: 0 20px;
+    }
+
+    .terms {
+        font-size: 0.8rem; 
+        top: 1rem;
+        z-index: 1; /* Aseguramos que también funcione en pantallas pequeñas */
+    }
+    
+    .termsR {
+        display:block;
+        }
+}
+
         </style>        
         <script>            
             function registro(){
@@ -164,14 +234,14 @@
                         if (datos.result == false && datos.capcha.success){
                             document.getElementById("btn_registro").disabled = true;
                             Swal.fire({
-                            title: 'Registrarse',
-                            text: "Se Procedera al Registro en Crytosignal, Recuerda debe ser Un Email de Usuario en Binance Valido. Aceptas Nuestros Terminos y Condiciones,  Deseas Unirte.? ",
+                            title: 'Sign Up',
+                            text: "We will proceed with the registration on Crytosignal. Remember, it must be a valid Binance user email. Do you accept our terms and conditions? Do you wish to join?",
                             icon: 'info',
                             confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'Si Unirme',
+                            confirmButtonText: 'Yes',
                             confirmButtonColor: '#3085d6',
                             showCancelButton: true,
-                            cancelButtonText: "Cancelar"
+                            cancelButtonText: "Cancel"
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     $.post("block.php",{
@@ -191,8 +261,8 @@
                         }
                         else{
                             Swal.fire({
-                            title: 'Vuelva a Intentar',
-                            text: `El Correo ${datos.correo} ya esta Registrado o la Capcha no es valida. Vuelva a intentalo`,
+                            title: 'Try Again',
+                            text: `The Email: ${datos.correo} already has an account. Either that or the capcha is not valid. So Try Again`,
                             icon: 'error',
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'Ok'
@@ -207,7 +277,7 @@
                     else{
                         Swal.fire({
                         title: 'Error',
-                        text: "El Pasword debe contener al menos 8 caracteres",
+                        text: "Password must have at least 8 characters",
                         icon: 'error',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok'
@@ -217,7 +287,7 @@
                 else{
                     Swal.fire({
                         title: 'Error',
-                        text: "Coloque un correo Valido",
+                        text: "Choose a valid Email",
                         icon: 'error',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok'
@@ -227,8 +297,24 @@
         </script> 
     </head>
     <body>
-
         <div class="content">
+            <div class='blue-div'>
+                <div style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                font-family: 'futurist';
+                color: #263653;
+                font-size: .6rem;">
+                    <h1 style='margin:0;'>Sign Up to Join the Signal</h1>
+                    <h2 style='margin:0;'>Get long-term safe profits</h2>
+                    <img src="Assets/sign-image.svg" alt="" style='width: 100%;margin-top: 3rem;'>
+                </div>
+            <div class="terms" id="terms" style='align-self: flex-start;max-width: 90%;margin: 0 auto;'><u>Terms and Conditions for Registration</u><br>
+                        <p>By clicking "Join", you agree to these Terms and Conditions. Our website is not responsible for the handling of the information provided. You must register with a valid Binance email. Your Binance email will be your identification. The website operator is not responsible for any loss of funds. For deposits and withdrawals, <u>Binance Pay</u> is used. You certify that you are of legal age and solely responsible for the lawful and unencumbered funds provided here. Deposits and withdrawals are processed within 24 to 48 hours.</p>
+                </div>
+        </div>
+
             <form>
                 <?php 
 			        if(isset($_GET['code'])){
@@ -237,10 +323,13 @@
                         echo "<input type='hidden' name='referente' id='referente' value='NULO'>";
                     }
 		        ?>               
-                <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="window.location.href='index'">X</a>
+                <a title="Cerrar" class='go-back' onclick="window.location.href='index'">⇦ Go Back </a>
+                
+                <section>
+                <div style='display: flex;flex-direction: column;align-items: center;'>
                 <img style='width:3.5rem;' src='Assets/logotype.png'>
-                <h2>Registro CryptoSignal</h2>
-                <br><br>
+                <h2>Sign Up</h2>
+                <br>
                 <div class='outer-input-container'> 
                     <div class='input-container'>Email:<input id="correo" required type="email" value="<?php echo $correo; ?>" ></div><br>
                     <div class='input-container'>Password:<input id="password" required type="password" ></div>
@@ -254,17 +343,12 @@
                 <div name="g-recaptcha-response" id="g-recaptcha-response" class="g-recaptcha" data-sitekey="6Lf1Ky8qAAAAAF7WqkzyLa6QnPQiuklj8tRr2og2" style='display: flex;align-items: center;justify-content: center;'></div>
                 -->                
                 <div name="g-recaptcha-response" id="g-recaptcha-response" class="g-recaptcha" data-sitekey="6Ld1nA0aAAAAAA7F7eJOY7CMwg7aaQAfg3WZy6P0" style='display: flex;align-items: center;justify-content: center;'></div>
-                <button type="button" onclick="registro()" id="btn_registro">Unirse</button> 
-
-                <div class="terms" id="terminos" ><u>Terminos y Condiciones para Registrarse</u><br>
-                    <p>Al hacer Click en Unirse Usted esta Aceptando estos Terminos y Condiciones, Nuestra Pagina
-                    No se hace responsable por el manejo de la Informacion suministrada, usted debe  
-                    Registrarse con un correo Valido para BINANCE, su correo de Binance sera su Identificacion   
-                    el Operador de la Pagina, no se hace responsable por extravios de Dinero, 
-                    para depositos y retiros se utiliza <u>Binance Pay</u>
-                    usted certifica que es Mayor de Edad y Unico Responsable de los Fondos Licitos y Libres aqui suministrados. 
-                    Los Depositos y Retiros se realizan en un plazo de 24 a 48 Horas.</p>
+                <button type="button" onclick="registro()" id="btn_registro">Sign Up!</button> 
+                <div class="termsR" id="termsR"><u>Terms and Conditions for Registration</u><br>
+                        <p style='text-align: justify;'>By clicking "Join", you agree to these Terms and Conditions. Our website is not responsible for the handling of the information provided. You must register with a valid Binance email. Your Binance email will be your identification. The website operator is not responsible for any loss of funds. For deposits and withdrawals, <u>Binance Pay</u> is used. You certify that you are of legal age and solely responsible for the lawful and unencumbered funds provided here. Deposits and withdrawals are processed within 24 to 48 hours.</p>
                 </div>
+                </div>
+                </section>
             </form>
         </div>
 

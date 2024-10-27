@@ -106,7 +106,7 @@ $style = "";
                                                     </li> 
                                                     <li id='show-on-small'>
                                                        <a href='miwallet'>
-                                                          <i></i><?php if(isset($_SESSION['user'])){echo "Saldo: <p id='saldo' style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p>";}?></a>
+                                                          <i></i><?php if(isset($_SESSION['user'])){echo "Balance <p id='saldo' style='color:green;margin:0;font-weight: 700;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p>";}?></a>
                                                     </li> 
                                                     
 
@@ -136,7 +136,7 @@ $style = "";
                                             
                                                    <li>
                                                       <a href='miwallet'>
-                                                         <i class='ri-pie-chart-line'></i> Balance: <div> <span id='saldo' style='color:green;margin:0;padding-bottom: 0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</span> <span>USDC</span> <div>
+                                                         <i class='ri-pie-chart-line'></i> Balance: <div> <span id='saldo' style='font-weight: 700;color:green;margin:0;padding-bottom: 0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</span> <span>USDC</span> <div>
                                                       </a>                          
                                                    </li>
 
@@ -172,7 +172,7 @@ $style = "";
                          
                                                     <li>
                                                        <a href='miwallet'>
-                                                          <i class='ri-pie-chart-line'></i> Balance: <p id='saldo' style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
+                                                          <i class='ri-pie-chart-line'></i> Balance: <p id='saldo' style='font-weight: 700;color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
                                                        </a>                          
                                                     </li>
                          
@@ -199,7 +199,7 @@ $style = "";
                          
                                                     <li>
                                                        <a href='miwallet'>
-                                                          <i class='ri-pie-chart-line'></i> Balance: <p id='saldo' style='color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
+                                                          <i class='ri-pie-chart-line'></i> Balance: <p id='saldo' style='font-weight: 700;color:green;margin:0;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p> USDC
                                                        </a>                          
                                                     </li>
                          

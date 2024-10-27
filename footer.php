@@ -97,12 +97,12 @@
         </li>
     </ul>
     <h1 style='font-family:futurist;color:#fff'>CryptoSignal</h1>
-    <h5 style='font-family:futurist;color:#fff'>Fondo de Inversion</h5>
+    <h5 style='font-family:futurist;color:#fff'>Investment Fund</h5>
     <ul class="menu">
       <li class="menu__item"><a class="menu__link" href="index">Home</a></li>
-      <li class="menu__item"><a class="menu__link" href="ayuda">Acerca De </a></li>
+      <li class="menu__item"><a class="menu__link" href="ayuda">About Us </a></li>
       <!--<li class="menu__item"><a class="menu__link" href="#">Servicios</a></li>-->
-      <li class="menu__item"><a class="menu__link" href="terminos">Terminos de Uso</a></li>
+      <li class="menu__item"><a class="menu__link" href="terminos">Terms of Service</a></li>
 
     </ul>
     <p>&copy;2017 CryptoSignal | All Rights Reserved</p>

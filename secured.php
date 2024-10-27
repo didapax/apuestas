@@ -32,7 +32,9 @@
             }
 
             body{
-                background: lightblue;
+                background: linear-gradient(45deg, black, #3575d691);
+                height: 100vh;
+
             }            
 
             .content{
@@ -151,6 +153,68 @@
                 color: #4a6ee9;
                 text-decoration: underline;
             }
+            
+            .go-back{
+                font-weight: bold;float: right;cursor: pointer;position: absolute;top: 10%;right: 10%;font-size: 1rem;font-family: sans-serif;
+            }
+
+            .go-back:hover{
+                color: #4a6ee9;
+            }
+
+
+            
+/* Media query para pantallas pequeñas */
+@media (max-width: 768px) {
+ 
+    body{
+        margin:0;
+        height: unset;
+    }
+    .content {
+        display: flex;
+        flex-direction: column-reverse
+    }
+
+    form {
+    color: white;
+    font-weight: bold;
+    width: 100%;
+    height: 100vh;
+    border-radius: 13px;
+    text-align: center;
+    background: #181a20;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 1px solid #67676778;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin:0;
+    padding:0;
+    }
+
+    .input-container {
+        padding: 0 20px;
+    }
+
+    .terms {
+        font-size: 0.8rem; 
+        width: 90%;
+        top: 1rem;
+        z-index: 1; /* Aseguramos que también funcione en pantallas pequeñas */
+    }
+    
+    .termsR {
+        display:block;
+        }
+
+    .go-back{
+        top: 1rem;
+        right: 1rem;
+     }
+
+}
 
 
         </style>        
@@ -173,7 +237,7 @@
                         else{
                             Swal.fire({
                             title: 'CryptoSinal',
-                            text: "Codigo Errado, Vuelva a Intentarlo",
+                            text: "Wrong Code. Try Again",
                             icon: 'error',
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'Ok'
@@ -188,17 +252,17 @@
                 let timeLeft = 55; // Tiempo en segundos
 
                 button.disabled = true; // Deshabilitar el botón
-                button.value = `Esperar ${timeLeft} segundos`;
+                button.value = `Wait ${timeLeft} seconds`;
 
                 // Iniciar el temporizador inmediatamente
                 const timer = setInterval(() => {
                     timeLeft--;
-                    button.value = `Esperar ${timeLeft} segundos`;
+                    button.value = `Wait ${timeLeft} seconds`;
 
                     if (timeLeft <= 0) {
                         clearInterval(timer);
                         button.disabled = false; // Habilitar el botón
-                        button.value = 'Solicitar Código';
+                        button.value = 'Get Code';
                     }
                 }, 1000); // Intervalo de 1 segundo
 
@@ -210,7 +274,7 @@
                     function(data){                        
                         Swal.fire({
                             title: 'CryptoSinal',
-                            text: "Revisa tu Email y Copia el Código que se te envió, Luego pega y Enviar Código para acceder.",
+                            text: "Check your email and copy the code that was sent to you.",
                             icon: 'info',
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'Ok'
@@ -237,19 +301,19 @@
                         echo "<input type='hidden' name='referente' id='referente' value='NULO'>";
                     }
 		        ?>               
-                <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="closesession()">X</a>
+                <a title="Cerrar" class='go-back' onclick="closesession()">⇦ Go Back </a>
                 <img style='width:3.5rem;' src='Assets/logotype.png'>
                 <h2>CryptoSignal</h2>
                 <br><br>
 
                 <div id="getcode" style="display:inline-block;">
                     <input class='binance-input' style="background:white; color:black;" type="text" id="code" >
-                    <input class='binance-button' type="button" id="buttonGetCode" value="Solicitar Codigo" onclick="getCodeClick()">
+                    <input class='binance-button' type="button" id="buttonGetCode" value="Get Code" onclick="getCodeClick()">
                 </div>
-                <button type="button" onclick="enviarcode()" id="btn_envio">Eviar Código</button> 
+                <button type="button" onclick="enviarcode()" id="btn_envio">Send Code</button> 
 
-                <div class="terms" id="terminos" ><u>Código de Seguridad</u><br>
-                    <p>Por su seguridad al solicitar un código se enviará a tu correo, búsquelo e ingréselo sino lo consigue en la bandeja de entrada intente buscar en la bandeja de no deseados, de lo contrario solicite uno nuevo, tenga en cuenta que si la red esta congestionada puede tardar un poco.</p>
+                <div class="terms" id="terminos" ><u>Security Code</u><br>
+                    <p>For your security, a code will be sent to your email. Please check your inbox for it and enter it. If you can't find it there, check your spam folder. Otherwise, request a new code. Please note that if the network is congested, it may take a while to arrive.</p>
                 </div>
             </form>
         </div>

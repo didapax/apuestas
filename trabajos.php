@@ -188,6 +188,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                     const fila = document.createElement("tr");
                     fila.innerHTML = `
                         <td>${producto.tipo}</td>
+                        <td>${producto.cliente}</td>
                         <td>${producto.medio_pago}</td>
                         <td>${Math.round(monto * 100) / 100} ${producto.moneda}</td>
                         <td style='background:${color_estatus}'>${producto.estatus}</td>
@@ -247,6 +248,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                         <thead>
                             <tr>
                                 <th>Tipo</th>
+                                <th>Cliente</th>
                                 <th>Medio</th>
                                 <th>Monto</th>
                                 <th>Estatus</th>

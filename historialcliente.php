@@ -5,6 +5,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
 ?>
 <html lang="es">
     <head>
+    <title>CriptoSignalGroup</title>
         <meta charset="UTF-8">        
         <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />        
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
@@ -41,7 +42,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
         <section class="hero hero-inside" >
         <input type="hidden" id="correo" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" >
         <div id="cuerpo" class="cuerpo" > 
-            <h3 style="font-weight: bold;text-align: center;color:white;">Participaciones en el Fondo de Inversion</h3>
+            <h3 style="font-weight: bold;text-align: center;color:white;">Investments</h3>
         <div id="vista" class='outerCard-container'></div>
         </div>
         </section> 

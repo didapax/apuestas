@@ -15,8 +15,12 @@ function sendBulkEmails($emails, $subject, $body) {
     $batch = array_slice($emails, $i, $batchSize);
     foreach ($batch as $email) {
       $datos= row_sqlconector("SELECT * FROM LISTA WHERE CORREO='$email'");
+      
       $subject = $datos['SUBJET'];
       $body = $datos['BODY'];
+      
+      $subject = utf8_encode($subject);
+      $body = utf8_encode($body);      
       sendEmail($email, $subject, $body); // Función para enviar un correo individual
       setEnviado($email,1);
     }

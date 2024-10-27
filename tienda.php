@@ -61,7 +61,7 @@
                     recalcularSuscripciones($correo);
                     //refreshDataAuto();
                     promoFlotante();
-                }
+                } 
             ?>
             <section class="hero hero-inside" >
             <div id="cuerpo" class="cuerpo" >

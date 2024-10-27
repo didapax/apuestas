@@ -350,8 +350,9 @@ function seltickect(){
 
 function mostrarTecnoDialog() {
             const tecnoDialog = document.getElementById("tecno-dialog");
-            tecnoDialog.showModal();
-}
+            document.getElementById("overlay-common-dialog-1").style.display = 'flex';
+            tecnoDialog.style.display = 'block';            
+} 
 
 function enviarAsistencia(){
             const tecnoDialog = document.getElementById("tecno-dialog");
@@ -359,15 +360,15 @@ function enviarAsistencia(){
             const asunto = document.getElementById("asuntoTecno").value;
             const mensaje = document.getElementById("mensajeTecno").value;
             if(asunto && mensaje){
-                tecnoDialog.close();
+              closeTecnoDialog();
                 Swal.fire({
                     title: 'Cryptosignal',
-                    text: `Se procedera a Abrir un Ticket de Soporte con su Caso ${asunto}`,
+                    text: `A support ticket will be opened for your case. ${asunto}`,
                     icon: 'warning',
                     confirmButtonColor: '#EC7063',
-                    confirmButtonText: 'Si Gracias',
+                    confirmButtonText: 'Yes, Thanks',
                     showCancelButton: true,
-                    cancelButtonText: "No Cancelar"
+                    cancelButtonText: "No, Cancel"
                     }).then((result) => {
                         if (result.isConfirmed) {    
                             $.post("servermail",{
@@ -377,8 +378,8 @@ function enviarAsistencia(){
                                 mensaje: mensaje
                             },function(data){
                                     Swal.fire({
-                                                title: 'Soporte Tecnico Asistencia',
-                                                text: "Tu Ticket de Asistencia esta en proceso en un plazo de 24 a 48 horas seras atendido en tu correo registrado en la plataforma,  esta atento Gracias y disculpe los inconvenientes",
+                                                title: 'Technical Support Assistance',
+                                                text: "Your support ticket is currently being processed. Please allow 24-48 hours for a response to your registered email address. Thank you for your patience.",
                                                 icon: 'info',
                                                 confirmButtonColor: '#3085d6',
                                                 confirmButtonText: 'Ok'
@@ -391,7 +392,7 @@ function enviarAsistencia(){
                 tecnoDialog.close();
                 Swal.fire({
                     title: 'Cryptosignal',
-                    text: "Faltan datos no se puede crear un ticket vacio.!",
+                    text: "Insufficient data provided. Please complete all required fields to create a ticket.",
                     icon: 'error',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Ok'
@@ -435,14 +436,14 @@ function enviarAsistencia(){
 <section class='overlay-common-dialog' id='overlay-common-dialog-1'>
                     <div class='common-dialog' id='tecno-dialog'>
                         <div class="tecno-content">
-                        <h3 class='dialog-title'>Asistencia Tecnica</h3>
-                        <label>Asunto Requerido:</label><input type="text" id="asuntoTecno">
+                        <h3 class='dialog-title'>Technical Assistance</h3>
+                        <label>Required Subject:</label><input type="text" id="asuntoTecno">
                         <br>
-                        <label>Mensaje:</label>
+                        <label>Message:</label>
                         <br><textarea id="mensajeTecno"></textarea>
                         <div style='margin-top:1rem'>
-                            <button class="closeDialog-btn" onclick="closeTecnoDialog()">Cancelar</button>
-                            <button class="add-button" onclick="enviarAsistencia()">Enviar</button>
+                            <button class="closeDialog-btn" onclick="closeTecnoDialog()">Cancel</button>
+                            <button class="add-button" onclick="enviarAsistencia()">Send</button>
                         </div>
 
                         </div>
@@ -471,18 +472,18 @@ function enviarAsistencia(){
 <div class='chatOuterContainer'> 
 <section class='dataSec' id='dataSec'>
 <div class='data'>
-  <h3 >SOPORTE CRYPTOSIGNAL</h3>
+  <h3 >SUPPORT CHAT</h3>
   <a class='binance-button'  style=" cursor:pointer;background: antiquewhite; margin-top:25px;font-size:1rem;text-decoration:none;color:black;" onclick="mostrarTecnoDialog()">
-  Ayuda Asistencia en Linea
+    Help yourself with online assistance!
   </a><br>  
     <div style="margin-top:21px;">
-      <h5 style='margin: 0;'>Chat directo con el Cajero</h5>
-      <span style='font-size: 1.2rem;font-weight: bold;'>Fecha:</span> <span id=fecha style='font-size: 1.2rem;font-weight: bold;'></span><br>
+      <h5 style='margin: 0;'>Chat directly with a customer service representative</h5>
+      <span style='font-size: 1.2rem;font-weight: bold;'>DATE:</span> <span id=fecha style='font-size: 1.2rem;font-weight: bold;'></span><br>
 
       <div style='border-bottom: 1px solid gray;margin-top: 1rem;'>
-      <span style="font-size:1.4rem; font-weight:bold;">Seleccione un Deposito/Retiro Activo: </span>
+      <span style="font-size:1.4rem; font-weight:bold;">Select a Current Deposit or Withdrawal:</span>
       <select id="selectTicket" onchange="seltickect()" style="width:60%;color:black;">
-      <option value="">seleccione</option>
+      <option value="">Select</option>
       <?php 
         $correo= readClienteId($_SESSION['user'])['CORREO'];
         $resultado = sqlconector("SELECT * FROM TRANSACCIONES WHERE PAGADO=0 AND CLIENTE='$correo'");
@@ -503,23 +504,23 @@ function enviarAsistencia(){
 <div style='padding-top: 1rem;'>
   <b><span id="detalle"></span></b><br>
   <span id="msj"></span> <b><span class='pay' id=totalPagar></span></b> <span style='font-size:1rem;'></span><br>
-  Metodo de Pago: <b><span id=metodoPago></span></b><br>
+  Payment Method: <b><span id=metodoPago></span></b><br>
 
 </div>
 
 <div class='estadoContainer'>
     <p>
 
-      Estatus en : <span id=estado ></span>
+      Status: <span id=estado ></span>
       <?php 
         if($_SESSION['nivel']==1){
           ?>
         <select id="cambioEstado" name="estado" onchange="cambiarEstado()">
-            <option id="">selecciona...</option>
-            <option id="REVISION" value="REVISION">En Revision</option>
-            <option id="ESPERA" value="ESPERA">En Proceso</option>
-            <option id="EXITOSO" value="EXITOSO">Exitoso</option>
-            <option id="FALLIDO" value="FALLIDO">Fallido</option> 
+            <option id="">Select!</option>
+            <option id="REVISION" value="REVISION">Under Review</option>
+            <option id="ESPERA" value="ESPERA">In Process</option>
+            <option id="EXITOSO" value="EXITOSO">Successful</option>
+            <option id="FALLIDO" value="FALLIDO">Failed</option>
         </select>
           <?php
         }
@@ -531,17 +532,26 @@ function enviarAsistencia(){
 
     <section class='chatSec' id='chatSec'>
       <div class='chatData'>
-        <h5 ><?php if($_SESSION['nivel']==1) echo "Cliente: "; else echo "Cajero: ";?> <span id=usuario></span></h5>
+        <h5 ><?php if($_SESSION['nivel']==1) echo "Cliente: "; else echo "operator: ";?> <span id=usuario></span></h5>
       </div>
 
-      <div class='chatBox'>
+      <div class="chatBox" style='height: 37rem;'>
 
-        <div class="mi-div-con-scroll" id='chat'></div>
+        <div class="mi-div-con-scroll" id="chat"></div>
 
-        <div class='inputChatContainer' id="input-chat">
-        <input class='inputChat' style='width: 100%;' autocomplete='off' id="mensaje"  onkeyup='myFunction(event)'>
+        <div class="inputChatContainer" id="input-chat">
+          <input class='inputChat' style='width: 100%;' autocomplete='off' id="mensaje"  onkeyup='myFunction(event)'>
         
-        <button class='sendButton' onclick="chat()"><i class='bx--send'></i></button>
+          <button type="button" class="sendButton" onclick="chat()" style='padding: 0;
+    background: linear-gradient(45deg, #5f9ea1, transparent);
+    color: white;
+    border: 1px solid;
+    width: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    transform: rotate(180deg);'><i class="bx--send"></i>⫷</button>
       </div>
    </section>
 
@@ -569,27 +579,27 @@ let progressValue = 0; // Cambia este valor según el progreso real
 
 function updateProgressBar(label) {
   switch (label) {
-    case "REVISION":
+    case "Under Review":
       document.getElementById("label1").innerText =  "";
       document.getElementById("label2").innerText =  "";
-      document.getElementById("label1").innerText =  "EN REVISION";
+      document.getElementById("label1").innerText =  "Under Review";
       progressValue += 20;
     break;
-    case "ESPERA":
-      document.getElementById("label1").innerText =  "EN REVISION";
-      document.getElementById("label2").innerText =  "EN ESPERA";
+    case "In Process":
+      document.getElementById("label1").innerText =  "Under Review";
+      document.getElementById("label2").innerText =  "In Process";
       progressValue += 40;
     break;
-    case "EXITOSO":
-      document.getElementById("label1").innerText =  "EN REVISION";
-      document.getElementById("label2").innerText =  "EN ESPERA";
-      document.getElementById("label3").innerText =  "EXITOSO";
+    case "Successful":
+      document.getElementById("label1").innerText =  "Under Review";
+      document.getElementById("label2").innerText =  "In Process";
+      document.getElementById("label3").innerText =  "Successful";
       progressValue += 80;
     break;     
-    case "FALLIDO":
+    case "Failed":
       document.getElementById("label1").innerText =  "";
       document.getElementById("label2").innerText =  "";
-      document.getElementById("label3").innerText =  "FALLIDO";
+      document.getElementById("label3").innerText =  "Failed";
       progressValue += 100;
     break;       
   }

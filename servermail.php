@@ -20,6 +20,9 @@ function sendEmailSoporte($to, $subject, $body) {
     $mail->Password = 'F_M4Cth#YNEw';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
+    
+     // Caracteres y codificaci¨®n
+    $mail->CharSet = 'UTF-8';
 
     $mail->setFrom('soporteadministrativo@criptosignalgroup.online', 'Soporte Cryptosignal');
     $mail->addAddress($to);
@@ -45,6 +48,9 @@ function sendEmail($to, $subject, $body) {
     $mail->Password = 'JRnc^YaDj@la';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
+    
+    // Caracteres y codificaci¨®n
+    $mail->CharSet = 'UTF-8';    
 
     $mail->setFrom('criptosignalgroup@criptosignalgroup.online', 'Cryptosignal');
     $mail->addAddress($to);
@@ -70,7 +76,11 @@ if(isset($_POST['sendmailtecno'])){
   $cliente = $_POST['cliente'];
   $asunto = $_POST['asunto'];
   $mensaje = $_POST['mensaje'];
+  
+  $asunto = utf8_encode($asunto);
+  $mensaje = utf8_encode($mensaje);
   $email = "crptsgnlgrpspprt@gmail.com";
+  
   sendEmail($email, "Asistencia Crytosignal", "Tienes una Nueva asistencia para el Cliente:<br>$cliente<br>Asunto Tratado: $asunto<br> <u><b>Problema Presentado:</b></u> $mensaje <hr>Recuerda contestar desde el correo de soporte este mensaje es solo un recordatorio.");  
 }
 

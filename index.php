@@ -11,7 +11,7 @@ include "modulo.php";
     <meta charset="utf-8">
     <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>CrytoSignal</title>
+    <title>CriptoSignalGroup</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -45,7 +45,19 @@ include "modulo.php";
 
         </style>        
 </head>
-<body id="top">
+<body id="top"> 
+<?php
+                $correo = "";
+                $saldo = "0.00";
+
+                if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
+                    $correo = readClienteId($_SESSION['user'])['CORREO'];
+                    $saldo = readClienteId($_SESSION['user'])['SALDO'];
+                    recalcularSuscripciones($correo);
+                    //refreshDataAuto();
+                    //promoFlotante();
+                }
+            ?>    
     <section class="hero">
         <section class="navigation">
             <header style='padding:40px 0;'>
@@ -80,7 +92,7 @@ include "modulo.php";
             </div>
         </div>
         <div class="macbook-wrap wp3"></div>
-        <div class="responsive-feature-img"><img src="img/macbook-pro.png" alt="responsive devices"></div>
+        <div class="responsive-feature-img"><img src="index-assets/img/macbook-pro.png" alt="responsive devices"></div>
     </section>
 
 
@@ -125,7 +137,7 @@ include "modulo.php";
             justify-content: space-between;
             align-items: center;">
 
-                <iframe class='youtube-tutorial' src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe class='youtube-tutorial' src="https://www.youtube.com/embed/h3t7BDOySPE?si=vwwKs9qr7vJYPaxi" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
                 <div>
                     <div class="feature-list">
@@ -184,60 +196,57 @@ include "modulo.php";
       
             <div class="faqB">
               <button class="accordion">
-                ¿Cuánto tiempo de anticipación necesito para hacer un pedido?         
+              Why has my deposit not been credited?        
                  <i class="ei--chevron-down"></i>
               </button>
               <div class="faqPannel">
                 <p>
-                  Recomendamos hacer el pedido al menos una semana antes de la fecha deseada. Esto nos permite planificar y asegurarnos de tener los ingredientes y el tiempo necesario para crear el pastel perfecto.
+                The network confirmation for your deposit is still pending Your deposit will be credited correctly once the transaction meets the minimum number of network confirmations required by the system.                </p>
+              </div>
+            </div>
+      
+            <div class="faqB">
+              <button class="accordion">
+              What benefits does acquiring this product or service have?                
+              <i class="ei--chevron-down"></i>
+              </button>
+              <div class="faqPannel">
+                <p>
+                By obtaining an investment fund plan you will be able to receive passive earnings monthly.                </p>
+              </div>
+            </div>
+      
+            <div class="faqB">
+              <button class="accordion">
+                Do I really need this product or service?
+                <i class="ei--chevron-down"></i>
+              </button>
+              <div class="faqPannel">
+                <p>
+                An investment fund is an organized and useful way to save in the short and long term to meet financial goals.
                 </p>
               </div>
             </div>
       
             <div class="faqB">
               <button class="accordion">
-                ¿De cuántas personas es el pastel?
-                <i class="ei--chevron-down"></i>
+              How much money does it cost to acquire this product?
+              <i class="ei--chevron-down"></i>
               </button>
               <div class="faqPannel">
                 <p>
-                  Nuestros pasteles varían en tamaño y capacidad. Podemos hacer pasteles pequeños para 10 personas o grandes para más de 50. Cuéntanos cuántos invitados esperas y te recomendaremos el tamaño adecuado.
-                </p>
+                Cryptosignal has different plans that range from a minimum amount of 10 dollars to the maximum amount of 2 thousand dollars.                </p>
               </div>
             </div>
       
             <div class="faqB">
               <button class="accordion">
-                ¿Ofrecen servicio de entrega?          
-                <i class="ei--chevron-down"></i>
+                What payment methods do they accept?
+              <i class="ei--chevron-down"></i>
               </button>
               <div class="faqPannel">
                 <p>
-                  Sí, ofrecemos servicio de entrega dentro de un radio de 10 km desde nuestra tienda. El costo de la entrega depende de la distancia y la complejidad del pedido.
-                </p>
-              </div>
-            </div>
-      
-            <div class="faqB">
-              <button class="accordion">
-                ¿Qué ingredientes utilizan en sus pasteles?
-                <i class="ei--chevron-down"></i>
-              </button>
-              <div class="faqPannel">
-                <p>
-                  Utilizamos ingredientes frescos y de alta calidad. Nuestras recetas incluyen harina, azúcar, huevos, mantequilla, vainilla y otros sabores según el tipo de pastel.
-                </p>
-              </div>
-            </div>
-      
-            <div class="faqB">
-              <button class="accordion">
-                ¿Aceptan tarjetas de crédito o solo efectivo?
-                <i class="ei--chevron-down"></i>
-              </button>
-              <div class="faqPannel">
-                <p>
-                  Aceptamos tanto pago movil como efectivo. Puedes pagar en la tienda o al momento de la entrega.
+                Currently the platform has binance pay and bep20 address (usdt, usdc) as payment methods.
                 </p>
               </div>
             </div>

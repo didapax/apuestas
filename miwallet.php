@@ -35,19 +35,20 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
          }
 
          dialog {
-            position: absolute;   
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            background-color: white;   
-            width: 100%; 
-            z-index: 1000;
-            border: solid 1px gray;            
-        }
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border: none;
+                padding: 20px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                background-color: white;                
+            }
 
         .dialog-content {
                 text-align: center;
-                background: url('Assets/ayudabinance.jpg') no-repeat center/cover;
+                background: url(Assets/ayudabinance.jpg) no-repeat center / cover;
         }  
 
         #modalOverlay{
@@ -105,14 +106,14 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
     <section class='overlay-common-dialog' id='overlay-common-dialog-2'>
         <div class='common-dialog' id='modalOverlay'>
             <span id="closeModalBtn" class="close-btn" onclick="closeOverlayModal();">X</span>
-                <h2 class='dialog-title'>Depositar</h2>
-                Selecciona un Cajero: 
+                <h2 class='dialog-title'>Deposit</h2>
+                Choose a checkout operator: 
                 <select onchange="selcajero()" id="micajero" class='select'>
                 </select>
                 <br>                 
-                Como Vas a Depositar: 
+                Choice of Deposit: 
                 <select onchange="selpago()" id="comopago" style="margin-bottom: 2rem;" class='select'></select>
-                Establecoin:
+                StableCoin:
                 <select id="establecoin" style="margin-bottom: 2rem;" class='select'>
                     <option selected value="USDC">USDC</option>
                     <option value= "USDT">USDT</option>
@@ -128,36 +129,36 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                     </div>
                     <br>                    
                 </div><br><br>
-                <button onclick="jugar_back()" class='deposit-button' style="float:right;width:auto;" type="button" id="jugar" name="jugar"><img style='width:1.2rem' src='./index-assets/img/in.png'>Depositar</button>
+                <button onclick="jugar_back()" class='deposit-button' style="float:right;width:auto;" type="button" id="jugar" name="jugar"><img style='width:1.2rem' src='./index-assets/img/in.png'>Deposit</button>
         </div>
     </section>    
     <section class='overlay-common-dialog' id='overlay-common-dialog-3'>
         <div class='common-dialog' id='modalOverlay2'>    
-        <span id="closeModalBtn2" class="close-btn" onclick="closeModalOverlay2();">X</span>
-                <h2 class='dialog-title'>Retiros</h2>
+        <span id="closeModalBtn2" class="close-btn" onclick="closeOverlayModal2();">X</span>
+                <h2 class='dialog-title'>Withdraw</h2>
                 <input type="hidden" id="tipo_retiro" name="tipo_retiro">
                 <br>
-                Selecciona un Cajero: 
+                Choose a checkout operator: 
                 <select onchange="selcajero_retiro()" id="micajero_retiro" style="margin-bottom:2rem;" class='select'>
                 </select>
                 <br>
-                Retirar con: 
+                Withdraw with: 
                 <select required onchange="selretiro()" id="como_retiro" style="margin-bottom:2rem;" class='select'>
                 </select>
-                Establecoin:
+                StableCoin:
                 <select id="establecoin_retiro" style="margin-bottom:2rem;" class='select'>
                     <option selected value="USDC">USDC</option>
                     <option value= "USDT">USDT</option>
                 </select>                
                 <div id="detalles_retiro" style="display:none;width:100%;">
-                    Cantidad a Retirar: 
-                    <input style="border: 1px solid #905353eb;outline: none;background: #f8425357;border-radius: 5px;padding: 3px;" type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" type="number" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0"  step="1"><br>
+                    Quantity: 
+                    <input style="border: 1px solid #905353eb;outline: none;background: #f8425357;border-radius: 5px;padding: 3px;" type="number"  id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo()" value="0" step="0.01" type="number" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0"  step="1"><br>
                     <div id="calculo_retiro"  style="width: 100%;float: right;background: #24262f;border: none border-radius:5px;margin: 1rem 0;padding: 1rem;border: double 1px #337ab77d;color: white;"></div><br><br>
                     <br><br><div style='text-align:center;' id='descripcionMetodoRetiro'></div>
                     <input readonly class="datcajero" style="width: 100%;border: none;outline: none;background: #00000000;text-align: center;text-decoration: underline;margin-bottom: 1rem;font-size: 1.8rem;" id="paycliente">                    
                     <br>
                 </div><br><br>
-                <button onclick="retirar_back()" class='retire-button' style="float:right;width:auto;" type="button" id="retirar_btn" name="retirar_btn"><img style='width:1.2rem' src='./index-assets/img/out.png'> Retirar</button>
+                <button onclick="retirar_back()" class='retire-button' style="float:right;width:auto;" type="button" id="retirar_btn" name="retirar_btn"><img style='width:1.2rem' src='./index-assets/img/out.png'> Withdraw</button>
             </div>
         </section>
 
@@ -167,10 +168,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
       <!-- Inicio de la pestaña -->
       <div >
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="pill" style="color:acua;" href="#home">Mis Wallet</a></li>
-                <li><a data-toggle="pill" style="color:acua;" href="#depositos" onClick="recalcDepositos()">Depositos</a></li>
-                <li><a data-toggle="pill" style="color:acua;" href="#retiros" onClick="recalcRetiros()">Retiros</a></li>
-                <li><a data-toggle="pill" style="color:acua;" href="#historial" onClick="recalcHistorial()">Mis Compras</a></li>
+                <li class="active"><a data-toggle="pill" style="color:acua;" href="#home">Wallets</a></li>
+                <li><a data-toggle="pill" style="color:acua;" href="#depositos" onClick="recalcDepositos()">Deposits</a></li>
+                <li><a data-toggle="pill" style="color:acua;" href="#retiros" onClick="recalcRetiros()">Withdrawals</a></li>
+                <li><a data-toggle="pill" style="color:acua;" href="#historial" onClick="recalcHistorial()">Acquisitions</a></li>
             </ul>
             
             <div class="tab-content">
@@ -178,13 +179,15 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                 <div id="home" class="tab-pane fade in active">
                     
                     <div class="tab-title">
-                        <h3>Gestionar mis Wallet</h3>
+                        <h3>Manage Wallets</h3>
                     </div>                    
 
                     <!-- Dialogo de informacion del usuario binance -->
                      
-                    <dialog id="info-dialog">
-                        <div class="dialog-content"></div>
+                    <dialog id="info-dialog" style='background: linear-gradient(45deg, #6d6d6d, #309ccf5e);text-align: center;'>
+                        <div class="dialog-content">
+                            <img src="Assets/ayudabinance.jpg" alt="" style='width: -webkit-fill-available;'>
+                        </div>
                         <br>
                         <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>
                     </dialog>  
@@ -193,10 +196,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                     <section class='overlay-common-dialog' id='overlay-common-dialog-1'>
                     <div class='common-dialog' id='tecno-dialog'>
                         <div class="tecno-content">
-                        <h3 class='dialog-title'>Asistencia Tecnica</h3>
-                        <label>Asunto Requerido:</label><input type="text" id="asuntoTecno">
+                        <h3 class='dialog-title'>Technical Assistance</h3>
+                        <label>Issue:</label><input type="text" id="asuntoTecno">
                         <br>
-                        <label>Mensaje:</label>
+                        <label>Message:</label>
                         <br><textarea id="mensajeTecno"></textarea>
                         <div style='margin-top:1rem'>
                             <button class="closeDialog-btn" onclick="closeTecnoDialog()">Cancelar</button>
@@ -209,48 +212,40 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                   </section>
 
                     <div id="agregar">
-                    <a class='binance-button'  style=" cursor:pointer;background: antiquewhite; margin-top:25px;font-size:13px;text-decoration:none;color:black;" onclick="mostrarTecnoDialog()">
-                    Soporte Técnico Asistencia en Linea (click)
-                    </a>                                
-                    <br>
-                        <p style="margin: 21 0 1em;">
-                        Con tu Direccion de Correo Binance y la wallet BSC Bep-20 (Puede ser Metamask, Trust o cualquier otra que maneje BSC Bep-20)seran Utlizadas para los Depositos y Retiros, 
-                        asegurate que sea correcta, CryptoSignal no se hace responsable por la informacion 
-                        erronea que suministres.<br><br>
-                        </p>
                         <section > 
-                            <div >
-                                <div >
-                                <div > 
-                                        <div> 
-                                            <h4>Nombre de Usuario Binance:</h4> <input type="text" class='binance-input' style="color:white;" id="userBinance"><span title="Donde Buscar" style="color:black;margin-left:5px;cursor:pointer;" onclick="mostrarAyudaBinance()"> &#10068;</span>
-                                        </div>                                        
-                                    </div>                                    
-                                    <div > 
-                                        <div style="width: 100%;"> 
-                                            <h4>Correo Binance:</h4> <input type="text" class='binance-input' style="width: 50%;color:white;" id="payid">
-                                        </div>
-                                    </div>
-                                    <div  style="width: 100%;">
-                                        <div style="width: 80%;">  
-                                            <h4> Wallet BSC Bep-20 (Metamask, Trust)</h4> <input class='binance-input' style="width: 100%;color:white;" type="text" id="bep20">
-                                        </div>                                        
-                                    </div>
-                                </div>
-                                <button id="guardar" class='binance-button' style="margin-top:25px;" type="button" onclick="guardar()">Guardar</button><br>
-                                <div class='binance-image-container' style="margin-right: 15px;">
-                                    <image src="Assets/minibina.png">
-                                </div>
+                        <p style="margin: 0; padding-left: 1rem;">
+                            Your Binance email address and BSC BEP-20 wallet (which can be Metamask, Trust, or any other compatible with BSC BEP-20) will be used for deposits and withdrawals. Please ensure that this information is correct. CryptoSignal is not responsible for any errors in the information you provide.<br><br>
+                            </p>
+                            <div style='padding-left:1rem;padding-left: 1rem;display: flex;flex-direction: column;gap: 1rem;'>
+                            <div> 
+                                <h4>Binance Username:</h4> <input type="text" class='binance-input' style="color:white;" id="userBinance"><span title="Donde Buscar" style="color:black;margin-left:5px;cursor:pointer;" onclick="mostrarAyudaBinance()"> &#10068;</span>
+                            </div>                                        
+
+                            <div style="width: 100%;"> 
+                                <h4>Binance Email:</h4> <input type="text" class='binance-input' style="width: 50%;color:white;" id="payid">
                             </div>
+
+                            <div  style="width: 100%;">
+                                <div style="width: 80%;">  
+                                    <h4> Wallet BSC Bep-20 (Metamask, Trust)</h4> <input class='binance-input' style="width: 100%;color:white;" type="text" id="bep20">
+                                </div>                                        
+                            </div>
+
+                            <button id="Save" class='binance-button' style="margin-top:25px;width: 10rem;" type="button" onclick="guardar()">Save</button><br>
+                            </div>
+                            <div class='binance-image-container' style="margin-right: 15px;">
+                                <image src="Assets/minibina.png">
+                            </div>
+
                         </section>
-                    
-                    </div> 
+                        <br>
                     </div>
+                </div>
                 
                 
                 <div id="depositos" class="tab-pane fade" >
                     <div class="tab-title">
-                        <h3>Depositar Establecoin de Forma Facil y Segura</h3>
+                        <h3>Deposit stablecoins easily and securely</h3>
                     </div>
                     <div class="container mt-5 mb-5">
                         <div class='button-container'><button id="buttonDeposito" class='deposit-button' onclick="initDeposito()">Depositar</button> </div>
@@ -258,10 +253,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                                     <thead>
                                         <tr>
                                             <th>Ticket N.</th>
-                                            <th>Descripcion</th>
-                                            <th>Monto</th>
-                                            <th>Estatus</th>
-                                            <th>Calificacion</th>
+                                            <th>Description</th>
+                                            <th>Cost</th>
+                                            <th>Status</th>
+                                            <th>Rating</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tabla-cuerpo-depositos">
@@ -273,7 +268,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
 
                 <div id="retiros" class="tab-pane fade">
                     <div class="tab-title">
-                        <h3>Retirar Tus Establecoin de la Plataforma</h3>
+                        <h3>Withdraw your StableCoins</h3>
                     </div>
                     <div class="container mt-5 mb-5">
                     <div class='button-container'>   <button id="buttonRetiro" class='retire-button' onclick="showModalOverlay2();">Retirar</button> </div>
@@ -282,10 +277,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                                     <thead>
                                         <tr>
                                             <th>Ticket N.</th>
-                                            <th>Descripcion</th>
-                                            <th>Monto</th>
-                                            <th>Estatus</th>
-                                            <th>Calificacion</th>
+                                            <th>Description</th>
+                                            <th>Cost</th>
+                                            <th>Status</th>
+                                            <th>Rating</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tabla-cuerpo-retiro">
@@ -297,17 +292,17 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
 
                 <div id="historial" class="tab-pane fade">
                     <div class="tab-title">
-                        <h3>Historial de Compras y Suscripciones</h3>
+                        <h3>Purchase and Subscription Record</h3>
                     </div>
                     <div class="container mt-5 mb-5">
                                 <table id='example2' class='ui celled table' style='width:100%; '> 
                                     <thead>
                                         <tr>
-                                            <th>Finaliza</th>
-                                            <th>Dias</th>
-                                            <th>Suscripcion</th>
-                                            <th>Monto</th>
-                                            <th>Estatus</th>
+                                            <th>Ends:</th>
+                                            <th>Days</th>
+                                            <th>Subscription</th>
+                                            <th>Cost</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tabla-cuerpo-historial">
