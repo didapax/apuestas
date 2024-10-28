@@ -37,8 +37,8 @@
             }
             
             .outer-input-container{
-                display: flex;
-                flex-direction: column;
+            display: flex;
+            flex-direction: column;
             align-items: center;
             }
 
@@ -53,7 +53,7 @@
                 background-repeat: no-repeat;
                 background-size: cover;
                 border: 1px solid #67676778;
-                border-left: 2rem solid gainsboro;
+                border-left: 2rem solid #0d0e18;
                 min-height: 100vh;
                 display: flex;
                 align-items: center;
@@ -81,7 +81,7 @@
                 font-size: 14px;
                 width: 270px;
                 background: #212631;
-                border: 1px solid #ffffff94;
+                border: 1px solid #50dfdf7a;
                 border-radius: 8px;
                 padding: 14px;
                 color: #ffffffe8;
@@ -95,7 +95,7 @@
                 font-size: 14px;
                 width: 270px;
                 background: #212631;
-                border: 1px solid #ffffff94;
+                border: 1px solid #50dfdf7a;
                 border-radius: 8px;
                 padding: 14px;
                 color: #ffffffe8;
@@ -104,7 +104,7 @@
             }
 
             button{
-                background: linear-gradient(45deg, #97dfef, #4a6ed9);
+                background: linear-gradient(45deg, #609ed3, #1a9495);
                 border-radius: 7px;
                 color: #fff;
                 font-family: "Poppins", sans-serif;
@@ -159,7 +159,7 @@
 
             .blue-div {
                 width: 40%; /* Cambia de 40% a 100% */
-                background: linear-gradient(45deg, #8996d3, transparent);
+                background: linear-gradient(45deg, #318b8f9e, #20648d);
                 min-height: 50vh; /* Cambia height a min-height */
                 display: flex;
                 flex-direction: column;
@@ -172,11 +172,24 @@
             }
 
             .go-back{
-                font-weight: bold;float: right;cursor: pointer;position: absolute;top: 10%;right: 10%;font-size: 1rem;font-family: sans-serif;
+                font-weight: bold;
+                float: right;
+                cursor: pointer;
+                position: absolute;
+                top: 2rem;
+                right: 2rem;
+                font-size: 1rem;
+                font-family: sans-serif;
+                border: 1px solid #50dfdf7a;
+                padding: .5rem;
+                color: #50dfdf7a;
             }
 
             .go-back:hover{
-                color: #4a6ee9;
+                color: #212631;
+                background: #50dfdf7a;
+                text-decoration:underline;
+                transition: .2s ease;
             }
 
 
@@ -197,7 +210,6 @@
     form {
         max-width: 100%;
         width: 100% !important;
-        padding: 20px;
         border-left: 1rem solid gainsboro;
         border:none;
 
@@ -214,8 +226,17 @@
     }
     
     .termsR {
-        display:block;
-        }
+        display: block;
+        width: 90%;
+        font-family: sans-serif;
+        font-weight: 100;
+        font-size: 0.6rem;
+    }
+
+    .go-back{
+        top: 1rem;
+        right: 1rem;
+    }
 }
 
         </style>        
@@ -315,6 +336,8 @@
                 </div>
         </div>
 
+        <a title="Cerrar" class='go-back' onclick="window.location.href='index'">Back ➠</a>
+
             <form>
                 <?php 
 			        if(isset($_GET['code'])){
@@ -323,12 +346,11 @@
                         echo "<input type='hidden' name='referente' id='referente' value='NULO'>";
                     }
 		        ?>               
-                <a title="Cerrar" class='go-back' onclick="window.location.href='index'">⇦ Go Back </a>
                 
                 <section>
                 <div style='display: flex;flex-direction: column;align-items: center;'>
                 <img style='width:3.5rem;' src='Assets/logotype.png'>
-                <h2>Sign Up</h2>
+                <h2 style='text-decoration:underline;'>Sign Up</h2>
                 <br>
                 <div class='outer-input-container'> 
                     <div class='input-container'>Email:<input id="correo" required type="email" value="<?php echo $correo; ?>" ></div><br>
