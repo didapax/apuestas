@@ -11,11 +11,11 @@ $style = "";
 
       <!--=============== CSS ===============-->
       <link rel="stylesheet" href="css/navBar.css">
-      
+
 
    <div class="header-content" style='display: flex;align-items: center;'>
                      <div style='display: flex;align-items: center;'>
-                     <img src="./assets/logotype.png" alt="" style='width:4rem;'> 
+                     <img src="Assets/logotype.png" alt="" style='width:4rem;'> 
                     <div class="logo" onclick="window.location.href='index'">
                        CryptoSignal
                     </div>
@@ -223,3 +223,4 @@ $style = "";
                         <a class="nav-toggle" href="#"><span></span></a>
                     </div>
                 </div>
+
