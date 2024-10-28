@@ -74,6 +74,27 @@ include "modulo.php";
             }
 
 
+            @media screen and (max-width: 1050px) {
+
+                
+            body{
+                width: max-content;
+            }
+
+            }
+
+
+            
+            @media screen and (max-width: 990px) {
+
+                
+            body{
+                width: auto;
+            }
+
+            }
+
+
 
         </style> 
 <body > 
