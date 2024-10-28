@@ -243,9 +243,11 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1) {
                 <dialog id="info-dialog">
                     <div class="dialog-content"></div><br>
                     <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>
-                </dialog>
+                </dialog> 
+                <div id="outerCard" class='outerCard-container' style="background:none;"></div>
                 <div class="common-background" style="background:black; padding:2rem;background: #00000078;padding: 2rem;border-radius: 17px;">
                     <div class="vista" id="vista">
+                        Client's Subscriptions
                         <hr>
                         <table id='example' class='ui celled table' style='width:100%;'>
                             <thead style="background: #31708f;">

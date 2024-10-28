@@ -3,31 +3,28 @@ include "modulo.php";
 ?>
 
 <!doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+<html  lang="en"> 
 <head>
-    <meta charset="utf-8">
-    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>CriptoSignalGroup</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
-    <link rel="stylesheet" href="index-assets/css/normalize.min.css">
-    <link rel="stylesheet" href="index-assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="index-assets/css/jquery.fancybox.css">
-    <link rel="stylesheet" href="index-assets/css/flexslider.css">
-    <link rel="stylesheet" href="index-assets/css/styles.css">
-    <link rel="stylesheet" href="index-assets/css/queries.css">
-    <link rel="stylesheet" href="index-assets/css/etline-font.css">
-    <link rel="stylesheet" href="index-assets/bower_components/animate.css/animate.min.css">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <script src="index-assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
-    <link rel="shortcut icon" href="Assets/favicon.png">
+        <title>CriptoSignalGroup</title>
+        <meta charset="UTF-8">        
+        <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
+        <link rel="shortcut icon" href="Assets/favicon.png">
+        <link rel="stylesheet" type="text/css" href="css/Common.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="css/newStyles.css">
+        <link rel="stylesheet" type="text/css" href="index-assets/css/datatables.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+        <link rel="stylesheet" href="index-assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="index-assets/css/jquery.fancybox.css">
+        <link rel="stylesheet" href="index-assets/css/flexslider.css">
+        <link rel="stylesheet" href="index-assets/css/styles.css">
+        <link rel="stylesheet" href="index-assets/css/queries.css">
+        <link rel="stylesheet" href="index-assets/css/etline-font.css">
+        <link rel="stylesheet" href="index-assets/bower_components/animate.css/animate.min.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />        
+        <link rel="shortcut icon" href="Assets/favicon.png">
+    </head> 
     <style>
             @font-face {
                 font-family: impact;
@@ -43,10 +40,16 @@ include "modulo.php";
                 background:black;
             }
 
-        </style>        
-</head>
-<body id="top"> 
-<?php
+        </style> 
+<body > 
+   
+            <?php $page = "index"; ?>
+        <section class="navigation">
+            <header style='padding:40px 0;'>
+                <?php include 'barraNavegacion.php';?>
+            </header>
+        </section>
+        <?php
                 $correo = "";
                 $saldo = "0.00";
 
@@ -56,14 +59,9 @@ include "modulo.php";
                     recalcularSuscripciones($correo);
                     //refreshDataAuto();
                     //promoFlotante();
-                }
-            ?>    
-    <section class="hero">
-        <section class="navigation">
-            <header style='padding:40px 0;'>
-                <?php include 'barraNavegacion.php';?>
-            </header>
-        </section>
+                } 
+            ?> 
+<section class="hero">
         <div class="container">
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
@@ -294,43 +292,41 @@ include "modulo.php";
     <?php include 'footer.php';?>
     <!--FIN footer--> 
     
-    <script>
-        var acc = document.getElementsByClassName("accordion");
-        var i;
-  
-        for (i = 0; i < acc.length; i++) {
-          acc[i].addEventListener("click", function () {
-            this.classList.toggle("active");
-            this.parentElement.classList.toggle("active");
-  
-            var pannel = this.nextElementSibling;
-  
-            if (pannel.style.display === "block") {
-              pannel.style.display = "none";
-            } else {
-              pannel.style.display = "block";
-            }
-          });
-        }
-      </script>
-  
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
-    <script src="bower_components/retina.js/dist/retina.js"></script>
-    <script src="index-assets/js/jquery.fancybox.pack.js"></script>
-    <script src="index-assets/js/vendor/bootstrap.min.js"></script>
-    <script src="index-assets/js/scripts.js"></script>
-    <script src="index-assets/js/jquery.flexslider-min.js"></script>
-    <script src="index-assets/bower_components/classie/classie.js"></script>
-    <script src="index-assets/bower_components/jquery-waypoints/lib/jquery.waypoints.min.js"></script>
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <script>
-    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-    function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-    e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-    e.src='//www.google-analytics.com/analytics.js';
-    r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-    ga('create','UA-XXXXX-X','auto');ga('send','pageview');
-    </script>
+    <script src="Javascript/index.js"></script>
+
+            <script>
+                var acc = document.getElementsByClassName("accordion");
+                var i;
+
+                for (i = 0; i < acc.length; i++) {
+                    acc[i].addEventListener("click", function () {
+                        this.classList.toggle("active");
+                        this.parentElement.classList.toggle("active");
+
+                        var pannel = this.nextElementSibling;
+
+                        if (pannel.style.display === "block") {
+                            pannel.style.display = "none";
+                        } else {
+                            pannel.style.display = "block";
+                        }
+                    });
+                }
+            </script>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+            
+            
+            <script src="bower_components/retina.js/dist/retina.js"></script>
+            <script src="index-assets/js/jquery.fancybox.pack.js"></script>
+            <script src="index-assets/js/vendor/bootstrap.min.js"></script>
+            <script src="index-assets/js/scripts.js"></script>
+            <script src="index-assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+            <script src="index-assets/js/jquery.flexslider-min.js"></script>
+            <script src="index-assets/bower_components/classie/classie.js"></script>
+            <script src="index-assets/bower_components/jquery-waypoints/lib/jquery.waypoints.min.js"></script>
+
 </body>
 </html>
