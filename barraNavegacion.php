@@ -92,8 +92,10 @@ $style = "";
                                     }
                                 ?>
                             </ul>
-                            <ul class="member-actions" >
 
+                            
+                            <ul class="member-actions" >
+                            <?php if(isset($_SESSION['secured'])){ ?>
                                                    <li id='show-on-small'>
                                                        <a  href='perfilcliente'>
                                                           <i class='ri-profile-line'></i> Profile
@@ -109,7 +111,7 @@ $style = "";
                                                           <i></i><?php if(isset($_SESSION['user'])){echo "Balance <p id='saldo' style='color:green;margin:0;font-weight: 700;'>".price(readClienteId($_SESSION['user'])['SALDO'])."</p>";}?></a>
                                                     </li> 
                                                     
-
+                                 <?php } ?>
                                                     
                                                     
                                  <?php 

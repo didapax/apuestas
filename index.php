@@ -40,6 +40,41 @@ include "modulo.php";
                 background:black;
             }
 
+            #image-dissapear{
+                display:block;
+            }
+
+            @media screen and (max-width: 990px) {
+
+                
+            #image-dissapear{
+                display:none;
+            }
+
+            }
+
+
+            @media screen and (max-width: 1250px) {
+
+                
+            body{
+                width: max-content;
+            }
+
+            }
+
+            
+            @media screen and (max-width: 1200px) {
+
+                
+            body{
+                width: auto;
+            }
+
+            }
+
+
+
         </style> 
 <body > 
    
@@ -77,9 +112,9 @@ include "modulo.php";
     </section>
 
     <section class="features-extra section-padding" id="assets">
-        <div class="container">
+        <div class="container" style='display: flex;'>
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-5" style='width: 100%;'>
                     <div class="feature-list">
                         <h3>Introducing CryptoSignal!</h3>
                         <p>At Cryptosignal, we specialize in providing innovative fixed-term investment solutions using cryptocurrencies. Our approach is designed to offer stability and substantial returns within a specified period, making it an attractive option for investors looking for reliable growth.</p>
@@ -88,8 +123,8 @@ include "modulo.php";
                     </div>
                 </div>
             </div>
+            <div><img src="index-assets/img/macbook-pro.png" alt="responsive devices" style='width: 40rem;' id='image-dissapear'></div>
         </div>
-        <div class="macbook-wrap wp3"></div>
         <div class="responsive-feature-img"><img src="index-assets/img/macbook-pro.png" alt="responsive devices"></div>
     </section>
 

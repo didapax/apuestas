@@ -32,10 +32,9 @@
             }
 
             body{
-                background: linear-gradient(45deg, black, #3575d691);
                 height: 100vh;
-
-            }            
+                background: linear-gradient(45deg, black, #101721d6);            
+            }                 
 
             .content{
                 text-align: center;
@@ -56,7 +55,7 @@
                 background: #181a20;
                 background-repeat: no-repeat;
                 background-size: cover;
-                border: 1px solid #67676778;
+                border: 1px solid #00ffff40;
                 margin-top: 5vh;
             }
 
@@ -104,7 +103,7 @@
             }
 
             button{
-                background: linear-gradient(45deg, #97dfef, #4a6ed9);
+                background: linear-gradient(45deg, #609ed3, #1a9495);                
                 border-radius: 7px;
                 color: #fff;
                 font-family: "Poppins", sans-serif;
@@ -155,12 +154,26 @@
             }
             
             .go-back{
-                font-weight: bold;float: right;cursor: pointer;position: absolute;top: 10%;right: 10%;font-size: 1rem;font-family: sans-serif;
+                font-weight: bold;
+                float: right;
+                cursor: pointer;
+                position: absolute;
+                top: 2rem;
+                right: 2rem;
+                font-size: 1rem;
+                font-family: sans-serif;
+                border: 1px solid #50dfdf7a;
+                padding: .5rem;
+                color: #50dfdf7a;
             }
 
             .go-back:hover{
-                color: #4a6ee9;
+                color: #212631;
+                background: #50dfdf7a;
+                text-decoration:underline;
+                transition: .2s ease;
             }
+
 
 
             

@@ -186,7 +186,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                      
                     <dialog id="info-dialog" style='background: linear-gradient(45deg, #6d6d6d, #309ccf5e);text-align: center;'>
                         <div class="dialog-content">
-                            <img src="Assets/ayudabinance.jpg" alt="" style='width: -webkit-fill-available;'>
+                            <img src="Assets/ayudabinance.jpg" alt="" style='width: 100%;width: -moz-available;width: -webkit-fill-available;'>
                         </div>
                         <br>
                         <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>

@@ -22,7 +22,7 @@
 
             body{
                 height: 100vh;
-                background: linear-gradient(45deg, black, #3575d691);
+                background: linear-gradient(45deg, black, #101721d6);            
             }            
 
             .content{
@@ -38,20 +38,22 @@
                 font-weight: bold;
                 width: 25rem;
                 height: auto;
-                border-radius: 13px;
+                border-radius: 13px 13px 0 0;
                 text-align: center;
                 padding: 40px;
                 background: #181a20;
                 background-repeat: no-repeat;
                 background-size: cover;
-                border: 1px solid #67676778;
+                border: 1px solid #00ffff40;
                 margin-top: 5vh;
+
             }
 
             form h2{
                font-family: futurist;
                letter-spacing:1px; 
                margin-top:0.5rem;
+               text-decoration: underline;
             }
 
             .input-container{
@@ -69,7 +71,7 @@
                 font-size: 14px;
                 width: 270px;
                 background: #212631;
-                border: 1px solid #ffffff94;
+                border: 1px solid  #50dfdf7a;
                 border-radius: 8px;
                 padding: 14px;
                 color: #ffffffe8;
@@ -83,7 +85,7 @@
                 font-size: 14px;
                 width: 270px;
                 background: #212631;
-                border: 1px solid #ffffff94;
+                border: 1px solid  #50dfdf7a;
                 border-radius: 8px;
                 padding: 14px;
                 color: #ffffffe8;
@@ -92,7 +94,7 @@
             }
 
             button{
-                background: linear-gradient(45deg, #97dfef, #4a6ed9);
+                background: linear-gradient(45deg, #609ed3, #1a9495);                
                 border-radius: 7px;
                 color: #fff;
                 font-family: "Poppins", sans-serif;
@@ -129,18 +131,173 @@
             }
 
             .forgot-password-container{
+                display: flex;
+                flex-direction: column;
+                padding: 0;
+                width: 30rem;
+                background: #181a20;
+                border-radius: 0 0 13px 13px;
+                color: #4a6ee9;
+                font-family: "Poppins", sans-serif;
+            }
+
+            .forgot-password-container a{
+                width: auto;padding: 1rem;border: solid 1px #00ffff40;
+            }
+
+            .forgot-password-container a:hover{
+                color: #4a6ee9;
+                background: #13dae508;
+                text-decoration: underline;
+                transition: .2s ease;
+                cursor:pointer;
+            }
+
+             #last{
+            border-radius: 0 0 13px 13px;
+            }
+
+
+            
+            .go-back{
+                font-weight: bold;
+                float: right;
+                cursor: pointer;
+                position: absolute;
+                top: 2rem;
+                right: 2rem;
+                font-size: 1rem;
+                font-family: sans-serif;
+                border: 1px solid #50dfdf7a;
+                padding: .5rem;
+                color: #50dfdf7a;
+            }
+
+            .go-back:hover{
+                color: #212631;
+                background: #50dfdf7a;
+                text-decoration:underline;
+                transition: .2s ease;
+            }
+
+
+
+
+
+            @media screen and (max-width: 950px) {
+
+            body{
+                height: 100vh;
+                background: #181a20;
+                margin: 0;
+            }
+
+            .content {
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+            }
+
+            form {
+                width: auto;
+                height: auto;
+                border-radius: 13px 13px 0 0;                
+                text-align: center;
+                padding: 20px;
+                background: #181a20;
+                border: none;
+                margin-top: 5rem;
+            }
+
+            form h2 {
+                font-family: futurist;
+                letter-spacing: 1px;
+                margin-top: 0.5rem;
+                font-size: 1rem;
+            }
+
+        .outer-input-container{
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: center;
+        }
+
+            .input-container {
+                font-family: "Poppins", sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.2rem;
+                padding: 0;
+            }
+
+            input[type="email"] {
+                margin-top: 5px;
+                padding: 0;
+                font-size: 14px;
+                width: 270px;
+                background: #212631;
+                border: 1px solid  #50dfdf7a;
+                border-radius: 8px;
+                padding: 14px;
+                font-family: "Poppins", sans-serif;
+                font-weight: 600;
+            }
+
+            input[type="password"] {
+                margin-top: 5px;
+                padding: 0;
+                font-size: 14px;
+                width: 270px;
+                background: #212631;
+                border: 1px solid  #50dfdf7a;
+                border-radius: 8px;
+                padding: 14px;
+                font-family: "Poppins", sans-serif;
+                font-weight: 600;
+            }
+
+
+                
+            .forgot-password-container{
                 font-family: "Poppins", sans-serif;
                 color: #4a6ed9;
-                text-decoration:none;
-                font-weight:600;
-                cursor:pointer;
-                padding:.5rem;
+                text-decoration: none;
+                font-weight: 600;
+                cursor: pointer;
+                padding: .5rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+
+            .forgot-password-container a{
+                width: 100%;
             }
 
             .forgot-password-container a:hover{
                 color: #4a6ee9;
                 text-decoration: underline;
+                background: #13dae508;
             }
+            
+            .terms p {
+                font-family: "Poppins", sans-serif;
+                text-align: justify;
+                font-weight: 200;
+                font-size: 10px;
+                margin-top: 0px;
+        }
+
+        #last{
+            border-radius: 0;
+        }
+                
+    }
+
+
 
             
 
@@ -285,7 +442,7 @@
                         echo "<input type='hidden' name='referente' id='referente' value='NULO'>";
                     }
 		        ?>               
-                <a title="Cerrar" style="font-weight: bold;float:right;cursor:pointer;" onclick="window.location.href='index'">X</a>
+                <a title="Cerrar" class='go-back' onclick="window.location.href='index'">Back ➠</a>
                 <img style='width:3.5rem;' src='Assets/logotype.png'>
                 <h2>CryptoSignal</h2>
                 <br><br>
@@ -302,7 +459,7 @@
                 <div name="g-recaptcha-response" id="g-recaptcha-response" class="g-recaptcha" data-sitekey="6Lf1Ky8qAAAAAF7WqkzyLa6QnPQiuklj8tRr2og2" style='display: flex;align-items: center;justify-content: center;'></div>
                 -->                  
                 <div name="g-recaptcha-response" id="g-recaptcha-response" class="g-recaptcha" data-sitekey="6Ld1nA0aAAAAAA7F7eJOY7CMwg7aaQAfg3WZy6P0" style='display: none;align-items: center;justify-content: center;'></div>
-                <button type="button" onclick="registro()" id="btn_registro"> Inicio </button>
+                <button type="button" onclick="registro()" id="btn_registro"> Log in </button>
 
                 <div class="terms" id="terminos" ><u>Terms of use</u><br>
                 <p>By clicking "Start", you are accepting these Terms and Conditions, <b>Investors' Rights:</b>
@@ -311,7 +468,7 @@ Investors in Cryptosignal have their holdings represented by a unique card, whic
 <b>Non-Transferability:</b> Cards are non-transferable and cannot be sold or resold to other users. This ensures that ownership and benefits of the investment remain with the original investor, maintaining the integrity and security of the fund.</p>
                 </div>
             </form>
-            <div class='forgot-password-container'> <a onclick="recuperar()">Forgot my password?</a> <a style="margin-left:34px;" onclick="unirse()">Sign In</a></div>
+            <div class='forgot-password-container'> <a onclick="recuperar()" >Forgot my password?</a> <a onclick="unirse()" id='last'>Sign In</a></div>
         </div>
 
     </body>
