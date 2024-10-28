@@ -66,6 +66,7 @@
   flex-shrink: 0;
   transform-style: preserve-3d;
   perspective: 1000px;
+  cursor: pointer;
 }
 
 .cover .glow {
@@ -86,7 +87,7 @@
   border-radius: 15px;
 }
 
-.cover:hover .content {
+.rotated .content {
   transform: rotateY(180deg);
 }
 

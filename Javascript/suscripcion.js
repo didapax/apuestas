@@ -5,7 +5,7 @@ let tarjetas = [];
 
 function dibujaTarjeta(acciones,imagen,titulo,texto,mensaje,costo,estrellas){	
 	let dibujo = `
-    <div class="cover" >
+    <div class="cover" onclick="rotateCard(this)">
         <div class="content">
 			<div class="back-image-front" style="background: url('Assets/${imagen}') no-repeat center/cover;">
 				<div class='glow'>
@@ -51,6 +51,16 @@ function dibujaTarjeta(acciones,imagen,titulo,texto,mensaje,costo,estrellas){
 	</div>`;
     return dibujo;
 }
+
+function rotateCard(element) {
+	element.classList.toggle('rotated');
+}
+  
+document.querySelectorAll('.cover').forEach(card => {
+	card.addEventListener('click', function() {
+	  rotateCard(this);
+	});
+});
 
 function mostrarTarjetas() {
     const caja = document.getElementById("vista");	
