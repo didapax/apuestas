@@ -1,5 +1,5 @@
 <?php 
-include "modulo.php";
+include "servermail.php";
 ?>
 
 <!doctype html>

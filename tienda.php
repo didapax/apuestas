@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
-    include "modulo.php";
+    include "servermail.php";
     date_default_timezone_set('America/Caracas');    
 ?>
 
