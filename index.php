@@ -6,6 +6,7 @@ include "servermail.php";
 <html  lang="en"> 
 <head>
         <title>CriptoSignalGroup</title>
+		<link rel="manifest" href="manifest.json">		
         <meta charset="UTF-8">        
         <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0" />
         <link rel="shortcut icon" href="Assets/favicon.png">
@@ -22,7 +23,7 @@ include "servermail.php";
         <link rel="stylesheet" href="index-assets/css/etline-font.css">
         <link rel="stylesheet" href="index-assets/bower_components/animate.css/animate.min.css">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />        
+        <link rel="stylesheet" type="text/css" href="Javascript/SweetAlert/sweetalert2.min.css" />
         <link rel="shortcut icon" href="Assets/favicon.png">
     </head> 
     <style>
@@ -383,6 +384,6 @@ include "servermail.php";
             <script src="index-assets/js/jquery.flexslider-min.js"></script>
             <script src="index-assets/bower_components/classie/classie.js"></script>
             <script src="index-assets/bower_components/jquery-waypoints/lib/jquery.waypoints.min.js"></script>
-
+			<script src="page_script.js" defer></script>
 </body>
 </html>
