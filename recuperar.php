@@ -88,18 +88,21 @@
 				<input type="hidden" name="asociado" id="asociado" value="<?php echo $_GET['key']; ?>">
 				<input type="hidden" name="code" id="code" value="<?php echo $_GET['code']; ?>">
 				<h2>Recuperar Contraseña</h2>
-				<input type="password" placeholder="Enter New Password" name="psw" id="psw" required >
+				<input style="color:black;padding:3px;" type="password" placeholder="Enter New Password" name="psw" id="psw" required >
 				<br><br>
-				<button type="submit" style="background:#BCE7BC;" name="guardar" class="btn btn-form">Cambiar Contraseña</button>
+				<button type="submit" style="background:#BCE7BC;color:black" name="guardar" class="btn btn-form">Cambiar Contraseña</button>
 				<br>
 			</form>
 
 		<?php 
 		}
 			else {
-				echo "<span style='color:black;'>El Link de Recuperacion ha Expirado....!</span>";
+				echo "<span style='color:white;'>El Link de Recuperacion ha Expirado....!</span>";
 			}
-		}  
+		}
+        else{
+            header("Location: index");
+        }  
 		?>
 		</div>
         </div>

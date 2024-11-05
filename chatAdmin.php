@@ -319,7 +319,7 @@ function seltickect(){
 </div>
 
 <div class='chatOuterContainer'> 
-<section class='dataSec'>
+<section class='dataSec' style="color:#dfee6e;font-weight: bold;">
 <div class='data'>
   <h3 >SOPORTE CRIPTO SIGNAL GROUP</h3>
     <div>
@@ -346,7 +346,7 @@ function seltickect(){
       <?php 
         if($_SESSION['nivel']==1){
           ?>
-        <select id="cambioEstado" name="cambioEstado" onchange="cambiarEstado()">
+        <select style="color: black;font-weight: bold;" id="cambioEstado" name="cambioEstado" onchange="cambiarEstado()">
             <option id="">selecciona...</option>
             <option id="REVISION" value="REVISION">En Revision</option>
             <option id="ESPERA" value="ESPERA">En Espera</option>
@@ -375,7 +375,16 @@ function seltickect(){
         <div class='inputChatContainer' id="input-chat">
         <input class='inputChat' style='width: 100%;' autocomplete='off' id="mensaje"  onkeyup='myFunction(event)'>
         
-        <button class='sendButton' onclick="chat()"><i class='bx--send'></i></button>
+        <button type="button" class="sendButton" onclick="chat()" style='padding: 0;
+    background: linear-gradient(45deg, #5f9ea1, transparent);
+    color: white;
+    border: 1px solid;
+    width: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    transform: rotate(180deg);'><i class="bx--send"></i>⫷</button>
       </div>
    </section>
 

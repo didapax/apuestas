@@ -123,11 +123,11 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1) {
                     <p>Wallet Bep20: <b>${producto.bep20}</b></p>
                     `;
                 dialog.showModal();
-            }
+            } 
 
             function dibujaTarjeta(acciones, imagen, titulo, texto, mensaje, costo, estrellas) {
                 let dibujo = `
-        <div class="cover" >
+        <div class="cover" onclick="rotateCard(this)">
             <div class="content">
                 <div class="back-image-front" style="background: url('Assets/${imagen}') no-repeat center/cover;">
                     <div class='glow'>
@@ -174,6 +174,16 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1) {
                 return dibujo;
             }
 
+            function rotateCard(element) {
+                element.classList.toggle('rotated');
+            }
+            
+            document.querySelectorAll('.cover').forEach(card => {
+                card.addEventListener('click', function() {
+                rotateCard(this);
+                });
+            });     
+
             function mostrarTarjetas() {
                 const caja = document.getElementById("outerCard");
                 caja.innerHTML = '';
@@ -195,7 +205,6 @@ if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1) {
                     caja.innerHTML += dibujaTarjeta(acciones, tarjeta.imagen, tarjeta.titulo, texto, mensaje, costo, estrellas);
                 });
             }
-
 
             function recuperarTarjetas() {
                 fetch("block?getSuscripciones=&correo=" + document.getElementById('correo').value)

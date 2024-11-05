@@ -222,7 +222,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 <label style="margin-left:13px; font-weight:bold;" id="reg"></label>
             </div> -->
         <dialog id="modalOverlay">
-                <span id="closeModalBtn" class="close-btn" onclick="document.getElementById('modalOverlay').close();">X</span>
+                <span id="closeModalBtn" class="close-btn" style="color:black;" onclick="document.getElementById('modalOverlay').close();">X</span>
                 <h2><span id="evento"></span></h2>
                 <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
                 <input type="hidden" id="idapuesta">

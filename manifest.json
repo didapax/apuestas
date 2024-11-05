@@ -2,7 +2,6 @@
   "name": "Cryptosignal Group",
   "short_name": "Cryptosignal",
   "lang": "es-ES",
-  "name": "Cryptosignal Group",
   "version": "0.3.2",
   "main": "worker.js",
   "icons": [

@@ -154,7 +154,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
             <button style="display:none;margin-left:21px; background:#E9B2B2; display:none;" id="btn_reset" type="button" onclick="reset()">Reset Promocion</button>
         </div>
         <dialog id="modalOverlay" >
-        <span id="closeModalBtn" class="close-btn" onclick="document.getElementById('modalOverlay').close();">X</span>
+        <span id="closeModalBtn" class="close-btn" style="color:black;" onclick="document.getElementById('modalOverlay').close();">X</span>
                 <h2>Agregar una Promocion</h2>
                 Titulo: <input type="text" id="nombre"><br>
                 Detalle:<br>

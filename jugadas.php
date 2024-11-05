@@ -31,11 +31,12 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
 }
 
           .textAreaContainer{
-            background:white;
-            color: black;
+            background:#363e4a;
+            color: white;
          }
          textarea{
-            color:black;
+            background:#363e4a;
+            color:white;
          }
          input[type=text]{
             color:black;
@@ -91,7 +92,8 @@ input[type="checkbox"] {
                 padding: 20px;
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
                 border-radius: 8px;
-                background-color: white;   
+                background-color: black;
+                color:white;
                 width: 80%; 
                 height: 88%;
                 overflow-y: auto;                   
@@ -101,7 +103,7 @@ input[type="checkbox"] {
 
             dialog h2,h3{
                 font-size: 1rem;
-                color:black;
+                color:white;
             }
 
             .dialog-content {
@@ -109,12 +111,17 @@ input[type="checkbox"] {
             }
 
             .dialog-content p{
-                color: black;
+                color: white;
             }
 
             .trumbowyg-modal {
                 z-index: 1000050 !important; /* Ajusta este valor según sea necesario */
             }
+
+            .trumbowyg-editor, .trumbowyg-textarea {
+            background: #363e4a;
+            color: white;
+            }            
         </style>        
         <script>
 
