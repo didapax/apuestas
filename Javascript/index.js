@@ -61,7 +61,7 @@ function rotateCard(element) {
 	  rotateCard(this);
 	});
   });
-
+ 
 function mostrarTarjetas() {
     const caja = document.getElementById("vista");	
     caja.innerHTML = '';
