@@ -73,7 +73,7 @@ function mostrarTarjetas() {
         let estrellas = dibujarEstrellas(tarjeta.estrellas);
         if (tarjeta.bloqueo === '1') {
             acciones = `onclick="bloque()"`;
-            mensaje = "<span style='color:red;'>Suscripcion Bloqueda</span>";
+            mensaje = "<span style='color:red;'>Suscripcion Pausada</span>";
         }
 
         if (tarjeta.sesion === false) {
@@ -183,7 +183,7 @@ function initsession(){
 function bloque(){
 	Swal.fire({
 		title: 'Bloqueo',
-		text: "Suscripcion Bloqueda, Vuelva a Intentarlo Mas tarde o Elija otra.",
+		text: "Suscripcion Pausada, Vuelva a Intentarlo Mas tarde o Elija otra.",
 		icon: 'error',
 		confirmButtonColor: '#3085d6',
 		confirmButtonText: 'Continuar'
