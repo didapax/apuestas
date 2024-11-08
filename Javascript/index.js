@@ -23,9 +23,6 @@ function dibujaTarjeta(id,acciones,imagen,titulo,texto,mensaje,costo,estrellas){
                                         <p>${texto.slice(0, 130)}</p>
                                     </div>
                                 </section>
-                                <section class='right-side'>
-                                    <button class='yellow-button' ${acciones}>OBTENER</button>
-                                </section>
                             </section>
                             <section class='lower-side'>
                                 <div class='cost-container'>
@@ -36,16 +33,18 @@ function dibujaTarjeta(id,acciones,imagen,titulo,texto,mensaje,costo,estrellas){
                                     </div>
                                 </div>
                                 <div class='star-container'>
-                                    <div class='stars'> ${estrellas} </div>
-                                    <div class='message'> ${mensaje} </div>
+                                    <div class='stars' style="font-weight: 800;"> ${estrellas} </div>                                    
                                 </div>
                             </section>
                         </div>
                     </div>
                 </div>
-                <div class="back-image-back" style="background: url('Assets/${imagen}') no-repeat center/cover; display:flex;align-items: center;justify-content: center;">
+                <div class="back-image-back" style="background: url('Assets/${imagen}') no-repeat center/cover; display:flex;flex-direction: column;align-items: center;justify-content: center;">
                     <input type="hidden" id="M${id}" value="${costo}">
                     <button class='yellow-button' ${acciones}>OBTENER AHORA!!</button>
+					<div style="position: absolute; left: 30%; top: 85%;font-weight: 800;color:antiquewhite;">
+						<div class='message'> ${mensaje} </div>
+					</div>
                 </div>
             </div>
         </div>`;
