@@ -7,7 +7,9 @@ let depositos = [];
 let historial = [];
 let cajeros = [];
 let person = [];
+let dataSend = [];
 let retiroTabla = null;
+let sendTabla = null;
 let cajeroTabla = null;
 let depositosTabla = null;
 let historialTabla = null;
@@ -300,7 +302,7 @@ function retirar_back(){
                                             confirmButtonColor: '#3085d6',
                                             confirmButtonText: 'Ok'
                                             });
-                        }                                   
+                        }                           
                     }
                     else{
                         window.location.href="miwallet";
@@ -381,8 +383,9 @@ function retirar(){
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok'
                         });
-    }         
+    }        
 }
+
 function showModalOverlay2() {
     document.getElementById('modalOverlay2').style.display = 'flex';
     document.getElementById("overlay-common-dialog-3").style.display = 'flex';
@@ -534,6 +537,7 @@ function mostrarTablaRetiros() {
         }        
         const fila = document.createElement("tr");
         fila.innerHTML = `
+            <td>${producto.fecha}</td>
             <td>${producto.ticket}</td>
             <td>${producto.descripcion}</td>
             <td>${Math.round(producto.monto * 100) / 100} ${producto.moneda}</td>
@@ -544,6 +548,38 @@ function mostrarTablaRetiros() {
     });
 }
 
+function mostrarTablaSend() {
+    const tablaCuerpo = document.getElementById("tabla-cuerpo-send");
+    tablaCuerpo.innerHTML = "";
+
+    dataSend.forEach((producto, index) => {
+        let color_estatus="#ff7b7b";
+        switch (producto.estatus) {
+            case 'Under Review':
+                color_estatus="#25d596";
+                break;
+                case 'In Process':
+                    color_estatus="#478cf7";
+                    break;        
+
+                case 'Successful':
+                    color_estatus="#f78c3d";
+                    break;        
+            default:
+                color_estatus="#ff7b7b";
+                break;
+        }        
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+            <td>${producto.fecha}</td>
+            <td>${producto.ticket}</td>
+            <td>${producto.sendto}</td>
+            <td style='color:${producto.color};'>${Math.round(producto.monto * 100) / 100} ${producto.moneda}</td>
+            <td style='color: #fff;font-weight: 600;text-align: center;background:${color_estatus}'>${producto.estatus}</td>
+        `;
+        tablaCuerpo.appendChild(fila);
+    });
+}
 
 function mostrarTablaDepositos() {
     const tablaCuerpo = document.getElementById("tabla-cuerpo-depositos");
@@ -568,6 +604,7 @@ function mostrarTablaDepositos() {
         }
         const fila = document.createElement("tr");
         fila.innerHTML = `
+            <td>${producto.fecha}</td>
             <td>${producto.ticket}</td>
             <td>${producto.descripcion}</td>
             <td>${Math.round(producto.monto * 100) / 100} ${producto.moneda}</td>
@@ -680,6 +717,36 @@ function recuperarCajeros() {
     
     }
 
+
+    function recuperarSend() {
+        fetch("block?readSend=1&correo="+document.getElementById('correo').value)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error en la solicitud: " + response.status);
+                }
+                return response.json(); // Parsear la respuesta como JSON
+            })
+            .then(data => {
+                dataSend = data;  
+                
+                mostrarTablaSend();
+                
+                 sendTabla = $('#tableSend').DataTable({
+                    responsive: true,
+                    paging: true,
+                    searching: true
+                });
+                
+                //new DataTable('#example1');
+                // Aquí puedes procesar los datos recibidos (data
+                console.log("Datos retiros:", data);
+            })
+            .catch(error => {
+                console.error("Error en la solicitud:", error);
+            });
+        
+        }
+    
 function recuperarRetiros() {
     fetch("block?readRetiros=1&correo="+document.getElementById('correo').value)
         .then(response => {
@@ -718,7 +785,18 @@ function recuperarRetiros() {
         }
     
         recalcResponsive().then(recalcResponsive);
-    }    
+    }
+
+    function recalcSend() {
+        function recalcResponsive() {
+            return new Promise(resolve => {
+                sendTabla.responsive.recalc();
+                setTimeout(resolve, 500); // Espera a que termine la recalculación
+            });
+        }
+    
+        recalcResponsive().then(recalcResponsive);
+    }        
 
     function recalcCajeros() {
         function recalcResponsive() {
@@ -908,13 +986,88 @@ function recuperarRetiros() {
                 });
             }
         }
+
+        function sendToEmail(){
+            if(document.getElementById("amountTo").value*1 > 0){
+                if((document.getElementById("tsaldo").value*1) >= (document.getElementById("amountTo").value*1)){
+                    if(document.getElementById("sendTo").value.length>0){
+                        Swal.fire({
+                            title: 'Send',
+                            text: "Confirms that you will ship at "+document.getElementById("sendTo").value+" "+document.getElementById("amountTo").value+" USDC",
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes',
+                            showCancelButton: true,
+                            cancelButtonText: "No"                            
+                            }).then((result) => {
+                                if (result.isConfirmed) {          
+                                    document.getElementById("buttonSend").disabled = true;
+                                    $.post("block",{
+                                        sendtoemail:"",                        
+                                        tipo: "SEND",
+                                        comopago: "TRANSFER",
+                                        origen: "CRYPTOSIGNAL",
+                                        destino: document.getElementById("sendTo").value,
+                                        correo: document.getElementById("sendTo").value,
+                                        cajero: document.getElementById("correo").value,
+                                        monto: document.getElementById("amountTo").value,                        
+                                        recibe: document.getElementById("amountTo").value,
+                                        comision: document.getElementById("amountTo").value,
+                                        moneda: "USDC"
+                                    },function(data){
+                                        datos = JSON.parse(data);
+                                        Swal.fire({
+                                            title: 'Send',
+                                            text: datos.mensaje,
+                                            icon: datos.icon,
+                                            confirmButtonColor: '#3085d6',
+                                            confirmButtonText: 'Ok'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {          
+                                                    window.location.href="miwallet";
+                                                }    
+                                            });
+                                    });                                
+                                }    
+                            }); 
+                    }else{
+                        Swal.fire({
+                                        title: 'Send',
+                                        text: "Send cannot be processed or data is missing.",
+                                        icon: 'error',
+                                        confirmButtonColor: '#3085d6',
+                                        confirmButtonText: 'Ok'
+                                        });
+                    }                    
+                }
+                else{
+                    Swal.fire({
+                                title: 'Send To',
+                                text: "Insufficient USDC balance",
+                                icon: 'error',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                                });
+                }
+            }
+            else{
+                Swal.fire({
+                                title: 'Send To',
+                                text: "Send must be at least 1 USDC",
+                                icon: 'error',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                                });
+            }
+        }
     
         function inicio(){
-            leerDatos();                
-            recuperarRetiros();  
-            recuperarDepositos();  
-            recuperarHistorial();  
-            recuperarCajeros();                       
+            leerDatos();         
+            recuperarRetiros();
+            recuperarDepositos();
+            recuperarHistorial();
+            recuperarCajeros();
+            recuperarSend();
             //myVar = setInterval(refrescar, 2000);
         }
         

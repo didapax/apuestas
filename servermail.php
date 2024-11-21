@@ -21,7 +21,7 @@ function sendEmailSoporte($to, $subject, $body) {
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
     
-     // Caracteres y codificaci��n
+     // Caracteres y codificacion
     $mail->CharSet = 'UTF-8';
 
     $mail->setFrom('soporteadministrativo@criptosignalgroup.online', 'Soporte Cryptosignal');

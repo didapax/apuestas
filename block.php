@@ -52,19 +52,58 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
   
       $para = $cajero;
       $asunto = "Tienes un Retiro Pendiente por ejecutar";
-      $mensaje = "Retiro Pendiente por ejecutar de $cliente por un monto de: $recibe por la plataforma $comopago";
-      //$cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
-      //$cabeceras .= "MIME-Version: 1.0" . "\r\n";
-      //$cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-  
+      $mensaje = "Retiro Pendiente por ejecutar de $cliente por un monto de: $recibe por la plataforma $comopago";  
       sendEmail($para, $asunto, $mensaje);
-      /*if(mail($para, $asunto, $mensaje, $cabeceras)) {
-        echo "Correo enviado exitosamente.";
-      } else {
-          echo "Error al enviar el correo.";
-      } */  
   }
-    
+  
+  if(isset($_POST['sendtoemail'])){
+    $obj = array('icon' => 'success', 'mensaje' => 'Successful transaction, USDC has been sent');
+    $wallet_comisiones = $_POST['correo'];
+    $ticket = generaTicket();
+    $monto = $_POST['monto'];
+    $recibe = $_POST['recibe'];
+    $comision = $_POST['comision'];
+    $cajero = $_POST['cajero'];
+    $cliente = $_POST['correo'];
+    $origen = $_POST['origen'];
+    $destino = $_POST['destino'];
+    $descripcion= $_POST['tipo'];
+    $comopago = $_POST['comopago'];
+    $moneda = $_POST['moneda'];
+  
+    if(ifUsuarioExist($cliente)){
+      sqlconector("INSERT INTO TRANSACCIONES (TICKET,TIPO,DESCRIPCION,CAJERO,CLIENTE,ORIGEN,DESTINO,MEDIO_PAGO,MONTO,RECIBE,MONEDA,PAGADO,ENVIADO,ESTATUS) VALUES(
+        '$ticket',
+        'SEND',
+        '$descripcion',
+        '$cajero',
+        '$cliente',
+        '$origen',
+        '$destino',      
+        '$comopago',      
+        $monto,
+        $recibe,
+        '$moneda',
+        1,
+        1,
+        'Successful')");
+  
+      $saldo= readCliente($cajero)['SALDO'] - $monto;
+      sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$cajero'");
+      $saldo_comision = readCliente($wallet_comisiones)['SALDO'] + $comision;
+      sqlconector("UPDATE USUARIOS SET SALDO = $saldo_comision WHERE CORREO='$wallet_comisiones'");
+  
+      $para = $cliente;
+      $asunto = "Recibiste Transferencia en USDC";
+      $mensaje = "Recibiste $recibe $moneda de $cajero por via $comopago Numero: $ticket por la Red de Cryptosignal, puedes hacer uso de tu dinero, gracias por preferirnos";
+      sendEmail($para, $asunto, $mensaje);
+    }else{
+      $obj['mensaje'] = 'The user is not registered on the platform';
+      $obj['icon'] = 'error';
+    }
+      echo json_encode($obj);
+  }
+
   if(isset($_POST['depositar'])){ 
     $ticket = generaTicket();
     $monto = $_POST['cantidad'];
@@ -91,15 +130,9 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
     $para = $cajero;
     $asunto = "Tienes un deposito Pendiente";
     $mensaje = "Deposito Pendiente por revisar de $cliente por un monto de: $monto por la plataforma $comopago";
-    //$cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
-    //$cabeceras .= "MIME-Version: 1.0" . "\r\n";
-    //$cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
     sendEmail($para, $asunto, $mensaje);
-    /*if(mail($para, $asunto, $mensaje, $cabeceras)) {
-        echo "Correo enviado exitosamente.";
-    } else {
-        echo "Error al enviar el correo.";
-    }*/
+
   }
   
   if(isset($_POST['addpar'])){
@@ -705,6 +738,37 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
     mysqli_close($conexion);
     echo json_encode($obj);
   }
+
+  if(isset($_GET['readSend'])) {
+    $obj = array();    
+    $correo = $_GET['correo'];    
+    $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
+    $consulta = "select * from TRANSACCIONES WHERE TIPO='SEND' AND PAGADO=1 AND ENVIADO=1 AND (CAJERO='$correo' OR CLIENTE='$correo') ORDER BY FECHA DESC";
+    $resultado = mysqli_query( $conexion, $consulta );
+    while($row = mysqli_fetch_assoc($resultado)){
+      $color = "red";    
+      $sendTo = $row['CLIENTE'];
+      if($sendTo == $correo){
+        $sendTo = $row['CAJERO'];
+        $color ="green";
+      }
+      $obj[] = array('fecha' => latinFecha($row['FECHA']),
+      'id' => $row['ID'],
+      'ticket' => $row['TICKET'],
+      'descripcion' => $row['DESCRIPCION'],
+      'monto' => price($row['MONTO']),
+      'sendto' => $sendTo,
+      'cliente' => $row['CAJERO'],
+      'pagado' => $row['PAGADO'],
+      'rate' => $row['RATE'],
+      'moneda' => $row['MONEDA'],
+      'calificado' => $row['CALIFICADO'],
+      'color' => $color,
+      'estatus' => $row['ESTATUS']);
+    }
+    mysqli_close($conexion);
+    echo json_encode($obj);
+  }
   
   if(isset($_GET['readHistorial'])) {
     $obj = array();
@@ -772,14 +836,11 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
   
   if(isset($_POST['cancelar'])){
     sqlconector("UPDATE APUESTAS SET ELIMINADO=1, ESTATUS='CANCELADO' WHERE ID={$_POST['cancelar']}");
-    //ini_set( 'display_errors', 1 );
-    //error_reporting( E_ALL );
-    //$from = "soporte@fortunaroyal.com";
+
     $to = readApuestaId($_POST['cancelar'])['CLIENTE'];
     $subject = "Su Compra ha Sido Cancelada";
     $message = "Fue Cancelada, no se consiguio el Id de la transaccion (".readApuestaId($_POST['cancelar'])['NOTAID']." ) le Recordamos que Criptosignal no se hace responsable por perdidas debe de revisar y colocar la Nota Id de su Transferencia al momento de Tranferir.. ";
-    //$headers = "From:" . $from;
-    //mail($to,$subject,$message, $headers);  
+
     sendEmail($to, $subject, $message);
   }
   
@@ -808,31 +869,16 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         $para = $correo;
         $asunto = "Transaccion de Deposito CryptoSignal";
         $mensaje = "Tu transaccion de deposito ha sido marcada con el estatus Exitoso, puedes consultar tu saldo ";
-        //$cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
-        //$cabeceras .= "MIME-Version: 1.0" . "\r\n";
-        //$cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
         sendEmail($para, $asunto, $mensaje);
-        /*if(mail($para, $asunto, $mensaje, $cabeceras)) {
-            echo "Correo enviado exitosamente.";
-        } else {
-            echo "Error al enviar el correo.";
-        }*/
+
       }
       elseif (readTransaccionTicket($_POST['idapuesta'])['TIPO'] == "RETIRO"){
         $para = $correo;
         $asunto = "Transaccion de Retiro CryptoSignal";
         $mensaje = "Tu Retiro ha sido marcada con el estatus Exitoso, puedes consultar tu saldo en tu wallet de destino.! gracias por preferirnos ";
-        //$cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
-        //$cabeceras .= "MIME-Version: 1.0" . "\r\n";
-        //$cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
         sendEmail($para, $asunto, $mensaje);
-        /*if(mail($para, $asunto, $mensaje, $cabeceras)) {
-          echo "Correo enviado exitosamente.";
-        } else {
-            echo "Error al enviar el correo.";
-        }*/
-  
       }
     }
   }
@@ -1051,11 +1097,8 @@ else{
     $para = $correo;
     $asunto = "Verificación de correo electrónico";
     $mensaje = "<a href='http://criptosignalgroup.online/verificarEmail?vkey=$vkey'>Verificar Cuenta</a>";
-    //$cabeceras = "From: criptosignalgroup@criptosignalgroup.online \r\n";
-    //$cabeceras .= "MIME-Version: 1.0" . "\r\n";
-    //$cabeceras .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
     sendEmail($para, $asunto, $mensaje);
-    //mail($para, $asunto, $mensaje, $cabeceras);  
   }  
 
   if(isset($_POST['recivecodemail'])){

@@ -23,6 +23,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
         <link rel="stylesheet" href="index-assets/bower_components/animate.css/animate.min.css">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <script src="Javascript/miwallet.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
     </head>
         <style> 
             .textAreaContainer{
@@ -121,11 +122,11 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                 <div id="detalles" style="display:none;width:100%;">
                     Cantidad a Depositar: 
                     <input style="border: 1px solid #7aa891eb;outline: none;background: #42f87863;border-radius: 5px;padding: 3px;" type="number"  id="cantidad" onkeyup="calculo()" onchange="calculo()" value="0" step="0.01" style="color:black;"><br>
-                    <div id="calculo" style="width: 100%;float: right;background: #24262f;border: none border-radius:5px;margin: 1rem 0;padding: 1rem;border: double 1px #337ab77d;color: white;"></div><br>                    
+                    <div id="calculo" style="width: 100%;float: right;background: #24262f;border: none; border-radius:5px;margin: 1rem 0;padding: 1rem;border: double 1px #337ab77d;color: white;"></div><br>                    
                     <br><br> <div id='descripcionMetodo'></div>
                     <input readonly class="datcajero" style="width: 100%;border: none;outline: none;background: #00000000;text-align: center;text-decoration: underline;margin-bottom: 1rem;font-size: 1.8rem;" id="paycajero"><br>
                     <div style="width:100%;text-align: center;">
-                        <img style="" id='QRdeposito' src="">
+                        <img id='QRdeposito' src="">
                     </div>
                     <br>                    
                 </div><br><br>
@@ -153,7 +154,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                 <div id="detalles_retiro" style="display:none;width:100%;">
                     Quantity: 
                     <input style="border: 1px solid #905353eb;outline: none;background: #f8425357;border-radius: 5px;padding: 3px;" type="number"  id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo()" value="0" step="0.01" type="number" id="cantidad_retiro" onkeyup="calculo_retiro()" onchange="calculo_retiro()" value="0"  step="1"><br>
-                    <div id="calculo_retiro"  style="width: 100%;float: right;background: #24262f;border: none border-radius:5px;margin: 1rem 0;padding: 1rem;border: double 1px #337ab77d;color: white;"></div><br><br>
+                    <div id="calculo_retiro"  style="width: 100%;float: right;background: #24262f;border: none; border-radius:5px;margin: 1rem 0;padding: 1rem;border: double 1px #337ab77d;color: white;"></div><br><br>
                     <br><br><div style='text-align:center;' id='descripcionMetodoRetiro'></div>
                     <input readonly class="datcajero" style="width: 100%;border: none;outline: none;background: #00000000;text-align: center;text-decoration: underline;margin-bottom: 1rem;font-size: 1.8rem;" id="paycliente">                    
                     <br>
@@ -171,6 +172,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                 <li class="active"><a data-toggle="pill" style="color:acua;" href="#home">Wallets</a></li>
                 <li><a data-toggle="pill" style="color:acua;" href="#depositos" onClick="recalcDepositos()">Deposits</a></li>
                 <li><a data-toggle="pill" style="color:acua;" href="#retiros" onClick="recalcRetiros()">Withdrawals</a></li>
+                <li><a data-toggle="pill" style="color:acua;" href="#send" onClick="recalcSend()">Send</a></li>
                 <li><a data-toggle="pill" style="color:acua;" href="#historial" onClick="recalcHistorial()">Acquisitions</a></li>
             </ul>
             
@@ -219,7 +221,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                             <div style='padding-left:1rem;padding-left: 1rem;display: flex;flex-direction: column;gap: 1rem;'>
                             <div> 
                                 <h4>Binance Username:</h4> <input type="text" class='binance-input' style="color:white;" id="userBinance"><span title="Donde Buscar" style="color:black;margin-left:5px;cursor:pointer;" onclick="mostrarAyudaBinance()"> &#10068;</span>
-                            </div>                                        
+                            </div>
 
                             <div style="width: 100%;"> 
                                 <h4>Binance Email:</h4> <input type="text" class='binance-input' style="width: 50%;color:white;" id="payid">
@@ -252,6 +254,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                                 <table id='example' class='ui celled table' style='width:100%; '> 
                                     <thead>
                                         <tr>
+                                            <th>Date</th>
                                             <th>Ticket N.</th>
                                             <th>Description</th>
                                             <th>Cost</th>
@@ -276,6 +279,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                                 <table id='example1' class='ui celled table' style='width:100%; '> 
                                     <thead>
                                         <tr>
+                                            <th>Date</th>
                                             <th>Ticket N.</th>
                                             <th>Description</th>
                                             <th>Cost</th>
@@ -289,6 +293,39 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                     </div>
                                         
                 </div>
+
+                <div id="send" class="tab-pane fade">
+                    <div class="tab-title">
+                        <h3>Send USDC Stablecoin</h3>
+                    </div>
+                    <div class="container mt-5 mb-5">
+                    <div class='button-container' style="display: contents;justify-content: flex-start; align-items: flex-end;">
+                        <div style="width: 100%;"> 
+                            <h4>Cryptosignal Email:</h4>
+                            <input type="text" class='binance-input' style="width: 250px;color:white;" id="sendTo">
+                        </div>
+                        <div style="width: 100%;"> 
+                            <h4>Usdc Amount:</h4>
+                            <input type="number" min="1" value="1" step="0.1" class='binance-input' style="width: 180px;color:white;" id="amountTo">
+                        </div>                        
+                        <button id="buttonSend" class='binance-button' style="margin-top:25px;width: 10rem;" onclick="sendToEmail()">Send</button>
+                    </div>
+                                <table id='tableSend' class='ui celled table' style='width:100%; '> 
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Ticket N.</th>
+                                            <th>User</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-cuerpo-send">
+                                    </tbody>
+                                </table>
+                    </div>
+                                        
+                </div>                
 
                 <div id="historial" class="tab-pane fade">
                     <div class="tab-title">
@@ -345,8 +382,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                 }
             </script>
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-            <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>            
             <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
             <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
             
@@ -354,7 +390,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
             <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
             <script type="text/javascript" charset="utf8"src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
             
-            <script src="bower_components/retina.js/dist/retina.js"></script>
+            <!--<script src="bower_components/retina.js/dist/retina.js"></script>-->
             <script src="index-assets/js/jquery.fancybox.pack.js"></script>
             <script src="index-assets/js/vendor/bootstrap.min.js"></script>
             <script src="index-assets/js/scripts.js"></script>
