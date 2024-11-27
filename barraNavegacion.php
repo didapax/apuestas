@@ -83,12 +83,12 @@ $style = "";
                                        else{                        
                                          echo "<li><a href='promo' >Promotion</a></li>";
                                        }
-                                       /*if($page=="criptos"){
-                                         echo "<a href='criptos' class='nav__link active'>Criptos</a>";
+                                       if($page=="criptos"){
+                                         echo "<li><a href='criptos' >Criptos</a></li>";
                                        }
                                        else{                        
-                                         echo "<a href='criptos' class='nav__link'>Criptos</a>";
-                                       }    */   
+                                         echo "<li><a href='criptos' >Criptos</a></li>";
+                                       }    
                                     }
                                 ?>
                             </ul>

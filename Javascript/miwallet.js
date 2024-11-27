@@ -540,7 +540,9 @@ function mostrarTablaRetiros() {
             <td>${producto.fecha}</td>
             <td>${producto.ticket}</td>
             <td>${producto.descripcion}</td>
-            <td>${Math.round(producto.monto * 100) / 100} ${producto.moneda}</td>
+            <td>${Math.round(producto.recibe * 100) / 100} ${producto.moneda}</td>
+            <td>${Math.round(producto.comision * 100) / 100}</td>
+            <td>${Math.round(producto.monto * 100) / 100}</td>
             <td style='color: #fff;font-weight: 600;text-align: center;background:${color_estatus}'>${producto.estatus}</td>
             <td>${calificacion(producto.rate,producto.calificado,producto.id)}</td>
         `;

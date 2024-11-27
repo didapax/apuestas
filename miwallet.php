@@ -282,6 +282,8 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secu
                                             <th>Date</th>
                                             <th>Ticket N.</th>
                                             <th>Description</th>
+                                            <th>Payment</th>                                            
+                                            <th>Fee</th>
                                             <th>Cost</th>
                                             <th>Status</th>
                                             <th>Rating</th>

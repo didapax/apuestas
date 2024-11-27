@@ -23,15 +23,14 @@ function dibujaTarjeta(acciones,imagen,titulo,texto,mensaje,costo,estrellas){
 								<p>${texto.slice(0, 130)}</p>
 							</div>
 						</section>
-						<section class='right-side'>
-                        ${acciones}
+						<section class='right-side'>                        
 						</section>
 					</section>   
 					<section class='lower-side'>
 						<div class='cost-container'>
 							<p>COSTO:</p> 
 							<div class='cost'>
-								<p style='font-size: 2rem;'>${costo}<p> <p style='font-size:1.2rem;'>USDC<p>
+								<p style='font-size: 2rem;'>${costo}</p> <p style='font-size:1.2rem;'>USDC</p>
 							</div>
 						</div>
 						
@@ -41,10 +40,9 @@ function dibujaTarjeta(acciones,imagen,titulo,texto,mensaje,costo,estrellas){
 					</section>
 				</div>							             
 			</div>
-			<div class="back-image-back" style="overflow-y: auto;overflow-x: hidden;background: url('Assets/${imagen}') no-repeat center/cover; display:flex;align-items: center;justify-content: center;">
-            ${acciones}
+			<div class="back-image-back" style="overflow-y: auto;overflow-x: hidden;background: url('Assets/${imagen}') no-repeat center/cover; display:flex;align-items: center;justify-content: center;">           
 				<div class='text-container' style="overflow-y: auto;overflow-x: hidden; height: 200px;">
-					<p>${texto}</p>
+					<p>${texto}</p> <p> ${acciones}</p>
 				</div>
 			</div>
 		</div>
@@ -74,6 +72,10 @@ function mostrarTarjetas() {
         if (tarjeta.activo) {
             acciones = "";
             mensaje = "Suscripcion Activa";
+            if(tarjeta.etf){
+                costo = `<p style="font-size: 2rem;color:${tarjeta.color};">${tarjeta.symbol} ${tarjeta.costo}</p>`;
+                acciones = `<button id="sell${tarjeta.id}" style='float: right;color:black;border:solid 1px black;border-radius:5px; padding:3px;' onclick="sell('${tarjeta.id}')">Vender</button>`;
+            }
         }
         else{
             acciones = `<button style='float: right;color:black;border:solid 1px black;border-radius:5px;' onclick="renovar('${tarjeta.id}')">Renovar</button>
@@ -122,6 +124,55 @@ function inicio(){
     /*myVar = setInterval(leerHistorial, 3000);*/
 }
 
+function sell(id){
+    boton = "sell"+id;
+
+    buttonDisabled = document.getElementById(boton);
+    buttonDisabled.disabled = true;
+    
+    Swal.fire({
+        title: 'Sell',
+        text: "Sell Shares to Cryptosignal, Be Sure to Sell Your Shares, 3% of the total amount of your share will be deducted for network fees.",
+        icon: 'warning',
+        confirmButtonColor: '#117A65',
+        confirmButtonText: 'Sell',
+        cancelButtonColor: '#AEB6BF',
+        showCancelButton: true,
+        cancelButtonText: "Cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                    //aqui va la logiba de comunicacion con el backed
+                    $.post("block",{
+                    venderEtf: id
+                    }, 
+                    function(data){
+                        var datos= JSON.parse(data);
+                        if(datos.result == true){
+                            Swal.fire({
+                                    title: 'Sell',
+                                    text: "Successful Sale, has been credited to your balance.",
+                                    icon: 'info',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href="historialcliente"; 
+                                        }
+                                    }); 
+                        }
+                        else{                            
+                            window.location.href="historialcliente"; 
+                        }
+                    }
+                );                            
+    
+            }
+            else{
+                buttonDisabled.disabled = false;
+            }
+        }); 
+}
+
 function renovar(id){
     Swal.fire({
     title: 'Suscripciones',
@@ -147,6 +198,10 @@ function renovar(id){
                                 icon: 'error',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'Ok'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href="historialcliente"; 
+                                    }
                                 }); 
                     }else{
                         window.location.href="historialcliente"; 

@@ -65,7 +65,7 @@ function mostrarTarjetas() {
     const caja = document.getElementById("vista");	
     caja.innerHTML = '';
     tarjetas.forEach((tarjeta) => {
-        let acciones = `onclick="trade('${tarjeta.id}')"`;
+        let acciones = `onclick="trade('${tarjeta.id}','${tarjeta.referencia}')"`;
         let texto = tarjeta.detalle;
         let mensaje = "Suscripcion Abierta";
         let costo = tarjeta.costo;
@@ -119,40 +119,80 @@ function dibujarEstrellas(n) {
     return estrellas;
 }
 
-function trade(id){
+function trade(id,referencia){
 	let etiqueta =  "M"+id;
-	if(document.getElementById("actualsaldo").value *1 >= document.getElementById(etiqueta).value *1 ){
-		$.get("block?datosJuego&idjuego="+id,
-			function(data){
-				var datos= JSON.parse(data);
-				Swal.fire({
-					title: 'Suscripciones',
-					text: `Estas Seguro de realizar la Compra de la Suscripcion ${datos.tipo} de ${datos.juego}, las Suscripciones tardan entre 24 a 48 horas en realizarse dependiendo de la congestion de la red.`,
-					icon: 'info',
-					confirmButtonColor: '#EC7063',
-					confirmButtonText: 'Si Unirme',
-					showCancelButton: true,
-					cancelButtonText: "Cancelar"
-					}).then((result) => {
-						if (result.isConfirmed) {
-							$.post("block",{
-								jugar:"",
-								idjuego: datos.id,
-								correo: document.getElementById("correo").value
-							},function(data){
-								window.location.href="historialcliente";
-							});  
-						}
-					});                                    
-			});
+	let comision = (document.getElementById(etiqueta).value * 3) /100;
+	let monto = (document.getElementById(etiqueta).value *1) + comision;
+	if(referencia === 'ETF'){
+		if(document.getElementById("actualsaldo").value *1 >= monto *1 ){
+			$.get("block?datosJuego&idjuego="+id,
+				function(data){
+					var datos= JSON.parse(data);
+					Swal.fire({
+						title: 'Buy',
+						text: `You are sure to make the Purchase of the Share ${datos.referencia} de ${datos.juego}, Shares have an additional 3% Network and Maintenance Fee Charge.`,
+						icon: 'warning',
+						confirmButtonColor: '#EC7063',
+						confirmButtonText: 'Buy',
+						showCancelButton: true,
+						cancelButtonText: "Cancel"
+						}).then((result) => {
+							if (result.isConfirmed) {
+								$.post("block",{
+									jugar:"",
+									idjuego: datos.id,
+									correo: document.getElementById("correo").value
+								},function(data){
+									window.location.href="historialcliente";
+								});  
+							}
+						});                                    
+				});
+		}
+		else{
+			Swal.fire({
+				title: 'Buy',
+				text: "Insufficient Balance to carry out this Operation..",
+				icon: 'error',
+				confirmButtonColor: '#3085d6',
+				confirmButtonText: 'Next'
+				}); 
+		}
 	}else{
-		Swal.fire({
-			title: 'Suscripciones',
-			text: "Saldo Insuficiente para realizar esta Operacion..",
-			icon: 'info',
-			confirmButtonColor: '#3085d6',
-			confirmButtonText: 'Continuar'
-			}); 
+		if(document.getElementById("actualsaldo").value *1 >= document.getElementById(etiqueta).value *1 ){
+			$.get("block?datosJuego&idjuego="+id,
+				function(data){
+					var datos= JSON.parse(data);
+					Swal.fire({
+						title: 'Buy',
+						text: `You are sure to make the Subscription Purchase ${datos.tipo} de ${datos.juego}, Subscriptions are commission-free.`,
+						icon: 'warning',
+						confirmButtonColor: '#EC7063',
+						confirmButtonText: 'Buy',
+						showCancelButton: true,
+						cancelButtonText: "Cancel"
+						}).then((result) => {
+							if (result.isConfirmed) {
+								$.post("block",{
+									jugar:"",
+									idjuego: datos.id,
+									correo: document.getElementById("correo").value
+								},function(data){
+									window.location.href="historialcliente";
+								});  
+							}
+						});                                    
+				});
+		}
+		else{
+			Swal.fire({
+				title: 'Buy',
+				text: "Insufficient Balance to carry out this Operation..",
+				icon: 'error',
+				confirmButtonColor: '#3085d6',
+				confirmButtonText: 'Next'
+				}); 
+		}
 	}
 }
 

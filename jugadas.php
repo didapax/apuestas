@@ -84,6 +84,21 @@ input[type="checkbox"] {
                 border: solid 1px gray;            
         }   
 
+        .regalo-dialog{
+            position: fixed;
+            top: 49%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: black;
+            color:white;
+            width: 320px; 
+            height: 250px;            
+            z-index: 1000000;
+            border: solid 1px gray;
+        }
         dialog {
                 position: fixed;
                 top: 49%;
@@ -124,6 +139,9 @@ input[type="checkbox"] {
             }            
         </style>        
         <script>
+            let orderFavorito = 0;
+            let orderAdelantado = 0;
+            let devuelveCapital = 0;            
 
             function calcularInteresMensual(capital, tasaInteresAnual, meses) {
                 // Convertir la tasa de interés anual a mensual
@@ -175,8 +193,8 @@ input[type="checkbox"] {
 
                 if(capital *1 > 0 ){
                     let resultados = calcularInteresMensual(capital, interes, numMes);
-                    $("#calculos").html(`Interes Mensuales: ${Math.round(resultados['interesMensual'] * 100) / 100}<br>
-                    Cuota Mensual de: ${Math.round(resultados['cuotaMensual'] * 100) / 100}`);
+                    $("#calculos").html(`Interes Mensuales: ${(Math.round(resultados['interesMensual'] * 100) / 100)}<br>
+                    Cuota Mensual de: ${(Math.round(resultados['cuotaMensual'] * 100) / 100)}`);
                 }
                 else{
                     document.getElementById("monto").focus();                    
@@ -184,16 +202,9 @@ input[type="checkbox"] {
             }
 
             function crear(){
-                let orderFavorito = 0;
-                let orderAdelantado = 0;
-                let devuelveCapital = 0;
                 let titulo = document.getElementById("nombre").value;
 
                 document.getElementById('modalOverlay').close();
-                
-                if(document.getElementById('favorito').checked === true){
-                    orderFavorito = 1;
-                }                
                 
                 if(document.getElementById('adelantado').checked){
                     orderAdelantado = 1;
@@ -201,7 +212,7 @@ input[type="checkbox"] {
 
                 if(document.getElementById('devuelve_capital').checked){
                     devuelveCapital = 1;
-                }                
+                }
 
                 document.getElementById("btncrear").disabled = true;
                 if(titulo){
@@ -221,7 +232,7 @@ input[type="checkbox"] {
                                                 cajero: document.getElementById("correo").value,
                                                 nombre: document.getElementById("nombre").value,
                                                 descripcion: document.getElementById("summernote").value,
-                                                min: document.getElementById("min").value,
+                                                max: document.getElementById("max").value,
                                                 rate: document.getElementById("rate").value,
                                                 favorito: orderFavorito,
                                                 tipo: document.getElementById("tipoJuego").value,
@@ -230,7 +241,9 @@ input[type="checkbox"] {
                                                 poradelantado: orderAdelantado,
                                                 devuelveCapital: devuelveCapital,
                                                 imagen: document.getElementById("imagen").value,
-                                                foreground: document.getElementById("foreground").value
+                                                foreground: document.getElementById("foreground").value,
+                                                selectTipo: document.getElementById("selectTipo").value,
+                                                variableInversion: document.getElementById("variableInversion").value
                                             },function(data){
                                                 //leerVista();
                                                 document.getElementById("btncrear").disabled = false;                                                
@@ -309,6 +322,10 @@ input[type="checkbox"] {
             }
 
             function showDialog(){
+                $("#groupTipoJuego").css("display","none");
+                $("#groupCosto").css("display","none");
+                $("#groupInversion").css("display","none");
+                $("#groupETF").css("display","none");                   
                 document.getElementById('modalOverlay').show();
             }
 
@@ -410,6 +427,45 @@ input[type="checkbox"] {
                 }
             }
 
+            function clickSelectTipo(){
+                const tipo = document.getElementById("selectTipo");                
+                const valueTipo = tipo.value;
+                if(valueTipo){
+                    switch (valueTipo) {
+                        case "INVERSION":
+                            $("#groupInversion").css("display","block");
+                            $("#groupTipoJuego").css("display","block");
+                            $("#groupCosto").css("display","block");
+                            orderFavorito = 0;
+                            break;
+                        case "REGALO":
+                            $("#groupInversion").css("display","block");
+                            $("#groupTipoJuego").css("display","block");
+                            $("#groupCosto").css("display","block");
+                            orderFavorito = 1;
+                            break;
+                        case "ETF":
+                            $("#groupETF").css("display","block");
+                            $("#groupTipoJuego").css("display","none");
+                            $("#groupCosto").css("display","none");
+                            $("#groupInversion").css("display","none");
+                            orderFavorito = 0;
+                            orderAdelantado = 0;
+                            devuelveCapital = 0;                            
+                            break;                            
+                        default:
+                        $("#groupTipoJuego").css("display","block");
+                        $("#groupCosto").css("display","block");
+                        $("#groupInversion").css("display","none");
+                        $("#groupETF").css("display","none");                        
+                        orderFavorito = 0;
+                        orderAdelantado = 0;
+                        devuelveCapital = 0;
+                        break;
+                    }
+
+                }
+            }
         </script>
     <body onload="inicio()" id="top">
     <?php $page = "jugadas"; ?>
@@ -420,9 +476,11 @@ input[type="checkbox"] {
         </section>
         <section class="hero hero-inside" >
         <div id="cuerpo" class="cuerpo">
-        <dialog id="info-dialog">
+        <dialog id="info-dialog" class="regalo-dialog">
+            <div style="display:grid;">
             <div class="dialog-content"></div>
-            <button class="add-button" onclick="document.getElementById('info-dialog').close()">Cerrar</button>            
+            <button class="add-button" style="background:none; border:1px solid white;" onclick="document.getElementById('info-dialog').close()">Cerrar</button>            
+            </div>
         </dialog>        
         <input type="hidden" value="<?php if(isset($_SESSION['user'])) echo readClienteId($_SESSION['user'])['CORREO']; ?>" id="correo">
         <input type="hidden"  id="idAnalisis">
@@ -432,31 +490,28 @@ input[type="checkbox"] {
 
         <dialog id="modalOverlay" class="dialog-crear">
         <span id="closeModalBtn" class="close-btn" onclick="document.getElementById('modalOverlay').close();">X</span>
-                <h2 style="font-size:2rem;">Agregar Tarjeta</h2>
-                    <div>
-                        <h3>Titulo:</h3> 
-                        <input type="text" id="nombre">
-                    </div>
-                                           
+                <h2 style="font-size:2rem;">Agregar Tarjeta</h2>                           
                     <div >
                         <h3>Tipo: </h3>
                         <div style='display: flex;gap: 1rem;'>
-                            <div style='display: flex;align-items: flex-start;gap: .2rem;'>
-                            Normal: 
-                                <input title="Solo Insertar la Tarjeta" type="radio" id="ninguno" name="selectx">
-                            </div>
-                            <div style='display: flex;align-items: flex-start;gap: .2rem;'>
-                                De Regalo: 
-                                <input title="Poner la tarjeta como Favorita" type="radio" value="1" id="favorito" name="selectx"><br>                
-                            </div>
+                            <select id="selectTipo" onchange="clickSelectTipo()"> 
+                                <option value=''>Seleccione...</option>
+                                <option value='INVERSION'>Inversion</option>
+                                <option value='SUSCRIPCION'>Suscripcion</option>
+                                <option value='REGALO'>Regalo</option>
+                                <option value='ETF'>ETF Fondo</option>
+                            </select>
                         </div>
                     </div>
-                                       
-                    <div >
+                    <div>
+                        <h3>Titulo:</h3> 
+                        <input type="text" id="nombre" style="width: 80%;">
+                    </div>                                       
+                    <div id="groupTipoJuego">
                         <h3>Periodo:</h3> 
 
                         <select id="tipoJuego" >
-                            <option value="MENSUAL">selecciona Duracion..</option>
+                            <option value="INDEFINIDA">Duracion..</option>
                             <option value="MENSUAL">Mensual</option>
                             <option value="TRIMESTRAL">Trimestral</option>
                             <option value="SEMESTRAL">Semestral</option>
@@ -467,7 +522,7 @@ input[type="checkbox"] {
                     <div >
                         <h3>Color de Fondo:</h3> 
                         <select id="imagen" >
-                            <option value="azul.png">background..</option>
+                            <option value="azul.png">Color de Fondo..</option>
                             <option value="amarillo.png">Dorado</option>
                             <option value="azul.png">Azul</option>
                             <option value="azul_oscuro.png">Azul Oscuro</option>
@@ -475,13 +530,15 @@ input[type="checkbox"] {
                             <option value="naranja.png">Naranja</option>                    
                             <option value="rojo.png">Rojo</option>
                             <option value="plateado.png">Plata</option>
+                            <option value="bitcoin.png">Bitcoin</option>
+                            <option value="ether.png">Etherer</option>
                         </select>
                     </div>
                     
                     <div >
                         <h3>Color de Letra:</h3> 
                         <select id="foreground" >
-                            <option value="white">foreground..</option>
+                            <option value="white">Color de Letra..</option>
                             <option value="yellow">Amarillo</option>
                             <option value="blue">Azul</option>
                             <option value="red">Rojo</option>
@@ -491,12 +548,23 @@ input[type="checkbox"] {
                         </select>   
                     </div>
     
-                    <div >
+                    <div id="groupCosto">
                         <h3>Costo:</h3> 
                         <input required type="number" id="monto" value="0" style="color:black;" step="1"><span style='color:green;'>Usdc</span>
                     </div>
 
-                    <div >
+                    <div id="groupETF" style="display: none;">
+                        <div>
+                            <h3>Variable Inversion:</h3> 
+                            <select id="variableInversion">
+                                <option value=''>Seleccione...</option>
+                                <option value="__FBTC__">Fondo Bitcoin</option>
+                                <option value="__FETH__">Fondo Ether</option>
+                            </select>
+                        </div> 
+                    </div>
+
+                    <div id="groupInversion" style="display: none;">
                             <h3>Paga Intereses: </h3>
                         <div >   
                             Si:   <input title="Paga Intereses.." type="checkbox" value="1" id="paga_intereses" onchange="pagaIntereses()">              
@@ -523,7 +591,7 @@ input[type="checkbox"] {
 
                     <div >
                         <h3>Cantidad de Tarjetas a la Venta:</h3> 
-                        <input type="number" id="min" value="10">
+                        <input type="number" id="max" value="1000">
                     </div>
 
                     <div >

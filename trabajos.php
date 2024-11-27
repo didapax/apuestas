@@ -40,6 +40,22 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 border: solid 1px gray;            
             }
 
+            .dialog-send {
+                position: fixed;
+                top: 49%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 20px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                background-color: black;   
+                width: 350px; 
+                height: 400px;
+                overflow-y: hidden;                   
+                z-index: 1000;
+                border: solid 1px gray;            
+            }
+
             .dialog-content {
                 text-align: center;
             }
@@ -54,7 +70,7 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 if (datos) {  
                     
                     let monto = datos.monto;
-                    let destino = `${datos.tipo} de: <b>${datos.usuariobinance}</b><br>Origen: ${datos.origen}<br>Wallet de Destino: ${datos.destino}`
+                    let destino = `Procesando un ${datos.tipo} del Usuario: <b>${datos.usuariobinance}</b><br>Origen: <b>${datos.origen}</b><br>Wallet de Destino: <b>${datos.destino}</b>`
                     if(datos.tipo == "RETIRO"){
                         monto = datos.recibe;
                         //destino = `Wallet de Destino: ${datos.origen}`
@@ -193,15 +209,92 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                         <td>${Math.round(monto * 100) / 100} ${producto.moneda}</td>
                         <td style='background:${color_estatus}'>${producto.estatus}</td>
                         <td>
-                            <!--<button type='button' onclick='borrar(${producto.id})' >Delete</button>-->                            
-                            <button type='button' class='add-button' onclick='ver(${producto.id})' >Detalles</button>
-                            <a  class='add-button' style='background:#ede0af;' href='chatAdmin?ticket=${producto.ticket}'>Chat<sup style='color:red; font-weight: bold;'>${producto.notif}</sup></a>                            
+                            <!--<button type='button' onclick='borrar(${producto.id})' >Delete</button>-->
+                            <button type='button' class='deposit-button' onclick='ver(${producto.id})' >Detalles</button>
+                            <a class='deposit-button' style='background:none; border:1px solid white; margin-top:5px;' href='chatAdmin?ticket=${producto.ticket}'>Chat<sup style='color:red; font-weight: bold;'>${producto.notif}</sup></a>                            
                         </td>
                     `;
                     tablaCuerpo.appendChild(fila);
                 });
             }              
 
+            function sendToEmail(){
+            if(document.getElementById("amountTo").value*1 > 0){
+                if((document.getElementById("tsaldo").value*1) >= (document.getElementById("amountTo").value*1)){
+                    if(document.getElementById("sendTo").value.length>0){
+                        Swal.fire({
+                            title: 'Send',
+                            text: "Confirms that you will ship at "+document.getElementById("sendTo").value+" "+document.getElementById("amountTo").value+" USDC",
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes',
+                            showCancelButton: true,
+                            cancelButtonText: "No"                            
+                            }).then((result) => {
+                                if (result.isConfirmed) {          
+                                    document.getElementById("buttonSend").disabled = true;
+                                    $.post("block",{
+                                        sendtoemail:"",                        
+                                        tipo: "SEND",
+                                        comopago: "TRANSFER",
+                                        origen: "CRYPTOSIGNAL",
+                                        destino: document.getElementById("sendTo").value,
+                                        correo: document.getElementById("sendTo").value,
+                                        cajero: document.getElementById("correo").value,
+                                        monto: document.getElementById("amountTo").value,                        
+                                        recibe: document.getElementById("amountTo").value,
+                                        comision: document.getElementById("amountTo").value,
+                                        moneda: "USDC"
+                                    },function(data){
+                                        datos = JSON.parse(data);
+                                        Swal.fire({
+                                            title: 'Send',
+                                            text: datos.mensaje,
+                                            icon: datos.icon,
+                                            confirmButtonColor: '#3085d6',
+                                            confirmButtonText: 'Ok'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {          
+                                                    window.location.href="trabajos";
+                                                }    
+                                            });
+                                    });                                
+                                }    
+                            }); 
+                    }else{
+                        Swal.fire({
+                                        title: 'Send',
+                                        text: "Send cannot be processed or data is missing.",
+                                        icon: 'error',
+                                        confirmButtonColor: '#3085d6',
+                                        confirmButtonText: 'Ok'
+                                        });
+                    }                    
+                }
+                else{
+                    Swal.fire({
+                                title: 'Send To',
+                                text: "Insufficient USDC balance",
+                                icon: 'error',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                                });
+                }
+            }
+            else{
+                Swal.fire({
+                                title: 'Send To',
+                                text: "Send must be at least 1 USDC",
+                                icon: 'error',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                                });
+            }
+        }
+
+        function showSend(){
+            document.getElementById('dialogSend').show()
+        }
             function inicio(){
                 leerTrabajos();
                 //myVar = setInterval(leerTrabajos, 3000);
@@ -209,6 +302,8 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
             
         </script>
     <body onload="inicio()" id="top">
+    <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
+    <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['SALDO']; ?>"  name="tsaldo" id="tsaldo">        
     <?php $page = "trabajos"; ?>
     <section class="navigation">
                 <header style='padding:40px 0;'>
@@ -221,10 +316,31 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 <label style="margin-left:1px; font-weight:bold;" id="estad"></label>
                 <label style="margin-left:13px; font-weight:bold;" id="reg"></label>
             </div> -->
+        <dialog id="dialogSend" class="dialog-send">
+            <div id="send">
+                <div >
+                        <h3>Send USDC Stablecoin</h3>
+                    </div>
+                    <div >
+                    	<div >
+                        	<div style="width: 100%;color:white;"> 
+                            		<h4>Cryptosignal Email:</h4>
+                            		<input type="text" class='binance-input' style="width: 250px;color:white;" id="sendTo">
+                        	</div>
+                        	<div style="width: 100%;color:white;"> 
+                            		<h4>Usdc Amount:</h4>
+                            		<input type="number" min="1" value="1" step="0.1" class='binance-input' style="width: 180px;color:white;" id="amountTo">
+                        	</div>                        
+                        	<button id="buttonSend" class='binance-button' style="margin-top:25px;width: 10rem;" onclick="sendToEmail()">Send</button>
+                            <button id="buttonSend" class='deposit-button' style="background:none; border:1px solid white; margin-top:25px;width: 10rem;" onclick="document.getElementById('dialogSend').close()">Cancel</button>
+                    	</div>
+                </div>                                        
+            </div>
+        </dialog>
+
         <dialog id="modalOverlay">
                 <span id="closeModalBtn" class="close-btn" style="color:black;" onclick="document.getElementById('modalOverlay').close();">X</span>
                 <h2><span id="evento"></span></h2>
-                <input type="hidden" value="<?php echo readClienteId($_SESSION['user'])['CORREO']; ?>" name="correo" id="correo">
                 <input type="hidden" id="idapuesta">
                 Transaccion: <br>
                 Cliente: <span id="emailCliente"></span><br>
@@ -232,8 +348,9 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 <span style='background:yellow;' id="wallet"></span>
                 <br>
                 Monto: <span id="monto"></span><br>
-                Estatus:<span id="estatus"></span><br>
-                Cambiar: <select id="selestatus" >
+                Estatus:<span id="estatus"></span>
+                <hr>
+                Cambiar Estatus: <select id="selestatus" >
                     <option id="">selecciona estatus...</option>
                     <option id="REVISION" value="REVISION">En Revision</option>
                     <option id="ESPERA" value="ESPERA">En Espera</option>
@@ -243,7 +360,10 @@ if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 1){
                 <button class='add-button' style="float:right;" type="button" id="btnenviar" onclick="enviar()">Cambiar Estatus</button>
         </dialog>
         <div class="common-background" style="background:black; padding:2rem;background: #00000078;padding: 2rem;border-radius: 17px;">
-            <div class="vista" id="vista">
+            <div class="button-menu" id="menu">
+                <button class='add-button' type="button" onclick="showSend()">Send Money</button>
+            </div>
+            <div class="vista" id="vista">                
                     <table id='example' class='ui celled table' style='width:100%; '> 
                         <thead>
                             <tr>

@@ -7,12 +7,28 @@ session_start();
 $GLOBALS['__TOTALUSUARIOS__'] = row_sqlconector("SELECT COUNT(*) AS TOTAL FROM USUARIOS")['TOTAL'];
 $GLOBALS['__DEPOSITOS__'] = row_sqlconector("SELECT COUNT(*) AS TOTAL FROM TRANSACCIONES WHERE TIPO='DEPOSITO'")['TOTAL'];
 $GLOBALS['__DEPOSITOSUSDC__'] = row_sqlconector("SELECT FORMAT(COALESCE(SUM(RECIBE), 0), 2) AS TOTAL FROM TRANSACCIONES WHERE TIPO='DEPOSITO'")['TOTAL'];
-$GLOBALS['__RETIROS__'] = row_sqlconector("SELECT COUNT(*) AS TOTAL FROM TRANSACCIONES WHERE TIPO='RETIRO'")['TOTAL'];
-$GLOBALS['__RETIROSUSDC__'] = row_sqlconector("SELECT FORMAT(COALESCE(SUM(RECIBE), 0), 2) AS TOTAL FROM TRANSACCIONES WHERE TIPO='RETIRO'")['TOTAL'];
+$GLOBALS['__RETIROS__'] = row_sqlconector("SELECT COUNT(*) AS TOTAL FROM TRANSACCIONES WHERE TIPO='RETIRO' AND YEAR(FECHA) = YEAR(NOW())")['TOTAL'];
+$GLOBALS['__RETIROSUSDC__'] = row_sqlconector("SELECT FORMAT(COALESCE(SUM(RECIBE), 0), 2) AS TOTAL FROM TRANSACCIONES WHERE TIPO='RETIRO' AND YEAR(FECHA) = YEAR(NOW())")['TOTAL'];
+$GLOBALS['__OPERACIONESETF__'] = row_sqlconector("SELECT FORMAT(COALESCE(SUM(MONTO), 0), 2) AS TOTAL FROM TRANSACCIONES WHERE (TIPO='BUY' OR TIPO='SELL') AND YEAR(FECHA) = YEAR(NOW())")['TOTAL'];
 $GLOBALS['__TOTALSALDOS__'] = row_sqlconector("SELECT FORMAT(COALESCE(SUM(SALDO), 0), 2) AS TOTAL FROM USUARIOS")['TOTAL'];
 $GLOBALS['__PAGOSMESACTUAL__'] = row_sqlconector("SELECT FORMAT(COALESCE(SUM(INTERES_MENSUAL), 0), 2) AS TOTAL FROM LIBROCONTABLE WHERE TIPO = 'CREDITO' AND PAGADO=0 AND MONTH(FECHA) = MONTH(CURDATE()) AND YEAR(FECHA) = YEAR(CURDATE())")['TOTAL'];
-$GLOBALS['__CIERREANUAL__'] = row_sqlconector("SELECT FORMAT(COALESCE(SUM(MONTO), 0), 2) AS SALDO FROM APUESTAS WHERE PAGADOS = 1 AND ACTIVO = 0 AND ELIMINADO = 1 AND PORCIENTO > 0 AND DEVUELVE_CAPITAL = 0 AND YEAR(fecha) = YEAR(NOW())")['SALDO'];
-$GLOBALS['__CIERREANUALSENALES__'] = row_sqlconector("SELECT FORMAT(COALESCE(SUM(MONTO), 0), 2) AS SALDO FROM `LIBROCONTABLE` WHERE JUEGO LIKE '%SEÑALES%' AND PAGADO = 1 AND ESTATUS = 'CERRADO' AND YEAR(fecha) = YEAR(NOW())")['SALDO'];
+$GLOBALS['__CIERREANUAL__'] = row_sqlconector("SELECT FORMAT(COALESCE(SUM(MONTO), 0), 2) AS SALDO FROM APUESTAS WHERE PAGADOS = 1 AND ACTIVO = 0 AND ELIMINADO = 1 AND PORCIENTO > 0 AND DEVUELVE_CAPITAL = 0 AND YEAR(FECHA) = YEAR(NOW())")['SALDO'];
+$GLOBALS['__CIERREANUALSENALES__'] = row_sqlconector("SELECT FORMAT(COALESCE(SUM(MONTO), 0), 2) AS SALDO FROM `LIBROCONTABLE` WHERE JUEGO LIKE '%SEÑALES%' AND PAGADO = 1 AND ESTATUS = 'CERRADO' AND YEAR(FECHA) = YEAR(NOW())")['SALDO'];
+$GLOBALS['__COMISIONRETIRO__'] = number_format(($GLOBALS['__RETIROSUSDC__'] * 3) /100, 2);
+
+$GLOBALS['__COMISIONRETIROETF__'] = 3;
+$GLOBALS['__COMISIONDEPOSITOETF__'] = 3;
+$GLOBALS['__COMISIONPRIMAETF__'] = 2;
+
+$GLOBALS['__BTCPOSEIDO__'] = row_sqlconector("SELECT BALANCE FROM DATOS WHERE MONEDA ='BTCUSDC'")['BALANCE'];
+$GLOBALS['__ETHPOSEIDO__'] = row_sqlconector("SELECT BALANCE FROM DATOS WHERE MONEDA ='ETHUSDC'")['BALANCE'];
+$GLOBALS['__PRECIOBTC__'] = row_sqlconector("SELECT PRECIO FROM DATOS WHERE MONEDA ='BTCUSDC'")['PRECIO'];
+$GLOBALS['__PRECIOETH__'] = row_sqlconector("SELECT PRECIO FROM DATOS WHERE MONEDA ='ETHUSDC'")['PRECIO'];
+$GLOBALS['__NUMACCIONESBTC__'] = row_sqlconector("SELECT ACCIONES FROM DATOS WHERE MONEDA ='BTCUSDC'")['ACCIONES'];
+$GLOBALS['__NUMACCIONESETH__'] = row_sqlconector("SELECT ACCIONES FROM DATOS WHERE MONEDA ='ETHUSDC'")['ACCIONES'];
+
+$GLOBALS['__FBTC__'] = number_format(calcularNAV($GLOBALS['__BTCPOSEIDO__'], $GLOBALS['__PRECIOBTC__'], $GLOBALS['__NUMACCIONESBTC__'], $GLOBALS['__COMISIONPRIMAETF__'])['navPorAccion'], 2);
+$GLOBALS['__FETH__'] = number_format(calcularNAV($GLOBALS['__ETHPOSEIDO__'], $GLOBALS['__PRECIOETH__'], $GLOBALS['__NUMACCIONESETH__'], $GLOBALS['__COMISIONPRIMAETF__'])['navPorAccion'], 2);
 
 function generaTicket(){
     $bytes = random_bytes(8);
@@ -24,6 +40,27 @@ function generaCode(){
   $bytes = random_bytes(4);
   $referencia = bin2hex($bytes);
   return $referencia;
+}
+
+function calcularNAV($btcPoseido, $precioBTC, $numAcciones, $primaPorcentaje) {
+  // Calcular el valor total de los activos
+  $valorTotalActivos = $btcPoseido * $precioBTC;
+
+  // Calcular el NAV por acción
+  $navPorAccion = $valorTotalActivos / $numAcciones;
+
+  // Calcular la prima
+  $prima = $navPorAccion * ($primaPorcentaje / 100);
+
+  // Calcular el precio de la acción con prima
+  $precioAccionConPrima = $navPorAccion + $prima;
+
+  // Retornar los valores calculados
+  return [
+      'valorTotalActivos' => $valorTotalActivos,
+      'navPorAccion' => $navPorAccion,
+      'precioAccionConPrima' => $precioAccionConPrima
+  ];
 }
 
 function obtenerCalificaciones($cajero) {
@@ -688,7 +725,7 @@ function ifClienteJuegoExist($idjuego,$correo) {
       exit;
   }
 
-  $resultado = mysqli_query($conexion, "SELECT 1 FROM APUESTAS WHERE CLIENTE = '$correo' AND IDJUEGO=$idjuego");
+  $resultado = mysqli_query($conexion, "SELECT 1 FROM APUESTAS WHERE ELIMINADO=0 AND CLIENTE = '$correo' AND IDJUEGO=$idjuego");
   $existe = mysqli_num_rows($resultado) > 0;
   mysqli_close($conexion);
 
