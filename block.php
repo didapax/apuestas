@@ -147,7 +147,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
        {$_POST['acciones']},
       0)");
     }
-    refreshDatos($_POST['moneda']);
+    //refreshDatos($_POST['moneda']);
   }
 
   if(isset($_POST['editpar'])){
@@ -163,11 +163,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
   if(isset($_GET['listMonedas'])){
     echo json_encode (array_sqlconector("SELECT * FROM DATOS"));
   }
-  
-  if(isset($_GET['getPriceBinance'])){
-        refreshDataAuto();
-  }
-  
+   
   if(isset($_POST['jugar'])){
         $suscripcion = readJuegoId($_POST['idjuego']);  
         $ticket = generaTicket();      
@@ -647,18 +643,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
     }
     echo json_encode($obj);
   }
-  
-  if( isset($_GET['bot']) ){
-    $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
-    $consulta = "select * from USUARIOS";
-    $resultado = mysqli_query( $conexion, $consulta );
-    while($row = mysqli_fetch_assoc($resultado)){
-      if(!ifReferidoExist($row['CODIGOREFERIDO'])){
-        insertReferido($row['CODIGOREFERIDO'],"a4050f5ac6267099");
-      }
-    }  
-  }
-  
+   
   if(isset($_GET['readPromos'])) {
     $conexion = mysqli_connect($GLOBALS["servidor"],$GLOBALS["user"],$GLOBALS["password"],$GLOBALS["database"]);
     if (!$conexion) {
@@ -1154,9 +1139,6 @@ else{
     $hashContrasena = password_hash($contrasena, PASSWORD_BCRYPT);
 
     sqlconector("INSERT INTO USUARIOS(IP,NOMBRE,PASSWORD,CORREO,CODIGOREFERIDO,VKEY) VALUES('$ipreal','$correo','$hashContrasena','$correo','$codeRefer','$vkey')");
-    if($_POST['referente'] != "NULO"){
-      insertReferido($codeRefer,$_POST['referente']);
-    }  
 
     $obj = array('result' => false,'correo' =>$correo, 'capcha' => $respuestaClave,'paso'=>false,'verificado' => 0,'vkey' => $vkey);
     echo json_encode($obj);         
