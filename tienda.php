@@ -59,9 +59,9 @@
                     $correo = readClienteId($_SESSION['user'])['CORREO'];
                     $saldo = readClienteId($_SESSION['user'])['SALDO'];
                     recalcularSuscripciones($correo);
-                    //refreshDataAuto();
+                    recalcularEtf();
                     promoFlotante();
-                } 
+                }  
             ?>
             <section class="hero hero-inside" >
             <div id="cuerpo" class="cuerpo" >

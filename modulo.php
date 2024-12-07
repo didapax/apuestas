@@ -19,6 +19,8 @@ $GLOBALS['__COMISIONRETIRO__'] = number_format(($GLOBALS['__RETIROSUSDC__'] * 3)
 $GLOBALS['__COMISIONRETIROETF__'] = 3;
 $GLOBALS['__COMISIONDEPOSITOETF__'] = 3;
 $GLOBALS['__COMISIONPRIMAETF__'] = 2;
+$GLOBALS['LLAVE'] =  "dd77b701661c5b55";
+$GLOBALS['SERVER'] = "http://www.localhost/signaltrader/server.php";
 
 $GLOBALS['__BTCPOSEIDO__'] = row_sqlconector("SELECT BALANCE FROM DATOS WHERE MONEDA ='BTCUSDC'")['BALANCE'];
 $GLOBALS['__ETHPOSEIDO__'] = row_sqlconector("SELECT BALANCE FROM DATOS WHERE MONEDA ='ETHUSDC'")['BALANCE'];
@@ -41,6 +43,35 @@ function generaCode(){
   $referencia = bin2hex($bytes);
   return $referencia;
 }
+
+function consultarServidor($url, $llave) {
+  $fullUrl = $url . "&llave=" . $llave;
+
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $fullUrl);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  $response = curl_exec($ch);
+  curl_close($ch);
+
+  if ($response === FALSE) {
+      echo "Error al realizar la solicitud.";
+      return null;
+  }
+
+  $data = json_decode($response, true);
+
+  if ($data === null) {
+      echo "Error al decodificar la respuesta JSON.";
+      return null;
+  }
+
+  return $data;
+}
+
+/*
+$data = consultarServidor($GLOBALS['SERVER'], $GLOBALS['LLAVE']);
+print_r($data);
+*/
 
 function calcularNAV($btcPoseido, $precioBTC, $numAcciones, $primaPorcentaje) {
   // Calcular el valor total de los activos

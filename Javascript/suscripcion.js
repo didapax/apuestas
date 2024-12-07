@@ -3,7 +3,12 @@
 let tarjetas = [];
 
 
-function dibujaTarjeta(acciones,imagen,titulo,texto,mensaje,costo,estrellas){	
+function dibujaTarjeta(tipo,acciones,imagen,titulo,texto,mensaje,costo,estrellas){
+    let host = "http://www.localhost/signaltrader/index?token=";
+    if(tipo === "trader"){
+        texto = `${titulo}<br><a href="${host}${titulo}" target="_blank">Ir al Trader</a>`;
+        titulo = "Especial SignalTrader";        
+    }
 	let dibujo = `
     <div class="cover" onclick="rotateCard(this)">
         <div class="content">
@@ -64,25 +69,32 @@ function mostrarTarjetas() {
     const caja = document.getElementById("vista");	
     caja.innerHTML = '';
     tarjetas.forEach((tarjeta) => {
+        let tipo = "normal";
         let acciones;
-        let texto = tarjeta.analisis;
+        let texto = "";
         let mensaje = "Suscripcion Abierta";
         let costo = tarjeta.costo;
         let estrellas = dibujarEstrellas(tarjeta.estrellas);
         if (tarjeta.activo) {
+            texto = tarjeta.analisis;
             acciones = "";
             mensaje = "Suscripcion Activa";
             if(tarjeta.etf){
+                tipo = "etf";
                 costo = `<p style="font-size: 2rem;color:${tarjeta.color};">${tarjeta.symbol} ${tarjeta.costo}</p>`;
                 acciones = `<button id="sell${tarjeta.id}" style='float: right;color:black;border:solid 1px black;border-radius:5px; padding:3px;' onclick="sell('${tarjeta.id}')">Vender</button>`;
             }
+            if(tarjeta.trader){
+                tipo = "trader";
+            }
         }
         else{
+            texto = "RECARGUE SALDO, DE VUELTA Y RENUEVE SU TARJETA PARA SEGUIR DISFRUTANDO DEL SERVICIO."
             acciones = `<button style='float: right;color:black;border:solid 1px black;border-radius:5px;' onclick="renovar('${tarjeta.id}')">Renovar</button>
                       <button style='background:coral;float: right;color:black;border:solid 1px black;border-radius:5px;' onclick="eliminar('${tarjeta.id}')">Eliminar</button>`;
             mensaje = "Suscripcion Suspendida";
         }
-        caja.innerHTML += dibujaTarjeta(acciones,tarjeta.imagen,tarjeta.titulo,texto,mensaje,costo,estrellas);
+        caja.innerHTML += dibujaTarjeta(tipo,acciones,tarjeta.imagen,tarjeta.titulo,texto,mensaje,costo,estrellas);
     });    
 }
 

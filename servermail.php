@@ -17,7 +17,7 @@ function sendEmailSoporte($to, $subject, $body) {
     $mail->Host = 'server121.web-hosting.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'soporteadministrativo@criptosignalgroup.online';
-    $mail->Password = '';
+    $mail->Password = 'F_M4Cth#YNEw';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
     
@@ -35,7 +35,7 @@ function sendEmailSoporte($to, $subject, $body) {
   } catch (Exception $e) {
     echo "Message could not be sent. Soporte Error: {$mail->ErrorInfo}";
   }
-}
+} 
 
 function sendEmail($to, $subject, $body) {
   // Configuración de PHPMailer
@@ -45,7 +45,7 @@ function sendEmail($to, $subject, $body) {
     $mail->Host = 'server121.web-hosting.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'criptosignalgroup@criptosignalgroup.online';
-    $mail->Password = '';
+    $mail->Password = 'JRnc^YaDj@la';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
     
@@ -83,6 +83,27 @@ if(isset($_POST['sendmailtecno'])){
   
   sendEmail($email, "Asistencia Crytosignal", "Tienes una Nueva asistencia para el Cliente:<br>$cliente<br>Asunto Tratado: $asunto<br> <u><b>Problema Presentado:</b></u> $mensaje <hr>Recuerda contestar desde el correo de soporte este mensaje es solo un recordatorio.");  
 }
+
+function recalcularEtf() {
+  $url = $GLOBALS['SERVER'] . "?getprices";
+  $data = consultarServidor($url, $GLOBALS['LLAVE']);
+
+  if ($data !== null && $data['estatus'] === true) {
+      foreach ($data['prices'] as $item) {
+          switch ($item['MONEDA']) {
+              case 'BTCUSDT':
+                  sqlconector("UPDATE DATOS SET PRECIO={$item['ACTUAL']} WHERE MONEDA='BTCUSDC'");
+                  break;
+              case 'ETHUSDT':
+                  sqlconector("UPDATE DATOS SET PRECIO={$item['ACTUAL']} WHERE MONEDA='ETHUSDC'");
+                  break;          
+          }
+      }
+  } else {
+      echo "No se pudo obtener los precios.";
+  }
+}
+
 
 function recalcularSuscripciones($correo){
   $resultado = sqlconector("SELECT * FROM LIBROCONTABLE WHERE CLIENTE='$correo' AND PAGADO=0 AND ACTIVO=1");

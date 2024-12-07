@@ -500,6 +500,7 @@ input[type="checkbox"] {
                                 <option value='SUSCRIPCION'>Suscripcion</option>
                                 <option value='REGALO'>Regalo</option>
                                 <option value='ETF'>ETF Fondo</option>
+                                <option value='TRADER'>Suscripcion Trader</option>
                             </select>
                         </div>
                     </div>
@@ -708,7 +709,7 @@ input[type="checkbox"] {
         <script>
         $(document).ready(function() {
             $('#summerNoteAnalisis').trumbowyg();
-            //$('#example').addClass('ui celled table');
+            $('#summernote').trumbowyg();
         });
     </script>   
 

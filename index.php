@@ -114,8 +114,6 @@ include "servermail.php";
                     $correo = readClienteId($_SESSION['user'])['CORREO'];
                     $saldo = readClienteId($_SESSION['user'])['SALDO'];
                     recalcularSuscripciones($correo);
-                    //refreshDataAuto();
-                    //promoFlotante();
                 } 
             ?> 
 <section class="hero">

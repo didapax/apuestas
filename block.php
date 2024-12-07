@@ -165,25 +165,25 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
   }
    
   if(isset($_POST['jugar'])){
-        $suscripcion = readJuegoId($_POST['idjuego']);  
-        $ticket = generaTicket();      
-        $monto = $suscripcion['MONTO'];
-        $tipo = $suscripcion['TIPO'];
-        $idJuego = $suscripcion['ID'];
-        $juego = $suscripcion['JUEGO'];
-        $cajero = $suscripcion['CAJERO'];
-        $porciento = $suscripcion['PORCIENTO'];
-        $porAdelantado = $suscripcion['PORADELANTADO'];
-        $devuelveCapital = $suscripcion['DEVUELVE_CAPITAL'];
-        $imagen = $suscripcion['IMAGEN'];
-        $foreground = $suscripcion['FOREGROUND'];
-        $correo = $_POST['correo'];      
-        $numMes = 0;
-        $cuotaMensual = 0;
-        $interesMensual = 0;
-        $totalCuotas = 0;
-        $numeroPagos = 0;
-        $resultado = 0;
+    $suscripcion = readJuegoId($_POST['idjuego']);  
+    $ticket = generaTicket();      
+    $monto = $suscripcion['MONTO'];
+    $tipo = $suscripcion['TIPO'];
+    $idJuego = $suscripcion['ID'];
+    $juego = $suscripcion['JUEGO'];
+    $cajero = $suscripcion['CAJERO'];
+    $porciento = $suscripcion['PORCIENTO'];
+    $porAdelantado = $suscripcion['PORADELANTADO'];
+    $devuelveCapital = $suscripcion['DEVUELVE_CAPITAL'];
+    $imagen = $suscripcion['IMAGEN'];
+    $foreground = $suscripcion['FOREGROUND'];
+    $correo = $_POST['correo'];      
+    $numMes = 0;
+    $cuotaMensual = 0;
+    $interesMensual = 0;
+    $totalCuotas = 0;
+    $numeroPagos = 0;
+    $resultado = 0;
   
         switch ($tipo) {
           case 'MENSUAL':
@@ -234,28 +234,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
              $numeroPagos,
              $devuelveCapital)";
         
-        sqlconector($consulta);
-  
-        $comision = ($suscripcion['MONTO'] * $GLOBALS['__COMISIONDEPOSITOETF__']) /100;
-        $monto =  $suscripcion['MONTO'] + $comision;
-        $saldo = readCliente($correo)['SALDO'] - $monto;
-        $saldoCajero = readCliente($suscripcion['CAJERO'])['SALDO'] + $comision;
-    
-        sqlconector("UPDATE USUARIOS SET SALDO = $saldo WHERE CORREO='{$correo}'");
-        sqlconector("UPDATE USUARIOS SET SALDO = $saldoCajero WHERE CORREO='".$suscripcion['CAJERO']."'");
-  
-        if($porAdelantado == 1){
-          $saldo= readCliente($correo)['SALDO'] + ($interesMensual * $numeroPagos);
-          sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$correo'");
-        }
-
-        $inversion = 0;
-        $tipo = "DEBITO";
-        $min = $suscripcion['MIN'] + 1;
-
-        sqlconector("UPDATE JUEGOS SET MIN={$min} WHERE ID={$_POST['idjuego']}");
-
-        sqlconector("INSERT INTO TRANSACCIONES(
+        $Q_INSERT = "INSERT INTO TRANSACCIONES(
         TICKET,
         TIPO,
         DESCRIPCION,
@@ -273,8 +252,28 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         'TRANSFER',
         $monto,
         1,
-        'Successful')");
+        'Successful')";
 
+        $comision = ($suscripcion['MONTO'] * $GLOBALS['__COMISIONDEPOSITOETF__']) /100;
+        $monto =  $suscripcion['MONTO'] + $comision;
+        $saldo = readCliente($correo)['SALDO'] - $monto;
+        $saldoCajero = readCliente($suscripcion['CAJERO'])['SALDO'] + $comision;
+        $inversion = 0;
+        $tipo = "DEBITO";
+        $min = $suscripcion['MIN'] + 1;
+
+        if($suscripcion['REFERENCIA'] != "TRADER"){
+          sqlconector("UPDATE USUARIOS SET SALDO = $saldo WHERE CORREO='{$correo}'");
+          sqlconector("UPDATE USUARIOS SET SALDO = $saldoCajero WHERE CORREO='".$suscripcion['CAJERO']."'");
+          sqlconector($consulta);
+          sqlconector("UPDATE JUEGOS SET MIN={$min} WHERE ID={$_POST['idjuego']}");
+          sqlconector($Q_INSERT);
+          if($porAdelantado == 1){
+            $saldo= readCliente($correo)['SALDO'] + ($interesMensual * $numeroPagos);
+            sqlconector("UPDATE USUARIOS SET SALDO=$saldo WHERE CORREO='$correo'");
+          }  
+        }
+        
         if($suscripcion['REFERENCIA'] == "INVERSION" || $suscripcion['REFERENCIA'] == "SUSCRIPCION" || $suscripcion['REFERENCIA'] == "REGALO"){
           if($porciento > 0){
             $inversion = 1;
@@ -327,7 +326,42 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
           }
           sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND FECHA='$fechaInicial'");
         }
-  }
+        if($suscripcion['REFERENCIA'] == "TRADER"){
+            //LA LOGICA PARA UNA SUSCRIPCION
+            $url= $GLOBALS['SERVER'] . "?crear-token";
+            $data = consultarServidor($url, $GLOBALS['LLAVE']);
+
+            if ($data !== null) {
+              sqlconector("UPDATE USUARIOS SET SALDO = $saldo WHERE CORREO='{$correo}'");
+              sqlconector("UPDATE USUARIOS SET SALDO = $saldoCajero WHERE CORREO='".$suscripcion['CAJERO']."'");
+              sqlconector($consulta);
+              sqlconector("UPDATE JUEGOS SET MIN={$min} WHERE ID={$_POST['idjuego']}");
+              sqlconector($Q_INSERT);
+
+              $fechas = array($fechaInicial, $fechaFinal);
+              foreach ($fechas as $fecha) {
+                  sqlconector("INSERT INTO LIBROCONTABLE(FECHA,TICKET,TIPO,IDJUEGO,INVERSION,JUEGO,CAJERO,CLIENTE,INTERES_ADELANTADO,MONTO,INTERES_MENSUAL,CUOTA_MENSUAL,TOTAL_PAGAR,DEVUELVE_CAPITAL) VALUES(
+                      '$fecha',
+                      '$ticket',
+                      '$tipo',
+                      $idJuego,
+                      $inversion,
+                      '$juego',
+                      '$cajero',
+                      '$correo',
+                      $porAdelantado,
+                      $monto,
+                      $interesMensual,
+                      $cuotaMensual,
+                      $totalCuotas,
+                      $devuelveCapital
+                  )");
+              }
+              sqlconector("UPDATE LIBROCONTABLE SET PAGADO=1,ACTIVO=0,ESTATUS='CERRADO' WHERE TICKET='$ticket' AND FECHA='$fechaInicial'");
+              sqlconector("UPDATE APUESTAS SET JUEGO='{$data['token']}' WHERE TICKET='$ticket'");
+            }
+        }
+}
     
   if(isset($_GET['listCajeros'])){
     echo json_encode (array_sqlconector("SELECT * FROM USUARIOS WHERE NIVEL=1"));
@@ -507,16 +541,17 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         $interes = price($row['INTERES_MENSUAL']);
         $pagaIntereses = false;
         $etf = false;
+        $trader = false;
         $color= "green";
         $symbol = "";
   
         if(readJuegoId($row['IDJUEGO'])['PORCIENTO'] > 0){
-        $pagaIntereses = true;
+          $pagaIntereses = true;
         }		  
-       if($row['ACTIVO']==0){     
-        $activo = false;
-       }
-       else{
+        if($row['ACTIVO']==0){     
+          $activo = false;
+        }
+        else{
         
           if( isset(readJuegoId($row['IDJUEGO'])['ANALISIS']) ){
             $analisis = strip_tags(readJuegoId($row['IDJUEGO'])['ANALISIS']);
@@ -546,6 +581,10 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
             }            
           }
 
+          if(readJuegoId($row['IDJUEGO'])['REFERENCIA'] == 'TRADER'){
+            $trader = true;
+          }          
+
         }
         
         $obj[]= array(
@@ -564,6 +603,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         'activo'=>$activo,
         'costo'=>$costo,
         'etf' => $etf,
+        'trader' => $trader,
         'color' => $color,
         'symbol' => $symbol
       );
@@ -598,7 +638,7 @@ if(isset($_SESSION['user']) && isset($_SESSION['secured'])){
         $suscripcionExiste = false;
         $pagaIntereses = false;
         $titulo = strip_tags($row['JUEGO']);
-        $detalle = strip_tags($row['DESCRIPCION']);
+        $detalle = $row['DESCRIPCION'];
         $estrellas = $row['RATE'];
         $costo = price($row['MONTO']);
         $referencia = $row['REFERENCIA'];

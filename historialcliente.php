@@ -1,7 +1,13 @@
 <?php 
-include "modulo.php";
-date_default_timezone_set('America/Caracas');    
+include "servermail.php";
+date_default_timezone_set('America/Caracas');
+$correo = "";
+$saldo = "0.00";
 if(isset($_SESSION['nivel']) && $_SESSION['nivel'] == 0 && isset($_SESSION['secured'])){
+    $correo = readClienteId($_SESSION['user'])['CORREO'];
+    $saldo = readClienteId($_SESSION['user'])['SALDO'];
+    recalcularSuscripciones($correo);
+    recalcularEtf();
 ?>
 <html lang="es">
     <head>
