@@ -160,7 +160,7 @@ function calcularDiasEntreFechas($fechaInicial, $fechaFinal) {
 
   $diferencia = $fechaInicio->diff($fechaFin);
 
-  return $diferencia->format('%a');
+  return $diferencia->format('%R%a');
 }
 
 function calcularInteresMensual($capital, $tasaInteresAnual, $meses) {
